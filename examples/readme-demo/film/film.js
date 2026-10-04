@@ -99,22 +99,23 @@
 
   // ------------------------------------------------------------------ 1. Hook: the report nobody opens
   const VID_H = Math.round(SW * 9 / 16);
-  // the film inside the frame: its own first shot, already playing when the dark panel lands (hook → turn)
+  const ZOOM12 = (t) => 1 + 0.03 * ease.inOut(seg(t, 'sc1', 'sc3'));
+  // the film inside the frame: what the report becomes — one number and its chart, not the headline again
+  const BARS = [0.34, 0.42, 0.4, 0.55, 0.68, 0.86];
   function miniFilm(parent) {
     const M = {};
-    M.a = line(parent, 'Nobody reads', { x: 56, y: 70, size: 76, color: '#fff' });
-    M.b = line(parent, 'the report.', { x: 56, y: 156, size: 76, color: '#fff', accent: [1] });
-    M.doc = reg(abs(parent, `left:${SW - 250}px;top:64px;width:200px;height:250px;border-radius:14px;background:#fff;overflow:hidden`), { o: 0 });
-    for (let i = 0; i < 9; i++) abs(M.doc, `left:22px;top:${28 + i * 24}px;width:${i % 4 === 3 ? 90 : 156}px;height:9px;border-radius:5px;background:rgba(18,19,22,${i ? 0.14 : 0.5})`);
+    abs(parent, 'left:56px;top:64px;font:500 28px/1 UI;color:rgba(255,255,255,.6)', 'Q3 revenue');
+    M.n = reg(abs(parent, 'left:52px;top:108px;font:650 156px/1 Display;letter-spacing:-0.05em;color:#fff;font-variant-numeric:tabular-nums', ''));
+    abs(parent, 'left:56px;top:288px;font:500 28px/1 UI;color:rgba(255,255,255,.6)', 'vs Q2, all regions');
+    M.bars = BARS.map((v, i) => reg(abs(parent, `left:${470 + i * 52}px;top:${380 - 300 * v}px;width:36px;height:${300 * v}px;border-radius:8px;background:${i === BARS.length - 1 ? 'var(--accent)' : 'rgba(255,255,255,.28)'};transform-origin:50% 100%`), { sy: 0 }));
     abs(parent, `left:40px;top:${VID_H - 40}px;width:${SW - 80}px;height:6px;border-radius:3px;background:rgba(255,255,255,.2)`);
     M.prog = reg(abs(parent, `left:40px;top:${VID_H - 40}px;height:6px;border-radius:3px;background:var(--accent)`), { o: 0 });
     return M;
   }
   function runMini(t, M) {
-    rise(t, M.a, 6.3, null, { stagger: 0.05 });
-    rise(t, M.b, 6.45, null, { stagger: 0.05 });
-    const pd = sp(t, 6.6, 'snappy');
-    put(M.doc, { o: show(pd), y: 40 * (1 - pd), r: 6 - 3 * pd });
+    const pn = sp(t, 6.4, 'default');
+    put(M.n, { text: '+' + Math.round(24 * clamp(pn * 1.04)) + '%', o: show(pn) });
+    M.bars.forEach((e, i) => put(e, { sy: sp(t, 6.3 + i * 0.12, 'snappy') }));
     const pr = seg(t, 6.3, 'sc3');
     put(M.prog, { o: show(pr), css: { width: (SW - 80) * pr + 'px' } });
   }
@@ -154,8 +155,8 @@
       S.mini = miniFilm(S.dark);
     },
     run(t, b, S) {
-      put(S.root, { s: 1 + 0.03 * ease.inOut(seg(t, 'sc1', 'sc2')) });
-      rows(t, S.h, [-1.0, -0.85], 7.8);                        // frame 0 already reads
+      put(S.root, { s: ZOOM12(t) });                           // the same slow push runs through hook and turn: no jump at the cut
+      rows(t, S.h, [-1.0, -0.85]);                             // leaves inside the next scene (no blank frames at the cut)                        // frame 0 already reads
       const pw = sp(t, -0.8, 'default');
       put(S.st, { y: 60 * (1 - pw), r: -2 * (1 - pw), s: STAGE.s });
       put(S.body, { y: -1100 * ease.inOut(seg(t, 0, 7)) });   // the report scrolls past, unread
@@ -187,6 +188,7 @@
     build(root, S) {
       root.style.background = 'var(--bg)';
       LOCKUP(root);
+      S.old = head(root, ['Nobody reads', 'the report.'], { 1: [1] });
       S.h = head(root, ['Make it', 'a film.'], { 1: [1] });
       S.st = stage(root);
       S.vf = abs(S.st, `width:${SW}px;height:${VID_H}px;overflow:hidden;background:var(--ink)`, '', 'card');
@@ -205,8 +207,10 @@
       });
     },
     run(t, b, S) {
-      frame(t, b, S);
-      rows(t, S.h, [7.95, 8.1]);
+      frame(t, b, S, 0);
+      put(S.root, { s: ZOOM12(t) });
+      rows(t, S.old, [-1.0, -0.85], 8.0);
+      rows(t, S.h, [8.1, 8.2]);
       const pf = spHit(t, 8.3, 'snappy');
       put(S.field, { o: show(pf), y: 30 * (1 - pf) });
       const n = type(t, S.text, '/motion-film report.pdf', 8.6, 9.9, S.caret, 10.2);

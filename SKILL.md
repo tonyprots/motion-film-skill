@@ -69,7 +69,7 @@ row per scene with its marks, what lands on which chunk, the real media, the clo
 ## 6. Music and captions
 ```
 .venv/bin/python scripts/music_source.py                      # synth (default) | file | elevenlabs | openrouter | none
-.venv/bin/python scripts/captions.py                          # draft captions.json → EDIT: digits on screen, chunk per clause
+.venv/bin/python scripts/captions.py                          # draft captions.json → EDIT: digits on screen, chunk per clause, drop lines the headline already shows
 node scripts/sync.mjs
 ```
 A synth score is the exact nominal grid; a supplied or generated track is measured with `beats.py` (AUDIO.md §2).

@@ -54,6 +54,8 @@ You are a senior motion designer reviewing a voice-led film before it goes to it
 19. An empty or mostly empty container (chat window, card) for more than ~0.6 s.
 20. A dark sliver at the corner of a rounded card (a layer behind it not clipped to the radius). Crop the corners of every card.
 21. A caption that differs from what the voice says (beyond digits for number words), or a caption under the 9:16 platform zone.
+22. The same sentence twice or more in one frame: headline + caption, or a frame-in-frame repeating the headline.
+23. A jump at a cut: shared elements change scale or position between the last frame of one scene and the first of the next, or a blank frame between two headlines. Check a 30 fps strip across every cut.
 
 ## Output (append to docs/review_log.md exactly like this)
 ```

@@ -1,13 +1,5 @@
 [
  [
-  "s1a.1",
-  "Nobody reads the report."
- ],
- [
-  "s2a.1",
-  "So make it a film."
- ],
- [
   "s2a.3",
   "Written in code, by your agent."
  ],
@@ -29,6 +21,6 @@
  ],
  [
   "s4a.4",
-  "Then it renders, four times faster."
+  ""
  ]
 ]
