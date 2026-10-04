@@ -1,0 +1,7 @@
+{
+  "_doc": "Defaults for every film. Overridden by defaults.local.json (personal, not published) and by the project's timeline.json. See reference/PROVIDERS.md.",
+  "voiceover": { "provider": "auto", "model": null, "lang": null, "voice": null },
+  "transcribe": { "provider": null },
+  "music": { "source": "synth" },
+  "render": { "workers": "auto" }
+}

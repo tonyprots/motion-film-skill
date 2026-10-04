@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1008 214" width="1008" height="214" role="img" aria-label="Render time for a 2:36 film at 60 fps with motion blur: about 42 minutes sequential, 9 minutes 46 seconds with motion-film">
+<style>text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif}.l{font-size:17px;fill:#121316}.v{font-size:17px;fill:#5c5f67}.b{font-weight:700;fill:#3550ff}.s{font-size:14px;fill:#5c5f67}.h{font-size:16px;font-weight:650;fill:#121316}</style>
+<rect width="1008" height="214" rx="18" fill="#f5f5f2"/>
+<text x="24" y="44" class="h">Final render, one format</text>
+<text x="24" y="90" class="l">Sequential capture</text><rect x="260" y="67" width="580" height="32" rx="8" fill="#c9c8c3"/><text x="856" y="90" class="v">≈ 42 min</text>
+<text x="24" y="138" class="l">motion-film, 4 workers</text><rect x="260" y="115" width="135" height="32" rx="8" fill="#3550ff"/><text x="411" y="138" class="v b">9 min 46 s · 4.3× faster</text>
+<text x="24" y="186" class="s">2:36 film · 1920×1080 · 60 fps · adaptive motion blur · Apple M1 (8 cores). One worker reproduces the sequential render byte for byte.</text></svg>

@@ -1,0 +1,26 @@
+{
+  "name": "motion-film demo",
+  "brand": {
+    "product": "motion-film",
+    "url": "https://github.com/tonyprots/motion-film-skill",
+    "promise": "Your agent turns a report into a film, written in code.",
+    "hook": "Nobody reads the report.",
+    "cta": "github.com/tonyprots/motion-film-skill",
+    "audience": "GitHub README + X/LinkedIn feed, sound on and off",
+    "reference": "",
+    "must_show": "SCRIPT.md, the voice beat grid, the critic's scores, the render log, 16:9 + 9:16",
+    "must_avoid": "video-model claims, competitor names, any work content"
+  },
+  "colors": { "bg": "#f5f5f2", "ink": "#121316", "ink2": "#5c5f67", "accent": "#3550ff", "card": "#ffffff" },
+  "fonts": {
+    "display": { "file": "fonts/geist.woff2", "family": "Geist", "weight": 650, "tracking": "-0.045em" },
+    "ui": { "file": "fonts/geist.woff2", "family": "Geist" }
+  },
+  "timeline": {
+    "fps": 60, "bpm": 120, "formats": ["16x9", "9x16"],
+    "music": { "source": "synth", "chords": ["Fmaj7", "Am7", "Dm7", "C"], "seed": 7 }
+  },
+  "voiceover": { "provider": "elevenlabs", "voice": "", "model": "eleven_v4", "lang": "en", "style": "calm, confident, warm; natural pauses" },
+  "transcribe": { "provider": "elevenlabs" },
+  "notes": ["Light theme, one accent.", "Real files on screen: SCRIPT.md, render log, score table.", "Scene headline whole within 1 s."]
+}

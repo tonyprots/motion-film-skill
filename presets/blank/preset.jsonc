@@ -1,0 +1,83 @@
+// BLANK PRESET: copy this folder to presets/<your-brand>/ and fill it in.
+// Apply it when you scaffold a film:
+//   sh <skill>/scripts/init.sh <project-dir> --preset <your-brand>
+// Or just ask for a film with /motion-film and say "use preset <your-brand>".
+// Leave any field as "" or null and the skill will ask you for it (or measure it from your site).
+{
+  // Shown in the scaffold log and in brief.md.
+  "name": "Blank preset",
+
+  "brand": {
+    // Product or channel name. The starter film's end card uses it until the real film is built.
+    "product": "",
+    // The site the skill captures real UI, logo, fonts and colours from (scripts/capture.mjs). Include https://.
+    "url": "",
+    // One sentence the film has to land. Default: your site's H1, shortened.
+    "promise": "",
+    // First words on screen (frame 0). Keep it to 2–5 words, ending in a full stop.
+    "hook": "",
+    // End-card line, e.g. "Try it at example.com".
+    "cta": "",
+    // Who watches and where, e.g. "YouTube + Shorts, sound on" or "LinkedIn feed, sound off".
+    "audience": "",
+    // Optional reference film URL or path. The skill copies its grammar (rhythm, transitions), never its content.
+    "reference": "",
+    // The 2–4 things the film must show, comma separated.
+    "must_show": "",
+    // Anything off-limits: competitor names, claims, colours, words.
+    "must_avoid": ""
+  },
+
+  // Colour tokens written into film/index.html :root. Hex values. House rule: ONE accent.
+  "colors": {
+    "bg": "",      // canvas / page background
+    "ink": "",     // headline text
+    "ink2": "",    // body / secondary text
+    "accent": "",  // the one accent: logo or primary button colour
+    "card": ""     // UI cards and panels
+  },
+
+  // One display face, one UI face. Paths to .woff2 files, relative to this folder (e.g. "fonts/display.woff2").
+  // Only include fonts you are licensed to redistribute (OFL fonts from Google Fonts or Fontsource are safe).
+  // Leave "file" empty to use a system fallback until capture.mjs downloads your site's own faces.
+  "fonts": {
+    "display": {
+      "file": "",
+      "family": "",       // human-readable name, for the brief
+      "weight": null,     // e.g. 600. Written into the .display class.
+      "tracking": ""      // letter-spacing, e.g. "-0.04em"
+    },
+    "ui": {
+      "file": "",
+      "family": ""
+    }
+  },
+
+  // Merged into timeline.json. Everything else in the timeline (marks, sfx) comes from the approved shotlist.
+  "timeline": {
+    "duration": null,     // seconds, e.g. 15
+    "fps": null,          // 60 for finals (drafts render at 30 automatically)
+    "bpm": null,          // tempo of the synthesized score, e.g. 120
+    "formats": [],        // any of "16x9", "1x1", "4x5", "9x16". The first one is the primary format.
+    "music": {
+      "source": "",       // "synth" (original score in code), "file" (+ "path"), "elevenlabs" / "openrouter" (+ "prompt"), "none"
+      "chords": [],       // one chord per bar, cycled, e.g. ["Am", "F", "C", "G"]
+      "seed": null        // any integer; change it for a different arrangement of the same parts
+    }
+  },
+
+  // Voiceover: any provider in scripts/providers (elevenlabs, openrouter, openai, …), "file" for your own recordings,
+  // or "none" for a music-only film. See reference/PROVIDERS.md.
+  "voiceover": {
+    "provider": "",
+    "voice": "",          // provider's voice id or name (voice.py voices lists them)
+    "model": "",          // optional; provider default if empty
+    "lang": "",           // e.g. "ru", "en"
+    "style": ""           // delivery note for the whole film, e.g. "calm, confident, natural pauses"
+  },
+  // Which provider transcribes takes to check them against the script (defaults to the voice provider).
+  "transcribe": { "provider": "" },
+
+  // House notes copied into brief.md. One string per rule, in your own words.
+  "notes": []
+}

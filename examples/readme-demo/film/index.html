@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>motion-film — demo</title>
+<!-- favicon: replace with the film's own mark (inline SVG data URI) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='14' width='52' height='36' rx='8' fill='%233550ff'/%3E%3Cpath d='M27 24l12 8-12 8z' fill='%23ffffff'/%3E%3C/svg%3E">
+<style>
+  @font-face { font-family: 'Display'; src: url(../assets/fonts/display.woff2) format('woff2'); font-weight: 650; }
+  @font-face { font-family: 'UI'; src: url(../assets/fonts/ui.woff2) format('woff2'); font-weight: 100 900; }
+  /* One display face, one UI face. Point these at the brand's real files in assets/fonts/ (capture.mjs lists them). */
+  :root {
+    /* style guide tokens: ONE accent unless the brief says otherwise */
+    --bg: #f5f5f2; --ink: #121316; --ink-2: #5c5f67; --accent: #3550ff; --card: #ffffff;
+  }
+  html, body { margin: 0; background: #000; overflow: hidden; }
+  #stage { position: relative; overflow: hidden; background: var(--bg); transform-origin: 0 0;
+           font-family: 'UI', 'Helvetica Neue', Arial, sans-serif; color: var(--ink);
+           -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; }
+  .scene { position: absolute; inset: 0; overflow: hidden; }
+  .abs { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  .display { font-family: 'Display', 'Helvetica Neue', Arial, sans-serif; font-weight: 650; letter-spacing: -0.045em;
+             line-height: 0.95; white-space: nowrap; }
+  /* a line is a mask: words rise through it. Padding keeps descenders; start words >= 140% below so no sliver shows. */
+  .line { position: absolute; overflow: hidden; padding: 0.08em 0.04em 0.18em; margin: -0.08em -0.04em 0; white-space: nowrap; }
+  .word { display: inline-block; }
+  .card { position: absolute; background: var(--card); border-radius: 28px;
+          box-shadow: 0 2px 6px rgba(0,0,0,.05), 0 30px 80px -20px rgba(0,0,0,.22); }
+  body.play { display: block; }
+  .cap { position: absolute; overflow: hidden; }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 0; }
+  .eyebrow { font: 600 26px/1 UI; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
+  .chip { position: absolute; padding: 18px 28px; border-radius: 999px; background: var(--card); font: 600 34px/1 UI;
+          white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 12px 30px -12px rgba(0,0,0,.2); }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="lib/motion.js"></script>
+<script src="data.js"></script>
+<script src="peaks.js"></script>
+<script src="core.js"></script>
+<script src="type.js"></script>
+<script src="lib/captions.js"></script>
+<script src="film.js"></script>
+</body>
+</html>

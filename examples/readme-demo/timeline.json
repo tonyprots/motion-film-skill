@@ -1,0 +1,238 @@
+{
+  "note": "Single source of truth for picture + sound. Everything is in BEATS on the measured grid (beats.json). film.js reads marks via data.js; sync.mjs turns sfx events into cues.json; music.py reads music.sections.",
+  "title": "motion-film — film",
+  "duration": 33,
+  "fps": 60,
+  "bpm": 120.0,
+  "formats": [
+    "16x9",
+    "9x16"
+  ],
+  "music": {
+    "source": "synth",
+    "chords": [
+      "Fmaj7",
+      "Am7",
+      "Dm7",
+      "C"
+    ],
+    "sections": [
+      {
+        "at": 0,
+        "kind": "intro"
+      },
+      {
+        "at": "sc2",
+        "kind": "dark"
+      },
+      {
+        "at": "sc3",
+        "kind": "full"
+      },
+      {
+        "at": 36,
+        "kind": "build"
+      },
+      {
+        "at": 39.5,
+        "kind": "gap"
+      },
+      {
+        "at": "sc4",
+        "kind": "drop"
+      },
+      {
+        "at": "sc5",
+        "kind": "outro"
+      }
+    ],
+    "seed": 7
+  },
+  "voiceover": {
+    "provider": "elevenlabs",
+    "model": "eleven_v4",
+    "lang": "en",
+    "style": "calm, confident, warm; natural pauses",
+    "voice": "uju3wxzG5OhpWcoi3SMy"
+  },
+  "marks": {
+    "sc1": 0,
+    "s1a": 2.0,
+    "s1a.1": 2.0,
+    "s1a.end": 5.38,
+    "sc2": 8,
+    "s2a": 10.0,
+    "s2a.1": 10.0,
+    "s2a.2": 10.88,
+    "s2a.3": 13.48,
+    "s2a.4": 15.89,
+    "s2a.end": 17.7,
+    "sc3": 20,
+    "s3a": 22.0,
+    "s3a.1": 22.0,
+    "s3a.2": 24.73,
+    "s3a.end": 28.34,
+    "s3b": 29.5,
+    "s3b.1": 29.5,
+    "s3b.2": 33.72,
+    "s3b.end": 34.06,
+    "sc4": 40,
+    "s4a": 42.0,
+    "s4a.1": 42.0,
+    "s4a.2": 44.09,
+    "s4a.3": 45.49,
+    "s4a.4": 46.4,
+    "s4a.5": 48.69,
+    "s4a.end": 51.52,
+    "sc5": 56,
+    "s5a": 58.0,
+    "s5a.1": 58.0,
+    "s5a.end": 61.63,
+    "done": 66
+  },
+  "sfx": [
+    {
+      "at": 2.0,
+      "type": "pop",
+      "gain": 0.5,
+      "what": "\"0 views\" pill lands"
+    },
+    {
+      "at": 7.0,
+      "type": "whoosh",
+      "gain": 0.45,
+      "what": "page morphs into the video frame"
+    },
+    {
+      "at": 8.9,
+      "to": 9.8,
+      "every": 0.25,
+      "type": "tick",
+      "gain": 0.28,
+      "what": "typing \"make it a film\""
+    },
+    {
+      "at": 10.2,
+      "type": "click",
+      "gain": 0.5,
+      "what": "send"
+    },
+    {
+      "at": 15.89,
+      "type": "pop",
+      "gain": 0.4,
+      "what": "agent chip"
+    },
+    {
+      "at": 19.4,
+      "type": "whoosh",
+      "gain": 0.45,
+      "what": "wipe into How"
+    },
+    {
+      "at": 29.9,
+      "type": "pop",
+      "gain": 0.4,
+      "what": "element 1 drops onto its mark"
+    },
+    {
+      "at": 30.65,
+      "type": "pop",
+      "gain": 0.4,
+      "what": "element 2 drops onto its mark"
+    },
+    {
+      "at": 31.4,
+      "type": "pop",
+      "gain": 0.4,
+      "what": "element 3 drops onto its mark"
+    },
+    {
+      "at": 32.15,
+      "type": "pop",
+      "gain": 0.4,
+      "what": "element 4 drops onto its mark"
+    },
+    {
+      "at": 32.9,
+      "type": "pop",
+      "gain": 0.4,
+      "what": "element 5 drops onto its mark"
+    },
+    {
+      "at": 39.4,
+      "type": "whoosh",
+      "gain": 0.45,
+      "what": "push up into Proof"
+    },
+    {
+      "at": 44.19,
+      "type": "thump",
+      "gain": 0.55,
+      "what": "SHIP stamp"
+    },
+    {
+      "at": 45.5,
+      "to": 46.0,
+      "every": 0.25,
+      "type": "tick",
+      "gain": 0.22,
+      "what": "typing the render command"
+    },
+    {
+      "at": 49.29,
+      "type": "pop",
+      "gain": 0.5,
+      "what": "4.3x lands"
+    },
+    {
+      "at": 52.42,
+      "type": "pop",
+      "gain": 0.35,
+      "what": "same pixels chip"
+    },
+    {
+      "at": 55.4,
+      "type": "whoosh",
+      "gain": 0.45,
+      "what": "wipe into the end card"
+    },
+    {
+      "at": 55.2,
+      "type": "thump",
+      "gain": 0.5,
+      "what": "motion-film lockup"
+    },
+    {
+      "at": 56.2,
+      "type": "pop",
+      "gain": 0.4,
+      "what": "agent chip 1"
+    },
+    {
+      "at": 56.5,
+      "type": "pop",
+      "gain": 0.4,
+      "what": "agent chip 2"
+    },
+    {
+      "at": 56.8,
+      "type": "pop",
+      "gain": 0.4,
+      "what": "agent chip 3"
+    }
+  ],
+  "brand": {
+    "product": "motion-film",
+    "url": "https://github.com/tonyprots/motion-film-skill",
+    "promise": "Your agent turns a report into a film, written in code.",
+    "hook": "Nobody reads the report.",
+    "cta": "github.com/tonyprots/motion-film-skill",
+    "audience": "GitHub README + X/LinkedIn feed, sound on and off",
+    "must_show": "SCRIPT.md, the voice beat grid, the critic's scores, the render log, 16:9 + 9:16",
+    "must_avoid": "video-model claims, competitor names, any work content"
+  },
+  "transcribe": {
+    "provider": "elevenlabs"
+  }
+}

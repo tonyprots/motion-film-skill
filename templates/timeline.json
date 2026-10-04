@@ -1,0 +1,40 @@
+{
+  "note": "Single source of truth for picture + sound. Everything is in BEATS on the measured grid (beats.json). film.js reads marks via data.js; sync.mjs turns sfx events into cues.json; music.py reads music.sections.",
+  "title": "Product — launch reel",
+  "duration": 16,
+  "fps": 60,
+  "bpm": 120,
+  "formats": ["16x9", "9x16"],
+  "music": {
+    "source": "synth",
+    "chords": ["Am", "F", "C", "G"],
+    "sections": [
+      { "at": "hook",  "kind": "intro" },
+      { "at": "mid",   "kind": "full" },
+      { "at": "build", "kind": "build" },
+      { "at": "gap",   "kind": "gap" },
+      { "at": "end",   "kind": "drop" }
+    ]
+  },
+  "voiceover": null,
+  "marks": {
+    "hook": 0, "hook_w2": 1, "hook_w3": 2, "hook_card": 4,
+    "mid": 8, "mid_a": 10, "mid_b": 12, "mid_c": 14,
+    "build": 20, "gap": 23.5,
+    "end": 24, "cta": 26,
+    "done": 32
+  },
+  "sfx": [
+    { "at": "hook",      "type": "pop",    "gain": 0.8,  "what": "first word lands on frame 0" },
+    { "at": "hook_w2",   "type": "pop",    "gain": 0.55, "what": "word 2" },
+    { "at": "hook_w3",   "type": "pop",    "gain": 0.6,  "what": "word 3" },
+    { "at": "hook_card", "type": "whoosh", "gain": 0.7,  "what": "card rises over the headline" },
+    { "at": "mid_a",     "type": "click",  "gain": 0.7,  "what": "selection moves to A" },
+    { "at": "mid_b",     "type": "click",  "gain": 0.7,  "what": "selection moves to B" },
+    { "at": "mid_c",     "type": "click",  "gain": 0.7,  "what": "selection moves to C" },
+    { "at": 16, "to": 18, "every": 0.25, "type": "tick", "gain": 0.35, "what": "typing" },
+    { "at": "end",       "type": "riser",  "gain": 0.6,  "what": "riser builds through the gap, peaks on the logo" },
+    { "at": "end",       "type": "thump",  "gain": 0.9,  "what": "logo lands" },
+    { "at": "cta",       "type": "pop",    "gain": 0.6,  "what": "CTA" }
+  ]
+}

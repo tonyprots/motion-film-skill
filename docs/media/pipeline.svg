@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1008 214" width="1008" height="214" role="img" aria-label="motion-film pipeline: script, voice, beat grid, motion, critic, render">
+<style>text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif}.n{font-size:14px;font-weight:700;fill:#3550ff}.t{font-size:21px;font-weight:650;fill:#121316}.s{font-size:14px;fill:#5c5f67}</style>
+<rect width="1008" height="214" rx="18" fill="#f5f5f2"/>
+<rect x="24" y="24" width="140" height="128" rx="14" fill="#fff" stroke="#e4e3de"/>
+<text x="42" y="54" class="n">1</text><text x="42" y="84" class="t">Script</text>
+<text x="42" y="112" class="s">story first</text><text x="42" y="132" class="s">you approve</text>
+<path d="M168 88h12" stroke="#3550ff" stroke-width="2"/><path d="M178 83l6 5-6 5" fill="none" stroke="#3550ff" stroke-width="2"/>
+<rect x="188" y="24" width="140" height="128" rx="14" fill="#fff" stroke="#e4e3de"/>
+<text x="206" y="54" class="n">2</text><text x="206" y="84" class="t">Voice</text>
+<text x="206" y="112" class="s">any TTS or yours</text><text x="206" y="132" class="s">takes verified</text>
+<path d="M332 88h12" stroke="#3550ff" stroke-width="2"/><path d="M342 83l6 5-6 5" fill="none" stroke="#3550ff" stroke-width="2"/>
+<rect x="352" y="24" width="140" height="128" rx="14" fill="#fff" stroke="#e4e3de"/>
+<text x="370" y="54" class="n">3</text><text x="370" y="84" class="t">Grid</text>
+<text x="370" y="112" class="s">voice marks</text><text x="370" y="132" class="s">→ beats</text>
+<path d="M496 88h12" stroke="#3550ff" stroke-width="2"/><path d="M506 83l6 5-6 5" fill="none" stroke="#3550ff" stroke-width="2"/>
+<rect x="516" y="24" width="140" height="128" rx="14" fill="#fff" stroke="#e4e3de"/>
+<text x="534" y="54" class="n">4</text><text x="534" y="84" class="t">Motion</text>
+<text x="534" y="112" class="s">springs, captions</text><text x="534" y="132" class="s">score, UI sounds</text>
+<path d="M660 88h12" stroke="#3550ff" stroke-width="2"/><path d="M670 83l6 5-6 5" fill="none" stroke="#3550ff" stroke-width="2"/>
+<rect x="680" y="24" width="140" height="128" rx="14" fill="#fff" stroke="#e4e3de"/>
+<text x="698" y="54" class="n">5</text><text x="698" y="84" class="t">Critic</text>
+<text x="698" y="112" class="s">8 scores, fix 3</text><text x="698" y="132" class="s">≥ 2 rounds</text>
+<path d="M824 88h12" stroke="#3550ff" stroke-width="2"/><path d="M834 83l6 5-6 5" fill="none" stroke="#3550ff" stroke-width="2"/>
+<rect x="844" y="24" width="140" height="128" rx="14" fill="#fff" stroke="#e4e3de"/>
+<text x="862" y="54" class="n">6</text><text x="862" y="84" class="t">Render</text>
+<text x="862" y="112" class="s">60 fps + blur</text><text x="862" y="132" class="s">16:9 + 9:16</text>
+<text x="24" y="186" class="s">The voice sets the timeline: scenes start on bars, phrases on half-beats, every element lands on a voice mark.</text></svg>

@@ -1,0 +1,8 @@
+# Direct dependencies (for upgrades). Installs use requirements.lock (exact versions + hashes): see scripts/lock_deps.py.
+# Python side of the pipeline (music.py, beats.py, mix.py, vo.py, layout_vo.py, review.py, tile.py).
+# Providers and voice.py use only the standard library.
+numpy
+scipy
+soundfile
+librosa
+pillow
