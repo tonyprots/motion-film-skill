@@ -1,7 +1,25 @@
 {
   "_doc": "Defaults for every film. Overridden by defaults.local.json (personal, not published) and by the project's timeline.json. See reference/PROVIDERS.md.",
-  "voiceover": { "provider": "auto", "model": null, "lang": null, "voice": null },
-  "transcribe": { "provider": null },
-  "music": { "source": "synth" },
-  "render": { "workers": "auto" }
+  "_auto_order_doc": "Provider \"auto\" takes the first provider of this list that is set up here (key in the environment, or a yc login for SpeechKit).",
+  "auto_order": [
+    "elevenlabs",
+    "openrouter",
+    "openai",
+    "speechkit"
+  ],
+  "voiceover": {
+    "provider": "auto",
+    "model": null,
+    "lang": null,
+    "voice": null
+  },
+  "transcribe": {
+    "provider": null
+  },
+  "music": {
+    "source": "synth"
+  },
+  "render": {
+    "workers": "auto"
+  }
 }

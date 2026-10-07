@@ -22,11 +22,11 @@
    *   inAt:   beat for word 0, or an array of beats (one per word). Hits use C.spHit: readable ON the beat.
    *   outAt:  beat the line starts leaving, or null. RULE: set it to the NEXT thing's in-beat minus the exit time,
    *           so the outgoing line is gone before the incoming one lands (no double exposure at swaps).
-   *   opts:   { stagger: 0.08 beats, preset: 'heavy', exit: 0.28 beats }
+   *   opts:   { stagger: 0.08 beats, preset: 'text' (role → heavy), exit: 0.28 beats }
    * Words start 145% of the size below the mask, so no glyph tops peek through the padding on the first frame.
    */
   function rise(t, L, inAt, outAt = null, o = {}) {
-    const stagger = o.stagger ?? 0.08, preset = o.preset || 'heavy', exit = o.exit ?? 0.28;
+    const stagger = o.stagger ?? 0.08, preset = o.preset || 'text', exit = o.exit ?? 0.28;
     const below = L.size * 1.45, above = -L.size * 1.45;
     L.words.forEach((w, i) => {
       const bin = Array.isArray(inAt) ? inAt[i] : C.beatOf(inAt) + i * stagger;

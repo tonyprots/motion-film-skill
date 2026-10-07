@@ -15,6 +15,7 @@ Fill every field before writing the script. `?` means "ask the user". A default 
 | Real media to show | ? | screenshots / UI from the sources (never redraw UI that exists) |
 | Voiceover | ? | defaults.json → provider + voice (ElevenLabs / OpenRouter / OpenAI / own recordings) |
 | Music | ? | `synth` (original score on the grid); or a supplied track; or generated (credits) |
+| Generated video bridges | ? | no (only when the customer asks: they cost money and easily read as stock) |
 | What may leave the machine | ? | the script goes to the voice provider: no NDA, no personal data |
 | CTA / end card | ? | — |
 | Must show | ? | — |

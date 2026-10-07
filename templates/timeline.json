@@ -17,6 +17,8 @@
     ]
   },
   "voiceover": null,
+  "styleframes": ["hook_card", "mid_c", "end"],
+  "motion": { "roles": {}, "stagger": 0.05 },
   "marks": {
     "hook": 0, "hook_w2": 1, "hook_w3": 2, "hook_card": 4,
     "mid": 8, "mid_a": 10, "mid_b": 12, "mid_c": 14,

@@ -30,6 +30,7 @@
       return scene({
         name: 'captions', from: 0, to: 'done', ...(o.scene || {}),
         build(root, S) {
+          root.style.zIndex = 60;   // above generated B-roll (lib/footage.js, z 40)
           const hgt = Math.round(box.size * 1.22 * 2) + 8;
           S.items = CAPT.map((c) => {
             const clip = el('div', { class: 'cap', style: `left:${box.x}px;top:${box.y}px;width:${box.w}px;height:${hgt}px` }, root);

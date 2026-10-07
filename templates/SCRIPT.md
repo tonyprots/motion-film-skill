@@ -1,11 +1,14 @@
 # <Film title> (~2:00)
 
 ## STORY
+- Type and arc: <a type from reference/STORY.md, or your own arc: step → step → …>
 - Logline: <one or two sentences: what changes, for whom>
 - One sentence the viewer repeats: "…"
-- Hero: <the person / product / object we follow>
-- Stakes: <what is lost if nothing changes>
-- Turn: <the moment the picture flips>
+- Argument chain: <3–6 steps to that sentence>
+- Not about: <the wrong reading the film rules out; never voiced>
+- Hero: <the person / product / object we follow — or "none — why">
+- Stakes: <what is lost if nothing changes — or "none — why">
+- Turn: <the moment in the middle when the picture flips — or "none — why">
 - Main number (in the voice, as words): <…>
 - Must not claim: <unverified numbers, plans, anything beyond the sources>
 - Sources: <paths>

@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Script doctor in code: checks SCRIPT.md against the rules that make a voice film watchable.
 Errors (exit 1) must be fixed before voicing; warnings are judgement calls — fix or say why not.
-  - STORY block present (logline, one sentence the viewer repeats, hero, stakes, turn)
+  - STORY block present (type and arc, logline, one sentence the viewer repeats, hero, stakes, turn — "none, because …" counts) and the thesis contract the
+    blind read checks against: argument chain (3–6 steps) and "not about" (the wrong reading the film must rule out)
+  - terms: a Latin word or abbreviation inside a Russian line with no entry in lexicon.json (next to SCRIPT.md) — say how
+    the voice reads it, or confirm it on a sample
   - hook: the first voice line <= 60 chars, no number in it
   - every line <= 200 chars (~13 s); sentences <= 20 words; lists <= 3 items
   - numbers: digits never in the voice (write them as words); <= 1 number per line, <= 8 per film
@@ -33,8 +36,9 @@ if not lines: sys.exit('no voice lines found ("**Voice:** \\"…\\"" / "**Гол
 story = re.search(r'^#+\s*(STORY|История|Каркас)', src, re.M | re.I)
 if not story: E('no STORY block: add logline, one sentence the viewer repeats, hero, stakes, turn — and get it approved first')
 else:
-    for key, alts in {'one sentence': r'one sentence|одна фраза', 'hero': r'hero|герой', 'stakes': r'stakes|ставк', 'turn': r'turn|поворот'}.items():
-        if not re.search(alts, src, re.I): W(f'STORY has no "{key}"')
+    for key, alts in {'type and arc': r'type and arc|тип и арка', 'one sentence': r'one sentence|одна фраза', 'hero': r'hero|герой', 'stakes': r'stakes|ставк', 'turn': r'turn|поворот',
+                      'argument chain': r'argument chain|цепочка', 'not about': r'not about|не про'}.items():
+        if not re.search(alts, src, re.I): W(f'STORY has no "{key}" (reference/STORY.md: the blind read checks the film against it)')
 
 def numbers(t):
     words = [w.lower() for w in re.findall(r"[\w'-]+", t)]
@@ -70,6 +74,17 @@ if moods and len(moods) < 3: W(f'only {len(moods)} mood(s) {sorted(moods)} — c
 if not moods: W('no voice direction ({mood=… pace=…}) — the whole film will sound the same')
 if not holds: W('no hold beat — give the key moment 1–2 s of picture and music only ({hold=1.5})')
 if holds > 3: W(f'{holds} hold beats — 1–2 per film, or they stop meaning anything')
+
+import json, os
+lex_path = os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), 'lexicon.json')
+LEX = json.load(open(lex_path, encoding='utf-8')) if os.path.exists(lex_path) else {}
+terms = {}
+for L in lines:
+    if not re.search('[а-яё]', L['text'], re.I): continue   # a Russian line: Latin words and abbreviations are the risk
+    for w in re.findall(r"[A-Za-z][A-Za-z0-9.+#'-]*|\b[А-ЯЁ]{2,}\b", L['text']):
+        if not any(w in k.split() or w == k for k in LEX): terms.setdefault(w.rstrip('.'), L['sec'][0])
+if terms: W(f'{len(terms)} term(s) with no lexicon.json entry: ' + ', '.join(f'{t} (s{n})' for t, n in list(terms.items())[:12])
+            + ' — add {"term": "how the voice says it"} or confirm on a voice sample')
 
 chars = sum(len(L['text']) for L in lines)
 print(f'{len(lines)} lines · {chars} chars · ≈{chars / 15:.0f} s of voice · {total_n} spoken numbers · moods {sorted(moods) or "—"} · holds {holds}')

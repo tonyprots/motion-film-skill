@@ -6,21 +6,25 @@
   voice.py lines   [--only s2a,s3b] [--no-check]              every line of audio/vo/lines.json → audio/vo/<id>.wav
   voice.py check   [--only …]                                 transcribe the takes in audio/vo/ and score them against the script
                                                               (use it on takes you recorded yourself, too)
+  voice.py check-mix [--only …]                               transcribe each phrase as it sounds in the FINAL audio/mix.wav
+                                                              (music, sfx, ducking and limiter included); < 0.85 = lost in the mix
 Common flags: --provider P  --voice V  --model M  --style "<delivery note for the whole film>"  --check-with P
 
 Settings: flags → timeline.json "voiceover" {provider, voice, model, lang, style} and "transcribe" {provider} →
 <skill>/defaults.local.json → <skill>/defaults.json. Keep one provider and one voice for the whole film.
 Requests go one at a time: parallel TTS requests hang on several providers.
 Every take is transcribed and retried (up to 3 takes, the last without direction tags) if it drifts from the text.
+A line's "say" (lexicon.json → extract_lines.py) is what the voice reads; the check accepts either spelling.
 The script text leaves the machine: it goes to the voice provider and the checking provider."""
 import argparse, difflib, json, os, re, subprocess, sys, tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import providers as P
+import inspect
 
 MOOD = {'neutral': '', 'intrigue': 'curious, leaning in', 'concern': 'serious, weighty', 'relief': 'relieved, warm smile',
         'confident': 'confident, crisp', 'warm': 'warm, gentle', 'excited': 'excited, bright',
         'интрига': 'curious, leaning in', 'тревога': 'serious, weighty', 'облегчение': 'relieved, warm smile',
-        'уверенность': 'confident, crisp', 'тепло': 'warm, gentle', 'нейтрально': ''}
+        'уверенность': 'confident, crisp', 'тепло': 'warm, gentle', 'восторг': 'excited, bright', 'нейтрально': ''}
 PACE = {'slow': 'slowly', 'fast': 'energetic, a bit faster', 'normal': '', 'медленно': 'slowly', 'быстро': 'energetic, a bit faster'}
 
 
@@ -56,6 +60,10 @@ def score(want, heard):
     return round(max(difflib.SequenceMatcher(None, norm(want), norm(heard)).ratio(), difflib.SequenceMatcher(None, a, b).ratio()), 3)
 
 
+def score2(L, heard):   # either spelling counts: the script's, or the lexicon's spoken form
+    return max(score(L['text'], heard), score(L['say'], heard) if L.get('say') else 0)
+
+
 def save(raw, out):
     if not raw: sys.exit(f'empty audio for {out}')
     fmt = ['-c:a', 'libmp3lame', '-b:a', '96k'] if out.endswith('.mp3') else []
@@ -74,7 +82,7 @@ def heard(checker, path, lang):
 
 
 ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-ap.add_argument('cmd', choices=['voices', 'samples', 'lines', 'check']); ap.add_argument('text', nargs='?')
+ap.add_argument('cmd', choices=['voices', 'samples', 'lines', 'check', 'check-mix']); ap.add_argument('text', nargs='?')
 for f in ('provider', 'voice', 'model', 'style', 'lang', 'voices', 'only', 'out', 'check-with'): ap.add_argument('--' + f)
 ap.add_argument('--no-check', action='store_true')
 a = ap.parse_args()
@@ -85,7 +93,7 @@ if not prov or prov == 'none': sys.exit('no voice provider: set timeline.json "v
 lang = a.lang or S.get('lang') or None
 style = a.style if a.style is not None else S.get('style', '')
 if prov == 'file':   # your own recordings: audio/vo/<id>.wav, named by line id
-    if a.cmd != 'check': sys.exit('provider "file": put your own takes in audio/vo/<id>.wav (ids from lines.json), then run voice.py check')
+    if a.cmd not in ('check', 'check-mix'): sys.exit('provider "file": put your own takes in audio/vo/<id>.wav (ids from lines.json), then run voice.py check')
     M = None
 else:
     M = P.load(prov)
@@ -118,9 +126,26 @@ if a.cmd == 'check':
     for L in todo:
         f = next((f'audio/vo/{L["id"]}{e}' for e in ('.wav', '.mp3', '.m4a', '.flac') if os.path.exists(f'audio/vo/{L["id"]}{e}')), None)
         if not f: print(L['id'], 'MISSING'); bad += 1; continue
-        h = heard(checker, f, lang); r = score(L['text'], h); bad += r < 0.93
+        h = heard(checker, f, lang); r = score2(L, h); bad += r < 0.93
         print(L['id'], f'{dur(f):5.1f}s', 'ok ' if r >= 0.93 else 'BAD', r, '' if r >= 0.93 else f'«{h[:90]}»')
     sys.exit(1 if bad else 0)
+
+if a.cmd == 'check-mix':   # what the viewer hears: each phrase cut from the final mix
+    if not checker: sys.exit('no transcription provider: pass --check-with P or set timeline.json "transcribe.provider"')
+    if not os.path.exists('audio/mix.wav') or not os.path.exists('audio/vo_placed.json'): sys.exit('needs audio/mix.wav and audio/vo_placed.json (vo.py, mix.py)')
+    placed = {p['id']: p for p in json.load(open('audio/vo_placed.json', encoding='utf-8'))}
+    bad = n = 0
+    for L in todo:
+        p = placed.get(L['id'])
+        if not p: print(L['id'], 'NOT PLACED'); bad += 1; continue
+        with tempfile.NamedTemporaryFile(suffix='.mp3') as tmp:
+            subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-ss', str(max(0, p['t0'] - 0.05)), '-to', str(p['t1'] + 0.35), '-i', 'audio/mix.wav',
+                            '-ac', '1', '-ar', '16000', '-b:a', '64k', tmp.name], check=True)
+            h = P.need(checker, 'transcribe')(tmp.name, lang)
+        r = score2(L, h); bad += r < 0.85; n += 1
+        print(L['id'], 'ok ' if r >= 0.85 else 'LOST', r, '' if r >= 0.85 else f'«{h[:90]}» — the mix buries it: lower music/sfx under this phrase')
+    print(f'check-mix: {n} phrases transcribed from audio/mix.wav, {bad} lost')
+    sys.exit(1 if bad or not n else 0)
 
 if not voice: sys.exit(f'no voice for {M.NAME}: set timeline.json "voiceover.voice" or pass --voice ({getattr(M, "VOICE_HINT", "")})')
 total = 0
@@ -129,9 +154,10 @@ for L in todo:
     out = f'audio/vo/{L["id"]}.wav'
     attempts = [d_full, d_full, style] if d_full != style else [style]   # direction is sometimes read aloud: last try without it
     for k, dr in enumerate(attempts):
-        d = save(P.need(M, 'tts')(L['text'], voice, model, dr, lang), out)
+        f = P.need(M, 'tts')   # providers that read no direction text (ElevenLabs v4) take the line itself: mood/pace → settings
+        d = save(f(L.get('say', L['text']), voice, model, dr, lang, line=L) if 'line' in inspect.signature(f).parameters else f(L.get('say', L['text']), voice, model, dr, lang), out)
         if not checker: r = None; break
-        h = heard(checker, out, lang); r = score(L['text'], h)
+        h = heard(checker, out, lang); r = score2(L, h)
         if r >= 0.93: break
         print(f'  {L["id"]} take {k + 1}: {r} «{h[:70]}» — retry')
     total += d

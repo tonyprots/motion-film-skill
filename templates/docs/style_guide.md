@@ -38,3 +38,14 @@ Enter: rise through a mask / slam / type. Exit: lift through the mask / covered 
 
 ## 8. Sound
 Tempo, feel, which UI events get which SFX (see timeline.json sfx), VO voice if any.
+
+## 9. Motion grammar
+| Role | Preset / duration | Cascade | Overshoot |
+|---|---|---|---|
+| UI entrance | `default`, 250–450 ms | 30–80 ms, ≤ 8 per wave | no |
+| Text | `heavy` | by word, ≤ 0.6 s per wave | no |
+| Accents / pills | `snappy` | — | no |
+| Hero moment | `heavy`, 600–900 ms | — | yes, once |
+| Camera | `heavy`, push 0.3–0.5 s before the action, 1.4–2.5× | — | no |
+Roles live in `timeline.json` `"motion"` (`enter`, `exit`, `text`, `accent`, `hero`, `camera`): change one, change the other.
+Finish (`timeline.json` → `finish`): LUT <file or none>, grain <0 / 1.5–2.5>, `--master` <yes/no>.

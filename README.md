@@ -77,7 +77,7 @@ Requirements: **macOS or Linux**, **Node 22+**, **Python 3.11–3.13**, **ffmpeg
 ### Claude Code
 
 ```bash
-git clone --branch v1.0.1 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
+git clone --branch v1.1.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
 ```
 
 Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our leadership channel."*
@@ -85,7 +85,7 @@ Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our l
 ### Codex
 
 ```bash
-git clone --branch v1.0.1 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
+git clone --branch v1.1.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
 ```
 
 ### Any other agent
@@ -110,13 +110,15 @@ sh ~/.claude/skills/motion-film/scripts/smoke_test.sh /tmp/motion-film-smoke
 
 ## Voice providers and keys
 
-Set **one** key. `"provider": "auto"` (the default) picks the first one it finds:
+Set **one** key. `"provider": "auto"` (the default) walks `auto_order` in `defaults.json` (ElevenLabs → OpenRouter → OpenAI →
+SpeechKit) and picks the first provider that is set up:
 
 | provider | voice | take check | music | key |
 |---|---|---|---|---|
 | ElevenLabs | eleven_v4, any voice incl. your clone | scribe_v2 | yes (plan-dependent) | `ELEVENLABS_API_KEY` |
 | OpenRouter | Gemini TTS, gpt-audio | Gemini audio | Lyria | `OPENROUTER_API_KEY` |
 | OpenAI | gpt-4o-mini-tts, gpt-audio | gpt-4o-transcribe | — | `OPENAI_API_KEY` |
+| Yandex SpeechKit | API v3 voices (`alena`, `kirill:strict` …) | SpeechKit STT | — | `YANDEX_CLOUD_API_KEY`, or a `yc` login |
 | your recordings | `audio/vo/<id>.wav` | any provider above | your track | — |
 | synth | — | — | original score in code | — |
 

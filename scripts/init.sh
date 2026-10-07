@@ -23,7 +23,7 @@ mkdir -p "$DEST"/film/lib "$DEST"/scripts/providers "$DEST"/docs "$DEST"/audio/v
 cp "$SKILL"/engine/index.html "$SKILL"/engine/core.js "$SKILL"/engine/type.js "$SKILL"/engine/film.js "$DEST"/film/
 cp "$SKILL"/engine/lib/*.js "$DEST"/film/lib/
 for f in render.mjs png.mjs sync.mjs sfx.mjs capture.mjs preset.mjs beats.py music.py music_source.py vo.py layout_vo.py captions.py \
-         mix.py review.py tile.py voice.py extract_lines.py script_lint.py; do cp "$SKILL/scripts/$f" "$DEST/scripts/"; done
+         mix.py review.py tile.py voice.py extract_lines.py script_lint.py plan_check.py blindpack.py notes.py share.py sfx_fetch.py vision.py broll.py; do cp "$SKILL/scripts/$f" "$DEST/scripts/"; done
 cp "$SKILL"/scripts/providers/*.py "$DEST"/scripts/providers/
 cp "$SKILL"/templates/brief.md "$SKILL"/templates/timeline.json "$SKILL"/templates/SCRIPT.md "$DEST"/
 cp "$SKILL"/templates/sfx_layout.py "$DEST"/scripts/
@@ -46,8 +46,8 @@ if [ ! -x "$HOMEDIR/venv/bin/python" ]; then
   $PY -m venv "$HOMEDIR/venv" && "$HOMEDIR/venv/bin/pip" install -q --require-hashes -r "$SKILL/requirements.lock" \
     || { rm -rf "$HOMEDIR/venv"; echo "ERROR: locked Python install failed (see above). Python 3.11–3.13 has wheels for every pin."; exit 1; }
 fi
-if [ ! -d "$HOMEDIR/node_modules/playwright" ]; then
-  echo "installing Playwright (locked) + Chromium headless shell into $HOMEDIR …"
+if [ ! -d "$HOMEDIR/node_modules/playwright" ] || [ ! -d "$HOMEDIR/node_modules/three" ]; then
+  echo "installing Playwright, three.js, postprocessing, GSAP (locked) + Chromium headless shell into $HOMEDIR …"
   cp "$SKILL/toolchain/package.json" "$SKILL/toolchain/package-lock.json" "$HOMEDIR/"
   (cd "$HOMEDIR" && npm ci -s && npx playwright install chromium-headless-shell) || { echo "ERROR: Playwright install failed"; exit 1; }
 fi

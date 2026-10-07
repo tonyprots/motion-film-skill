@@ -20,12 +20,22 @@
     heavy:   { response: 0.5,  damping: 1.0 },   // none (critical)  · big type, logo lockups
     playful: { response: 0.5,  damping: 0.45 },  // ~20% overshoot   · mascots only
   };
+  // Motion tokens: roles are preset names too, so one film speaks one motion language. A brand retunes them in ONE place,
+  // timeline.json "motion": {"roles": {"enter": "snappy"}, "presets": {"default": {"response": 0.35, "damping": 0.9}},
+  // "stagger": 0.05} — the core calls configure() with it before the first frame.
+  const ROLES = { enter: 'default', exit: 'snappy', ui: 'default', text: 'heavy', accent: 'snappy', hero: 'heavy', camera: 'heavy' };
+
+  function configure(m = {}) {
+    for (const [k, v] of Object.entries(m.presets || {})) PRESETS[k] = { ...(PRESETS[k] || {}), ...v };
+    Object.assign(ROLES, m.roles || {});
+    settleCache.clear();
+  }
 
   function resolve(p) {
     if (p == null) return PRESETS.default;
     if (typeof p === 'string') {
-      const r = PRESETS[p];
-      if (!r) throw new Error(`motion: unknown preset "${p}"`);
+      const r = PRESETS[p] || PRESETS[ROLES[p]] || (typeof ROLES[p] === 'object' ? ROLES[p] : null);
+      if (!r) throw new Error(`motion: unknown preset or role "${p}" (presets: ${Object.keys(PRESETS)}; roles: ${Object.keys(ROLES)})`);
       return r;
     }
     return p;
@@ -132,5 +142,5 @@
     return u;
   }
 
-  return { PRESETS, step, settle, spring, track, indicator, swapAlpha, loopT };
+  return { PRESETS, ROLES, configure, step, settle, spring, track, indicator, swapAlpha, loopT };
 });

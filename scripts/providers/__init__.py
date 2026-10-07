@@ -8,7 +8,9 @@ A provider is a module in this package that defines any of:
   voices(lang=None) -> list[dict]                                  optional: voice catalogue for picking
   DEFAULT_VOICE, DEFAULT_MODEL, VOICE_HINT                         optional defaults
 
-Built in: elevenlabs, openrouter, openai. "auto" (the default) picks the first of them whose key is set. Anything else (a corporate proxy, a local engine) is one more file here;
+Built in: elevenlabs, openrouter, openai, speechkit (+ a corporate gateway in some copies). "auto" (the default) walks
+"auto_order" from defaults(.local).json and picks the first provider that is available here (its key is set, or its
+available() says so); providers not in that list are never picked by "auto", only by name. Anything else (a corporate proxy, a local engine) is one more file here;
 see reference/PROVIDERS.md. A provider missing from this copy of the skill fails with a clear message.
 
 Settings resolve in this order: command-line flags → the project's timeline.json ("voiceover", "music") →
@@ -33,21 +35,22 @@ def load(name):
         raise
 
 
-AUTO_ORDER = ('elevenlabs', 'openrouter', 'openai')
+AUTO_ORDER = ('elevenlabs', 'openrouter', 'openai')   # used only when defaults(.local).json has no "auto_order"
 
 
 def resolve(name, fn='tts'):
-    """"auto" → the first provider whose key is in the environment and that has fn(); anything else as is."""
+    """"auto" → the first provider of "auto_order" that is available and has fn(); anything else as is."""
     if name != 'auto': return name
-    here = os.path.dirname(__file__)
-    rest = sorted(f[:-3] for f in os.listdir(here) if f.endswith('.py') and not f.startswith('_') and f[:-3] not in AUTO_ORDER)
-    for n in (*AUTO_ORDER, *rest):
+    order = defaults().get('auto_order') or AUTO_ORDER
+    for n in order:
         try: m = importlib.import_module(f'providers.{n}')
         except ModuleNotFoundError: continue
-        if hasattr(m, fn) and has_key(getattr(m, 'KEY_ENV', None)):
-            print(f'provider auto → {n} ({m.KEY_ENV} found)', file=sys.stderr); return n
-    raise SystemExit('provider "auto": no key found (ELEVENLABS_API_KEY, OPENROUTER_API_KEY, OPENAI_API_KEY …). '
-                     'Set one, or pass --provider / timeline.json "voiceover.provider" (reference/PROVIDERS.md)')
+        if not hasattr(m, fn): continue
+        ok = m.available() if hasattr(m, 'available') else has_key(getattr(m, 'KEY_ENV', None))
+        if ok:
+            print(f'provider auto → {n} (first available of {" → ".join(order)})', file=sys.stderr); return n
+    raise SystemExit(f'provider "auto": none of {" → ".join(order)} is available here (no key / no login). '
+                     'Set one up, or pass --provider / timeline.json "voiceover.provider" (reference/PROVIDERS.md)')
 
 
 def need(mod, fn):

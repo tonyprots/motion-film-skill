@@ -33,3 +33,17 @@ ok(M.loopT(4, 4) === 0 && M.loopT(4 - 1 / 120, 4, 60) === 0 && M.loopT(-1, 4) ==
   'loopT pins last frame to first');
 
 process.exitCode = failed ? 1 : 0;
+
+// motion tokens: roles resolve to presets, configure() retunes them
+{
+  const M = require('./motion.js');
+  const eq = (a, b, m) => { if (Math.abs(a - b) > 1e-12) throw new Error(m + `: ${a} vs ${b}`); };
+  eq(M.step(0.3, 'text'), M.step(0.3, 'heavy'), 'role text = heavy');
+  eq(M.step(0.3, 'enter'), M.step(0.3, 'default'), 'role enter = default');
+  M.configure({ roles: { enter: 'snappy' } });
+  eq(M.step(0.3, 'enter'), M.step(0.3, 'snappy'), 'configure retargets a role');
+  M.configure({ roles: { enter: 'default' } });
+  let threw = false; try { M.step(0.3, 'nope'); } catch { threw = true; }
+  if (!threw) throw new Error('unknown role must throw');
+  console.log('motion tokens ok');
+}

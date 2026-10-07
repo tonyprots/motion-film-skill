@@ -21,7 +21,7 @@ From the kit, as is or lightly edited:
 Dropped: Fish Audio voiceover (replaced by providers), `install.sh` (global install), `prompts/`, `presets/lukas-yt`.
 
 ## 2. voice-film — MIT (artkruglov/voice-film, commit 7a4ce65) — `LICENSE-voice-film`
-- `reference/STORY.md` (= `references/story.md`), `scripts/extract_lines.py`, `scripts/script_lint.py` (one doc line changed).
+- `reference/STORY.md` (based on `references/story.md`; arcs, source and ending rules added), `scripts/extract_lines.py`, `scripts/script_lint.py` (STORY field checks extended).
 - Provider code is a rewrite of its `tts.py` / `_or.py` / `_vc.py` / `music.py` ideas.
 
 ## 3. Our own (workspace)

@@ -1,4 +1,5 @@
-// Synthesize UI sounds from cues.json → audio/sfx.wav (48 kHz stereo, 32-bit float). No samples, no deps.
+// UI sounds from cues.json → audio/sfx.wav (48 kHz stereo, 32-bit float): real CC0 samples when scripts/sfx_fetch.py has
+// built a library, otherwise synthesized here (no deps). Per cue: "src": "synth" forces the synth, "sample": <Freesound id>.
 // Run from the project root after scripts/sync.mjs.
 //   click    cursor press / button: 1 ms HP noise tick + 2.3 kHz blip + 520 Hz body
 //   tick     typing key: quieter, shorter click
@@ -70,9 +71,47 @@ function shutter(p, seed) {
 }
 const SYN = { click, tick, pop, thump, whoosh, riser, shutter };
 
+// ---- real samples (scripts/sfx_fetch.py): used by default when a library exists, the synth above is the fallback.
+// The project freezes its own copy in audio/sfx_lib/ on first use, so a later re-fetch never changes a finished film.
+// timeline.json: "sfx_source": "synth" turns samples off; "sfx_pick": {"click": 171697} picks a Freesound id per type.
+// One sample per UI type keeps the interface sounding like one product; whooshes and thumps rotate through three.
+const TL = fs.existsSync('timeline.json') ? JSON.parse(fs.readFileSync('timeline.json', 'utf8')) : {};
+const ROTATE = { whoosh: 3, thump: 3 };
+function library() {
+  if (TL.sfx_source === 'synth') return null;
+  const own = 'audio/sfx_lib', shared = `${process.env.MOTION_FILM_HOME || `${process.env.HOME}/.cache/motion-film`}/sfx`;
+  if (!fs.existsSync(`${own}/index.json`)) {
+    if (!fs.existsSync(`${shared}/index.json`)) return null;
+    fs.cpSync(shared, own, { recursive: true });
+    console.log(`froze the sample library into ${own}/ (from ${shared})`);
+  }
+  return { dir: own, index: JSON.parse(fs.readFileSync(`${own}/index.json`, 'utf8')) };
+}
+function readWav16(path) {   // mono 16-bit PCM, as sfx_fetch.py writes it
+  const b = fs.readFileSync(path); let o = 12;
+  while (b.toString('ascii', o, o + 4) !== 'data') o += 8 + b.readUInt32LE(o + 4);
+  const n = b.readUInt32LE(o + 4) / 2, x = new Float32Array(n);
+  for (let i = 0; i < n; i++) x[i] = b.readInt16LE(o + 8 + i * 2) / 32768;
+  return x;
+}
+const LIB = library(), seen = {}, cache = {}, used = {};
+let fromLib = 0;
+function sample(c) {
+  const list = LIB?.index[c.type];
+  if (!list?.length || c.src === 'synth') return null;
+  const want = c.sample ?? TL.sfx_pick?.[c.type];
+  const k = seen[c.type] = (seen[c.type] ?? -1) + 1;
+  const s = (want && list.find((e) => e.id === want)) || list[k % Math.min(ROTATE[c.type] ?? 1, list.length)];
+  const raw = cache[s.file] ??= readWav16(`${LIB.dir}/${s.file}`);
+  const p = c.pitch ?? 1, n = Math.floor(raw.length / p), x = new Float32Array(n);   // pitch = playback rate
+  for (let i = 0; i < n; i++) { const f = i * p, j = f | 0, u = f - j; x[i] = raw[j] * (1 - u) + (raw[j + 1] ?? 0) * u; }
+  used[s.id] = s; fromLib++;
+  return { x, lead: s.lead / p, stereo: c.type === 'whoosh' };
+}
+
 cues.forEach((c, k) => {
   if (!SYN[c.type]) throw new Error(`unknown sfx type "${c.type}" (have: ${Object.keys(SYN).join(', ')})`);
-  const { x, lead, stereo } = SYN[c.type](c.pitch ?? 1, 9001 + k * 131);
+  const { x, lead, stereo } = sample(c) || SYN[c.type](c.pitch ?? 1, 9001 + k * 131);
   const start = Math.round((c.t - lead) * SR), g = c.gain ?? 0.8;
   for (let i = 0; i < x.length; i++) {
     const j = start + i; if (j < 0 || j >= N) continue;
@@ -92,4 +131,8 @@ function wav(path, chans) {   // 32-bit float WAV
 fs.mkdirSync('audio', { recursive: true });
 wav('audio/sfx.wav', [L, R]);
 let pk = 0; for (let i = 0; i < N; i++) pk = Math.max(pk, Math.abs(L[i]), Math.abs(R[i]));
-console.log(`audio/sfx.wav  ${cues.length} cues  ${duration}s  peak ${(20 * Math.log10(pk + 1e-12)).toFixed(1)} dBFS`);
+const ids = Object.values(used);
+if (ids.length) fs.writeFileSync('audio/sfx_credits.json', JSON.stringify(ids.map(({ id, name, author, url, licence }) => ({ id, name, author, url, licence })), null, 1));
+console.log(`audio/sfx.wav  ${cues.length} cues  ${duration}s  peak ${(20 * Math.log10(pk + 1e-12)).toFixed(1)} dBFS  ·  `
+  + (ids.length ? `${fromLib} from ${ids.length} Freesound CC0 samples (audio/sfx_credits.json), ${cues.length - fromLib} synth`
+    : TL.sfx_source === 'synth' ? 'synth (timeline sfx_source)' : 'synth (no sample library: scripts/sfx_fetch.py)'));

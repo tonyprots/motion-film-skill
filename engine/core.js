@@ -14,6 +14,7 @@
   const [W, H] = FORMATS[FMT];
   const FPS = TL.fps || 60, DUR = TL.duration || 15;
   const { step, track } = window.Motion;
+  window.Motion.configure(TL.motion);   // motion tokens: roles and brand presets (lib/motion.js)
 
   // ------------------------------------------------------------------ time (beats are the unit)
   // bt(n): beat n → seconds on the MEASURED grid (beats.json), linear between measured beats,
@@ -60,6 +61,8 @@
     expoIn: (x) => (x <= 0 ? 0 : Math.pow(2, 10 * x - 10)),
   };
   // springs released on beats (lib/motion.js). presets: snappy | default | heavy   (playful: mascots only)
+  // or roles: enter | exit | ui | text | accent | hero | camera — retuned per film in timeline.json "motion"
+  const stagger = (i, s = (TL.motion && TL.motion.stagger) ?? 0.05) => i * s;   // seconds; cascade 30–80 ms, ≤ 8 a wave
   const sp = (t, beat, preset = 'default') => step(t - bt(beat), preset);
   const spHit = (t, beat, preset = 'snappy', lead = leadFor(preset)) => step(t - (bt(beat) - lead), preset);   // reads ON the beat
   // keys: [[beat, value, preset?], ...]; first key = initial value. Retargets keep velocity (superposition).
@@ -195,17 +198,22 @@
 
   window.C = {
     TL, BEATS, FMT, W, H, FPS, DUR, LEAD, leadFor, stage, pick,
-    bt, beatAt, beatOf, clamp, lerp, seg, ease, sp, spHit, trk, trkObj, win, mulberry32, noise1,
+    bt, beatAt, beatOf, clamp, lerp, seg, ease, sp, spHit, stagger, trk, trkObj, win, mulberry32, noise1,
     el, frag, reg, put, commit, inset, rectOf, scene, canvas, hooks, SCENES,
+    pending: [],
     fonts: [],              // film.js: e.g. C.fonts = ['500 100px Display', '400 40px UI'] — awaited before frame 0
   };
 
   // ------------------------------------------------------------------ boot (called at the end of film.js)
+  // WebGL films (timeline "webgl": true): frame 0 waits until film/gl.js has built its layers and calls C.glDone()
+  const glGate = TL.webgl ? new Promise((r) => { C.glDone = r; }) : null;
+
   C.start = () => {
     for (const S of SCENES) S.build && S.build(S.root, S);
     window.FPS = FPS; window.DURATION = DUR; window.FILM = { W, H, FMT };
     window.CUTS = SCENES.filter((S) => (S.cut ?? S.pre === 0) && beatOf(S.from) > 0).map((S) => bt(S.from)).sort((a, b) => a - b);
-    window.seek = (t) => paint(Math.max(0, Math.min(DUR - 1e-6, t)));
+    // a hook that needs a file for this frame (footage) pushes its promise to C.pending; the renderer awaits what seek returns
+    window.seek = (t) => { paint(Math.max(0, Math.min(DUR - 1e-6, t))); return C.pending.length ? Promise.all(C.pending.splice(0)) : undefined; };
     window.READY = (async () => {
       // a missing face must be loud (the render logs [page] warnings) but not fatal: the stack falls back
       await Promise.all(C.fonts.map((f) => document.fonts.load(f).then((r) => { if (!r.length) console.warn(`font not loaded: ${f} (falling back)`); },
@@ -214,6 +222,7 @@
       const imgs = [...document.images];
       await Promise.all(imgs.map((i) => (i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; }))));
       await Promise.all(imgs.map((i) => i.decode().catch(() => 0)));
+      if (glGate) await glGate;
       window.seek(0);
       return true;
     })();

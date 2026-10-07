@@ -3,6 +3,7 @@
 ## Project layout (made by init.sh)
 ```
 brief.md  SCRIPT.md  timeline.json        inputs + single source of truth (marks, sfx, music, formats) in BEATS
+lexicon.json?                              how the voice says terms: {"SQL": "sequel"} (extract_lines.py → say)
 vo.json  captions.json                     voice phrases on the grid (layout_vo.py) · burned-in captions (captions.py, hand-edited)
 preset.json?                               the resolved brand preset (init.sh --preset), for the record
 beats.json  cues.json                      measured grid (beats.py) · sfx cues in seconds (sync.mjs)
@@ -17,7 +18,8 @@ assets/{shots,fonts,site,brand}/           real screenshots from the sources, pr
 audio/  vo/lines.json vo/<id>.wav vo/voice.json  vo.wav music.wav sfx.wav mix.wav
 renders/  <fmt>.mp4  draft_<fmt>.mp4  clip_*.mp4
 review/   sheets/  stills/  r<N>/          contact sheets, stills, critique kits
-docs/     style_guide.md shotlist.md review_log.md
+          blind_r<N>/  lint_<fmt>.json  text_<fmt>.json  cuts.json  seams_<fmt>.json   blind-read pack, text checks, text on screen, hard cuts, cut checks
+docs/     style_guide.md shotlist.md review_log.md notes.json
 scripts/                                   the pipeline (copied from the skill; project-local, editable) + providers/
 .venv  node_modules                        links to the shared toolchain in ~/.cache/motion-film (init.sh)
 ```
@@ -97,6 +99,12 @@ node scripts/render.mjs --draft --all                         30 fps drafts for 
 node scripts/render.mjs --all                                 finals (adaptive 180° motion blur, parallel)
 node scripts/render.mjs --mux --all                           new mix into existing finals
 node scripts/render.mjs --verify --all                        determinism check (cold vs after seeking elsewhere)
+node scripts/render.mjs --lint --all [--phase 0.6]            text in frame per beat: size, contrast, 9:16 zones, one phrase twice
+node scripts/render.mjs --seams --all                         every hard cut: shared words/images do not jump, no empty frame after it
+python3 scripts/plan_check.py                                 the plan before the render: overlaps, dead air, end hold, caption speed
+python3 scripts/blindpack.py <N> --draft                      blind-read pack → review/blind_r<N>/ (reference/BLIND.md)
+python3 scripts/notes.py add|list|resolve                     timecoded notes, docs/notes.json
+python3 scripts/share.py --all --mb 10                        light copy for chats: 30 fps, under the size budget
 file:///<project>/film/index.html?play                         preview player in a browser (click to play with audio/mix.wav)
 ```
 
@@ -111,3 +119,95 @@ losslessly. Measured on an Apple M1 (8 cores), 2:36 film, 1920×1080, 60 fps wit
 Parallel and serial output differ only where Chromium's raster cache depends on which frame it painted before (edge
 antialiasing of a moving card): worst frame 71 dB PSNR against a serial render, sharpness equal. `--workers 1` gives
 the serial path. GPU flags (`--use-angle=metal`) make screenshots 5× slower: do not add them.
+
+## Picture finish (motion-film)
+Finals and `--range` send frames to ffmpeg in 16 bits (`rgb48le`): the motion-blur average keeps its fractions. In 16 bits the
+frame goes through `deband` (on by default) and an optional `.cube` LUT, and drops to 8 bits only at the last step, with
+error diffusion (`sws_dither=ed`). Drafts stay 8-bit.
+`timeline.json`: `"finish": {"deband": true, "lut": "assets/brand/grade.cube", "grain": 0, "master": false}`; the flags
+`--deband [thr]`, `--lut`, `--grain N`, `--master`, `--no-finish` override it.
+- **Grain** (`grain`, 1.5–2.5 steps of the 8-bit scale) is monochrome, midtones only, and computed from the absolute frame
+  number, so a parallel render matches a serial one byte for byte (verified with `--crf 0`). Grain is a look, not a cure for
+  banding: deband and dithering are.
+- **`--master`** also writes `renders/<fmt>_master.mp4`: HEVC 10-bit, `hvc1`, from the same frames (~35 % more time).
+  The main `<fmt>.mp4` stays H.264 8-bit for chats and players.
+- Colour: both files are tagged bt709/bt709/bt709, tv range. Check: `ffprobe -show_entries stream=color_primaries,color_transfer,color_space`.
+- Cost (M1, 4 s of film): 16-bit + deband + dither — same time, file +20 %; with `--master` and grain, +35 % time.
+
+## Motion roles (motion tokens)
+One film, one motion language. Roles are preset names too and work wherever a preset does: `C.sp(t, b, 'enter')`,
+`C.spHit`, `C.trk`, `TYPE.rise` (default `text`), `CAM.rig` (default `camera`).
+
+| role | default | for |
+|---|---|---|
+| `enter` / `ui` | `default` | cards and UI coming in |
+| `exit` | `snappy` | leaving |
+| `text` | `heavy` | big type |
+| `accent` | `snappy` | pills, underlines, clicks |
+| `hero` | `heavy` | the hero moment |
+| `camera` | `heavy` | the camera |
+
+A brand retunes them in one place, `timeline.json`:
+`"motion": {"roles": {"enter": "snappy"}, "presets": {"default": {"response": 0.35, "damping": 0.9}}, "stagger": 0.05}`.
+`C.stagger(i)` is the i-th cascade delay in seconds (0.05 by default: cascade 30–80 ms, ≤ 8 a wave).
+
+## WebGL layer: three.js + post-processing (motion-film)
+For what the DOM cannot do: a 3D hero, physical materials and light, glass, depth of field, bloom, a device with a real
+screenshot on its screen. `engine/lib/gl.js` (three.js MIT, postprocessing Zlib — installed in the shared toolchain).
+1. `timeline.json`: `"webgl": true`. The render switches to the GPU (ANGLE Metal) by itself: a post-processed frame takes
+   ~95 ms there against ~1.4 s on the software rasteriser. By hand: `--gpu`.
+2. In `film/index.html`, after `film.js`: an import map (`three`, `three/addons/`, `postprocessing` → `/node_modules/…`, sample in
+   the header of `gl.js`) and `<script type="module" src="gl.js"></script>`.
+3. `film/gl.js`: `const L = await layer(sceneRoot, { dof, bloom, vignette, tone, env, bg })` — a transparent layer over the scene's DOM;
+   `L.scene.add(...)`, `L.frame((t, b) => …)` sets every value from t (springs `C.sp`, `C.seg` work as in the DOM);
+   `L.texture('assets/shots/x.png')` — a real screenshot as a texture, `L.gltf('assets/3d/x.glb')` — a model,
+   `env: 'assets/3d/x.hdr'` — an HDRI (Poly Haven, CC0). End with `C.glDone()`: frame 0 waits for it.
+- `tone` defaults to `neutral`: the brand colour stays the brand colour (AgX and ACES dull it). Grain is not here but in `finish.grain`.
+- Verified (M1, 2026-10-06): `--verify` 12/12, frame t is the same in any order. A parallel render differs from a serial one
+  by ±1 level in scattered pixels (worst frame 89 dB PSNR) — less than the DOM does (71 dB).
+- Never: TAA and temporal effects, accumulation between frames, `clock.getDelta()`, unseeded `Math.random`, your own `requestAnimationFrame`.
+  Metal and the software rasteriser give different pixels: one backend per film (`webgl` in the timeline guarantees it).
+- Heavy: every motion-blur sub-frame renders the scene again. Keep the scene simple on fast 3D moves.
+- Living background: `meshBackground(sceneRoot, ['#f6f5f1', '#fbe0d2', '#ffffff', '#f4c3ab'], { speed, radius, seed })` — a soft
+  gradient under the scene's DOM that drifts slowly with t. The first colour is the ground, the rest are soft lights over it. Keep the
+  palette tonal: one accent plus neutrals; a blue-to-purple wash reads as stock. Works without `layer()`, but needs `"webgl": true`.
+
+## GSAP (kinetic type)
+GSAP 3 is in the shared toolchain, including SplitText, DrawSVG, MorphSVG ("no charge" licence, commercial use allowed).
+Only `seek(t)` drives time:
+```js
+gsap.ticker.lagSmoothing(0); gsap.ticker.remove(gsap.updateRoot); gsap.registerPlugin(SplitText);
+const tl = gsap.timeline({ paused: true });
+C.hooks.before.push((t) => tl.totalTime(t, true));
+tl.from(new SplitText(el, { type: 'chars', mask: 'words' }).chars, { yPercent: 120, stagger: 0.03, duration: 0.7, ease: 'expo.out' }, C.bt('s2a'));
+```
+Load it with `<script src="/node_modules/gsap/dist/gsap.min.js">` (and the plugins) before `film.js`. GSAP animates only elements
+not registered with `C.reg`: otherwise `C.put` and GSAP write the same `transform`.
+
+## Cutouts and depth for photos (`scripts/vision.py`, `depthPhoto`)
+Photos of people, products, places only — on one or two scenes (RULES.md). Local models, downloaded once (~165 MB):
+- `.venv/bin/python scripts/vision.py cutout assets/shots/x.jpg` → `x.cut.png` (transparent background): an `<img>` over its own
+  background, the shadow a CSS `filter: drop-shadow(...)`. ~15 s a frame.
+- `.venv/bin/python scripts/vision.py depth assets/shots/x.jpg` → `x.depth.png` (white = near). ~6 s.
+- In `film/gl.js`: `await depthPhoto(sceneRoot, 'assets/shots/x.jpg', 'assets/shots/x.depth.png', { box, move: (t) => ({ x, y, z }) })` —
+  `z` 0 to 1 = push-in, `x`/`y` = drift; `amount` 0.02 (≤ 0.03), `focus` 0.5 = the depth that stays put. Needs `"webgl": true`.
+`vision.py` refuses a screenshot or a graphic (over 30 % perfectly flat pixels); `--force` only if it really is a photo.
+
+## Video bridges (`scripts/broll.py`, `lib/footage.js`)
+Only when the customer asks. In `timeline.json`:
+`"broll": [{"id": "b1", "at": "s3", "seconds": 4, "prompt": "…", "model": "google/veo-3.1-fast", "resolution": "1080p"}]` —
+the bridge plays from mark `at` (a mark name only) for `seconds` over the scenes; its first frame is the film's frame at `at`,
+its last the film's frame at `at` + `seconds`, so scene B starts right there. `broll.py` with no flags prints the plan and the
+price, `--yes` generates what is missing through OpenRouter (`assets/broll/<id>_<fmt>/`), then `node scripts/sync.mjs`. The engine
+plays the frames itself: `seek(t)` waits for the frame to load (`C.pending`). Price at 1080p without audio: Veo 3.1 Fast
+~$0.10/s, Lite ~$0.05/s (720p $0.03/s). `render.mjs --at` takes a mark with an offset: `s3+4`.
+
+## Camera, cursor, shake, focus (`lib/camera.js`, `window.CAM`)
+Loaded in `index.html` after `core.js`. All functions of t; `--verify` passes.
+| | |
+|---|---|
+| `CAM.rig(t, el, [[mark, {x, y, z}], …], {ax, ay, lead, preset, maxZoom})` | a virtual camera over a big element (a real screenshot): focus point in its own px and zoom. Every key starts `lead` (0.4 s) before its mark: the camera arrives before the action. Zoom ≤ 3×. Call it from `run()` or `C.hooks.before` |
+| `CAM.cursor(parent, [[mark, x, y, click?], …], {size, settle, hold})` | a directed cursor: an arc with ease-in and ease-out, arrives `settle` (0.12 s) before a click, a ring pulse on the click. Call it in `build()`. Returns `clicks` — marks for `click` SFX |
+| `CAM.shake(t, [mark, …], {amp, decay, rot})` | trauma shake on hero hits: returns `{x, y, r, s}` for a `put()` on a scene root (s overscans so no frame edge shows) |
+| `CAM.focus(t, els, hero, on)` | dims everything but the hero (opacity down to 0.35) while `on` > 0 — e.g. `C.win(t, a, b)` |
+If the scene has a WebGL layer, move its 3D camera (`L.camera`) rather than scaling the scene root: otherwise the layer's raster goes soft.

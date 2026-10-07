@@ -8,7 +8,8 @@ Apply these in every project, including one with no CLAUDE.md. A project's CLAUD
 - Randomness is seeded only (`C.mulberry32(seed)`, `C.noise1(seed)`). Never `Math.random`.
 - Output is H.264 yuv420p, CRF 16, bt709 tags, 60 fps finals, AAC 320k, `+faststart`.
 - Verify determinism once per project: `node scripts/render.mjs --verify --all`.
-- No `will-change`, no `translate3d`, no `translateZ(0)`. A composited GPU layer caches its raster, so the same t paints differently depending on the previous frame (measured: 9/12 probes differed, up to 211/255 per pixel). Use 2D transforms (`C.put` does). If a shot truly needs CSS 3D (`perspective` / `rotateX`), run `--verify` on it. If it fails, fake the depth in 2D (skew + scale + shadow) or draw it on a canvas.
+- No `mix-blend-mode`: in headless Chromium it blends with a layer left over from the previous frame, and in a parallel render frames bleed into each other. Grain and overlays use plain opacity.
+- No `will-change`, no `translate3d`, no `translateZ(0)`. A composited GPU layer caches its raster, so the same t paints differently depending on the previous frame (measured: 9/12 probes differed, up to 211/255 per pixel). Use 2D transforms (`C.put` does). If a shot truly needs CSS 3D (`perspective` / `rotateX`), run `--verify` on it. If it fails, fake the depth in 2D (skew + scale + shadow) or draw it on a canvas or in the WebGL layer (`engine/lib/gl.js`, ENGINE.md).
 
 ## Look
 - **Banned defaults:**
@@ -26,12 +27,14 @@ Apply these in every project, including one with no CLAUDE.md. A project's CLAUD
 - Use real product UI, captured from the site, and real logos. Never redraw UI that exists. When a piece exists only as a screenshot, rebuild it element by element and say so in a comment.
 - Type is left-aligned at x ≥ 120 px (1080p), sentence case, and the brand's punctuation habit applies. Accent colour goes on the key word or the second phrase only.
 - Anything that must be read is at least 28 px at 1080p and passes the 360 px-wide phone check. Scale the camera, not the font.
+- Text contrast against whatever it sits on is ≥ 4.5:1. A light accent (yellow, pastel) is not for text: use it as a plate under dark text. `render.mjs --lint` checks it.
 - 9:16 keeps key content out of the platform UI zones: top 14 %, bottom 20 %, right 12 %.
 
 ## Rhythm
 - Something new must happen on screen every 2–4 s. Nothing holds longer than one bar without a new element. The end card holds ≤ 2 s and is never static.
 - Hard cuts land on bar lines. Inner events land on beats or half-beats, in beats on the measured grid (`beats.json`), never in hard-coded seconds.
-- The hook reads in the first 2 s, and frame 0 is never empty.
+- The hook reads in the first 2 s, and frame 0 is never empty. In a launch film the product or hero is on screen by second 3.
+- Text stays long enough to read: a headline of five words or more is on screen whole for ≥ 1.3 s, a shorter one for ≥ 0.8 s. If you need room, take a bar of air, not a shorter show. Two headlines are never in frame at once.
 - Every held shot keeps moving: a micro push of 1.00 → 1.03–1.08, or drift.
 
 ## Motion (lib/motion.js springs)
@@ -66,10 +69,15 @@ Apply these in every project, including one with no CLAUDE.md. A project's CLAUD
 - Every hit sits on the grid, and every SFX event is declared in `timeline.json` `sfx` (write them with `scripts/sfx_layout.py`). A synthesized score IS the nominal grid: no `beats.json` for it. A supplied or generated track is measured with `beats.py`.
 - The mix sits at -14 LUFS integrated with true peak ≤ -1 dBTP (`mix.py`).
 - Voiceover is cut into phrases and each phrase is placed on a beat (`layout_vo.py`). Never speed up a whole take: the native pace of a good voice is the pace of the film.
+- The voice sits ≥ 12 dB above the bed in the speech band on every phrase (`mix.py`), and every phrase is transcribed correctly from the final mix (`voice.py check-mix`).
+- Put hits in the voice's pauses, not on words: a hit on top of a stressed word masks both. Every hit has a high-frequency click or noise: from a sub-bass alone neither the ear (nor `review.py`) finds the hit.
 
 ## Process
 - Loop before showing anything: contact sheet → score → fix the 3 worst → repeat until every score is ≥ 8 (at least 2 rounds; see SKILL.md step 9 for when to stop).
 - Judge from the rendered MP4s and sheets. Never judge from the page or from memory of the code.
+- Machine checks run before the critic's eyes: `plan_check.py` (the plan before the render), `review.py` (gates), `render.mjs --lint` and `--seams`, `mix.py`. A check that checked nothing is NOT CHECKED, not "clean". A new check is accepted only after it has failed on a known-bad input.
+- The blind read (`reference/BLIND.md`) is a delivery gate: a fresh reader without the script retells the thesis, and it matches `## STORY`.
+- A fix for a critic's note that removes or reorders a step of the argument chain changes the scope: the user decides it. Three sensible "for the pace" fixes in a row cut out of the film what it was proving.
 - Parallel sessions may run the same brief. Use a distinctive project folder, never write into a folder you did not create, and if files change under you, stop and check.
 
 ## Voice films (motion-film additions, learned on the first film, 2026-10-04)
@@ -83,4 +91,42 @@ Apply these in every project, including one with no CLAUDE.md. A project's CLAUD
 - **Clip what sits behind a rounded card** (`overflow: hidden` on the same radius): a dark layer poking out of a corner ("the dark crescent") survived three critique rounds unnoticed by the builder.
 - **One line, one place on screen.** If the headline already says the voice line, that line gets no caption. A frame inside the frame (a mini film, a preview, a phone) shows its own content, never the headline again. The same sentence two or three times in one frame reads as a template bug (README demo, 2026-10-05).
 - **No jump at a cut.** A match cut keeps every shared element at the same position and scale: a slow push runs through both scenes as one function of time, and the outgoing headline leaves inside the incoming scene, so the old and new lines roll in one move with no blank frame. Check 6 frames across every cut.
+- **Numbers on screen agree with each other.** The viewer recomputes a sum of parts, a duration, "N times": the blind reader of the demo found "208 s + 141 s" next to "9 min 46 s" and "a 2:36 film" in a 33 s film (2026-10-06). If a number is about a different object, label which one.
 - **Light theme by default**, one accent, the house fonts of the preset.
+
+## AAA direction (motion-film, 2026-10-06)
+The thresholds are starting points; critique rounds calibrate them.
+- **One hero per frame.** At any moment exactly one element is the brightest and fastest in frame. While the voice talks about
+  it, the rest is muted (opacity 0.3–0.4 or a 4–8 px blur).
+- **One hero moment per film** (up to two in 3 minutes), at 60–85 % of the length. A build leads into it, a breath follows.
+  The music drops out 0.3–0.7 s before the main hit, then the hit. The hero moment is the only place for a spring with a visible
+  overshoot and for a 600–900 ms move; everything else lands without a visible overshoot.
+- **An intensity curve, not a plateau.** Scene density (1–5 in the shotlist) alternates: a dense scene is followed by a
+  one-hero scene. No more than three scenes in a row of the same length (±10 %).
+- **Air.** Every ~20 s, a quiet window of 0.6–1.2 s: the voice finishes, no new elements or hits, the camera keeps drifting.
+  This does not break "something new every 2–4 s": the window sits after a key point or before the hero moment, not at random.
+- **Cut on action, with a carrier.** A scene changes during an action (a click, a result appearing), not after it stops.
+  Most transitions have a carrier: a shape, position or colour that travels into the next scene.
+- **J/L cuts.** The next scene's sound (a hit, a whoosh, the first word) starts 80–200 ms before the picture; the previous
+  scene's tail runs 100–300 ms past it. A hard sound cut only on purpose.
+- **Cascade rhythm.** Elements of one wave start 30–80 ms apart in reading order, at most 6–8 per wave, the whole wave
+  ≤ 0.6 s. Four or more elements starting on the same frame is a fault. A container arrives 40–120 ms before its content.
+- **Anticipation on big moves.** Before the main zoom or a scene change: 2–3 frames of counter-motion or a sound "breath in".
+  Only on big moves, never on every element.
+- **The camera arrives before the action.** The push to a target starts 0.3–0.5 s before the click or the word that names it.
+  Zoom 1.4–2.5×, never past 3×: context is lost and the raster goes soft.
+- **A directed cursor.** A smoothed curve with ease-in and ease-out, a micro-pause before the click, a response to the click
+  (pulse + sound within a frame). A straight line at constant speed reads as synthetic.
+- **Scene typography:** at most three text sizes, adjacent levels ≥ 1.5× apart. A headline is a point of up to 9 words.
+  Time on screen ≥ characters / 15 + 0.4 s.
+- **Light and depth.** One light source: all shadows point one way. The background is never perfectly flat (a soft gradient,
+  `finish.grain`), but never a glow. A 3D screen tilt is 4–10°, with a shadow, on one or two scenes.
+- **Stills first, motion second.** Key frames (styleframes) are approved as pictures before animation (SKILL.md step 7).
+  Never animate what looks wrong as a still.
+- **Generated video bridges — only when the customer asks** (brief, `scripts/broll.py`). 4–8 s of atmosphere between scenes:
+  fog, light, material, space. No screens, text, faces or logos — the model invents them. A bridge starts on a frame of the
+  film and ends on one, so neither cut shows; one or two a film. Say the price before `--yes`.
+- **Cutouts and depth: photos only, and sparingly.** A person or product lifted off its background with a shadow under it, or
+  a slow 2.5D push on a photo (`scripts/vision.py`, `depthPhoto` in ENGINE.md) — on the hero or a human moment, one or two
+  scenes a film. A UI screenshot, text, a logo, a chart — never: a cutout halos and parallax tears straight edges (`vision.py`
+  refuses them). Depth shift ≤ 3 % of the frame; more and object edges tear.

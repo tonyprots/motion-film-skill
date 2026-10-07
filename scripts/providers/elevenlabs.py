@@ -1,7 +1,8 @@
 """ElevenLabs: voice (TTS), transcription (Scribe) and music. Key: ELEVENLABS_API_KEY (your own account, you pay).
 
 Voices are voice_ids: your own or cloned voices (GET /v2/voices) or the shared library (GET /v1/shared-voices).
-pcm_24000 works on every plan; mp3 192k needs Creator+. eleven_v4 reads plain text: no direction tags.
+pcm_24000 works on every plan; mp3 192k needs Creator+. eleven_v4 reads plain text: no direction tags, so a line's
+mood/pace goes in as voice_settings instead (MOOD below; checked 2026-10-06: eleven_v4 accepts them, speed shortens the take).
 Music (POST /v1/music) depends on the plan; force_instrumental keeps vocals out from under the voiceover."""
 import json, os
 from . import key
@@ -21,9 +22,26 @@ def _hint(code):
     return {401: 'key missing or wrong', 402: 'plan or quota: check the subscription', 403: 'this plan has no access to that model or feature'}.get(code, '')
 
 
-def tts(text, voice, model=None, direction='', lang=None):
+# mood → delivery. Lower stability = more expressive and less even; style = how much of the voice's own manner; speed 0.7–1.2.
+# Tune on your voice: listen to the takes, not the table.
+MOOD = {'neutral': (0.50, 0.00, 1.00), 'intrigue': (0.40, 0.30, 0.95), 'concern': (0.60, 0.20, 0.93), 'relief': (0.45, 0.35, 0.98),
+        'confident': (0.55, 0.25, 1.00), 'warm': (0.50, 0.30, 0.97), 'excited': (0.30, 0.50, 1.07)}
+MOOD.update({'нейтрально': MOOD['neutral'], 'интрига': MOOD['intrigue'], 'тревога': MOOD['concern'], 'облегчение': MOOD['relief'],
+             'уверенность': MOOD['confident'], 'тепло': MOOD['warm'], 'восторг': MOOD['excited']})
+PACE = {'slow': 0.92, 'медленно': 0.92, 'fast': 1.08, 'быстро': 1.08}
+
+
+def settings(line):
+    """voice_settings for one SCRIPT line ({mood=… pace=…}); None when the line asks for nothing (the voice's own defaults)."""
+    if not line or not (line.get('mood') in MOOD or line.get('pace') in PACE): return None
+    st, sty, sp = MOOD.get(line.get('mood'), MOOD['neutral'])
+    return {'stability': st, 'similarity_boost': 0.75, 'style': sty, 'speed': round(max(0.7, min(1.2, sp * PACE.get(line.get('pace'), 1))), 2)}
+
+
+def tts(text, voice, model=None, direction='', lang=None, line=None):
     body = {'text': text, 'model_id': model or DEFAULT_MODEL}
     if lang: body['language_code'] = lang
+    if settings(line): body['voice_settings'] = settings(line)
     return post(f'{BASE}/v1/text-to-speech/{voice}?output_format=pcm_24000', _h(), body, timeout=180, name=NAME, hint=_hint).read()
 
 
