@@ -37,8 +37,11 @@ def frames(path, w, h, fps=None, gray=False):
     a = np.frombuffer(raw, np.uint8)
     return a.reshape(-1, h, w) if gray else a.reshape(-1, h, w, 3)
 def frames_at(path, idx, w, h):
-    sel = '+'.join(f'eq(n\\,{i})' for i in idx)
-    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', path, '-vf', f"select='{sel}',scale={w}:{h}:flags=area", '-vsync', '0', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], capture_output=True, check=True).stdout
+    # -fps_mode, not -vsync (removed in ffmpeg 9); batches of 40: ffmpeg 8+ cannot parse a select of ~100+ terms
+    def grab(part):
+        sel = '+'.join(f'eq(n\\,{i})' for i in part)
+        return subprocess.run(['ffmpeg', '-v', 'error', '-i', path, '-vf', f"select='{sel}',scale={w}:{h}:flags=area", '-fps_mode', 'passthrough', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], capture_output=True, check=True).stdout
+    raw = b''.join(grab(idx[k:k + 40]) for k in range(0, len(idx), 40))
     return np.frombuffer(raw, np.uint8).reshape(-1, h, w, 3)
 def tile(ims, cols, labels, out, pad=6, lab=22, bg=(20, 20, 20)):
     w, h = ims[0].size; rows = (len(ims) + cols - 1) // cols

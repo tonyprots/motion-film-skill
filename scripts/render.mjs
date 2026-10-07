@@ -57,7 +57,7 @@ const run = (cmd, a) => { const r = spawnSync(cmd, a, { stdio: ['ignore', 'inher
 if (has('mux')) {
   if (!hasAudio) { console.error('no audio at', AUDIO); process.exit(1); }
   for (const fmt of FORMATS) {
-    const src = path.join(ROOT, `renders/${fmt}.mp4`), tmp = src + '.tmp.mp4';
+    const src = path.join(ROOT, `renders/${DRAFT ? "draft_" : ""}${fmt}.mp4`), tmp = src + '.tmp.mp4';
     run('ffmpeg', ['-y', '-loglevel', 'error', '-i', src, '-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '320k', '-shortest', '-movflags', '+faststart', tmp]);
     fs.renameSync(tmp, src); console.log('muxed', src);
     const m = src.replace(/\.mp4$/, '_master.mp4');
@@ -108,7 +108,8 @@ function ffmpeg(a) {
   const done = new Promise((ok, bad) => p.on('close', (c) => (c ? bad(new Error(`ffmpeg exit ${c}`)) : ok())));
   return { p, done };
 }
-const write = async (s, buf) => { if (!s.write(buf)) await new Promise((r) => s.once('drain', r)); };
+// wait for each frame to be flushed: on macOS a large buffer still queued when stdin.end() runs can reach ffmpeg cut short
+const write = (s, buf) => new Promise((ok, bad) => s.write(buf, (e) => (e ? bad(e) : ok())));
 
 // ------------------------------------------------------------------ video: frames → ffmpeg
 const VIDEO = !['sheet', 'verify', 'at', 'lint', 'seams'].some(has);
@@ -185,11 +186,14 @@ async function renderFrames(F, { fps, blur, a }, i0, i1, sink, hist, tick) {
   for (let i = i0; i < i1; i++) {
     const tc = a + i / fps, frame = Math.round(tc * fps);
     if (!blur) {
-      const im = decodePNG(await F.png(tc));
+      let im = decodePNG(await F.png(tc));
+      for (let r = 0; im.length !== n && r < 3; r++) { console.error(`\n[frame ${i}] screenshot ${im.length} bytes, expected ${n}: reshooting`); im = decodePNG(await F.png(tc)); }
+      if (im.length !== n) throw new Error(`frame ${i}: screenshot size mismatch`);
       if (!HI) { await write(sink, Buffer.from(im.buffer)); }
       else { for (let q = 0; q < n; q++) out16[q] = im[q] * 257; await emit(frame); }
     } else {
-      const x = decodePNG(await F.png(at(tc, 0.25))), y = decodePNG(await F.png(at(tc, 0.75)));
+      const shot = async (u) => { let im = decodePNG(await F.png(at(tc, u))); for (let r = 0; im.length !== n && r < 3; r++) { console.error(`\n[frame ${i}] screenshot ${im.length} bytes, expected ${n}: reshooting`); im = decodePNG(await F.png(at(tc, u))); } if (im.length !== n) throw new Error(`frame ${i}: screenshot size mismatch`); return im; };
+      const x = await shot(0.25), y = await shot(0.75);
       let d = 0; for (let q = 0; q < x.length; q += 97) d += Math.abs(x[q] - y[q]); d /= x.length / 97;
       const SUB = d < 0.35 ? MIN_SUB : Math.min(MAX_SUB, Math.max(4, Math.round(4 + d * 1.6)));
       hist[SUB] = (hist[SUB] || 0) + 1;
@@ -198,7 +202,7 @@ async function renderFrames(F, { fps, blur, a }, i0, i1, sink, hist, tick) {
         else { for (let q = 0; q < n; q++) buf[q] = (x[q] + y[q] + 1) >> 1; }   // = Math.round((x + y) / 2)
       } else {
         acc.fill(0);
-        for (let k = 0; k < SUB; k++) { const im = decodePNG(await F.png(at(tc, (k + 0.5) / SUB))); for (let q = 0; q < n; q++) acc[q] += im[q]; }
+        for (let k = 0; k < SUB; k++) { const im = await shot((k + 0.5) / SUB); for (let q = 0; q < n; q++) acc[q] += im[q]; }
         if (HI) { const m = 257 / SUB; for (let q = 0; q < n; q++) out16[q] = acc[q] * m + 0.5; }   // the average keeps its fractions
         else { const S2 = 2 * SUB; for (let q = 0; q < n; q++) buf[q] = ((acc[q] << 1) + SUB) / S2 | 0; }   // = Math.round(acc / SUB)
       }

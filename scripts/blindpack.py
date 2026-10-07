@@ -35,9 +35,11 @@ r = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_e
 s = json.loads(r.stdout)['streams'][0]; W, H = s['width'], s['height']; n, d = map(int, s['r_frame_rate'].split('/')); FPS = n / d
 tw = 640 if W >= H else 300; th = int(tw * H / W) // 2 * 2
 idx = sorted({int(round(t * FPS)) for t in times})
-sel = '+'.join(f'eq(n\\,{i})' for i in idx)
-raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', SRC, '-vf', f"select='{sel}',scale={tw}:{th}:flags=area", '-vsync', '0', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
-                     capture_output=True, check=True).stdout
+def grab(part):   # ffmpeg 8 cannot parse a select expression of ~100+ terms: decode in batches
+    sel = '+'.join(f'eq(n\\,{i})' for i in part)
+    return subprocess.run(['ffmpeg', '-v', 'error', '-i', SRC, '-vf', f"select='{sel}',scale={tw}:{th}:flags=area", '-fps_mode', 'passthrough', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
+                          capture_output=True, check=True).stdout
+raw = b''.join(grab(idx[k:k + 40]) for k in range(0, len(idx), 40))
 fr = np.frombuffer(raw, np.uint8).reshape(-1, th, tw, 3)
 if len(fr) < 0.95 * len(idx): sys.exit(f'decoded {len(fr)} of {len(idx)} frames: the pack would be incomplete')
 try: FONT = ImageFont.truetype('/System/Library/Fonts/Menlo.ttc', 16)
