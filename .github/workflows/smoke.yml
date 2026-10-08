@@ -46,9 +46,12 @@ jobs:
         run: npx -y playwright@1.63.0 install-deps chromium-headless-shell
       - name: python syntax
         run: python -m compileall -q scripts
+      - name: unit tests
+        run: python -m unittest discover -s tests
       - name: smoke film
         env:
           MOTION_FILM_HOME: ${{ runner.temp }}/motion-film-home
+          MOTION_FILM_NO_UPDATE_CHECK: "1"
         run: sh scripts/smoke_test.sh "${{ runner.temp }}"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()

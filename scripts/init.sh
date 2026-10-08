@@ -60,4 +60,6 @@ command -v ffmpeg >/dev/null || echo "WARN: ffmpeg not on PATH (brew install ffm
 .venv/bin/python -c "import numpy, scipy, soundfile, librosa, PIL" 2>/dev/null || echo "WARN: python deps missing in $HOMEDIR/venv"
 node film/lib/motion.test.js >/dev/null && echo "motion.js tests pass"
 node scripts/sync.mjs >/dev/null && echo "film/data.js written (nominal grid)"
+# weekly "is a newer release out?" line; the script ships only in the public copy (publish/en/scripts/update_check.py)
+[ -f "$SKILL/scripts/update_check.py" ] && { python3 "$SKILL/scripts/update_check.py" || true; }
 echo "next: SKILL.md step 2 — STORY and SCRIPT.md"

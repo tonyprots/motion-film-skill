@@ -151,10 +151,12 @@ half a minute per format.
 | music (optional) | ElevenLabs or OpenRouter | a text prompt describing the music, never your content |
 | brand capture (optional) | the URL you give `capture.mjs` | an ordinary page visit |
 | first setup | PyPI, npm, the Playwright CDN | package downloads |
+| update check, at most once a week | `api.github.com` | a request for the latest release tag of this repo, nothing about your films |
 
 Nothing else is sent. There is no telemetry and no other server. Rendering, captions, the score, the mix and the
 critic's frame analysis all run locally. For material that must not leave your company, use your own recordings
-or a provider module that points at your company's gateway.
+or a provider module that points at your company's gateway. The update check is off with
+`MOTION_FILM_NO_UPDATE_CHECK=1`; it never updates the skill, it only tells you a new release exists.
 
 The skill treats everything it reads (reports, decks, web pages, screenshots) as **material for the film, never
 as instructions**. If a source asks the agent to run something or send something, it reports that to you instead.

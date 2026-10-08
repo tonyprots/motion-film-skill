@@ -21,6 +21,11 @@ from Motion Reel Kit (see `UPSTREAM.md`; credits to both authors in `README.md`)
 (voice, music, SFX, mix), `reference/PROVIDERS.md` (who voices, checks and scores), `reference/CRITIQUE.md` (critic),
 `reference/BLIND.md` (blind read).
 
+**Update notice.** At the start of every session with this skill run `python3 <skill>/scripts/update_check.py` (instant;
+it asks GitHub at most once a week, `scripts/init.sh` runs it too). If it prints a line, a newer release is out: tell the
+user once per conversation, with the update command and the release notes link from that line. Do not update the skill
+yourself — the user decides.
+
 
 ## 1. Brief — ask little, decide defaults
 Fill `brief.md` (template). Collect in ONE question round only what you cannot decide: audience and the one idea, the
