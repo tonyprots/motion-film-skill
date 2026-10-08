@@ -86,15 +86,24 @@ def _keyfile(env):
         if os.environ.get(f): return os.environ[f]
 
 
+try:   # corporate copy only: credentials from the company skill store (not in the public skill)
+    from ._store_auth import token as _store_token, slug as _store_slug
+except ImportError:
+    _store_token = lambda env: None
+    _store_slug = None
+
+
 def has_key(env):
-    return bool(env and (os.environ.get(env) or _keyfile(env)))
+    return bool(env and (os.environ.get(env) or _keyfile(env) or _store_token(env)))
 
 
 def key(env, hint=''):
-    """The secret from the environment (or a file named by <ENV>_FILE). Never printed, never written anywhere."""
-    k = os.environ.get(env)
+    """The secret: the company store's credential where that module exists, else the environment (or a file named by
+    <ENV>_FILE). Never printed, never written anywhere."""
+    k = _store_token(env) or os.environ.get(env)
     if not k and _keyfile(env):
         k = open(_keyfile(env)).read().strip()
     if not k:
-        raise SystemExit(f'{env} is not set in the environment of this command{": " + hint if hint else ""}')
+        how = f'`store setup-token {_store_slug(env)}` or set it in' if _store_slug else 'set it in'
+        raise SystemExit(f'{env} is not set: {how} the environment of this command{": " + hint if hint else ""}')
     return k
