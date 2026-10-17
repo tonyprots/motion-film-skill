@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>motion film · player</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='10' width='56' height='36' rx='7' fill='%23141414'/%3E%3Cpath d='M27 20l11 8-11 8z' fill='%23ffffff'/%3E%3Crect x='4' y='52' width='56' height='4' rx='2' fill='%23c9c6bf'/%3E%3Crect x='4' y='52' width='22' height='4' rx='2' fill='%23e8552b'/%3E%3C/svg%3E">
+<!-- Review player (scripts/player.mjs serves it): the film in an iframe, a scene timeline, click-to-note, live tweaks.
+     Nothing here changes the film's files: notes go to docs/notes.json through the local server, tweaks become notes. -->
+<style>
+  :root {
+    --bg: #f4f3ef; --panel: #ffffff; --ink: #18181a; --ink-2: #5d5b56; --line: #e2e0da; --soft: #efede8;
+    --accent: #2f6fe4; --note: #e0861a; --ok: #2e8a4e; --bad: #c43d2f;
+    --r: 10px; --font: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 14px/1.4 var(--font);
+               -webkit-font-smoothing: antialiased; }
+  body { display: grid; grid-template-rows: auto 1fr auto; height: 100vh; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 0 14px; min-height: 36px;
+           cursor: pointer; white-space: nowrap; }
+  button:hover { background: var(--soft); }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  button.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  button.primary:hover { background: #33332f; }
+  button:disabled { opacity: .45; cursor: default; }
+
+  header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  header h1 { font-size: 15px; font-weight: 600; margin: 0 8px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 34vw; }
+  #play { width: 44px; padding: 0; font-size: 16px; }
+  #time { font-variant-numeric: tabular-nums; color: var(--ink-2); min-width: 128px; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .seg button { border: 0; border-radius: 0; min-height: 34px; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .grow { flex: 1; }
+  #status { color: var(--ink-2); font-size: 13px; }
+  #status.bad { color: var(--bad); }
+
+  main { display: grid; grid-template-columns: 1fr 360px; min-height: 0; }
+  #viewport { position: relative; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  #screen { position: relative; background: #000; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 12px 40px -16px rgba(0,0,0,.25); }
+  #film { position: absolute; left: 0; top: 0; border: 0; transform-origin: 0 0; background: #000; }
+  #hover, #pick { position: absolute; pointer-events: none; border-radius: 3px; display: none; }
+  #hover { outline: 1.5px dashed rgba(47,111,228,.85); }
+  #pick { outline: 2.5px solid var(--note); box-shadow: 0 0 0 9999px rgba(0,0,0,.18); }
+  #hint { font-size: 12px; color: var(--ink-2); margin-bottom: 6px; }
+
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow-y: auto; min-height: 0; }
+  section { padding: 14px 16px 16px; border-bottom: 1px solid var(--line); }
+  section h2 { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 10px; }
+  .muted { color: var(--ink-2); font-size: 13px; }
+  .kv { display: grid; grid-template-columns: 64px 1fr; gap: 3px 10px; font-size: 13px; margin-bottom: 10px; }
+  .kv b { font-weight: 500; color: var(--ink-2); }
+  .kv span { overflow-wrap: anywhere; }
+  code { font: 12px/1.35 ui-monospace, Menlo, monospace; background: var(--soft); padding: 1px 4px; border-radius: 4px; overflow-wrap: anywhere; }
+  textarea, input[type=text], select { width: 100%; border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 8px 10px; }
+  textarea { min-height: 76px; resize: vertical; }
+  #notetext { margin-top: 12px; }
+  .row { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+  .row > .grow { flex: 1; }
+  #saveinfo:not(:empty) { margin-top: 8px; }
+  .swatch { display: grid; grid-template-columns: 96px 40px 1fr; gap: 8px; align-items: center; margin-bottom: 6px; font-size: 13px; }
+  .swatch input[type=color] { width: 40px; height: 32px; padding: 2px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+  .swatch input[type=text] { padding: 5px 8px; font: 12px ui-monospace, Menlo, monospace; }
+  .swatch.changed code { background: #fdf0de; }
+  label.f { display: block; font-size: 13px; color: var(--ink-2); margin: 10px 0 4px; }
+  #tweaks li, #notes li { font-size: 13px; }
+  ul.list { list-style: none; margin: 0; padding: 0; }
+  #notes li { display: grid; grid-template-columns: 52px 1fr; gap: 2px 8px; padding: 7px 0; border-top: 1px solid var(--soft); cursor: pointer; }
+  #notes li:first-child { border-top: 0; }
+  #notes li .t { font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  #notes li .el { grid-column: 2; color: var(--ink-2); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #notes li.closed { opacity: .5; }
+  #notes li .tag { font-size: 11px; color: var(--note); margin-left: 4px; }
+  #tweaks li { padding: 4px 0; overflow-wrap: anywhere; }
+  details summary { cursor: pointer; color: var(--ink-2); font-size: 13px; margin-top: 8px; }
+  #clip { width: 100%; min-height: 140px; margin-top: 8px; font: 12px/1.4 ui-monospace, Menlo, monospace; display: none; }
+
+  footer { background: var(--panel); border-top: 1px solid var(--line); padding: 8px 16px 12px; user-select: none; }
+  #tl { position: relative; height: 92px; cursor: pointer; touch-action: none; }
+  .lane { position: absolute; left: 0; right: 0; }
+  .lane-label { position: absolute; left: -2px; font-size: 11px; color: var(--ink-2); transform: translateY(-100%); }
+  #scenes { top: 14px; height: 26px; }
+  #marks { top: 44px; height: 14px; }
+  #vo { top: 62px; height: 12px; }
+  #pins { top: 78px; height: 12px; }
+  .sc { position: absolute; top: 0; height: 100%; border-radius: 5px; background: var(--soft); border: 1px solid var(--line);
+        font-size: 12px; padding: 4px 6px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--ink-2); }
+  .sc.live { background: #e3ecfb; border-color: #b9cdf3; color: var(--ink); }
+  .mk { position: absolute; top: 0; width: 1px; height: 100%; background: #a9a69f; }
+  .mk.vo { background: var(--accent); }
+  .ph { position: absolute; top: 1px; height: 10px; border-radius: 3px; background: #cfdcf6; }
+  .pin { position: absolute; top: 0; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: var(--note); }
+  .pin.closed { background: #c9c6bf; }
+  #head { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--bad); pointer-events: none; }
+  #head::before { content: ''; position: absolute; top: 0; left: -5px; border: 6px solid transparent; border-top-color: var(--bad); }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">motion film</h1>
+  <button id="play" title="Space" aria-label="play">▶</button>
+  <span id="time">0.00 / 0.00</span>
+  <span class="seg" id="fmts"></span>
+  <span class="grow"></span>
+  <span id="status"></span>
+  <button id="copy" class="primary" data-i18n="copy"></button>
+</header>
+<main>
+  <div id="viewport">
+    <div id="screen">
+      <iframe id="film" title="film" tabindex="-1"></iframe>
+      <div id="hover"></div>
+      <div id="pick"></div>
+    </div>
+  </div>
+  <aside>
+    <section id="sel">
+      <h2 data-i18n="note"></h2>
+      <div id="selinfo" class="muted" data-i18n="noSel"></div>
+      <textarea id="notetext" data-i18n-ph="notePh"></textarea>
+      <div class="row">
+        <button id="savenote" class="primary" data-i18n="save"></button>
+        <button id="unpick" data-i18n="unpick"></button>
+      </div>
+      <div class="muted" id="saveinfo"></div>
+    </section>
+    <section id="knobs">
+      <h2 data-i18n="knobs"></h2>
+      <div class="muted" data-i18n="knobsHint"></div>
+      <label class="f" data-i18n="palette"></label>
+      <div id="palette"></div>
+      <label class="f" for="fontDisplay" data-i18n="fontDisplay"></label>
+      <select id="fontDisplay"></select>
+      <label class="f" for="fontUI" data-i18n="fontUI"></label>
+      <select id="fontUI"></select>
+      <label class="f" for="edittext" data-i18n="text"></label>
+      <input type="text" id="edittext" disabled>
+      <div class="row"><button id="applytext" disabled data-i18n="applyText"></button><span class="grow muted" id="textinfo"></span></div>
+      <label class="f" data-i18n="pending"></label>
+      <ul class="list" id="tweaks"></ul>
+      <div class="row">
+        <button id="savetweaks" class="primary" disabled data-i18n="saveTweaks"></button>
+        <button id="resettweaks" data-i18n="reset"></button>
+      </div>
+    </section>
+    <section>
+      <h2 data-i18n="notes"></h2>
+      <ul class="list" id="notes"></ul>
+      <textarea id="clip" readonly></textarea>
+    </section>
+  </aside>
+</main>
+<footer>
+  <div id="hint" data-i18n="hintPlay"></div>
+  <div id="tl">
+    <div class="lane" id="scenes"></div>
+    <div class="lane" id="marks"></div>
+    <div class="lane" id="vo"></div>
+    <div class="lane" id="pins"></div>
+    <div id="head"></div>
+  </div>
+</footer>
+<script src="lib/player.js"></script>
+</body>
+</html>

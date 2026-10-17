@@ -19,6 +19,12 @@ TL = json.load(open('timeline.json'))
 FMT = sys.argv[sys.argv.index('--fmt') + 1] if '--fmt' in sys.argv else TL['formats'][0]
 SRC = f"renders/{'draft_' if DRAFT else ''}{FMT}.mp4"
 if not os.path.exists(SRC): sys.exit(f'{SRC} missing: node scripts/render.mjs {"--draft " if DRAFT else ""}--fmt {FMT}')
+# text.md comes from the CURRENT code, the frames from the video: an older video gives the reader two different films
+src_t = max([os.path.getmtime('timeline.json')] + [os.path.getmtime(os.path.join(dp, f)) for dp, _, fs in os.walk('film') for f in fs])
+if os.path.getmtime(SRC) < src_t:
+    newer = 'renders/draft_' + FMT + '.mp4'
+    hint = ' (the draft is newer: add --draft)' if not DRAFT and os.path.exists(newer) and os.path.getmtime(newer) >= src_t else ''
+    sys.exit(f'{SRC} is older than film/ or timeline.json{hint}: render it again before the blind read')
 HERE = os.path.dirname(os.path.abspath(__file__))   # in a project copy, providers/.skill (init.sh) points back at the skill
 SKILL = open(os.path.join(HERE, 'providers', '.skill')).read().strip() if os.path.exists(os.path.join(HERE, 'providers', '.skill')) else os.path.dirname(HERE)
 OUT = f'review/blind_r{R}'

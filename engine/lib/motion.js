@@ -14,6 +14,9 @@
 
   // response: seconds for one undamped period (SwiftUI-style); damping: ratio ζ.
   // Overshoot of a step = exp(-πζ / √(1-ζ²)) for ζ < 1.
+  // soft (s, optional): ease-in. A spring released at rest jumps from 0 to full acceleration on the release frame — on a
+  // slow camera that reads as a jolt. soft averages the response over a window of that length (closed form), so the
+  // acceleration ramps up instead; the motion lags by about soft/2. Default only for the camera role (ROLES below).
   const PRESETS = {
     snappy:  { response: 0.22, damping: 0.8 },   // ~1.5% overshoot · buttons, toggles, leading edges
     default: { response: 0.4,  damping: 0.86 },  // ~0.5% overshoot · cards, containers, camera
@@ -23,7 +26,8 @@
   // Motion tokens: roles are preset names too, so one film speaks one motion language. A brand retunes them in ONE place,
   // timeline.json "motion": {"roles": {"enter": "snappy"}, "presets": {"default": {"response": 0.35, "damping": 0.9}},
   // "stagger": 0.05} — the core calls configure() with it before the first frame.
-  const ROLES = { enter: 'default', exit: 'snappy', ui: 'default', text: 'heavy', accent: 'snappy', hero: 'heavy', camera: 'heavy' };
+  const ROLES = { enter: 'default', exit: 'snappy', ui: 'default', text: 'heavy', accent: 'snappy', hero: 'heavy',
+    camera: { response: 0.5, damping: 1.0, soft: 0.12 } };   // camera = heavy with a soft start
 
   function configure(m = {}) {
     for (const [k, v] of Object.entries(m.presets || {})) PRESETS[k] = { ...(PRESETS[k] || {}), ...v };
@@ -44,7 +48,13 @@
   /** Unit step response of a spring released τ seconds ago. 0 for τ ≤ 0. */
   function step(tau, preset) {
     if (!(tau > 0)) return 0;
-    const { response, damping: z } = resolve(preset);
+    const p = resolve(preset);
+    if (!(p.soft > 0)) return hard(tau, p);
+    // mean of the hard response over [tau - soft, tau] = (S(tau) - S(tau - soft)) / soft, S(x) = ∫0^x s = x - gap(x)
+    const T = p.soft, S = (x) => (x > 0 ? x - gap(x, p) : 0);
+    return (S(tau) - S(tau - T)) / T;
+  }
+  function hard(tau, { response, damping: z }) {
     const w = (2 * Math.PI) / response;
     if (z < 1) {
       const wd = w * Math.sqrt(1 - z * z);
@@ -54,12 +64,24 @@
     const wd = w * Math.sqrt(z * z - 1);   // overdamped
     return 1 - Math.exp(-z * w * tau) * (Math.cosh(wd * tau) + ((z * w) / wd) * Math.sinh(wd * tau));
   }
+  // gap(x) = ∫0^x (1 - hard(u)) du, closed form per damping regime
+  function gap(x, { response, damping: z }) {
+    const w = (2 * Math.PI) / response, a = z * w;
+    if (z < 1) {
+      const b = w * Math.sqrt(1 - z * z);
+      const F = (u) => (Math.exp(-a * u) * ((b - (a * a) / b) * Math.sin(b * u) - 2 * a * Math.cos(b * u))) / (w * w);
+      return F(x) - F(0);
+    }
+    if (z === 1) return 2 / w - (Math.exp(-w * x) * (2 + w * x)) / w;
+    const b = w * Math.sqrt(z * z - 1), r1 = -a + b, r2 = -a - b, c1 = (1 + a / b) / 2, c2 = (1 - a / b) / 2;
+    return (c1 * (Math.exp(r1 * x) - 1)) / r1 + (c2 * (Math.exp(r2 * x) - 1)) / r2;
+  }
 
   /** Seconds until the response stays within eps of its target for good. */
   const settleCache = new Map();
   function settle(preset, eps = 0.01) {
     const p = resolve(preset);
-    const key = `${p.response}/${p.damping}/${eps}`;
+    const key = `${p.response}/${p.damping}/${p.soft || 0}/${eps}`;
     if (settleCache.has(key)) return settleCache.get(key);
     let last = 0;
     for (let tau = 0; tau < 20 * p.response; tau += 0.001) {

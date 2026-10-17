@@ -128,6 +128,32 @@ if have['vo'] and os.path.exists('audio/vo_placed.json'):
         print(f"hits on speech: {len(on_speech)}/{len(hits)}" + (' — ' + ', '.join(f"{c['t']}s {c['type']}" for c in on_speech[:8]) if on_speech else '')
               + ('  · more than half: move hits into the pauses, the ear catches neither' if hits and len(on_speech) > len(hits) / 2 else ''))
 elif have['vo']: print('speech over background: NOT CHECKED (no audio/vo_placed.json: run vo.py)')
-for f in ('audio/_bg.wav', 'audio/_vo.wav', 'audio/_room_ir.wav'):
+
+# every sound must stand out in at least one of its own bands (one carrying ≥ 10 % of its energy) over music + voice as they
+# reach the sum, by ≥ 1.5 dB within 30 ms before to 250 ms after its cue (after Bodila51/opus-sound-layer qa.py "audible").
+if have['sfx'] and os.path.exists('cues.json'):
+    from scipy import signal
+    bed = [l for l in labels if l not in ('[sfx]', '[tone]')]
+    ff([*inputs, '-filter_complex', ';'.join(chains) + f";{''.join(bed)}amix=inputs={len(bed)}:normalize=0:duration=first[bed]",
+        '-map', '[sfx]', '-c:a', 'pcm_f32le', 'audio/_sfx.wav', '-map', '[bed]', '-c:a', 'pcm_f32le', 'audio/_bed.wav'])
+    fxa, bda = pcm('audio/_sfx.wav', 'anull'), pcm('audio/_bed.wav', 'anull')
+    SR16 = 16000   # pcm() decodes at 16 kHz: bands up to 8 kHz
+    BANDS = [(125, 250), (250, 500), (500, 1000), (1000, 2000), (2000, 4000), (4000, 7900)]
+    sos = [signal.butter(4, b, 'bandpass', fs=SR16, output='sos') for b in BANDS]
+    rms = lambda x, s: float(np.sqrt(np.mean(signal.sosfilt(s, x) ** 2))) if len(x) > 64 else 0.0
+    quiet = []
+    for c in json.load(open('cues.json'))['cues']:
+        w0, w1 = int((c['t'] - 0.03) * SR16), int((c['t'] + 0.25) * SR16)
+        fx, bg = fxa[max(0, w0):w1], bda[max(0, w0):w1]; n = min(len(fx), len(bg)); fx, bg = fx[:n], bg[:n]
+        e = [rms(fx, s) for s in sos]; tot = sum(v * v for v in e) + 1e-20
+        lifts = [(20 * np.log10(rms(bg + fx, s) / max(rms(bg, s), 1e-3) + 1e-12), b) for s, b, v in zip(sos, BANDS, e) if v * v / tot >= 0.1]
+        best = max(lifts) if lifts else (-99.0, None)
+        if best[0] < 1.5: quiet.append((c['t'], c['type'], c.get('what', ''), best))
+    n_c = len(json.load(open('cues.json'))['cues'])
+    print(f"sounds that stand out in their own band (≥ 1.5 dB over music + voice): {n_c - len(quiet)}/{n_c}")
+    for t, ty, wh, (d, b) in quiet[:8]:
+        print(f"  WARNING {t:.2f}s {ty} «{wh}»: {'no energy (silent sample?)' if b is None else f'+{d:.1f} dB at best, {b[0]}-{b[1]} Hz'}"
+              " — raise its gain, pick a brighter sample, or move it off the busy spot")
+for f in ('audio/_bg.wav', 'audio/_vo.wav', 'audio/_room_ir.wav', 'audio/_sfx.wav', 'audio/_bed.wav'):
     if os.path.exists(f): os.remove(f)
 sys.exit(1 if bad else 0)

@@ -24,6 +24,10 @@ Dropped: Fish Audio voiceover (replaced by providers), `install.sh` (global inst
 - `reference/STORY.md` (based on `references/story.md`; arcs, source and ending rules added), `scripts/extract_lines.py`, `scripts/script_lint.py` (STORY field checks extended).
 - Provider code is a rewrite of its `tts.py` / `_or.py` / `_vc.py` / `music.py` ideas.
 
+## 2b. huashu-art-motion — MIT (alchaincyf/huashu-art-motion, commit 64cb272) — `LICENSE-huashu-art-motion`
+- `reference/EXPLAINERS.md`: the explainer grammars (`references/09-视频动画语法.md`, `动画语法/*.md`) and the per-genre base
+  camera (`references/镜头语言.md`), translated and rewritten for our engine. Their code (canvas2D, `clips/*.js`) is not used.
+
 ## 3. Our own (workspace)
 - `scripts/providers/` — registry and providers: `elevenlabs`, `openrouter`, `openai`.
 - `scripts/voice.py`, `layout_vo.py` (generalised from the first film), `captions.py`, `music_source.py`, `png.mjs`, `tile.py`.

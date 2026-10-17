@@ -15,6 +15,10 @@ Settings: flags → timeline.json "voiceover" {provider, voice, model, lang, sty
 Requests go one at a time: parallel TTS requests hang on several providers.
 Every take is transcribed and retried (up to 3 takes, the last without direction tags) if it drifts from the text.
 A line's "say" (lexicon.json → extract_lines.py) is what the voice reads; the check accepts either spelling.
+Word timings: when the checker returns them (ElevenLabs Scribe does, in the same call), `lines` and `check` write
+audio/vo/<id>.words.json — every word of the line's "text" with its start/end in the take (s), aligned to what was heard;
+words the checker spelled differently (numbers, lexicon terms) share the time between their matched neighbours by letter
+count. layout_vo.py turns them into the marks <id>.w<k>. For takes that already exist: `voice.py check` (no new voice).
 The script text leaves the machine: it goes to the voice provider and the checking provider."""
 import argparse, difflib, json, os, re, subprocess, sys, tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -75,10 +79,74 @@ def dur(p):
     return float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p], capture_output=True, text=True).stdout.strip())
 
 
-def heard(checker, path, lang):
+def hear(checker, path, lang):
+    """(text, words): words = [{text, start, end}] in the take's seconds when the checker gives them, else None."""
+    if hasattr(checker, 'transcribe_words') or getattr(checker, 'NAME', '') == 'ElevenLabs':
+        with tempfile.NamedTemporaryFile(suffix='.flac') as tmp:   # lossless: an mp3 encoder delay would shift every word
+            subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', path, '-ac', '1', '-ar', '16000', tmp.name], check=True)
+            return checker.transcribe_words(tmp.name, lang) if hasattr(checker, 'transcribe_words') else scribe(checker, tmp.name, lang)
     with tempfile.NamedTemporaryFile(suffix='.mp3') as tmp:
         subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', path, '-b:a', '64k', tmp.name], check=True)
-        return P.need(checker, 'transcribe')(tmp.name, lang)
+        return P.need(checker, 'transcribe')(tmp.name, lang), None
+
+
+def scribe(M, path, lang):
+    """ElevenLabs Scribe: the request transcribe() makes, keeping the word timings the answer carries anyway (no extra cost)."""
+    from providers._http import post, multipart
+    fields = {'model_id': 'scribe_v2', 'tag_audio_events': 'false', 'timestamps_granularity': 'word'}
+    if lang: fields['language_code'] = lang
+    form = multipart(fields, {'file': (os.path.basename(path), open(path, 'rb').read(), 'audio/flac')})
+    J = json.load(post(f'{M.BASE}/v1/speech-to-text', M._h(), form=form, timeout=180, name=M.NAME, hint=M._hint))
+    return J['text'].strip(), [{'text': w['text'].strip(), 'start': round(w['start'], 3), 'end': round(w['end'], 3)}
+                               for w in J.get('words') or [] if w.get('type', 'word') == 'word' and w.get('text', '').strip()]
+
+
+# Display words, the same rule in layout_vo.py, sync.mjs and lib/captions.js: whitespace pieces; a piece with no letter
+# or digit ("—", "…") sticks to the word before it (a leading one, to the first word). wkey = the word for matching
+# (case, ё, punctuation dropped).
+def tokens(text):
+    out, lead = [], ''
+    for p in text.replace('|', ' ').split():
+        if re.search(r'\w', p): out.append(lead + p); lead = ''
+        elif out: out[-1] += ' ' + p
+        else: lead += p + ' '
+    return out
+
+
+def wkey(w):
+    return re.sub(r'[\W_]', '', w.lower().replace('ё', 'е'))
+
+
+def align(text, hw):
+    """Script words of `text` with times from the heard words hw. Matched words take their own time; a run of unmatched
+    ones (digits vs number words, lexicon terms) shares the heard span between its matched neighbours by letter count."""
+    T = tokens(text); m = [None] * len(T)
+    for blk in difflib.SequenceMatcher(None, [wkey(t) for t in T], [wkey(w['text']) for w in hw], autojunk=False).get_matching_blocks():
+        for j in range(blk.size): m[blk.a + j] = blk.b + j
+    out, i = [], 0
+    while i < len(T):
+        if m[i] is not None:
+            w = hw[m[i]]; out.append({'text': T[i], 'start': w['start'], 'end': w['end'], 'heard': True}); i += 1; continue
+        j = i
+        while j < len(T) and m[j] is None: j += 1
+        h0 = m[i - 1] + 1 if i else 0; h1 = m[j] if j < len(T) else len(hw)
+        if h1 > h0: s, e = hw[h0]['start'], hw[h1 - 1]['end']
+        else:
+            s = hw[m[i - 1]]['end'] if i else hw[0]['start']
+            e = hw[m[j]]['start'] if j < len(T) else hw[-1]['end']
+        n = [max(1, len(wkey(t))) for t in T[i:j]]; tot, acc = sum(n), 0
+        for t, k in zip(T[i:j], n):
+            out.append({'text': t, 'start': round(s + (e - s) * acc / tot, 3), 'end': round(s + (e - s) * (acc + k) / tot, 3), 'heard': False}); acc += k
+        i = j
+    return out
+
+
+def save_words(L, take, hw):
+    if not hw: return ''
+    W = align(L['text'], hw)
+    json.dump({'id': L['id'], 'take': os.path.basename(take), 'take_mtime': round(os.path.getmtime(take), 3), 'source': chk_name,
+               'words': W, 'heard': hw}, open(f'audio/vo/{L["id"]}.words.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
+    return f' · words {sum(w["heard"] for w in W)}/{len(W)} matched'
 
 
 ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -126,8 +194,8 @@ if a.cmd == 'check':
     for L in todo:
         f = next((f'audio/vo/{L["id"]}{e}' for e in ('.wav', '.mp3', '.m4a', '.flac') if os.path.exists(f'audio/vo/{L["id"]}{e}')), None)
         if not f: print(L['id'], 'MISSING'); bad += 1; continue
-        h = heard(checker, f, lang); r = score2(L, h); bad += r < 0.93
-        print(L['id'], f'{dur(f):5.1f}s', 'ok ' if r >= 0.93 else 'BAD', r, '' if r >= 0.93 else f'«{h[:90]}»')
+        h, hw = hear(checker, f, lang); r = score2(L, h); bad += r < 0.93
+        print(L['id'], f'{dur(f):5.1f}s', 'ok ' if r >= 0.93 else 'BAD', r, '' if r >= 0.93 else f'«{h[:90]}»', save_words(L, f, hw))
     sys.exit(1 if bad else 0)
 
 if a.cmd == 'check-mix':   # what the viewer hears: each phrase cut from the final mix
@@ -153,14 +221,15 @@ for L in todo:
     d_full = direction(L, style)
     out = f'audio/vo/{L["id"]}.wav'
     attempts = [d_full, d_full, style] if d_full != style else [style]   # direction is sometimes read aloud: last try without it
+    hw = None
     for k, dr in enumerate(attempts):
         f = P.need(M, 'tts')   # providers that read no direction text (ElevenLabs v4) take the line itself: mood/pace → settings
         d = save(f(L.get('say', L['text']), voice, model, dr, lang, line=L) if 'line' in inspect.signature(f).parameters else f(L.get('say', L['text']), voice, model, dr, lang), out)
         if not checker: r = None; break
-        h = heard(checker, out, lang); r = score2(L, h)
+        h, hw = hear(checker, out, lang); r = score2(L, h)
         if r >= 0.93: break
         print(f'  {L["id"]} take {k + 1}: {r} «{h[:70]}» — retry')
     total += d
-    print(L['id'], round(d, 2), 's', f'· {dr}' if dr else '', '' if r is None else f'· match {r}')
+    print(L['id'], round(d, 2), 's', f'· {dr}' if dr else '', '' if r is None else f'· match {r}', save_words(L, out, hw) if checker else '')
 json.dump({'provider': prov, 'model': model, 'voice': voice, 'style': style, 'lang': lang}, open('audio/vo/voice.json', 'w'), ensure_ascii=False)
 print('total', round(total, 1), 's  ·', M.NAME, model, voice)

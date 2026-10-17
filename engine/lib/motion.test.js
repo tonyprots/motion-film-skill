@@ -32,6 +32,26 @@ ok(M.swapAlpha(2, 1, 2) < 0.005, 'swapAlpha gone by next morph');
 ok(M.loopT(4, 4) === 0 && M.loopT(4 - 1 / 120, 4, 60) === 0 && M.loopT(-1, 4) === 3 && M.loopT(1, 4) === 1,
   'loopT pins last frame to first');
 
+// soft start: same end state, no acceleration jump at release, continuous, never past 1 for a critical spring
+{
+  const hardP = { response: 0.5, damping: 1 }, softP = { ...hardP, soft: 0.12 };
+  const acc = (p, t, h = 1e-4) => (M.step(t + h, p) - 2 * M.step(t, p) + M.step(t - h, p)) / (h * h);
+  ok(Math.abs(M.step(5, softP) - 1) < 1e-9, 'soft spring settles on target');
+  ok(Math.abs(acc(softP, 0.002)) < 0.2 * Math.abs(acc(hardP, 0.002)), `soft start: accel right after release ${acc(softP, 0.002).toFixed(1)} vs hard ${acc(hardP, 0.002).toFixed(1)}`);
+  let jump = 0;
+  for (let t = 0; t < 2; t += 1e-3) jump = Math.max(jump, Math.abs(M.step(t + 1e-3, softP) - M.step(t, softP)));
+  ok(jump < 0.02, 'soft spring is continuous');
+  ok(peak(softP) <= 1 + 1e-9, 'soft critical spring never overshoots');
+  const zs = [{ response: 0.4, damping: 0.6 }, { response: 0.4, damping: 1.4 }];
+  for (const p of zs) {
+    // closed-form gap matches numeric integration
+    const T = 0.1, tau = 0.37; let num = 0; const n = 20000;
+    for (let i = 0; i < n; i++) num += M.step(tau - T + ((i + 0.5) / n) * T, p) / n;
+    ok(Math.abs(M.step(tau, { ...p, soft: T }) - num) < 1e-6, `soft closed form = numeric mean (ζ ${p.damping})`);
+  }
+  ok(M.step(0.3, 'camera') < M.step(0.3, 'heavy'), 'camera role starts soft');
+}
+
 process.exitCode = failed ? 1 : 0;
 
 // motion tokens: roles resolve to presets, configure() retunes them

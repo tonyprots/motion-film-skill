@@ -2,8 +2,9 @@
 //
 // Frame lifecycle:  begin() → every live scene's run() calls put(el, props) → commit() → after() hooks → commit()
 // Every animated element is registered once with reg(el, base). On every frame commit() writes base ⊕ this
-// frame's overrides to EVERY registered element, so no state survives between frames and any frame can be
-// painted in any order. No timers, no CSS transitions, no Math.random; seeded noise only (mulberry32).
+// frame's overrides to every registered element that can be seen: scene roots, elements outside scenes, and elements
+// of live scenes. A dead scene's root is hidden, so its children are skipped; when the scene comes back, its children
+// get their full state again. No state survives between frames and any frame can be painted in any order. No timers, no CSS transitions, no Math.random; seeded noise only (mulberry32).
 //
 // Loads after lib/motion.js and film/data.js (window.TL timeline, window.BEATS grid, window.VO phrases).
 (() => {
@@ -11,6 +12,8 @@
   const qs = new URLSearchParams(location.search);
   const FORMATS = { '16x9': [1920, 1080], '1x1': [1080, 1080], '4x5': [1080, 1350], '9x16': [1080, 1920] };
   const FMT = qs.get('fmt') || (TL.formats || ['16x9'])[0];
+  // styleframe variants (SKILL.md step 7): ?variant= from render.mjs --frames, otherwise the pick in timeline "variant"
+  const VARIANT = qs.get('variant') || TL.variant || 'a';
   const [W, H] = FORMATS[FMT];
   const FPS = TL.fps || 60, DUR = TL.duration || 15;
   const { step, track } = window.Motion;
@@ -95,7 +98,7 @@
   const stage = document.getElementById('stage');
   stage.style.width = W + 'px'; stage.style.height = H + 'px';
   const REG = [];
-  let OVER = new Map();
+  let OVER = new Map(), LIVE = null;   // LIVE: roots of the scenes painted this frame (null = commit everything)
   function el(tag, attrs = {}, parent = null, html = '') {
     const e = document.createElement(tag);
     for (const [k, v] of Object.entries(attrs)) {
@@ -106,6 +109,26 @@
     return e;
   }
   const frag = (html) => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; };
+
+  // Live component (capture.mjs --components → assets/ui/, bundled into data.js by sync.mjs): the product's real
+  // markup with its computed styles, so a scene can change its state (type, toggle, add a row) instead of swapping
+  // screenshots. Returns { root, w, h, q(text), all(sel), fields }: q finds the innermost element whose text contains
+  // `text`; fields = text inputs as { box, value, placeholder } spans — type with TYPE.type(t, f.value, …), hide the placeholder.
+  function ui(parent, id, { x = 0, y = 0, scale = 1 } = {}) {
+    const U = (window.UI || {})[id];
+    if (!U) throw new Error(`no live component "${id}": run capture.mjs --components, then node scripts/sync.mjs`);
+    // registered at x, y, scale: put(U.root, { y, s, o }) moves it like any other element
+    const root = reg(el('div', { class: 'abs', 'data-ui': id, style: `width:${U.w}px;height:${U.h}px;` }, parent, U.html), { x, y, s: scale });
+    const q = (text) => {
+      const hit = [...root.querySelectorAll('*')].filter((e) => e.textContent.includes(text));
+      const leaf = hit.find((e) => ![...e.children].some((c) => c.textContent.includes(text)));
+      if (!leaf) throw new Error(`live component "${id}": no element with text "${text}"`);
+      return leaf;
+    };
+    const fields = [...root.querySelectorAll('[data-field]')].map((box) => ({ box, name: box.dataset.field,
+      value: box.querySelector('[data-value]'), placeholder: box.querySelector('[data-placeholder]') }));
+    return { root, w: U.w, h: U.h, q, all: (sel) => [...root.querySelectorAll(sel)], fields };
+  }
 
   /** Register an animated element. base = its props on frames where nobody put() it. Hidden things: {o: 0}. */
   function reg(e, base = {}) {
@@ -124,8 +147,15 @@
   // 2D transforms only, and no will-change: a composited layer (translate3d / will-change / 3D rotate) keeps a cached
   // raster whose pixels depend on which frame was painted before, which breaks seek(t) determinism (render --verify).
   const TF = ['x', 'y', 's', 'sx', 'sy', 'r'];
+  // the scene root an element belongs to (null: a scene root itself, or outside every scene); fixed once it is in the page
+  function ownerOf(e) {
+    if (e._owner === undefined && e.isConnected) e._owner = (e.parentElement && e.parentElement.closest('[data-scene]')) || null;
+    return e._owner;
+  }
   function commit() {
     for (const e of REG) {
+      const own = LIVE && ownerOf(e);
+      if (own && !LIVE.has(own)) continue;
       const p = Object.assign({}, e._base, OVER.get(e) || {});
       const st = {};
       if (TF.some((k) => p[k] != null)) {
@@ -187,6 +217,7 @@
     for (const h of hooks.before) h(t, b);
     // a scene starting at beat <= 0 owns frame 0 even when the measured beat 0 sits a hair after t = 0
     const live = SCENES.filter((S) => (beatOf(S.from) <= 0 || b >= beatOf(S.from) - S.pre) && b < beatOf(S.to) + S.post);
+    LIVE = new Set(live.map((S) => S.root));
     for (const S of live) { put(S.root, { hide: false }); S.run && S.run(t, b, S); }
     commit();
     if (hooks.after.length || live.some((S) => S.after)) {
@@ -197,10 +228,11 @@
   }
 
   window.C = {
-    TL, BEATS, FMT, W, H, FPS, DUR, LEAD, leadFor, stage, pick,
+    TL, BEATS, FMT, VARIANT, W, H, FPS, DUR, LEAD, leadFor, stage, pick,
     bt, beatAt, beatOf, clamp, lerp, seg, ease, sp, spHit, stagger, trk, trkObj, win, mulberry32, noise1,
-    el, frag, reg, put, commit, inset, rectOf, scene, canvas, hooks, SCENES,
+    el, frag, ui, reg, put, commit, inset, rectOf, scene, canvas, hooks, SCENES,
     pending: [],
+    gates: [],              // promises frame 0 waits for (pushed in build(): a Lottie file loading, a decoded asset)
     fonts: [],              // film.js: e.g. C.fonts = ['500 100px Display', '400 40px UI'] — awaited before frame 0
   };
 
@@ -223,6 +255,7 @@
       await Promise.all(imgs.map((i) => (i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; }))));
       await Promise.all(imgs.map((i) => i.decode().catch(() => 0)));
       if (glGate) await glGate;
+      await Promise.all(C.gates);
       window.seek(0);
       return true;
     })();

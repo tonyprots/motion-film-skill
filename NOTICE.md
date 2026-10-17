@@ -21,6 +21,10 @@ If you are the author and want any of this changed, open an issue — we will ac
 [github.com/artkruglov/voice-film](https://github.com/artkruglov/voice-film), MIT, see `LICENSE-voice-film`:
 `reference/STORY.md`, `scripts/extract_lines.py`, `scripts/script_lint.py`.
 
+## huashu-art-motion — alchaincyf (MIT)
+[github.com/alchaincyf/huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion), MIT, see
+`LICENSE-huashu-art-motion`: `reference/EXPLAINERS.md` is a translated and rewritten derivative of its explainer grammars.
+
 ## Fonts and libraries
 The only bundled font is Geist (SIL Open Font License 1.1) in `examples/readme-demo/preset/fonts/`, with its licence
 next to it. The demo media in `docs/media/` were made with this skill and are covered by our MIT licence. Playwright (Apache-2.0) and the Python packages in `requirements.lock` are installed from their

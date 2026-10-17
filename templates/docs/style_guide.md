@@ -1,7 +1,15 @@
 # Style guide: <product> reel
 
 Source material: `assets/site/info.json`, `assets/site/*.png`, reference `refs/<file>` (frames in `refs/frames/`).
-Take the reference's GRAMMAR (rhythm, transitions, camera, how text behaves), never its content, mascot, copy or palette.
+Take the reference's GRAMMAR (rhythm, transitions, camera, how text behaves), never its content, mascot, copy, numbers
+or palette.
+
+## 0. Reference films
+| Reference | Scenes (frame-by-frame breakdown) | Take | Leave |
+|---|---|---|---|
+| `refs/<file>` or URL | 1. … 2. … | | |
+One-line summary: what we take from all references and what we leave to them on purpose (e.g. "no white scenes", "no
+borrowed numbers").
 
 ## 1. Palette (measured, not guessed)
 | Token | Hex | Source |
@@ -28,7 +36,9 @@ e.g. hard cut on the bar · push-through · card rise · collapse-reveal · iris
 Never: crossfades, spins, glitches, light leaks.
 
 ## 5. Camera
-Constant micro push on holds (1.00 → 1.03–1.06), punch-ins on UI, perspective only where it adds depth.
+Vocabulary and limits — RULES.md "The camera is punctuation". Here: this film's base move (on exposition, a hold or a slow
+push to the detail), where accents are allowed (snap, punch, whip — only a reveal, a turn, the key number) and perspective
+only where it adds depth.
 
 ## 6. Texture & finish
 Grain or clean digital? Shadows and blur for depth, never glow.
@@ -49,3 +59,7 @@ Tempo, feel, which UI events get which SFX (see timeline.json sfx), VO voice if 
 | Camera | `heavy`, push 0.3–0.5 s before the action, 1.4–2.5× | — | no |
 Roles live in `timeline.json` `"motion"` (`enter`, `exit`, `text`, `accent`, `hero`, `camera`): change one, change the other.
 Finish (`timeline.json` → `finish`): LUT <file or none>, grain <0 / 1.5–2.5>, `--master` <yes/no>.
+
+## 10. Rules from notes
+Every user or critic note that could recur becomes a line here (`notes.py resolve N --reply "…" --rule "…"`): date, time,
+the rule, the verbatim reaction. The next round and the next issue of a series read this section before building.

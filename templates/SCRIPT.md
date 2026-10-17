@@ -2,6 +2,7 @@
 
 ## STORY
 - Type and arc: <a type from reference/STORY.md, or your own arc: step → step → …>
+- Format: <from reference/FORMATS.md> — <why; the runner-up and why not>
 - Logline: <one or two sentences: what changes, for whom>
 - One sentence the viewer repeats: "…"
 - Argument chain: <3–6 steps to that sentence>

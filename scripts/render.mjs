@@ -4,13 +4,17 @@
 //   node scripts/render.mjs --at 1.2,s2b [--fmt 1x1]              stills (seconds, marks, s2b+1.5) → review/stills/<fmt>/t<sec>.png
 //   node scripts/render.mjs --frames [--all]                      styleframes: timeline "styleframes" (marks or {at, name}) in every format
 //                                                                 → review/styleframes/board.jpg (one row per frame) — judge before animating
+//                                                                 an entry with "variants": ["a","b","c"] gets one row per variant
+//                                                                 (the film reads C.VARIANT; the pick goes to timeline "variant")
 //   node scripts/render.mjs --animatic [--all]                    12 fps, short side 480, no blur → renders/animatic_<fmt>.mp4 (timing first)
 //   node scripts/render.mjs --draft [--all]                       30 fps, no blur, CRF 22 → renders/draft_<fmt>.mp4 (for review rounds)
 //   node scripts/render.mjs [--fmt 16x9 | --all]                  final: 60 fps, adaptive 180° motion blur, H.264 yuv420p CRF 16 → renders/<fmt>.mp4
 //   node scripts/render.mjs --range 3,5 [--blur 0]                a clip of seconds 3–5 → renders/clip_<fmt>_3-5.mp4 (motion checks)
 //   node scripts/render.mjs --mux [--all]                         re-mux the current audio/mix.wav into existing renders without re-rendering
 //   node scripts/render.mjs --verify [--all]                      determinism check: 12 probes, cold vs after seeking elsewhere
-//   node scripts/render.mjs --lint [--all] [--phase 0.6]          text in frame, once per beat: size, contrast, 9:16 zones, one phrase twice
+//   node scripts/render.mjs --lint [--all] [--phase 0.6]          text in frame, once per beat: size, contrast, 9:16 zones, one phrase twice,
+//                                                                 words cut by the frame edge or a mask (caption cut, side cut = PROBLEM),
+//                                                                 screens cut at the side by their window, an «Illustration» plate
 //                                                                 → review/lint_<fmt>.json + text_<fmt>.json; exit 1 on a PROBLEM
 //   node scripts/render.mjs --seams [--all]                       every hard cut: shared text/images keep place and size (12 px, 5 %),
 //                                                                 no still-to-still cut, no empty first frame → review/seams_<fmt>.json
@@ -43,6 +47,16 @@ try { ({ chromium } = require('playwright')); } catch {
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i < 0 ? d : (argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : true); };
 const has = (k) => argv.includes(`--${k}`);
+// --help prints the usage above; an unknown flag stops here — without this, a typo or --help fell through to a full final render
+const KNOWN = ['all', 'animatic', 'at', 'audio', 'blur', 'chunk', 'crf', 'deband', 'draft', 'fmt', 'fps', 'frames', 'gpu', 'grain', 'lint', 'lut',
+  'master', 'mux', 'no-finish', 'phase', 'range', 'seams', 'sheet', 'verify', 'workers'];
+const unknown = argv.filter((a) => a.startsWith('--') && !KNOWN.includes(a.slice(2)));
+if (unknown.length) {
+  const usage = fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n').filter((l) => l.startsWith('//')).slice(0, 24).map((l) => l.slice(3)).join('\n');
+  const help = unknown.some((a) => a === '--help' || a === '--h');
+  (help ? console.log : console.error)(`${help ? '' : `unknown flag ${unknown.join(' ')}\n\n`}${usage}`);
+  process.exit(help ? 0 : 1);
+}
 const TL = JSON.parse(fs.readFileSync(path.join(ROOT, 'timeline.json'), 'utf8'));
 const SIZES = { '16x9': [1920, 1080], '1x1': [1080, 1080], '4x5': [1080, 1350], '9x16': [1080, 1920] };
 const FORMATS = has('all') || (has('frames') && !has('fmt')) ? TL.formats : [opt('fmt', TL.formats[0])];
@@ -58,11 +72,11 @@ if (has('mux')) {
   if (!hasAudio) { console.error('no audio at', AUDIO); process.exit(1); }
   for (const fmt of FORMATS) {
     const src = path.join(ROOT, `renders/${DRAFT ? "draft_" : ""}${fmt}.mp4`), tmp = src + '.tmp.mp4';
-    run('ffmpeg', ['-y', '-loglevel', 'error', '-i', src, '-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '320k', '-shortest', '-movflags', '+faststart', tmp]);
+    run('ffmpeg', ['-y', '-loglevel', 'error', '-i', src, '-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-af', 'apad', '-c:a', 'aac', '-b:a', '320k', '-shortest', '-movflags', '+faststart', tmp]);
     fs.renameSync(tmp, src); console.log('muxed', src);
     const m = src.replace(/\.mp4$/, '_master.mp4');
     if (fs.existsSync(m)) {
-      run('ffmpeg', ['-y', '-loglevel', 'error', '-i', m, '-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-tag:v', 'hvc1', '-c:a', 'aac', '-b:a', '320k', '-shortest', '-movflags', '+faststart', m + '.tmp.mp4']);
+      run('ffmpeg', ['-y', '-loglevel', 'error', '-i', m, '-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-tag:v', 'hvc1', '-af', 'apad', '-c:a', 'aac', '-b:a', '320k', '-shortest', '-movflags', '+faststart', m + '.tmp.mp4']);
       fs.renameSync(m + '.tmp.mp4', m); console.log('muxed', m);
     }
   }
@@ -85,18 +99,20 @@ const GPU = has('gpu') || TL.webgl === true;
 const GPU_ARGS = process.platform === 'darwin' ? ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist'] : ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=vulkan'];
 const browser = await chromium.launch({ args: ['--force-color-profile=srgb', '--disable-lcd-text', '--font-render-hinting=none', '--disable-gpu-vsync', ...(GPU ? GPU_ARGS : [])] });
 
-async function openFilm(fmt) {
+async function openFilm(fmt, variant = null) {
   const [W, H] = SIZES[fmt];
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') console.log('[page]', m.text()); });
   page.on('pageerror', (e) => { console.error('[pageerror]', e.message); process.exitCode = 1; });
-  await page.goto(`http://127.0.0.1:${server.address().port}/film/index.html?fmt=${fmt}`);
+  await page.goto(`http://127.0.0.1:${server.address().port}/film/index.html?fmt=${fmt}${variant ? '&variant=' + encodeURIComponent(variant) : ''}`);
   await page.waitForFunction(() => window.READY, null, { timeout: 120000 });
   await page.evaluate(() => window.READY);
   const cdp = await page.context().newCDPSession(page);
   const info = await page.evaluate(() => ({ DUR: window.DURATION, FPS: window.FPS, CUTS: window.CUTS || [], BEATS: window.BEATS || {} }));
-  const png = async (t) => {
-    await page.evaluate((t) => window.seek(t), t);
+  // hold = the time of the output frame this shot belongs to (motion-blur sub-frames share it): footage.js picks the
+  // recording's frame from it, so a 25 fps source is never averaged across two of its own frames
+  const png = async (t, hold = t) => {
+    await page.evaluate(([t, hold]) => { window.FRAME_T = hold; return window.seek(t); }, [t, hold]);
     const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', optimizeForSpeed: true });
     return Buffer.from(data, 'base64');
   };
@@ -192,7 +208,7 @@ async function renderFrames(F, { fps, blur, a }, i0, i1, sink, hist, tick) {
       if (!HI) { await write(sink, Buffer.from(im.buffer)); }
       else { for (let q = 0; q < n; q++) out16[q] = im[q] * 257; await emit(frame); }
     } else {
-      const shot = async (u) => { let im = decodePNG(await F.png(at(tc, u))); for (let r = 0; im.length !== n && r < 3; r++) { console.error(`\n[frame ${i}] screenshot ${im.length} bytes, expected ${n}: reshooting`); im = decodePNG(await F.png(at(tc, u))); } if (im.length !== n) throw new Error(`frame ${i}: screenshot size mismatch`); return im; };
+      const shot = async (u) => { let im = decodePNG(await F.png(at(tc, u), tc)); for (let r = 0; im.length !== n && r < 3; r++) { console.error(`\n[frame ${i}] screenshot ${im.length} bytes, expected ${n}: reshooting`); im = decodePNG(await F.png(at(tc, u), tc)); } if (im.length !== n) throw new Error(`frame ${i}: screenshot size mismatch`); return im; };
       const x = await shot(0.25), y = await shot(0.75);
       let d = 0; for (let q = 0; q < x.length; q += 97) d += Math.abs(x[q] - y[q]); d /= x.length / 97;
       const SUB = d < 0.35 ? MIN_SUB : Math.min(MAX_SUB, Math.max(4, Math.round(4 + d * 1.6)));
@@ -214,7 +230,7 @@ async function renderFrames(F, { fps, blur, a }, i0, i1, sink, hist, tick) {
 
 function encoder(F, fps, out, audio) {
   const input = ['-f', 'rawvideo', '-pix_fmt', HI ? 'rgb48le' : 'rgb24', '-s', `${F.W}x${F.H}`, '-framerate', String(fps), '-probesize', '100M', '-i', '-', ...(audio ? ['-i', audio] : [])];
-  const aud = audio ? ['-map', '1:a', '-c:a', 'aac', '-b:a', '320k', '-shortest'] : [];
+  const aud = audio ? ['-map', '1:a', '-af', 'apad', '-c:a', 'aac', '-b:a', '320k', '-shortest'] : [];
   const fc = FIN.master && HI
     ? `[0:v]${finishChain()},split=2[f1][f2];[f1]${toYUV('yuv420p')}[v8];[f2]${toYUV('yuv420p10le')}[v10]`
     : `[0:v]${HI ? finishChain() + ',' + toYUV('yuv420p') : (ANIMATIC ? `scale=${F.W >= F.H ? '-2:480' : '480:-2'}:flags=bilinear,` : '') + TAGS}[v8]`;
@@ -276,7 +292,7 @@ async function renderVideo(F, fmt, t0) {
     });
     const list = path.join(partsDir, 'list.txt');
     fs.writeFileSync(list, parts.map((p) => `file '${p.replace(/'/g, "'\\''")}'`).join('\n'));
-    const join = (lst, dst) => run('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, ...(withAudio ? ['-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:a', 'aac', '-b:a', '320k', '-shortest'] : []),
+    const join = (lst, dst) => run('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, ...(withAudio ? ['-i', AUDIO, '-map', '0:v', '-map', '1:a', '-af', 'apad', '-c:a', 'aac', '-b:a', '320k', '-shortest'] : []),
       '-c:v', 'copy', ...(dst === out ? [] : ['-tag:v', 'hvc1']), '-movflags', '+faststart', dst]);
     join(list, out);
     if (FIN.master && HI) {
@@ -322,28 +338,45 @@ function beatTimes(F, phase) {
 // farthest from that colour (the background it actually sits on). Masked or clipped words (< 30 % of the box inside the
 // clipping ancestors) and words under another layer (hit test at three points) are skipped.
 const PAGE_TEXT = () => {
-  const out = [], vw = innerWidth, vh = innerHeight;
+  const out = [], vw = innerWidth, vh = innerHeight, ctx = document.createElement('canvas').getContext('2d');   // ink metrics
   const groupOf = (el) => el.closest('.line, .cap') || el;
-  // hit testing sees only what paints: transparent full-frame scene roots and canvases must not count as "on top"
+  // hit testing sees only what paints: transparent full-frame scene roots and canvases must not count as "on top",
+  // nor do layers faded out (elementFromPoint ignores visibility, not opacity: a later scene's hidden button would cover the frame)
   const paints = (el, s) => [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) || /^(IMG|SVG|VIDEO)$/i.test(el.tagName)
     || s.backgroundImage !== 'none' || !/rgba\(.*,\s*0\)$|transparent/.test(s.backgroundColor);
-  const saved = [];
+  const saved = [], opOf = new Map([[document.body, 1]]);
   for (const el of document.querySelectorAll('body *')) {
-    const s = getComputedStyle(el);
-    saved.push([el, el.style.pointerEvents]); el.style.pointerEvents = paints(el, s) ? 'auto' : 'none';
+    const s = getComputedStyle(el), o = (opOf.get(el.parentElement) ?? 1) * parseFloat(s.opacity);
+    opOf.set(el, o);
+    saved.push([el, el.style.pointerEvents]);
+    el.style.pointerEvents = o >= 0.5 && el.checkVisibility({ visibilityProperty: true }) && paints(el, s) ? 'auto' : 'none';
   }
   for (const el of document.querySelectorAll('body *')) {
     if (!el.checkVisibility || !el.checkVisibility({ opacityProperty: true, visibilityProperty: true })) continue;
     const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join('').trim();
     if (!own) continue;
     const cs = getComputedStyle(el), er = el.getBoundingClientRect();
-    let r = null;   // the glyphs' own box (text nodes), not the element's: a caption box is wider than its words
+    // the glyphs' own box (text nodes), not the element's: a caption box is wider than its words. r is the Range box (the
+    // font's content area: contrast samples, hit tests and seams use it); ink is the letters themselves, for the cut check:
+    // a content area is taller than a tight line-height plus mask padding, so every masked headline read as ~7 % cut by
+    // its own .line while its letters sat whole inside the mask.
+    let r = null, ink = null;
+    const grow = (b, l, t, rr, bb) => b ? { left: Math.min(b.left, l), top: Math.min(b.top, t), right: Math.max(b.right, rr), bottom: Math.max(b.bottom, bb) } : { left: l, top: t, right: rr, bottom: bb };
+    ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
     for (const n of el.childNodes) if (n.nodeType === 3 && n.textContent.trim()) {
-      const rg = document.createRange(); rg.selectNodeContents(n); const q = rg.getBoundingClientRect();
-      if (q.width && q.height) r = r ? { left: Math.min(r.left, q.left), top: Math.min(r.top, q.top), right: Math.max(r.right, q.right), bottom: Math.max(r.bottom, q.bottom) } : { left: q.left, top: q.top, right: q.right, bottom: q.bottom };
+      const rg = document.createRange(); rg.selectNodeContents(n);
+      const m = ctx.measureText(n.textContent.trim()), fa = m.fontBoundingBoxAscent, fd = m.fontBoundingBoxDescent;
+      for (const q of rg.getClientRects()) {   // one rect per line fragment; ink = baseline − ascent … baseline + descent
+        if (!q.width || !q.height) continue;
+        r = grow(r, q.left, q.top, q.right, q.bottom);
+        const k = fa + fd > 0 ? q.height / (fa + fd) : 0;   // CSS px → screen px (camera scale included)
+        ink = k ? grow(ink, q.left, q.top + (fa - m.actualBoundingBoxAscent) * k, q.right, q.top + (fa + m.actualBoundingBoxDescent) * k) : grow(ink, q.left, q.top, q.right, q.bottom);
+      }
     }
     if (!r || r.right - r.left < 2 || r.bottom - r.top < 2) continue;
-    let op = 1, vis = { l: Math.max(0, r.left), t: Math.max(0, r.top), r: Math.min(vw, r.right), b: Math.min(vh, r.bottom) }, unknownClip = false;
+    const frame = (b) => ({ l: Math.max(0, b.left), t: Math.max(0, b.top), r: Math.min(vw, b.right), b: Math.min(vh, b.bottom) });
+    const cut = (v, box) => ({ l: Math.max(v.l, box.l), t: Math.max(v.t, box.t), r: Math.min(v.r, box.r), b: Math.min(v.b, box.b) });
+    let op = 1, vis = frame(r), inkVis = frame(ink), unknownClip = false;
     for (let a = el; a && a !== document.body; a = a.parentElement) {
       const s = getComputedStyle(a); op *= parseFloat(s.opacity);
       const clipped = s.clipPath !== 'none', over = a !== el && s.overflow !== 'visible';
@@ -357,7 +390,7 @@ const PAGE_TEXT = () => {
         const sx = a.offsetWidth ? q.width / a.offsetWidth : 1, sy = a.offsetHeight ? q.height / a.offsetHeight : 1;
         box = { l: q.left + il * sx, t: q.top + it * sy, r: q.right - ir * sx, b: q.bottom - ib * sy };
       }
-      vis = { l: Math.max(vis.l, box.l), t: Math.max(vis.t, box.t), r: Math.min(vis.r, box.r), b: Math.min(vis.b, box.b) };
+      vis = cut(vis, box); inkVis = cut(inkVis, box);
     }
     const area = Math.max(0, vis.r - vis.l) * Math.max(0, vis.b - vis.t);
     if (unknownClip || op < 0.5 || area < 0.3 * (r.right - r.left) * (r.bottom - r.top)) continue;
@@ -366,11 +399,26 @@ const PAGE_TEXT = () => {
     const scale = el.offsetWidth ? er.width / el.offsetWidth : 1;
     const g = groupOf(el);
     out.push({ text: own, group: g === el ? own : g.innerText.replace(/\s+/g, ' ').trim(), gid: [...document.querySelectorAll('*')].indexOf(g),
-      cap: !!el.closest('.cap'), px: parseFloat(cs.fontSize) * scale, color: cs.color, op, box: vis, glyph: { l: r.left, t: r.top, r: r.right, b: r.bottom } });
+      cap: !!el.closest('.cap'), px: parseFloat(cs.fontSize) * scale, color: cs.color, op, box: vis, glyph: { l: r.left, t: r.top, r: r.right, b: r.bottom },
+      inkBox: inkVis, ink: { l: ink.left, t: ink.top, r: ink.right, b: ink.bottom }, crop: !!el.closest('[data-crop]') });
   }
   for (const [el, v] of saved) el.style.pointerEvents = v;
   return out;
 };
+// --lint: real screens (img ≥ 200 px wide) cut at the LEFT or RIGHT by a clipping ancestor or the frame. A push must hold the
+// screen whole across, or cut on a natural edge (mark that with data-crop="edge"; CAM.rig keep:false marks a pan "pan").
+const PAGE_SIDECUT = () => [...document.images].filter((i) => i.checkVisibility({ opacityProperty: true, visibilityProperty: true }))
+  .map((i) => {
+    const r = i.getBoundingClientRect(); if (r.width < 200 || r.height < 60) return null;
+    let l = Math.max(0, r.left), rr = Math.min(innerWidth, r.right), op = 1;
+    for (let a = i; a && a !== document.body; a = a.parentElement) {
+      const s = getComputedStyle(a); op *= parseFloat(s.opacity);
+      if (a !== i && s.overflow !== 'visible') { const q = a.getBoundingClientRect(); l = Math.max(l, q.left); rr = Math.min(rr, q.right); }
+    }
+    if (op < 0.5 || rr - l < 100 || i.closest('[data-crop]')) return null;
+    const cutL = l - r.left, cutR = r.right - rr;
+    return cutL > 2 || cutR > 2 ? { src: i.getAttribute('src'), l: r.left, cutL: Math.round(cutL), cutR: Math.round(cutR), pct: Math.round(100 * (cutL + cutR) / r.width) } : null;
+  }).filter(Boolean);
 const lum = ([r, g, b]) => { const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
 const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
 
@@ -403,11 +451,18 @@ for (const fmt of FORMATS) {
     if (!SF.length) { console.error('timeline.json "styleframes" is empty: list 4–6 marks (or {"at": mark|seconds, "name": "…"}) — hook, UI, data, hero, end'); process.exit(1); }
     const dir = path.join(ROOT, 'review/styleframes', fmt); mkdir(dir);
     for (const f of fs.readdirSync(dir)) fs.unlinkSync(path.join(dir, f));
-    for (let i = 0; i < SF.length; i++) {
-      const at = typeof SF[i] === 'object' ? SF[i].at : SF[i], t = typeof at === 'number' ? at : await F.page.evaluate((m) => C.bt(m), at);
-      fs.writeFileSync(path.join(dir, `f${i}.png`), await F.png(t));
+    // variants: build() runs once per page load, so every variant is its own page
+    for (const v of [null, ...new Set(SF.flatMap((f) => f.variants || []))]) {
+      const idx = SF.map((f, i) => i).filter((i) => (v ? (SF[i].variants || []).includes(v) : !SF[i].variants));
+      if (!idx.length) continue;
+      const Fv = v ? await openFilm(fmt, v) : F;
+      for (const i of idx) {
+        const at = typeof SF[i] === 'object' ? SF[i].at : SF[i], t = typeof at === 'number' ? at : await Fv.page.evaluate((m) => C.bt(m), at);
+        fs.writeFileSync(path.join(dir, `f${i}${v ?? ''}.png`), await Fv.png(t));
+      }
+      if (v) await Fv.page.close();
     }
-    console.log(`styleframes ${fmt}: ${SF.length} → ${path.relative(ROOT, dir)}/`);
+    console.log(`styleframes ${fmt}: ${SF.length}${SF.some((f) => f.variants) ? ' (with variants)' : ''} → ${path.relative(ROOT, dir)}/`);
   } else if (has('sheet')) {
     // one frame per beat, a quarter-beat after the hit so the reaction is visible
     const times = beatTimes(F, +opt('phase', 0.25));
@@ -430,6 +485,14 @@ for (const fmt of FORMATS) {
     let seen = 0; const onScreen = [];
     for (const t of times) {
       const img = decodePNG(await F.png(t)), items = await F.page.evaluate(PAGE_TEXT);
+      // the same words 0.12 s later (fetched only when something looks cut): a cut word that is still moving is a reveal
+      // or an exit in progress (a caption rising through its mask between beats), not a crop
+      let later = null;
+      const moving = async (it) => {
+        if (!later) { await F.png(t + 0.12); later = await F.page.evaluate(PAGE_TEXT); }
+        const o = later.find((x) => x.gid === it.gid && x.text === it.text);
+        return !o || Math.abs(o.glyph.t - it.glyph.t) > 1 || Math.abs(o.glyph.l - it.glyph.l) > 1;
+      };
       seen += items.length;
       const byGroup = new Map(); for (const it of items) if (!byGroup.has(it.gid)) byGroup.set(it.gid, { text: it.group, where: it.cap ? 'caption' : 'in the scene' });
       onScreen.push({ t: +t.toFixed(3), text: [...byGroup.values()] });
@@ -452,6 +515,25 @@ for (const fmt of FORMATS) {
           const zone = it.box.t < F.H * 0.14 ? 'top 14 %' : it.box.b > F.H * 0.80 ? 'bottom 20 %' : it.box.r > F.W * 0.88 ? 'right 12 %' : null;
           if (zone) note(it.cap ? 'PROBLEM' : 'WARN', `zone|${it.group}`, t, `in the platform UI zone (${zone})${it.cap ? ', caption' : ''}: ${where}`);
         }
+        // landed text partly cut ("clear the cut"): a caption cut is a PROBLEM, scene text a WARN (a camera push may crop on purpose).
+        // Measured on the ink: it.inkBox is the letters' box clipped by the frame and by clipping ancestors, it.ink unclipped
+        // (not the Range box, whose content area overhangs a tight mask). Words under 30 % visible were skipped by PAGE_TEXT
+        // as mid-reveal; between that and 97 % the cut is on screen unless the word is still moving 0.12 s later (an entrance
+        // or exit through a mask).
+        const g = it.ink, area = (b) => Math.max(0, b.r - b.l) * Math.max(0, b.b - b.t), shown = area(it.inkBox) / area(g);
+        if (shown < 0.97 && !(await moving(it))) {
+          const edge = g.l < -1 || g.t < -1 || g.r > F.W + 1 || g.b > F.H + 1;
+          const side = it.inkBox.l > g.l + 1 || it.inkBox.r < g.r - 1;   // cut at the left or right: a push cropping a screen
+          note(it.cap || (side && !it.crop) ? 'PROBLEM' : 'WARN', `cut|${it.group}`, t, `${Math.round((1 - shown) * 100)} % of «${word}» cut by ${edge ? 'the frame edge' : 'a mask or overflow'}${it.cap ? ' (caption)' : ''}: ${where}`);
+        }
+      }
+      for (const it of items) if (/^(illustration|иллюстрация|example|пример)\.?$/i.test(it.text.trim()))
+        note('PROBLEM', `plate|${it.text}`, t, `«${it.text}» plate in the frame: honesty is carried by the voice line, not a label (STORY.md)`);
+      for (const c of await F.page.evaluate(PAGE_SIDECUT)) {   // a screen cut at the side, unless it is still moving (an entrance)
+        await F.png(t + 0.12);
+        const o = (await F.page.evaluate(PAGE_SIDECUT)).find((x) => x.src === c.src);
+        await F.png(t);
+        if (o && Math.abs(o.l - c.l) <= 1) note('PROBLEM', `sidecut|${c.src}`, t, `screen «${c.src}» cut at the ${c.cutL > 2 && c.cutR > 2 ? 'left and right' : c.cutL > 2 ? 'left' : 'right'} by its window or the frame (${c.pct} % of its width): keep it whole across or cut on a panel edge (CAM.rig keep, data-crop="edge")`);
       }
       const groups = new Map();   // one phrase in two places at once (headline + caption, frame in frame)
       for (const it of items) groups.set(it.gid, it.group);
@@ -534,12 +616,14 @@ if (has('frames')) {
   // board: one row per styleframe, every format side by side at the same height, labelled
   const SF = TL.styleframes, RH = 540, rows = [];
   const tmp = path.join(ROOT, 'review/styleframes/.rows'); mkdir(tmp);
-  for (let i = 0; i < SF.length; i++) {
-    const ins = FORMATS.flatMap((f) => ['-i', path.join(ROOT, 'review/styleframes', f, `f${i}.png`)]);
-    const name = String(typeof SF[i] === 'object' ? SF[i].name ?? SF[i].at : SF[i]).replace(/[':\\]/g, ' ');
+  const label = (f) => (typeof f === 'object' ? f.name ?? f.at : f);
+  const ROWS = SF.flatMap((f, i) => (f.variants || ['']).map((v) => ({ i, v, text: `${i + 1}${v}. ${label(f)}${v && v === TL.variant ? ' (picked)' : ''}` })));
+  for (const [r, { i, v, text }] of ROWS.entries()) {
+    const ins = FORMATS.flatMap((f) => ['-i', path.join(ROOT, 'review/styleframes', f, `f${i}${v}.png`)]);
+    const name = text.replace(/[':\\]/g, ' ');
     const pads = FORMATS.map((_, k) => `[${k}:v]scale=-2:${RH}:flags=lanczos,pad=iw+12:ih:0:0:color=0x202020[p${k}]`).join(';');
-    const lab = `drawtext=text='${i + 1}. ${name}':x=10:y=10:fontsize=22:fontcolor=white:box=1:boxcolor=black@0.6:boxborderw=6`;
-    const out = path.join(tmp, `r${i}.png`);
+    const lab = `drawtext=text='${name}':x=10:y=10:fontsize=22:fontcolor=white:box=1:boxcolor=black@0.6:boxborderw=6`;
+    const out = path.join(tmp, `r${r}.png`);
     const graph = (l) => `${pads};${FORMATS.map((_, k) => `[p${k}]`).join('')}hstack=inputs=${FORMATS.length}${l ? ',' + l : ''}`;
     const args = (l) => ['-y', '-loglevel', 'error', ...ins, '-filter_complex', FORMATS.length > 1 ? graph(l) : `[0:v]scale=-2:${RH}${l ? ',' + l : ''}`, '-frames:v', '1', out];
     if (spawnSync('ffmpeg', args(lab)).status) run('ffmpeg', args(''));
@@ -550,7 +634,7 @@ if (has('frames')) {
     ? `${rows.map((_, k) => `[${k}:v]pad=iw:ih+12:0:0:color=0x202020[r${k}]`).join(';')};${rows.map((_, k) => `[r${k}]`).join('')}vstack=inputs=${rows.length}`
     : '[0:v]null', '-q:v', '3', board]);
   fs.rmSync(tmp, { recursive: true });
-  fs.writeFileSync(board.replace(/\.jpg$/, '.txt'), SF.map((f, i) => `${i + 1}. ${typeof f === 'object' ? f.name ?? f.at : f}`).join('\n') + `\nformats left to right: ${FORMATS.join(', ')}\n`);
-  console.log('wrote', path.relative(ROOT, board), `(${SF.length} styleframes × ${FORMATS.join(', ')}) — give it to a fresh critic: CRITIQUE.md, no motion`);
+  fs.writeFileSync(board.replace(/\.jpg$/, '.txt'), ROWS.map((x) => x.text).join('\n') + `\nformats left to right: ${FORMATS.join(', ')}\n`);
+  console.log('wrote', path.relative(ROOT, board), `(${ROWS.length} rows × ${FORMATS.join(', ')}) — give it to a fresh critic: CRITIQUE.md, no motion${ROWS.some((x) => x.v) ? '; variants: the critic picks one → timeline "variant"' : ''}`);
 }
 }

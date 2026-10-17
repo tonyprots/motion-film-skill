@@ -4,7 +4,12 @@
 //                                 [[mark, {x, y, z}], …] — focus point in the element's own px and zoom. Each key starts
 //                                 `lead` s (0.4) BEFORE its mark: the camera arrives before the action, never chases it.
 //                                 Springs keep velocity between keys (C.trkObj). o: {ax, ay} = where the focus sits on
-//                                 the frame (default centre), preset 'camera' (role → heavy), lead 0.4, maxZoom 3.
+//                                 the frame (default centre), preset 'camera' (role → heavy, soft start), lead 0.4, maxZoom 3.
+//                                 It never cuts a screen at the sides: the window (a parent with overflow hidden, else the
+//                                 frame; o.view = {l, r} in the parent's px) holds keep = [x0, x1] whole (default: the
+//                                 element's full width). A zoom too deep for that is capped and the focus slides inward.
+//                                 keep: [x0, x1] = a panel inside the screenshot (a natural boundary); keep: false = a pan
+//                                 over a desk or board wider than the frame (marks it data-crop="pan" for --lint).
 //   CAM.shake(t, hits, o)         trauma shake: hits = [mark, …]; each adds trauma 1 that decays over `decay` s (0.45);
 //                                 offset = amp · trauma² · seeded noise. Returns {x, y, r, s} for a put() on a scene root or a
 //                                 camera container (s overscans so no edge shows). Hero hits only.
@@ -23,6 +28,25 @@
     // keys are on marks; evaluating the track at t + lead moves every key `lead` seconds earlier
     const v = trkObj(t + lead, keys.map(([m, v, p]) => [m, { x: v.x, y: v.y, z: Math.min(maxZ, v.z ?? 1) }, p]), o.preset || 'camera');
     const ax = o.ax ?? C.W / 2, ay = o.ay ?? C.H / 2;
+    if (o.keep === false) e.dataset.crop = 'pan';
+    else {
+      // the window in the parent's px, and the span of the element (its own px) that must stay whole across it
+      if (e._camV == null) {
+        const p = e.parentElement, clips = p && getComputedStyle(p).overflow !== 'visible';
+        e._camV = o.view || { l: 0, r: clips ? p.clientWidth : C.W };
+        e._camK = o.keep || [0, e.offsetWidth];
+        if (o.keep) e.dataset.crop = 'edge';   // the author named a panel: its edges are the natural cut
+      }
+      const { l, r } = e._camV, [k0, k1] = e._camK;
+      if ((k1 - k0) * v.z > r - l) {
+        const z = (r - l) / (k1 - k0);
+        if (!e._camWarned) { e._camWarned = true; console.warn(`CAM.rig: zoom ${v.z.toFixed(2)} capped at ${z.toFixed(2)} to keep ${o.keep ? 'the panel' : 'the screen'} whole across its window${o.keep ? '' : ' — pass keep: [x0, x1] to frame a panel'}`); }
+        v.z = z;
+      }
+      // window edges in the element's px; slide the focus until [k0, k1] sits inside
+      const lo = k1 - (r - ax) / v.z, hi = k0 + (ax - l) / v.z;
+      v.x = Math.min(Math.max(v.x, lo), hi);
+    }
     const props = { x: ax - e._camL - v.z * v.x, y: ay - e._camT - v.z * v.y, s: v.z };
     put(e, props);
     return v;

@@ -17,3 +17,7 @@ The 33-second film at the top of the main README, made with this skill. Everythi
 To rebuild it: `sh scripts/init.sh ~/films/readme-demo --preset <path to this preset>`. Then copy these files over the
 project and run SKILL.md from step 4. You need your own voice key; the voice is regenerated, so the timing marks
 will shift slightly.
+
+The film in the README was rendered with four whooshes on its transitions. Since 1.3.0 the skill has no whoosh or
+riser (a noise sweep is the harshest sound in the mix), so these files no longer carry them and a rebuild is quieter on
+the cuts.

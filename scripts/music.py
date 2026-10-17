@@ -8,11 +8,12 @@
 #       intro   four-on-the-floor, rim backbeat, off-beat hats, root bass, mallet motif
 #       full    + clap backbeat, 16th hats, off-beat bass plucks, brighter motif
 #       dark    stripped: half-time kick, sparse rim, low bass, no motif (under dense UI / VO)
-#       build   climbing mallet, clap roll accelerating into the next section, filtered-noise riser
+#       build   climbing mallet, clap roll accelerating into the next section (no noise riser: too harsh)
 #       gap     stop-time hit on its first beat, then silence (make the next section's first beat land hard)
-#       drop    impact on its first beat (big kick, crash, chord stab, sub), then the full groove
-#       outro   half-time, final chord on its first beat, rings out to the end
-#   music.accents    [beat|mark, ...] extra crash + big kick (logo, CTA)
+#       drop    chord stab and sub on its first beat (no crash, no big kick: no hit at the climax by default), then the full groove
+#       outro   no drums: the final chord on its first beat rings out to the end (no crash, no kick: a loud hit at
+#               the end is not a default)
+#   music.accents    [beat|mark, ...] crash + big kick, only on explicit request (never by default)
 #   music.seed       integer (default 4242)
 # Minimal and clean by design: kick, rim/clap, metallic hats, plucked sine bass, FM mallet. No pads, no vocals.
 import json, os, re
@@ -91,12 +92,6 @@ def crash(g=1.0, d=1.8):
     t = tt(d); n = filt(noise(len(t)), 'highpass', 4500)
     return n * np.exp(-t * 2.4) * np.minimum(t / 0.002, 1) * g
 
-def riser(d, g=1.0):
-    t = tt(d); u = t / d; n = noise(len(t)); y = np.zeros_like(n); z = 0.0
-    a = 1 - np.exp(-2 * np.pi * (300 + 7000 * u ** 2.4) / SR)
-    for i in range(len(n)): z += a[i] * (n[i] - z); y[i] = z
-    return filt(y, 'highpass', 200) * u ** 2.6 * g
-
 def room(x, secs=0.7, seed=5, mix=1.0):
     t = tt(secs); out = []
     for ch in range(2):
@@ -148,8 +143,9 @@ for b in range(NB):
     if kind == 'gap': continue
     groove = 'full' if kind == 'drop' else kind
     # kick
-    if groove in ('intro', 'full', 'build') or (groove in ('dark', 'outro') and pos in (0, 2)):
-        big = first and kind in ('drop', 'outro') or b in ACCENTS
+    if groove == 'outro': pass   # the outro is the chord alone (below): no kick, no hats
+    elif groove in ('intro', 'full', 'build') or (groove == 'dark' and pos in (0, 2)):
+        big = b in ACCENTS
         add(kickb, kick(1.25 if big else (0.8 if groove == 'dark' else 1.0), big=big), T(b))
     # backbeat
     if pos in (1, 3):
@@ -157,7 +153,7 @@ for b in range(NB):
         elif groove in ('full', 'build'): add(drums, clap(0.5), T(b), pan=0.08)
     if groove == 'dark' and not first: add(drums, rim(0.35), T(b + 0.75), pan=-0.3)
     # hats
-    steps = (0.25, 0.5, 0.75) if groove in ('full', 'build') else (0.5,)
+    steps = (0.25, 0.5, 0.75) if groove in ('full', 'build') else () if groove == 'outro' else (0.5,)
     for s in steps:
         g = (0.55 if s == 0.5 else 0.28) * (0.55 if groove in ('dark', 'outro') else 1)
         add(drums, hat(g), T(b + s), pan=0.25 if s == 0.5 else -0.2)
@@ -179,10 +175,8 @@ for b in range(NB):
     if groove == 'build' and s1 - b <= 2:
         for i in range(4): add(drums, clap(0.16 + 0.06 * (i + 4 * (b + 2 - s1))), T(b + i * 0.25), pan=-0.05)
     # section starts
-    if first and kind == 'build':
-        add(fx, riser(max(0.5, T(s1 - s0) - 0.075), 0.4), T(s0))     # clears 75 ms before the next section
     if first and kind in ('drop', 'outro') or b in ACCENTS:
-        add(fx, crash(0.28 if kind == 'drop' or b in ACCENTS else 0.16), T(b))
+        if b in ACCENTS: add(fx, crash(0.28), T(b))   # a crash only where asked for: none on a drop or the outro
         add(bassb, bass(root - 12, 1.6, 0.85), T(b))
         ring = 2.0 if kind == 'drop' else max(1.2, DUR - T(b))
         for k, m in enumerate(voic + [voic[0] + 12]):

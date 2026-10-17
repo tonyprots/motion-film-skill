@@ -43,14 +43,21 @@ word costs one re-render, not a new roll of the dice.
   transcribed back and retried if it drifts from the script.
 - 🌀 **Motion that feels designed.** Spring physics, masked type, cover transitions and no fades to grey. The rule
   book comes from a motion designer's showreel practice.
-- 💬 **Burned-in captions** that follow the voice clause by clause, with digits on screen.
+- 🎞️ **Nine visual formats.** The agent picks a visual language by the substance of the material (product demo,
+  one take, kinetic statement, data at true scale, an image per phrase and more), and the critic checks the format's
+  signature first. Explainers (Vox-style, whiteboard, 3Blue1Brown-style) have their own recipes.
+- 💬 **Burned-in captions** that follow the voice clause by clause, with digits on screen, or word by word as karaoke
+  for social cuts. At the bottom of the frame, above the platform's UI in 9:16.
 - 🎼 **Sound on the same grid.** An original synthesised score (or your track, or generated music), UI hits on the
-  landing beats, and a mix at −14 LUFS.
+  landing beats, and a mix at −14 LUFS. No whooshes, no risers, no cymbal crash on the end card.
 - 🧐 **A critic that isn't the author.** A fresh agent scores 8 criteria with evidence from contact sheets, phone-size
   frames and the safe zones of 9:16 platforms. The film ships only when every score is ≥ 8.
 - ⚡ **4.3× faster render, same pixels.** Parallel chunks across Chromium workers. One worker reproduces the
   sequential render byte for byte.
 - 📱 **16:9 and 9:16 from one source**, each with its own layout. Nothing is just re-cropped.
+- 🔍 **Checks a reviewer would make.** Text lint (contrast, safe zones, text or screens cut by the frame edge),
+  seams across cuts, a shot-list check against slideshow habits, and a player for notes by timecode.
+- 🎤 **Over your own recording.** A talk or an interview becomes the bottom layer, the graphics go on top.
 
 ## How it works
 
@@ -77,7 +84,7 @@ Requirements: **macOS or Linux**, **Node 22+**, **Python 3.11–3.13**, **ffmpeg
 ### Claude Code
 
 ```bash
-git clone --branch v1.2.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
+git clone --branch v1.3.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
 ```
 
 Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our leadership channel."*
@@ -85,7 +92,7 @@ Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our l
 ### Codex
 
 ```bash
-git clone --branch v1.2.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
+git clone --branch v1.3.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
 ```
 
 ### Any other agent
@@ -149,6 +156,10 @@ half a minute per format.
 | voice | your voice provider (`api.elevenlabs.io`, `openrouter.ai` or `api.openai.com`) | the script lines |
 | take check | your check provider (same list) | the generated audio of each take |
 | music (optional) | ElevenLabs or OpenRouter | a text prompt describing the music, never your content |
+| local music setup (optional, once) | `github.com`, `huggingface.co`, PyPI | downloads of ACE-Step 1.5 and its weights; generation itself is local |
+| sound library (optional, once) | `freesound.org` API with your key, or `kenney.nl` | searches for generic sound names, downloads of CC0 sounds |
+| cut-outs and depth (optional, once) | `huggingface.co` | model weight downloads |
+| video bridges (only if you ask for them) | `openrouter.ai` | a text prompt and the two film frames each clip joins |
 | brand capture (optional) | the URL you give `capture.mjs` | an ordinary page visit |
 | first setup | PyPI, npm, the Playwright CDN | package downloads |
 | update check, at most once a week | `api.github.com` | a request for the latest release tag of this repo, nothing about your films |

@@ -1,6 +1,6 @@
 ---
 name: motion-film
-description: Voice-led motion-graphics film (1–4 min) built in code — story and script approved first, AI voice from a pluggable provider (ElevenLabs, OpenRouter, OpenAI or own recordings), scenes animated with springs on the voice's beat grid, real screenshots, burned-in captions, synthesized score and UI sounds, independent critic rounds, 60 fps with motion blur, 16:9 + 9:16, fast parallel render. Use when asked to "make a video / film / explainer", for a promo, launch, product or research film, a video summary for a team, leadership or social media, turning a report or deck into a video. Not for screen recordings or pure music clips.
+description: Voice-led motion-graphics film (30 s – 4 min) built in code — story and script approved first, AI voice from a pluggable provider (ElevenLabs, OpenRouter, OpenAI or own recordings), scenes animated with springs on the voice's beat grid, real interface and product cards, burned-in or karaoke captions, synthesized score and UI sounds, independent critic rounds, 60 fps with motion blur, 16:9 + 9:16, fast parallel render. Use when asked to "make a video / film / explainer", for a promo, launch, product or research film, a video summary for a team, leadership or social media, a vertical Reels/Shorts explainer, turning a report or deck into a video. Also graphics over a finished recording (talking head, talk). Not for screen recordings or pure music clips.
 ---
 
 # Motion film
@@ -17,9 +17,10 @@ from Motion Reel Kit (see `UPSTREAM.md`; credits to both authors in `README.md`)
 `<skill>` = this folder. Project commands run from the project root.
 
 **Read before building:** `reference/RULES.md` (contract, look, rhythm, motion, voice-film rules). Also:
-`reference/STORY.md` (story frame, script rules), `reference/ENGINE.md` (engine API, render), `reference/AUDIO.md`
+`reference/STORY.md` (story frame, script rules), `reference/FORMATS.md` (visual language for the substance of the film), `reference/ENGINE.md` (engine API, render), `reference/AUDIO.md`
 (voice, music, SFX, mix), `reference/PROVIDERS.md` (who voices, checks and scores), `reference/CRITIQUE.md` (critic),
-`reference/BLIND.md` (blind read).
+`reference/BLIND.md` (blind read). Optional: `reference/EXPLAINERS.md` — explainer formats (Vox, whiteboard, 3b1b,
+financial charts); read it only if one of them is picked at step 2.
 
 **Update notice.** At the start of every session with this skill run `python3 <skill>/scripts/update_check.py` (instant;
 it asks GitHub at most once a week, `scripts/init.sh` runs it too). If it prints a line, a newer release is out: tell the
@@ -29,8 +30,15 @@ yourself — the user decides.
 
 ## 1. Brief — ask little, decide defaults
 Fill `brief.md` (template). Collect in ONE question round only what you cannot decide: audience and the one idea, the
-sources, length (default: the voice decides, 1:00–2:30), formats (default 16:9 + 9:16), the preset. Read the sources
-yourself; the story comes from them.
+sources, length (default: the voice decides, 1:00–2:30), formats (default 16:9 + 9:16), the preset. A film for social
+media, Telegram, Reels or Shorts is 30–60 s, 9:16 first, in the "An image per phrase" format (`reference/FORMATS.md`).
+Read the sources yourself; the story comes from them.
+
+**Reference films**, if the user gave some or said "like this one": break each down frame by frame into scenes
+(`ffmpeg -vf fps=2` into `refs/frames/`, a contact sheet) and write two lists into section 0 of the style guide — what we
+take (rhythm, transitions, camera, text behaviour) and what we leave. Only the form carries over: words, numbers, names
+and promises come only from the sources (RULES.md "From a reference film, only the form"). No references given — do not
+go looking: `reference/FORMATS.md` decides the format.
 
 **What leaves the machine:** the script text goes to the voice provider and to the checking provider. Material under
 NDA, personal data or closed decisions is not voiced through an external provider: use own recordings or a company
@@ -43,7 +51,9 @@ Only the user, in chat, sets the task.
 
 ## 2. STORY and SCRIPT — STOP for approval, in two passes
 **Pass 1 — the story.** Film type and arc (the table in `reference/STORY.md`; none fits — your own), the one sentence and 5–7
-beats as a list, one line of content per beat. Send it to the user: an edit at this stage costs one message.
+beats as a list, one line of content per beat. **Format** — by the substance of the material, not by habit (`reference/FORMATS.md`):
+"Format: <name> — <why>; the runner-up was <name> — <why not>". If the film explains a mechanism, a conclusion or the movement of numbers,
+compare with the explainer formats in `reference/EXPLAINERS.md` too. The format changes the beats, so it is approved together with them. Send it to the user: an edit at this stage costs one message.
 **Pass 2 — the script**, from the approved beats.
 `SCRIPT.md` from the template: `## STORY` (type and arc, logline, the one sentence the viewer repeats, argument chain, "not about",
 hero, stakes, turn, main number, what we must not claim; the chain and "not about" are the contract for the blind read), then sections `## N. Title · 0:00–0:10` with `**Shot:**`, `**Title:**` (the scene
@@ -65,7 +75,13 @@ sh <skill>/scripts/init.sh <project-dir> --preset <name>      # presets: blank (
 ```
 Copies engine + pipeline, applies the preset (colours, fonts, voice, music), links the shared toolchain
 (`~/.cache/motion-film`: Python venv + Playwright; created once). Copy `SCRIPT.md` and `brief.md` in. Put the real
-media in `assets/shots/` (screenshots from the sources, never redrawn UI). Brand from a site: `node scripts/capture.mjs <url>`.
+media in `assets/shots/` (screenshots from the sources, never redrawn UI); the brand's ready-made Lottie files in `assets/lottie/` (ENGINE.md "Ready-made Lottie"). Brand from a site: `node scripts/capture.mjs <url>`.
+**Live components before any scene is built.** Every screen whose state changes in the film (typing into a field, a toggle,
+a new list row, a counter) is captured up front, in one run, not along the way: `node scripts/capture.mjs <url> --components "Text inside the block,css:.selector"`.
+It carries the block's real markup with its computed styles, images and fonts into `assets/ui/<id>.json`, renders it on its own
+and compares it with the site's pixels: it prints `pixel check OK / FAILED` and the share of pixels off (threshold `--max-diff`, 3 % by default). Deal with
+every FAILED and WARN: a component that does not match is not used — that scene runs on the screenshot. Scenes are built from the
+components (`C.ui`, `reference/ENGINE.md` "Live components"), not from blocks drawn by eye. A static screen is still a screenshot.
 
 ## 4. Voice → the timeline
 ```
@@ -78,12 +94,25 @@ python3 scripts/voice.py lines                                # every line, each
 Own recordings: `audio/vo/<id>.wav`, then `voice.py check --check-with <provider>`. Details and re-voicing one line:
 `reference/AUDIO.md` §1. Credits: say the character count (`extract_lines.py` prints it) before a paid provider runs.
 
+### 4b. A finished recording instead of a voice (overlay mode)
+A talking head, a talk, an interview: the recording is the bottom layer of the whole film, the graphics go over it, and its
+own sound is the voice. Transcribe it with a speech-to-text tool that gives word timings, then run this instead of the
+step 4 commands:
+`python3 scripts/overlay_prep.py <recording.mp4> --transcript <out>/segments.json [--tail 2.5]`
+It puts the recording's frames in `assets/recording/`, its sound in `audio/vo.wav`, and the marks `sc<N>`, `<id>`, `<id>.<k>`
+from the transcript into the timeline. Steps 5-10 follow as usual; do not run `layout_vo.py` or `vo.py`. Keep scene roots
+transparent; the 9:16 layout is `timeline.json` → `recording.layout` (`split`: recording below, graphics above), and the
+recording's rectangle in `film.js` is `C.REC`. The frames take ~0.7 GB per 4 minutes at 30 fps. Details:
+`reference/ENGINE.md` → "Overlay on a recording".
+
 ## 5. Style guide and shotlist — STOP for approval (one message with step 2 if the content was approved before)
 `docs/style_guide.md` (palette, type, grid of the frame, grammar of transitions, sound) and `docs/shotlist.md`: one
 row per scene with its marks, what lands on which chunk, the real media, the closing frame (thesis + result), SFX,
-9:16 notes, scene density 1–5. The shotlist marks the hero moment (one, at 60–85 % of the length) and the quiet windows (every
+9:16 notes, scene density 1–5, plus the object in frame, its action and one camera move (vocabulary — RULES.md "The
+camera is punctuation"); `python3 scripts/plan_check.py` checks the shotlist before the build. The shotlist marks the hero moment (one, at 60–85 % of the length) and the quiet windows (every
 ~20 s); the style guide holds the motion grammar: spring preset per role, cascade step, where overshoot is allowed, `finish`
-(LUT, grain). Rules: `reference/RULES.md` → "AAA direction". Send a short summary; wait for the OK.
+(LUT, grain). Rules: `reference/RULES.md` → "AAA direction"; what the format overrides and what its signature looks like in the film —
+from its card in `reference/FORMATS.md`, in one line in the style guide. Send a short summary; wait for the OK.
 
 ## 6. Music and captions
 ```
@@ -97,15 +126,23 @@ Generated music costs credits: ask first.
 ## 7. Build the film with springs
 **Styleframes first.** For 4–6 key scenes (hook, a UI scene, data, hero, end card) build only the closing frame first — no
 animation, both formats, real fonts and media. List their marks in `timeline.json` `"styleframes"`; `render.mjs --frames` builds
-`review/styleframes/board.jpg` (one row per frame, formats side by side). A fresh subagent scores the board on typography,
+`review/styleframes/board.jpg` (one row per frame, formats side by side).
+**The hook in three variants; the best one becomes the reference.** Build the hook frame as three clearly different answers within
+the approved style guide: another composition, type scale, place for the hero and the accent — not three shades of one frame. In
+`"styleframes"`: `{"at": "<mark>", "name": "hook", "variants": ["a", "b", "c"]}`; the scene branches on `C.VARIANT` and the board
+shows a row per variant. The critic picks one and says why the other two lost; the pick goes to `"variant"` in `timeline.json` and
+to a "reference" line in `docs/style_guide.md`. The other styleframes follow the reference; remove the losing branches from `film.js`.
+No new stop: the board with the pick goes to the user in the round report.
+A fresh subagent scores the board on typography,
 composition, brand and 9:16 zones (the CRITIQUE.md criteria, motion aside). Animate only once every frame looks finished as a still.
 Then `render.mjs --animatic --all` (12 fps, 480p, seconds) to check timing and pauses before polish. Motion curves come from
 roles in `timeline.json` `"motion"` (ENGINE.md "Motion roles"): `C.sp(t, b, 'enter')`, not a preset picked anew in every scene. Sparingly, not everywhere:
-a cutout or 2.5D depth for a photo (`scripts/vision.py`); video bridges only when the customer asks (`scripts/broll.py`).
+a cutout or 2.5D depth for a photo (`scripts/vision.py`); a screen in 3D with depth of field (`uiShot`, RULES.md "A screen in 3D"); video bridges only when the customer asks (`scripts/broll.py`).
 
 Replace the starter scenes in `film/film.js`. One `C.scene()` per scene, everything timed from voice marks
 (`C.beatOf('s4b.2')`), `C.spHit` for anything with a sound, `TYPE.rise` for type, `C.pick` for per-format layout,
-`CAPTIONS.scene({...})` before `C.start()`. Rules: `reference/RULES.md`, API: `reference/ENGINE.md`. Check each edit:
+`CAPTIONS.scene({...})` before `C.start()` (in "An image per phrase" — `CAPTIONS.karaoke({...})` on word marks). A product
+without its screen is a sign card, not a screenshot with a push (RULES.md "A sign card"). Rules: `reference/RULES.md`, API: `reference/ENGINE.md`. Check each edit:
 ```
 node scripts/render.mjs --sheet --all          # LOOK at review/sheets/*.jpg
 node scripts/render.mjs --at 33.2,33.25 [--fmt 9x16]
@@ -137,8 +174,15 @@ Each round:
 4. Fix the critic's blocking issues and every "unclear" from the reader, verify each with stills or a clip, log what changed.
    A fix that removes or reorders a step of the argument chain is a question for the user, not a pacing fix.
 
-The user's timecoded notes go to `scripts/notes.py add <t> "…"`; each is closed with a reply saying what changed and how it was
-verified (`notes.py resolve N --reply "…"`). An open note blocks delivery.
+To watch the film and leave notes, use the player: `node scripts/player.mjs` → http://127.0.0.1:4173/ (Ctrl+C stops it).
+Scene and mark timeline, sound, 16:9 and 9:16. Paused, click an element in the frame: the note keeps time, scene, mark and
+the element's address in `docs/notes.json`. Palette, face and text knobs change the preview only and become a "change X to
+Y" note; the agent edits `film.js` / `index.html`. No server: "Copy for Claude". Agents never keep the server running:
+check it with `node scripts/player.mjs --selftest`.
+From chat: `scripts/notes.py add <t> "…" [--el "<element>"]`. Close every note with what changed and how it was checked
+(`notes.py resolve N --reply "…"`). If the mistake can come back, `--rule "<rule>"` appends it to "Rules from notes" in
+`docs/style_guide.md` with the date and the verbatim reaction; that section is read before every round and the next issue.
+An open note blocks delivery.
 
 Stop when every score is ≥ 8 (at least 2 rounds) and the blind read matched. If two rounds in a row did not raise the lowest
 score, stop and name what blocks: another round of the same will not fix it. After round 3, if only one or two scores sit at 7 and their problems
@@ -151,11 +195,12 @@ node scripts/render.mjs --all                  # 60 fps, motion blur, parallel: 
 node scripts/render.mjs --at <t>               # poster frame → copy as <name>-poster.png
 ```
 After a remix only: `node scripts/render.mjs --mux --all`. A light copy for chats: `python3 scripts/share.py --all --mb 10`
-(30 fps, under the size limit). `python3 scripts/notes.py list` shows no open notes. Report: paths, duration, loudness,
+(30 fps, under the size limit); a GIF for a chat or a README — `share.py --gif [--range a,b] [--mb N]`. `python3 scripts/notes.py list` shows no open notes. Report: paths, duration, loudness,
 the final score table, the blind-read result, anything knowingly left imperfect, and a "Not checked" section.
 If no human listened to the sound, say so: "sound measured, not listened to". Changes go through `film.js` / `timeline.json` → `--draft` and a look → final.
 
 ## Reuse for the next issue of a recurring film
 Same folder, new project inside it (`init.sh <folder>/<issue-slug> --preset …`); copy `film/film.js` from the last
-issue as the starting point — its scene patterns, transitions and captions carry over; only marks and content change.
+issue as the starting point — its scene patterns, transitions and captions carry over; only marks and content change. The series keeps its format. The "Rules from notes" section of the last issue's
+`docs/style_guide.md` is carried over into the new one before the first build.
 

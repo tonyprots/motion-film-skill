@@ -23,6 +23,14 @@ You are a senior motion designer reviewing a voice-led film before it goes to it
 - `docs/notes.json`: the user's timecoded notes; check the open ones first
 - `docs/review_log.md`: previous rounds. Check that last round's fixes actually landed.
 
+**Format.** Read the "Format" field in `## STORY` and its card in `reference/FORMATS.md`. Do not penalise items the format
+overrides; check the format's signature first: if it is absent from the film, that is a blocking problem (max 6 on
+Variety / pacing) even if every frame is good — the film is shot in a language other than the one that was approved.
+
+**The styleframe board** (`review/styleframes/board.jpg`, step 7, before animation). Judge the frames as stills on the same
+criteria. If a frame has rows `1a`, `1b`, `1c`, pick one variant: name it, the criterion it won on, and how each of the other two
+lost. If all three are one frame in different shades, that is a blocking problem: variants must differ in their answer.
+
 **Look at every image.** Read `metrics.json` in full. Do not take the builder's numbers on trust: if a number disagrees with
 what you see, rerun `python3 scripts/review.py <N> --draft` and `node scripts/render.mjs --lint --all`, `--seams --all` and `python3 scripts/plan_check.py` yourself. NOT CHECKED is not "clean":
 score such a criterion only from your own viewing and say the machine did not check it. When a moment is ambiguous, ask for stills (`node scripts/render.mjs --at <t>`) or a clip (`--range a,b`) rather than guessing.
@@ -35,7 +43,7 @@ score such a criterion only from your own viewing and say the machine did not ch
 | **Motion quality** | Springs with weight. Overlap and follow-through. Nothing snaps or pops in. Nothing fades as an enter or exit. Motion blur on fast moves. Strips show clean arcs. | A fade-in/out used as a transition → max 6. A visible pop or jump in a strip → max 7 |
 | **Variety / pacing** | Something new every 2–4 s (`max_gap_between_visual_events`). Shot sizes and transition types vary. The build accelerates into the logo. | Any gap > 4 s, or a static run > 2 s outside the end card → max 7. No hero moment, or the energy is a plateau (no. 28, 31, 32) → max 7 |
 | **Brand accuracy** | Real UI and real logo. Exact colours, the one accent, the real faces. The voice matches the site. None of the reference's content copied. | Invented UI where real UI exists, a wrong font, or a second accent → max 6 |
-| **Sound sync** | Every hit lands with its picture (±45 ms in `metrics.sync`). Whooshes peak on landings. Loudness -14 ±0.5 LUFS, true peak ≤ -1 dBTP. The VO matches the on-screen words. | Hits off by > 80 ms, or loudness off target → max 6. A phrase with voice headroom < 6 dB (`mix.py`) or lost in `voice.py check-mix` → max 6. More than half the hits on speech → max 7 |
+| **Sound sync** | Every hit lands with its picture (±45 ms in `metrics.sync`). No noise sweeps (whoosh, riser) and no cymbal hit at the climax or the end. Loudness -14 ±0.5 LUFS, true peak ≤ -1 dBTP. The VO matches the on-screen words. | Hits off by > 80 ms, or loudness off target → max 6. A phrase with voice headroom < 6 dB (`mix.py`) or lost in `voice.py check-mix` → max 6. More than half the hits on speech → max 7 |
 | **Composition (every format)** | Each format is re-blocked, not cropped. No dead zones. Type never centred on an empty field. Depth from perspective and shadow. | 9:16 with a third of the frame empty for > 1 s → max 7 |
 | **Polish** | No blank frames (`near_blank_frames`), no double exposures at swaps, no stray carets, no glyph slivers at masks, no orphaned captions. Clean loop seam. | Any blank frame mid-film, or a double-exposed caption → max 7. A FAIL in `gates` (flashes, file spec, mux) → max 5. A PROBLEM in `seams_<fmt>.json` → max 6 |
 
@@ -60,7 +68,7 @@ score such a criterion only from your own viewing and say the machine did not ch
 18. A scene that never shows its thesis and its result in one frame.
 19. An empty or mostly empty container (chat window, card) for more than ~0.6 s.
 20. A dark sliver at the corner of a rounded card (a layer behind it not clipped to the radius). Crop the corners of every card.
-21. A caption that differs from what the voice says (beyond digits for number words), or a caption under the 9:16 platform zone.
+21. A caption that differs from what the voice says (beyond digits for number words), or a caption under the 9:16 platform zone, or a caption at the top of the frame with no reason in the style guide. An "Illustration" plate in the frame.
 22. The same sentence twice or more in one frame: headline + caption, or a frame-in-frame repeating the headline.
 23. A jump at a cut: shared elements change scale or position between the last frame of one scene and the first of the next, or a blank frame between two headlines. Check `strip_cut*.jpg` and a 30 fps strip across every cut.
 24. A single-frame "pop" (`metrics.pops`): look at the frames before and after; it is a stray layer or a jump.
@@ -75,6 +83,17 @@ score such a criterion only from your own viewing and say the machine did not ch
 33. The cursor moves in a straight line at constant speed, or clicks with no response; the camera chases the action instead of arriving first.
 34. Spring overshoot on UI and text outside the hero moment (wobble on every element).
 35. Parallax or a cutout on a screenshot, text or a graphic; or depth on every other scene instead of one or two.
+36. The camera does the same thing on every shot (an even slow push reads as a presentation, a snap as fuss); three pushes in
+    a row with no pull; accents on more than a third of the shots; the camera moves while the viewer reads.
+37. A number or promise that is not in the project's sources (carried over from a reference film or made up); code-drawn
+    little people and faces on objects.
+38. One layout in every scene: a headline, a window or screenshot under it, a caption under that — scene after scene only
+    the window's content changes. That is a slide deck: at most 6 on Variety / pacing.
+39. The camera travels to a screenshot's text because it can't be read without the push, or a screenshot carries text the
+    voice asks you to read that is under 28 px at 1080p (look at `phone_*.jpg`). The fix is a sign card or a live component
+    (RULES.md), not one more push.
+40. The voice names a thing and nothing in frame changes: the phrase plays over the same state as the one before. In "An
+    image per phrase" this is a failed format signature.
 
 ## Output (append to docs/review_log.md exactly like this)
 ```

@@ -9,6 +9,7 @@ Every API call for audio goes through `scripts/providers/<name>.py`. The pipelin
 | `openrouter` | Gemini TTS, gpt-audio | Gemini with audio input | Lyria | `OPENROUTER_API_KEY` (+ `OPENROUTER_API_BASE`) |
 | `openai` | gpt-4o-mini-tts, gpt-audio | gpt-4o-transcribe | — | `OPENAI_API_KEY` (+ `OPENAI_API_BASE` for compatible servers) |
 | `speechkit` | Yandex SpeechKit API v3: `alena`, `kirill:strict` … (voice:role); stress — `+` before the vowel in the text | SpeechKit STT | — | `YANDEX_CLOUD_API_KEY`, else the `yc` CLI profile on the machine (`yc iam create-token`) — nothing to set up |
+| `ace_step` (`music.source: ace`) | — | — | ACE-Step 1.5 on this machine (MIT), own venv and weights in `$MOTION_FILM_HOME/ace-step/` | — (once: `ace_step.py setup`) |
 | `file` | your own recordings in `audio/vo/<id>.wav` | via any provider above | your track (`music.source: file`) | — |
 | `synth` | — | — | original score in code | — |
 
@@ -32,7 +33,9 @@ Create `scripts/providers/<name>.py` with `NAME`, `KEY_ENV` and any of:
 ```python
 def tts(text, voice, model=None, direction='', lang=None) -> bytes   # raw PCM s16le, 24 kHz, mono
 def transcribe(path, lang=None) -> str                               # verbatim text
-def music(prompt, seconds, model=None) -> tuple[bytes, str]          # (audio bytes, 'mp3' | 'wav')
+def music(prompt, seconds, model=None) -> tuple[bytes, str]          # (audio bytes, 'mp3' | 'wav');
+                                                                     # may also take bpm=, key=, seed=: music_source.py passes them
+LOCAL = True                                                         # optional: a model on this machine (free, by seed)
 def voices(lang=None) -> list[dict]                                  # optional: [{id, name, gender, accent, about}]
 DEFAULT_MODEL, DEFAULT_VOICE, VOICE_HINT                             # optional
 ```
@@ -44,3 +47,8 @@ Then: `voice.py samples "<a line>" --provider <name> --voices <v>` and `voice.py
 The script text goes to the voice provider and to the checking provider; generated music prompts go to the music
 provider; for video bridges (`scripts/broll.py`) OpenRouter gets two frames of the film and the prompt. Before the first paid or external call, tell the user which provider gets what. Work material that must not
 leave the company goes only through a company gateway (a private provider module), or is voiced from own recordings.
+
+ACE-Step (`music.source: ace`) runs entirely on this machine: the prompt, the BPM and the track go nowhere, and there is
+no key. So it is fine for work films that must not leave the company: the one way to get generated (not coded) music
+without sending anything out. The network is needed once, for `setup`: the clone from GitHub and the weights from
+Hugging Face.

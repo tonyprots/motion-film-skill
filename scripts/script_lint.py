@@ -5,7 +5,7 @@ Errors (exit 1) must be fixed before voicing; warnings are judgement calls — f
     blind read checks against: argument chain (3–6 steps) and "not about" (the wrong reading the film must rule out)
   - terms: a Latin word or abbreviation inside a Russian line with no entry in lexicon.json (next to SCRIPT.md) — say how
     the voice reads it, or confirm it on a sample
-  - hook: the first voice line <= 60 chars, no number in it
+  - hook: the first voice line <= 60 chars; a number in it only if it is the shock (warning)
   - every line <= 200 chars (~13 s); sentences <= 20 words; lists <= 3 items
   - numbers: digits never in the voice (write them as words); <= 1 number per line, <= 8 per film
   - the last line is a thought, not logistics (no links, "materials", "subscribe")
@@ -36,9 +36,9 @@ if not lines: sys.exit('no voice lines found ("**Voice:** \\"…\\"" / "**Гол
 story = re.search(r'^#+\s*(STORY|История|Каркас)', src, re.M | re.I)
 if not story: E('no STORY block: add logline, one sentence the viewer repeats, hero, stakes, turn — and get it approved first')
 else:
-    for key, alts in {'type and arc': r'type and arc|тип и арка', 'one sentence': r'one sentence|одна фраза', 'hero': r'hero|герой', 'stakes': r'stakes|ставк', 'turn': r'turn|поворот',
+    for key, alts in {'type and arc': r'type and arc|тип и арка', 'format': r'^\s*-\s*(format|формат)\s*:', 'one sentence': r'one sentence|одна фраза', 'hero': r'hero|герой', 'stakes': r'stakes|ставк', 'turn': r'turn|поворот',
                       'argument chain': r'argument chain|цепочка', 'not about': r'not about|не про'}.items():
-        if not re.search(alts, src, re.I): W(f'STORY has no "{key}" (reference/STORY.md: the blind read checks the film against it)')
+        if not re.search(alts, src, re.I | re.M): W(f'STORY has no "{key}" (reference/STORY.md: the blind read checks the film against it)')
 
 def numbers(t):
     words = [w.lower() for w in re.findall(r"[\w'-]+", t)]
@@ -62,7 +62,7 @@ for i, L in enumerate(lines):
         if s.count(',') >= 3: W(f'{tag}: a list of {s.count(",") + 1} items — say three at most, show the rest')
     if i == 0:
         if len(t) > 60: E(f'hook {tag}: {len(t)} chars — the first line is <= 60 chars: a question, a contradiction or one striking fact')
-        if n: W(f'hook {tag}: a number in the hook — numbers land better from the second line on')
+        if n: W(f'hook {tag}: a number in the hook — keep it only if it IS the shock (one, with stakes); a number for precision goes later')
     if i == len(lines) - 1:
         if LOGISTICS.search(t): E(f'last line {tag}: logistics in the voice — end on the meaning (echo the hook); links go on screen')
         if len(t) > 90: W(f'last line {tag}: {len(t)} chars — the closing thought is short')

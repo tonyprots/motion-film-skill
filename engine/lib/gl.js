@@ -7,7 +7,7 @@
 //
 //   // film/gl.js
 //   import { layer, THREE } from './lib/gl.js';
-//   const L = await layer(document.querySelector('[data-scene="hero"]'), { bloom: 0.5, dof: { focus: 0.02 } });
+//   const L = await layer(document.querySelector('[data-scene="hero"]'), { bloom: 0.5, dof: {} });   // dof: autofocus on the origin
 //   const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(1, 0.3, 256, 48), L.physical({ color: '#2d5bff' }));
 //   L.scene.add(knot);
 //   L.frame((t, b) => { knot.rotation.y = C.sp(t, 'hero') * Math.PI; L.camera.position.z = 6 - C.seg(t, 'hero', 'hero_end') });
@@ -24,24 +24,35 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import { EffectComposer, RenderPass, EffectPass, BloomEffect, VignetteEffect, ToneMappingEffect, ToneMappingMode, DepthOfFieldEffect } from 'postprocessing';
+import { EffectComposer, RenderPass, EffectPass, Effect, BlendFunction, KawaseBlurPass, KernelSize, BloomEffect, VignetteEffect, ToneMappingEffect, ToneMappingMode, DepthOfFieldEffect } from 'postprocessing';
 
 export { THREE };
 
 /**
  * A full-frame WebGL layer inside `parent` (a scene root or any element). Options:
  *   fov 35 · bg null (transparent: the DOM shows through) or a colour · env 'room' | 'assets/3d/x.hdr' · envIntensity 1
- *   tone 'neutral' (keeps brand colours) | 'agx' | 'aces' · bloom 0 (intensity; threshold 0.85) · vignette 0 (darkness 0.2–0.4) · dof null | { focus, range, bokeh }
- *   msaa 4 · z (CSS z-index inside parent)
- * Returns { scene, camera, renderer, frame(fn), physical(props), gltf(url), texture(url), render(t, b) }.
+ *   tone 'neutral' (lit 3D: soft highlights) | 'none' (flat 2D and exact brand colours: neutral maps white to 240/255 and
+ *     dulls the accent) | 'agx' | 'aces'
+ *   bloom 0 (additive, threshold 0.85: light on a DARK ground; on a light ground it washes the frame out — use glow)
+ *   glow 0 | { strength 0.8, size 'large', color } — a soft halo of the layer's own content laid UNDER it, for a light ground:
+ *     the DOM seen through a transparent layer (bg null) or the layer's own bg colour; it never brightens the ground.
+ *     A number = strength. color (e.g. the accent) tints the halo by coverage instead of blurring the
+ *     content's own colours — dark ink blurred over a light ground reads as grey haze. Draw the ground with bg, not with a full-frame mesh: the halo goes between the two.
+ *   vignette 0 (darkness 0.2–0.4)
+ *   dof null | { focus, target, range 1, bokeh 2.5 } — world units, like the scene: focus = distance from the camera;
+ *     target = a THREE.Vector3 to keep sharp as the camera moves; neither → autofocus on the origin. Per frame:
+ *     L.dof.target.set(…) or L.dof.cocMaterial.focusDistance = d (a focus pull).
+ *   msaa 4 · z (CSS z-index inside parent; 0 = under the scene's DOM children, raise it to draw over them)
+ * Returns { scene, camera, renderer, composer, dof, frame(fn), physical(props), gltf(url), texture(url), render(t, b) }.
  */
 export async function layer(parent, o = {}) {
   const W = C.W, H = C.H;
-  const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: o.bg == null, preserveDrawingBuffer: true, powerPreference: 'high-performance', stencil: false, depth: false });
+  const groundFx = o.glow && o.bg != null;   // glow over an opaque bg: render transparent, lay the bg in after the halo
+  const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: o.bg == null || groundFx, preserveDrawingBuffer: true, powerPreference: 'high-performance', stencil: false, depth: false });
   renderer.setPixelRatio(1); renderer.setSize(W, H, false);
   Object.assign(renderer.domElement.style, { position: 'absolute', left: 0, top: 0, width: W + 'px', height: H + 'px', zIndex: o.z ?? 0, pointerEvents: 'none' });
   parent.prepend(renderer.domElement);
-  renderer.setClearColor(o.bg == null ? 0x000000 : new THREE.Color(o.bg), o.bg == null ? 0 : 1);
+  renderer.setClearColor(o.bg == null || groundFx ? 0x000000 : new THREE.Color(o.bg), o.bg == null || groundFx ? 0 : 1);
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(o.fov ?? 35, W / H, 0.1, 200);
@@ -51,14 +62,21 @@ export async function layer(parent, o = {}) {
   else { const hdr = await new RGBELoader().loadAsync('../' + o.env); scene.environment = pmrem.fromEquirectangular(hdr).texture; hdr.dispose(); }
   scene.environmentIntensity = o.envIntensity ?? 1;
 
-  const composer = new EffectComposer(renderer, { frameBufferType: THREE.HalfFloatType, multisampling: o.msaa ?? 4, alpha: o.bg == null });
+  const composer = new EffectComposer(renderer, { frameBufferType: THREE.HalfFloatType, multisampling: o.msaa ?? 4, alpha: o.bg == null || groundFx });
   composer.addPass(new RenderPass(scene, camera));
   const fx = [];
   let dof = null;
-  if (o.dof) { dof = new DepthOfFieldEffect(camera, { focusDistance: o.dof.focus ?? 0.02, focusRange: o.dof.range ?? 0.05, bokehScale: o.dof.bokeh ?? 2.5 }); fx.push(dof); }
+  if (o.dof) {
+    // postprocessing 6.x takes focusDistance / focusRange in WORLD units (a 0..1 depth value would focus 2 cm from the lens)
+    dof = new DepthOfFieldEffect(camera, { focusDistance: o.dof.focus ?? camera.position.length(), focusRange: o.dof.range ?? 1, bokehScale: o.dof.bokeh ?? 2.5 });
+    if (o.dof.focus == null) dof.target = o.dof.target || new THREE.Vector3(0, 0, 0);
+    fx.push(dof);
+  }
+  if (o.glow) fx.push(new GlowUnder({ ...(typeof o.glow === 'number' ? { strength: o.glow } : o.glow), ground: groundFx ? o.bg : null }));
   if (o.bloom) fx.push(new BloomEffect({ intensity: o.bloom, luminanceThreshold: o.bloomThreshold ?? 0.85, mipmapBlur: true }));
   if (o.vignette) fx.push(new VignetteEffect({ darkness: o.vignette }));
-  fx.push(new ToneMappingEffect({ mode: { agx: ToneMappingMode.AGX, aces: ToneMappingMode.ACES_FILMIC, neutral: ToneMappingMode.NEUTRAL }[o.tone || 'neutral'] }));
+  const tone = o.tone || 'neutral';
+  if (tone !== 'none') fx.push(new ToneMappingEffect({ mode: { agx: ToneMappingMode.AGX, aces: ToneMappingMode.ACES_FILMIC, neutral: ToneMappingMode.NEUTRAL }[tone] }));
   const pass = new EffectPass(camera, ...fx);
   composer.addPass(pass);
 
@@ -79,6 +97,30 @@ export async function layer(parent, o = {}) {
   };
   C.hooks.after.push((t, b) => L.render(t, b));
   return L;
+}
+
+// Halo for a light ground: a blur of the layer itself, composited UNDER it in premultiplied space
+// (out = in + (1 − in.a) · blur), so the halo only fills transparent pixels and the DOM ground stays its own colour.
+// With ground (the layer's bg colour) the result is then laid over that colour and comes out opaque.
+class GlowUnder extends Effect {
+  constructor({ strength = 0.8, size = 'large', ground = null, color = null } = {}) {
+    const G = ground == null ? null : new THREE.Color(ground);   // linear, like the buffer
+    const T = color == null ? null : new THREE.Color(color);
+    super('GlowUnder', `uniform sampler2D glowMap; uniform float strength; uniform vec3 ground, tint; uniform float hasGround, hasTint;
+      void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
+        vec4 g = min(texture2D(glowMap, uv) * strength, vec4(1.0));
+        if (hasTint > 0.5) g = vec4(tint * g.a, g.a);
+        vec4 c = inputColor + (1.0 - inputColor.a) * g;
+        outputColor = hasGround > 0.5 ? vec4(c.rgb + (1.0 - c.a) * ground, 1.0) : c; }`,
+    { blendFunction: BlendFunction.SRC, uniforms: new Map([['glowMap', new THREE.Uniform(null)], ['strength', new THREE.Uniform(strength)],
+      ['ground', new THREE.Uniform(G || new THREE.Color(0))], ['hasGround', new THREE.Uniform(G ? 1 : 0)],
+      ['tint', new THREE.Uniform(T || new THREE.Color(0))], ['hasTint', new THREE.Uniform(T ? 1 : 0)]]) });
+    this.rt = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: false });
+    this.blur = new KawaseBlurPass({ kernelSize: KernelSize[String(size).toUpperCase()] ?? KernelSize.LARGE });
+    this.uniforms.get('glowMap').value = this.rt.texture;
+  }
+  update(renderer, inputBuffer) { this.blur.render(renderer, inputBuffer, this.rt); }
+  setSize(w, h) { this.rt.setSize(Math.max(1, w >> 1), Math.max(1, h >> 1)); this.blur.setSize(w, h); }
 }
 
 /**
@@ -159,4 +201,133 @@ export async function depthPhoto(parent, src, depthSrc, o = {}) {
   scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat));
   C.hooks.after.push((t) => { const m = (o.move || (() => ({})))(t) || {}; mat.uniforms.move.value.set(m.x ?? 0, m.y ?? 0, m.z ?? 0); renderer.render(scene, cam); });
   return { renderer, material: mat };
+}
+
+/**
+ * A real UI screenshot as a plane in 3D: an oblique camera travels over it and depth of field follows the page.
+ * For ONE or two shots per film where a big real screen is the subject and the voice names its detail (RULES.md
+ * "A screen in 3D"). Not for every screenshot; not for text that must be read whole.
+ *
+ *   const U = await uiShot(sceneRoot, [{ id: 'page', src: 'assets/shots/app.png', w: 1600 }], {
+ *     keys: [['s3', { x: 300, y: 180, d: 900, yaw: -26, pitch: 12 }],     // look at (x, y) of the page from d px away
+ *            ['s3b', { x: 300, y: 700 }]],                                 // rail: only the target moves → camera travels
+ *     dof: { strength: 40, max: 8 } });
+ *
+ * planes: [{ id, src, w (px in world; height from the image), x, y, z (top-left of the plane, world px; +z towards the
+ *   camera), yaw, pitch (deg, around the plane's own centre), radius 24 (rounded corners, image px), shadow true,
+ *   move(t, b) → {x, y, z, yaw, pitch, o} per frame (lift a WHOLE card; never a cut-out piece) }].
+ * Coordinates are the first plane's pixels: x right, y down. The camera:
+ *   keys [[mark, {x, y, d, yaw, pitch, roll, focus}], …] — target point, distance, angles (deg; yaw < 0 = the left edge is
+ *     near); missing fields keep the previous key. Springs keep velocity (C.trkObj), preset 'camera', each key starts
+ *     `lead` s (0.4) before its mark like CAM.rig. cam(t, b) → the same object replaces keys for hand-made paths.
+ *   persp 1200 — CSS-like perspective: at d = persp a plane at yaw 0 shows 1:1.
+ * Depth of field — thin lens, per pixel: blur = min(max, strength · |1 − s / d|), s = focus distance (default d: the
+ *   target is sharp), d = this pixel's distance along the camera axis. strength folds f² / (N·(s − f)) into one number:
+ *   40 = gentle, 80 = shallow. A focus pull: put `focus` into a key. dof: null → everything sharp.
+ * Background is transparent: the scene's DOM ground (light presets) shows through. Needs "webgl": true. f(t) only.
+ */
+export async function uiShot(parent, planes, o = {}) {
+  const box = o.box || { x: 0, y: 0, w: C.W, h: C.H };
+  const persp = o.persp ?? 1200, dof = o.dof === null ? null : { strength: 40, max: 8, ...(o.dof || {}) };
+  const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true, alpha: true, depth: true, stencil: false });
+  renderer.setPixelRatio(1); renderer.setSize(box.w, box.h, false); renderer.setClearColor(0x000000, 0);
+  Object.assign(renderer.domElement.style, { position: 'absolute', left: box.x + 'px', top: box.y + 'px', width: box.w + 'px', height: box.h + 'px', zIndex: o.z ?? 0, pointerEvents: 'none' });
+  parent.prepend(renderer.domElement);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(2 * Math.atan(box.h / 2 / persp) * 180 / Math.PI, box.w / box.h, 1, 20000);
+  const blurU = { strength: { value: dof ? dof.strength : 0 }, maxBlur: { value: dof ? dof.max : 0 }, focus: { value: persp } };
+
+  // one golden-angle disc, shared by every plane: 48 taps cover an 8–12 px blur without visible rings
+  const TAPS = 48;
+  const disc = Array.from({ length: TAPS }, (_, i) => { const r = Math.sqrt((i + 0.5) / TAPS), a = i * 2.39996323; return new THREE.Vector2(r * Math.cos(a), r * Math.sin(a)); });
+  const vert = `varying vec2 vUv; varying float vDepth;
+    void main(){ vUv = uv; vec4 mv = modelViewMatrix * vec4(position, 1.0); vDepth = -mv.z; gl_Position = projectionMatrix * mv; }`;
+  // uv runs over the padded quad; the image sits in [pad, 1 - pad]. Samples outside the rounded rect are transparent,
+  // so a blurred edge fades instead of smearing the border colour.
+  const frag = `precision highp float; varying vec2 vUv; varying float vDepth;
+    uniform sampler2D img; uniform vec2 pad, size; uniform float radius, strength, maxBlur, focus, opacity; uniform vec2 disc[${TAPS}];
+    vec4 tap(vec2 uv, float px, vec2 gx, vec2 gy){ vec2 q = (uv - pad) / (1.0 - 2.0 * pad); vec2 p = (q - 0.5) * size;
+      vec2 e = abs(p) - (0.5 * size - radius); float dist = length(max(e, 0.0)) + min(max(e.x, e.y), 0.0) - radius;
+      float a = clamp(0.5 - dist / max(px, 1e-3), 0.0, 1.0);                               // 1-screen-px antialiased edge
+      vec4 c = textureGrad(img, clamp(q, 0.0, 1.0), gx, gy); return vec4(c.rgb * a, a); }   // explicit gradients: no implicit derivatives inside the branch
+    void main(){
+      // derivatives once, in uniform control flow: uv per screen px and image px per screen px
+      vec2 dx = dFdx(vUv), dy = dFdy(vUv), S = size / (1.0 - 2.0 * pad);
+      float px = 0.7071 * length(vec2(length(dx * S), length(dy * S)));
+      vec2 gx = dx / (1.0 - 2.0 * pad), gy = dy / (1.0 - 2.0 * pad);                        // image uv per screen px
+      float r = strength > 0.0 ? min(maxBlur, strength * abs(1.0 - focus / vDepth)) : 0.0;   // blur radius, screen px
+      vec4 acc = tap(vUv, px, gx, gy);
+      if (r > 0.35) { acc = vec4(0.0);
+        for (int i = 0; i < ${TAPS}; i++) acc += tap(vUv + (dx * disc[i].x + dy * disc[i].y) * r, px, gx, gy);
+        acc /= float(${TAPS}); }
+      if (acc.a < 0.002) discard;
+      gl_FragColor = vec4(acc.rgb / acc.a, acc.a * opacity);
+      #include <colorspace_fragment>
+    }`;
+  // soft contact shadow under a lifted plane: an analytic blurred rectangle, no texture
+  const shadowFrag = `precision highp float; varying vec2 vUv; varying float vDepth; uniform vec2 size; uniform float soft, opacity;
+    void main(){ vec2 p = (vUv - 0.5) * (size + 4.0 * soft); vec2 h = 0.5 * size;
+      vec2 s = smoothstep(-h - soft, -h + soft, p) * (1.0 - smoothstep(h - soft, h + soft, p));
+      gl_FragColor = vec4(0.0, 0.0, 0.0, s.x * s.y * opacity); }`;
+
+  const loader = new THREE.TextureLoader();
+  const P = await Promise.all(planes.map(async (pl) => {
+    const tx = await loader.loadAsync('../' + pl.src);
+    tx.colorSpace = THREE.SRGBColorSpace; tx.anisotropy = 8; tx.generateMipmaps = true; tx.minFilter = THREE.LinearMipmapLinearFilter;
+    const iw = tx.image.width, ih = tx.image.height, w = pl.w ?? iw, h = w * ih / iw, k = w / iw;
+    const padPx = 64;                                                                     // world px of transparent margin for the blur
+    const geo = new THREE.PlaneGeometry(w + 2 * padPx, h + 2 * padPx);
+    const mat = new THREE.ShaderMaterial({ vertexShader: vert, fragmentShader: frag, transparent: true, depthWrite: false,
+      uniforms: { img: { value: tx }, pad: { value: new THREE.Vector2(padPx / (w + 2 * padPx), padPx / (h + 2 * padPx)) },
+        size: { value: new THREE.Vector2(iw, ih) }, radius: { value: pl.radius ?? 24 }, opacity: { value: 1 }, disc: { value: disc }, ...blurU } });
+    const g = new THREE.Group(), mesh = new THREE.Mesh(geo, mat);
+    g.add(mesh);
+    let sh = null;
+    if (pl.shadow !== false) {
+      const soft = Math.max(20, 0.04 * w);
+      sh = new THREE.Mesh(new THREE.PlaneGeometry(w + 4 * soft, h + 4 * soft), new THREE.ShaderMaterial({ vertexShader: vert, fragmentShader: shadowFrag,
+        transparent: true, depthWrite: false, uniforms: { size: { value: new THREE.Vector2(w, h) }, soft: { value: soft }, opacity: { value: 0.16 } } }));
+      sh.position.set(0, 0.02 * h, -2); g.add(sh);
+    }
+    scene.add(g);
+    return { pl, g, mesh, sh, w, h, k };
+  }));
+  // camera targets are in the first plane's image px, from its top-left corner
+  const k0 = P[0].k, x0 = P[0].pl.x ?? 0, y0 = P[0].pl.y ?? 0;
+
+  const deg = Math.PI / 180;
+  const place = (p, m) => {
+    const x = m.x ?? p.pl.x ?? 0, y = m.y ?? p.pl.y ?? 0, z = m.z ?? p.pl.z ?? 0;
+    p.g.position.set(x + p.w / 2, -(y + p.h / 2), z);                                     // world: y up, plane centre
+    p.g.rotation.set((m.pitch ?? p.pl.pitch ?? 0) * deg, (m.yaw ?? p.pl.yaw ?? 0) * deg, 0, 'YXZ');
+    const op = m.o ?? 1; p.mesh.material.uniforms.opacity.value = op; if (p.sh) p.sh.material.uniforms.opacity.value = 0.16 * op;
+    p.g.visible = op > 0.001;
+  };
+  const first = (o.keys || [[0, {}]])[0][1];
+  const FULL = { x: 0, y: 0, d: persp, yaw: 0, pitch: 0, roll: 0, focus: null, ...first };
+  const keys = (o.keys || []).map(([m, v, pr]) => [m, v, pr]);
+  // fill missing fields from the previous key so a key may say only what changes
+  for (let i = 0; i < keys.length; i++) keys[i][1] = { ...(i ? keys[i - 1][1] : FULL), ...keys[i][1] };
+  const camAt = (t, b) => {
+    if (o.cam) return { ...FULL, ...o.cam(t, b) };
+    const v = C.trkObj(t + (o.lead ?? 0.4), keys.map(([m, v, pr]) => [m, { ...v, focus: v.focus ?? v.d }, pr]), o.preset || 'camera');
+    return v;
+  };
+  const vec = new THREE.Vector3(), q = new THREE.Quaternion(), eul = new THREE.Euler();
+  C.hooks.after.push((t, b) => {
+    for (const p of P) place(p, (p.pl.move && p.pl.move(t, b)) || {});
+    const v = camAt(t, b);
+    // the camera sits on a sphere around the target: yaw turns it around the page's vertical, pitch tilts it
+    const tx = x0 + v.x * k0, ty = -(y0 + v.y * k0);
+    eul.set(-v.pitch * deg, v.yaw * deg, v.roll * deg, 'YXZ'); q.setFromEuler(eul);
+    vec.set(0, 0, v.d).applyQuaternion(q);
+    camera.position.set(tx + vec.x, ty + vec.y, vec.z); camera.quaternion.copy(q);
+    blurU.focus.value = v.focus ?? v.d;
+    // explicit back-to-front order: the far plane first, and each shadow right before its own plane. Left to three's
+    // transparent sort, an oblique camera can put a shadow "nearer" than its page and darken it.
+    const far = P.map((p) => [p, p.g.position.distanceToSquared(camera.position)]).sort((a, c) => c[1] - a[1]);
+    far.forEach(([p], i) => { if (p.sh) p.sh.renderOrder = 2 * i; p.mesh.renderOrder = 2 * i + 1; });
+    renderer.render(scene, camera);
+  });
+  return { renderer, scene, camera, planes: P };
 }

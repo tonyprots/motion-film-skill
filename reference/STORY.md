@@ -7,6 +7,7 @@ A film lands one idea. Write the STORY block at the top of `SCRIPT.md` and get i
 ```
 ## STORY
 - Type and arc: <a type from the table below, or your own arc as steps joined by "→">
+- Format: <visual language from reference/FORMATS.md> — <why this one>
 - Logline: <who> can't <what>, because <why>; <solution> changes that.
 - One sentence the viewer repeats: "<the idea in ≤ 20 words>"
 - Argument chain: <3–6 steps by which the film leads to that sentence; the step that carries the thesis gets the most time and the music drop>
@@ -19,7 +20,8 @@ A film lands one idea. Write the STORY block at the top of `SCRIPT.md` and get i
 ```
 If the one sentence won't come, the film isn't ready — don't start the script.
 
-Type, the one sentence, the chain, "not about" and "must not claim" are required. Hero, stakes, turn and the main number go in
+Type, format, the one sentence, the chain, "not about" and "must not claim" are required. Arc and format are independent: the arc is the
+order of steps to the idea, the format is the language they are shown in (`reference/FORMATS.md`). Hero, stakes, turn and the main number go in
 when the material has them. An announcement, a news breakdown or a report often has no turn and no human hero: then the field
 says "none — <why>" instead of bending the material to fit. A surprise at the end ("an AI made this film") is not a turn: the
 turn sits in the middle and makes the solution necessary.
@@ -40,12 +42,14 @@ The one sentence, the chain and "not about" are the thesis contract: the blind r
 | **News breakdown** | what happened, as one fact → why it is not just another headline → what exactly changed (≤ 3 points) → what it means for the viewer → what to do or watch |
 | **Results** (team, project, quarter) | the goal and how it was set → the main result against a baseline → how we got there (≤ 3 moves) → what did not work and why → the next step and what we need from the viewer |
 | **Period review** (digest, roundup) | the one idea of the period → 3–5 shifts, each with "what it means for us" → which shift matters most → what to watch next |
+| **Listicle** (n tools, reasons, mistakes) | hook: what the viewer loses without them → "there are n" → item by item: what it is in one phrase, what it changes, one number or example from the sources → wrap-up: all n together → one call to action |
 
 If the film fits no type, build the arc yourself from 4–7 steps, write it in "Type and arc" and explain the order in one line.
 A new arc that worked is a candidate for this table.
 
 ## Rules that make it watchable
-- **Hook ≤ 60 characters**: a question, a contradiction or one striking fact. No number in it.
+- **Hook ≤ 60 characters**: a question, a contradiction or one striking fact. A number only if it IS the shock: one, with
+  stakes ("can cost you $100,000 with zero users", "40 % cheaper"); a number for precision goes later in the film.
 - **One hero** (a person or a product) through the whole film; other examples come as a fast montage after it.
 - **≤ 8 spoken numbers per film, ≤ 1 per line, each with a comparison** ("three times fewer"). The rest are on screen.
 - **Lines ≤ 200 characters (~13 s), sentences ≤ 15–20 words, lists ≤ 3 items.** Short fragments are fine: "Same silk. Same cut. Same colour."
@@ -57,7 +61,7 @@ A new arc that worked is a candidate for this table.
   of a list ("Codex, Claude, new video models" when the source has no video models), no shortening that shifts the meaning
   ("video" for "making video"). A contrast "X, not Y" is voiced only if the source makes it.
 - **"Not about" is a contract, not a line.** The field is for the blind reader and for edits; it never goes into the voice or the titles.
-- **Honesty**: say only what the product does today; label illustrations and estimates on screen.
+- **Honesty**: say only what the product does today. The voice and the script carry it, not a plate in the frame: where a shot is an example or an estimate, the line says so ("for example", "about", "in our test"). Never put an "Illustration" or "Example" label in the frame (`--lint` PROBLEM). A drawn scene never poses as a product screen: the real interface is shown only with real screenshots.
 - **Terms**: everything the voice reads differently from how it is written (abbreviations, versions, addresses, foreign names)
   goes to `lexicon.json` next to the script: `{"SQL": "sequel", "v2.0": "version two"}`. The script, the screen and the captions
   keep the spelling; the voice gets the pronunciation. Check a new entry on a voice sample. Set words off with commas and

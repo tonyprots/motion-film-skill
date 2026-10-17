@@ -98,12 +98,6 @@
       "what": "\"0 views\" pill lands"
     },
     {
-      "at": 7.0,
-      "type": "whoosh",
-      "gain": 0.45,
-      "what": "page morphs into the video frame"
-    },
-    {
       "at": 8.9,
       "to": 9.8,
       "every": 0.25,
@@ -122,12 +116,6 @@
       "type": "pop",
       "gain": 0.4,
       "what": "agent chip"
-    },
-    {
-      "at": 19.4,
-      "type": "whoosh",
-      "gain": 0.45,
-      "what": "wipe into How"
     },
     {
       "at": 29.9,
@@ -160,12 +148,6 @@
       "what": "element 5 drops onto its mark"
     },
     {
-      "at": 39.4,
-      "type": "whoosh",
-      "gain": 0.45,
-      "what": "push up into Proof"
-    },
-    {
       "at": 44.19,
       "type": "thump",
       "gain": 0.55,
@@ -190,12 +172,6 @@
       "type": "pop",
       "gain": 0.35,
       "what": "same pixels chip"
-    },
-    {
-      "at": 55.4,
-      "type": "whoosh",
-      "gain": 0.45,
-      "what": "wipe into the end card"
     },
     {
       "at": 55.2,
