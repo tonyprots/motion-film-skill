@@ -86,7 +86,8 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
 
 - **Essence.** Not a single cut: every scene grows out of the shape of the previous one. A dot becomes a pill, the pill a photo,
   the photo a grid, a cell a screen.
-- **Use when:** a short launch (15–45 s), a set of features that flow into one another naturally; a loop for the feed.
+- **Use when:** a short launch (15–45 s), a set of features that flow into one another naturally; a loop for the feed (4–14 s
+  without a voice — the short route, SKILL.md "Loop").
 - **Don't use:** a film longer than ~45 s (the chain of transformations tires); an argument with a turn that needs a pause and a
   change of shot; material made of unrelated screens.
 - **Signature:** `render.mjs --seams` finds zero hard cuts; every change has a shared element that changes size, radius or

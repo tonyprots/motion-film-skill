@@ -1,6 +1,6 @@
 ---
 name: motion-film
-description: Voice-led motion-graphics film (30 s – 4 min) built in code — story and script approved first, AI voice from a pluggable provider (ElevenLabs, OpenRouter, OpenAI or own recordings), scenes animated with springs on the voice's beat grid, real interface and product cards, burned-in or karaoke captions, synthesized score and UI sounds, independent critic rounds, 60 fps with motion blur, 16:9 + 9:16, fast parallel render. Use when asked to "make a video / film / explainer", for a promo, launch, product or research film, a video summary for a team, leadership or social media, a vertical Reels/Shorts explainer, turning a report or deck into a video. Also graphics over a finished recording (talking head, talk). Not for screen recordings or pure music clips.
+description: Voice-led motion-graphics film (30 s – 4 min) built in code — story and script approved first, AI voice from a pluggable provider (ElevenLabs, OpenRouter, OpenAI or own recordings), scenes animated with springs on the voice's beat grid, real interface and product cards, burned-in or karaoke captions, synthesized score and UI sounds, independent critic rounds, 60 fps with motion blur, 16:9 + 9:16, fast parallel render. Use when asked to "make a video / film / explainer", for a promo, launch, product or research film, a video summary for a team, leadership or social media, a vertical Reels/Shorts explainer, turning a report or deck into a video. Also graphics over a finished recording (talking head, talk) and a 4–14 s loop without a voice — a GIF or MP4 for a feed, Telegram or X. Not for screen recordings or pure music clips.
 ---
 
 # Motion film
@@ -39,6 +39,8 @@ Read the sources yourself; the story comes from them.
 take (rhythm, transitions, camera, text behaviour) and what we leave. Only the form carries over: words, numbers, names
 and promises come only from the sources (RULES.md "From a reference film, only the form"). No references given — do not
 go looking: `reference/FORMATS.md` decides the format.
+
+**A 4–14 s loop without a voice** (a GIF, an MP4 for a feed, Telegram or X) has its own short route: "Loop" below.
 
 **What leaves the machine:** the script text goes to the voice provider and to the checking provider. Material under
 NDA, personal data or closed decisions is not voiced through an external provider: use own recordings or a company
@@ -179,6 +181,8 @@ Scene and mark timeline, sound, 16:9 and 9:16. Paused, click an element in the f
 the element's address in `docs/notes.json`. Palette, face and text knobs change the preview only and become a "change X to
 Y" note; the agent edits `film.js` / `index.html`. No server: "Copy for Claude". Agents never keep the server running:
 check it with `node scripts/player.mjs --selftest`.
+Verbal feedback ("livelier", "more premium", "it drags") is first turned into numbers with the table in
+`reference/CRITIQUE.md` → "Verbal feedback → numbers"; take one or two notes per round, not all of them at once.
 From chat: `scripts/notes.py add <t> "…" [--el "<element>"]`. Close every note with what changed and how it was checked
 (`notes.py resolve N --reply "…"`). If the mistake can come back, `--rule "<rule>"` appends it to "Rules from notes" in
 `docs/style_guide.md` with the date and the verbatim reaction; that section is read before every round and the next issue.
@@ -198,6 +202,38 @@ After a remix only: `node scripts/render.mjs --mux --all`. A light copy for chat
 (30 fps, under the size limit); a GIF for a chat or a README — `share.py --gif [--range a,b] [--mb N]`. `python3 scripts/notes.py list` shows no open notes. Report: paths, duration, loudness,
 the final score table, the blind-read result, anything knowingly left imperfect, and a "Not checked" section.
 If no human listened to the sound, say so: "sound measured, not listened to". Changes go through `film.js` / `timeline.json` → `--draft` and a look → final.
+
+## A 4–14 s loop without a voice — the short route (2026-10-22)
+A piece for a feed, a README, Telegram or X: 4–14 s, no voice, it plays on repeat and the viewer sees it several times in a
+row. Same engine, same render. There is no voice, no script and no argument chain, so a blind reader has nothing to retell.
+1. **Brief** — one line: what loops, where it is shown (GIF, MP4), cycle length, frame format. The visual language comes
+   from `reference/FORMATS.md`, most often "One take".
+2. **One stop instead of steps 2 and 5.** One message: the idea of the loop in one sentence, 3–6 states with their
+   durations, the cycle length and the styleframe board (`render.mjs --frames`) whose first frame is frame 0. Wait for
+   OK. `SCRIPT.md`, `script_lint.py` and step 4 are not needed.
+3. **A timeline without a voice.** `init.sh`, then in `timeline.json`: `"loop": true` (turns on the loop checks in
+   `review.py` and `share.py`), `"voiceover": null`, `duration` = the cycle length,
+   marks in beats, a `bpm` that fits a whole number of bars into the cycle (the grid is needed even without music). No
+   sound by default: feeds play muted and a GIF has none. Do not run `mix.py` — without `audio/mix.wav` the render
+   writes no audio track. Sound only if it was asked for in the MP4; then steps 6 and 8 as usual.
+4. **Build** — step 7 under the loop rules (`reference/ENGINE.md` → "Loop"): phase = frame / N and a whole number of
+   cycles, noise on a circle, frames 0..N−1 with no duplicate at the seam, frame 0 a finished composition.
+5. **Check.** `render.mjs --draft --all`, `review.py 1 --draft`, `--lint --all`. The seam is invisible on `loop_seam.jpg`
+   and `review.py` gives no FAIL `loop`: exactly length × fps frames, and the step at the seam is 0.75–1.5 of the smaller
+   neighbouring step (`metrics.json` → `loop_seam`). Above 1.5 is a jump (a spring not settled, drift without a whole
+   number of periods), below 0.75 a stutter (the last frame repeats frame 0). Without `"loop": true` these checks are off
+   and the "< 10 reads as continuous" hint on `loop_seam_jump` is useless for a loop: compare the seam with its
+   neighbours by hand. Without a voice `review.py` passes (exit 0): the sound checks are NOT CHECKED and a calm loop gets a WARN
+   `slides`; `--lint` with no text in frame is NOT CHECKED. Critic
+   (`reference/CRITIQUE.md`) — without the voice and caption items and without Sound sync if there is no sound. No blind
+   read. One round if every score is ≥ 8, otherwise another.
+6. **Final.** `render.mjs --all`, then `share.py --gif [--gif-fps 15] [--mb N]` and/or `share.py` for an MP4. Length ×
+   `--gif-fps` is a whole number of frames, otherwise ffmpeg rounds the frame count up and the cycle grows (5.5 s × 15 fps
+   → 83 frames, 5.54 s). With `"loop": true` `share.py` checks the finished GIF itself (exactly length × fps frames,
+   delays summing to the length), prints FAIL with a rate that fits and exits 1, and when it lowers the rate to fit
+   `--mb` it takes only rates with a whole frame count. X takes GIFs
+   of up to 350 frames: length × `--gif-fps` ≤ 350, ~14.5 s at 24 fps. An MP4 for Telegram has no audio track
+   (`ffprobe -select_streams a` is empty).
 
 ## Reuse for the next issue of a recurring film
 Same folder, new project inside it (`init.sh <folder>/<issue-slug> --preset …`); copy `film/film.js` from the last

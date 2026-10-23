@@ -40,7 +40,9 @@ Apply these in every project, including one with no CLAUDE.md. A project's CLAUD
 - Something new must happen on screen every 2–4 s. Nothing holds longer than one bar without a new element. The end card holds ≤ 2 s and is never static.
 - Hard cuts land on bar lines. Inner events land on beats or half-beats, in beats on the measured grid (`beats.json`), never in hard-coded seconds.
 - The hook reads in the first 2 s, and frame 0 is never empty. In a launch film the product or hero is on screen by second 3.
-- Text stays long enough to read: a headline of five words or more is on screen whole for ≥ 1.3 s, a shorter one for ≥ 0.8 s. If you need room, take a bar of air, not a shorter show. Two headlines are never in frame at once.
+- Text stays long enough to read: whole on screen for ≥ characters / 15 + 0.4 s and never under 0.8 s (2026-10-22: one
+  rule instead of two; the old "≥ 1.3 s from five words" is softer, and "0.3 s per word + 0.5 s" also gives less on an
+  ordinary headline: five words — 2.0 s against ~2.7 s). If you need room, take a bar of air, not a shorter show. Two headlines are never in frame at once.
 - Something happens in a held shot: an element moves, something new is revealed, the camera leads the eye. The camera
   itself may stand still — see "The camera is punctuation" below. A slow micro push on every shot is the mark of a slide
   show, not of a live frame.
@@ -128,6 +130,10 @@ field of its card applies. The render contract, legibility, contrast and sound a
 - **One hero moment per film** (up to two in 3 minutes), at 60–85 % of the length. A build leads into it, a breath follows.
   The music drops out 0.3–0.7 s before the main hit, then the hit. The hero moment is the only place for a spring with a visible
   overshoot and for a 600–900 ms move; everything else lands without a visible overshoot.
+- **Motion hierarchy within a shot** (2026-10-22). One main move per shot — on the hero of the frame. Secondary moves travel
+  50–70 % of its path (offset, scale, rotation) and start 100–200 ms later. Background motion (drift, parallax, gradient
+  grain) — under 5 % of the main move's path. Two moves of the same amplitude starting on the same frame are two heroes.
+  One wave of a cascade ("Cascade rhythm" below) is elements of one level, not secondaries to a main move.
 - **An intensity curve, not a plateau.** Scene density (1–5 in the shotlist) alternates: a dense scene is followed by a
   one-hero scene. No more than three scenes in a row of the same length (±10 %).
 - **Air.** Every ~20 s, a quiet window of 0.6–1.2 s: the voice finishes, no new elements or hits, the camera keeps drifting.
@@ -165,7 +171,7 @@ field of its card applies. The render contract, legibility, contrast and sound a
 - **A directed cursor.** A smoothed curve with ease-in and ease-out, a micro-pause before the click, a response to the click
   (pulse + sound within a frame). A straight line at constant speed reads as synthetic.
 - **Scene typography:** at most three text sizes, adjacent levels ≥ 1.5× apart. A headline is a point of up to 9 words.
-  Time on screen ≥ characters / 15 + 0.4 s.
+  Time on screen — by the text-hold rule in "Rhythm".
 - **Light and depth.** One light source: all shadows point one way. The background is never perfectly flat (a soft gradient,
   `finish.grain`), but never a glow. A 3D screen tilt is 4–10°, with a shadow, on one or two scenes (the exception: `uiShot`, below).
 - **Stills first, motion second.** Key frames (styleframes) are approved as pictures before animation (SKILL.md step 7). The hook is built in three different variants; the one picked is the reference for the other frames.

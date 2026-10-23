@@ -27,6 +27,10 @@ You are a senior motion designer reviewing a voice-led film before it goes to it
 overrides; check the format's signature first: if it is absent from the film, that is a blocking problem (max 6 on
 Variety / pacing) even if every frame is good — the film is shot in a language other than the one that was approved.
 
+**A loop without a voice** (SKILL.md "Loop"). The voice and caption items (21, 27, 40) do not apply; Sound sync is not
+scored if there is no sound. Check the seam first: `loop_seam.jpg` and `loop_seam_jump` (the jump is no larger than between
+neighbouring frames mid-cycle) — a visible seam caps Polish at 6. Frame 0 that is not a finished composition caps Hook at 6.
+
 **The styleframe board** (`review/styleframes/board.jpg`, step 7, before animation). Judge the frames as stills on the same
 criteria. If a frame has rows `1a`, `1b`, `1c`, pick one variant: name it, the criterion it won on, and how each of the other two
 lost. If all three are one frame in different shades, that is a blocking problem: variants must differ in their answer.
@@ -94,6 +98,26 @@ score such a criterion only from your own viewing and say the machine did not ch
     (RULES.md), not one more push.
 40. The voice names a thing and nothing in frame changes: the phrase plays over the same state as the one before. In "An
     image per phrase" this is a failed format signature.
+41. No motion hierarchy in a shot (RULES.md "Motion hierarchy"): a secondary move travels the same path as the main one or
+    starts on the same frame; the background moves more than 5 % of the main move's path. Check on `strip_fast*.jpg`: in
+    every shot one element travels the longest path, the rest start 100–200 ms later and travel 50–70 % of it.
+
+## Verbal feedback → numbers (2026-10-22)
+A note in words ("livelier", "more premium") is not a change. Turn it into numbers first, then change one thing. Write the
+"Fix" column of the problem table the same way: a number, not an adjective.
+
+| Note | What changes | How to check |
+|---|---|---|
+| "livelier", "make it pop" | a scale hit on the key word or number the voice names: 1.0 → 1.08 → 1.0 over 6 frames (0.1 s at 60 fps), peak exactly on the beat; at most one per scene | `--at` on the beat and ±3 frames around it |
+| "more premium" | linear moves (`C.seg`) — ease-out-quint, `cubic-bezier(0.22, 1, 0.36, 1)`, in code `1 - (1 - x) ** 5`; container springs — ζ = 0.8 (~1.5 % overshoot); text — `heavy` (ζ = 1), no overshoot | `--range` over the scene: no overshoot on text in the strips |
+| "it drags" | every pause one beat shorter: `air`, `pre`, `hold` in `SCRIPT.md`, quiet windows, holds between events; text hold never below the RULES.md "Rhythm" rule | `plan_check.py`, `--animatic` |
+| "too busy" | one main move per shot; the rest start 150 ms later and travel 60 % of its path (RULES.md "Motion hierarchy") | `strip_fast*.jpg`: one fastest element in frame |
+| "looks AI-made" | list every default move in the shot (a fade entrance, a uniform cascade, a slow push on every shot, a preset with no role), ban each with a line in the style guide's "Rules from notes" and re-render | the new sheet or clip against the last one: none of the listed moves left |
+
+**The revision loop.** The user's taste notes — one or two per round, not all at once: after five changes at once you cannot
+tell which one worked. A change that worked becomes a rule: `notes.py resolve N --rule "…"` appends it to "Rules from
+notes" in `docs/style_guide.md`, and the next round and issue start from it. This does not limit the critic's blocking
+defects: fix all of them.
 
 ## Output (append to docs/review_log.md exactly like this)
 ```

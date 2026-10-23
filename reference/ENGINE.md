@@ -377,6 +377,37 @@ python3 <skill>/scripts/overlay_prep.py talk.mp4 --transcript asr/segments.json 
   Sound: the source clicks land on the same millisecond in `audio/vo.wav` and 6 ms later in the mix; shifted streams (audio
   +0.2 s, video +0.2 s) come out aligned. `--verify` 12/12 in both formats.
 
+## Loop (`Motion.loopT`, 2026-10-22)
+The short route is SKILL.md "Loop". A cycle of length D at fps is N = D · fps frames (a whole number: D = 6 at 60 fps
+gives 360). The seam is invisible only if frame N equals frame 0.
+- **Phase = frame / N.** `const u = Motion.loopT(t, D, C.FPS), p = u / D;` — everything periodic is computed from p, not
+  from t: `Math.sin(2 * Math.PI * k * p)` with an integer k. A rotation makes a whole number of turns per cycle, a drift a
+  whole number of periods, a counter or progress bar returns to its frame-0 value by the end of the cycle.
+- **Springs return to frame 0 before the seam.** The last state change brings the element back to where it stood on
+  frame 0 and has time to settle: the return mark + `Motion.settle(preset)` ≤ D. A spring tail cut by the seam is a jump.
+- **Noise on a circle.** For noise to come back to where it started, sample it on a circle, not along the time line: in a
+  shader `noise(c + R · vec2(cos(2π p), sin(2π p)))`, in JS a sum of 3–4 harmonics `a_k · sin(2π k p + φ_k)` with
+  integer k and phases from `C.mulberry32(seed)` (the same noise on a circle written as a Fourier series; it closes
+  exactly). `C.noise1(seed)(t)`, `CAM.shake` and `meshBackground` run along straight t and do not close: keep them out of
+  a loop.
+- **Frames 0..N−1, no duplicate at the seam.** `render.mjs` already writes them that way (frame i is time i/fps, i < N), and
+  `loopT` maps t = D to 0. Do not add a last frame equal to the first: the GIF shows it twice and the seam stutters.
+- **Frame 0 is a finished composition.** It is visible while the GIF loads and it is the feed preview. Everything is in
+  place and reads without motion, nothing is halfway. Also, the motion-blur sub-frames of frame 0 do not cross the seam
+  (the render clips them at t = 0), so at the seam everything is at rest or moving slowly.
+- **Check:** `timeline.json` → `"loop": true`; then `review.py` gives FAIL `loop` if there are not exactly D · fps frames or
+  the step at the seam (`loop_seam`: luma, 480 px, mean |Δ|) falls outside 0.75–1.5 of the smaller step on either side.
+  Luma only: in the final, frame 0 is the codec's keyframe, and in colour even a clean seam is noisier than its
+  neighbours (0.59 against 0.40–0.49). Measured 2026-10-23, draft and final: a clean loop 1.01–1.16; a spring not settled
+  by D 1.82–2.46; the last frame = frame 0 0.19. The "< 10" threshold on `loop_seam_jump` is useless for a loop (the same
+  spring gives 1.1). By eye — `loop_seam.jpg` (the last 6 and first 6 frames in a row).
+- **A GIF for X — up to 350 frames:** D × `--gif-fps` ≤ 350, ~14.5 s at 24 fps, 23 s at 15 fps. D × `--gif-fps` is a whole
+  number, otherwise ffmpeg rounds the frame count up and the cycle grows: 5.5 s × 15 fps → 83 frames, 5.54 s. With
+  `"loop": true` `share.py` checks the finished GIF with `ffprobe` (exactly D × fps frames, delays summing to D ± 0.02 s)
+  and on a mismatch prints FAIL and exits 1; when it lowers the rate to fit `--mb` it skips rates with a fractional frame
+  count. GIF delays are in hundredths of a second, so frames are uneven (15 fps — 7, 7, 6; 24 fps — 4 ×5, 5), but they
+  sum to D.
+
 ## GIF (`share.py --gif`)
 ```
 python3 scripts/share.py --gif [--fmt 16x9 | --all] [--width 720] [--gif-fps 15] [--mb 10] [--range 2,8]

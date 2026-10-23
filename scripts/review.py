@@ -33,13 +33,14 @@ def frames(path, w, h, fps=None, gray=False):
     raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', path, '-vf', vf, '-f', 'rawvideo', '-pix_fmt', 'gray' if gray else 'rgb24', '-'], capture_output=True, check=True).stdout
     a = np.frombuffer(raw, np.uint8)
     return a.reshape(-1, h, w) if gray else a.reshape(-1, h, w, 3)
-def frames_at(path, idx, w, h):
+def frames_at(path, idx, w, h, gray=False):
     # -fps_mode, not -vsync (removed in ffmpeg 9); batches of 40: ffmpeg 8+ cannot parse a select of ~100+ terms
     def grab(part):
         sel = '+'.join(f'eq(n\\,{i})' for i in part)
-        return subprocess.run(['ffmpeg', '-v', 'error', '-i', path, '-vf', f"select='{sel}',scale={w}:{h}:flags=area", '-fps_mode', 'passthrough', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], capture_output=True, check=True).stdout
+        return subprocess.run(['ffmpeg', '-v', 'error', '-i', path, '-vf', f"select='{sel}',scale={w}:{h}:flags=area", '-fps_mode', 'passthrough', '-f', 'rawvideo', '-pix_fmt', 'gray' if gray else 'rgb24', '-'], capture_output=True, check=True).stdout
     raw = b''.join(grab(idx[k:k + 40]) for k in range(0, len(idx), 40))
-    return np.frombuffer(raw, np.uint8).reshape(-1, h, w, 3)
+    a = np.frombuffer(raw, np.uint8)
+    return a.reshape(-1, h, w) if gray else a.reshape(-1, h, w, 3)
 def tile(ims, cols, labels, out, pad=6, lab=22, bg=(20, 20, 20)):
     w, h = ims[0].size; rows = (len(ims) + cols - 1) // cols
     S = Image.new('RGB', (cols * (w + pad) + pad, rows * (h + lab + pad) + pad), bg); d = ImageDraw.Draw(S)
@@ -287,7 +288,8 @@ for f, p in V.items():
     M['spec'][f] = sp
     if f in SIZES and (v['width'], v['height']) != SIZES[f]: gate('FAIL', 'spec', f'{f}: size {sp["size"]}, expected {SIZES[f][0]}x{SIZES[f][1]}')
     if abs(fps - want_fps) > 0.01: gate('FAIL', 'spec', f'{f}: {fps:.3f} fps, expected {want_fps}')
-    if abs(sp['frames'] - want_n) > 1: gate('FAIL', 'spec', f'{f}: {sp["frames"]} frames, expected {want_n} ±1 (chunks joined with a drift?)')
+    if TL.get('loop') and sp['frames'] != want_n: gate('FAIL', 'loop', f'{f}: {sp["frames"]} frames, a loop needs exactly duration × fps = {want_n} (a frame repeated at the seam?)')
+    elif abs(sp['frames'] - want_n) > 1: gate('FAIL', 'spec', f'{f}: {sp["frames"]} frames, expected {want_n} ±1 (chunks joined with a drift?)')
     if sp['pix_fmt'] != 'yuv420p': gate('FAIL', 'spec', f'{f}: pix_fmt {sp["pix_fmt"]}, expected yuv420p')
     if sp['color'] != ['bt709'] * 3: gate('WARN', 'spec', f'{f}: colour tags {sp["color"]}, expected bt709 ×3')
     if sp['faststart'] is not True: gate('WARN', 'spec', f'{f}: moov atom is not before mdat (no fast start)')
@@ -393,6 +395,21 @@ tail = frames_at(V[P], list(range(NF - 6, NF)), 480, int(480 * H0 / W0) // 2 * 2
 head = frames_at(V[P], list(range(6)), 480, int(480 * H0 / W0) // 2 * 2)
 tile([Image.fromarray(x) for x in list(tail) + list(head)], 6, [f'A f{NF - 6 + i}' for i in range(6)] + [f'B f{i}' for i in range(6)], f'{OUT}/loop_seam.jpg')
 M['loop_seam_jump'] = {'value': round(float(np.abs(head[0].astype(float) - tail[-1].astype(float)).mean()), 1), 'note': 'typical hard cut 40–80; < 10 reads as continuous'}
+# timeline "loop": true (SKILL.md "Loop"): the seam step against the steps on both sides of it, luma only (the codec's
+# keyframe at frame 0 adds chroma noise). Measured 2026-10-23 on a 6 s loop, draft and final: clean 1.0–1.16; a spring
+# still moving at D 1.8–2.7; the last frame = frame 0 0.05–0.2; a GIF cycle longer than D (5.5 s × 15 fps) 0.6.
+if TL.get('loop'):
+    lh = int(480 * H0 / W0) // 2 * 2
+    lt = frames_at(V[P], list(range(NF - 4, NF)), 480, lh, gray=True).astype(float)
+    lf = frames_at(V[P], list(range(4)), 480, lh, gray=True).astype(float)
+    step_ = lambda a, b: float(np.abs(a - b).mean())
+    before, after, seam = np.median([step_(lt[i], lt[i + 1]) for i in range(3)]), np.median([step_(lf[i], lf[i + 1]) for i in range(3)]), step_(lt[-1], lf[0])
+    near, FLOOR = min(before, after), 0.15          # below FLOOR the seam is at rest: a repeated frame cannot be seen there
+    ratio = seam / max(near, FLOOR)
+    M['loop_seam'] = {'seam': round(seam, 3), 'before': round(float(before), 3), 'after': round(float(after), 3), 'ratio': round(ratio, 2),
+                      'rule': 'seam step ÷ the smaller of the steps before and after it, luma at 480 px: 0.75–1.5 is clean'}
+    if ratio > 1.5: gate('FAIL', 'loop', f'seam step {ratio:.2f}× the neighbours (> 1.5): a jump at the loop point — a spring still moving at the end, or drift without a whole number of periods (ENGINE.md "Loop")')
+    elif near >= FLOOR and ratio < 0.75: gate('FAIL', 'loop', f'seam step {ratio:.2f}× the neighbours (< 0.75): a stutter at the loop point — the last frame repeats frame 0, or the cycle is longer than its duration')
 
 # 5. sound sync. Audio onset: high-passed at 150 Hz (sub-bass makes false onsets), 2.5 ms blocks, rise in dB over the loudest
 # of the 4 blocks before; per video frame the largest rise. audio_vs_cue = audio onset minus the cue time (> 1 frame = the mix

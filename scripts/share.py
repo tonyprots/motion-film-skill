@@ -11,7 +11,10 @@ moves win), ordered dither with rectangle diff (only the changed region is re-en
 background cheap). Starts at --width px wide and --gif-fps (default 720 px, 15 fps) and steps width, then frame rate down
 (to 320 px, 8 fps) until the file fits --mb. A whole film rarely fits a chat GIF: cut a moment with --range a,b (seconds).
   --src FILE [--out FILE]   any video instead of renders/<fmt>.mp4 (no timeline.json needed), for --gif and the MP4 copy;
-                            without --out the copy goes to the current folder"""
+                            without --out the copy goes to the current folder
+A loop (timeline "loop": true, whole film, no --range): the step-down skips rates where duration × rate is not a whole
+number, and the finished GIF is checked — exactly duration × rate frames, delays summing to the duration. Otherwise
+FAIL and exit 1: ffmpeg rounds the frame count up and the cycle stutters at the seam (5.5 s × 15 fps → 83 frames, 5.54 s)."""
 import json, os, subprocess, sys
 
 arg = lambda k, d: sys.argv[sys.argv.index(k) + 1] if k in sys.argv else d
@@ -25,12 +28,33 @@ else:
 MB, FPS = float(arg('--mb', 10)), int(arg('--fps', 30))
 GIF = '--gif' in sys.argv or arg('--format', '') == 'gif'
 RANGE = [float(x) for x in arg('--range', '').split(',')] if '--range' in sys.argv else None
+LOOP = float(TL['duration']) if not SRC and not RANGE and TL.get('loop') else None   # cycle length, seconds
+whole = lambda f: LOOP is None or abs(LOOP * f - round(LOOP * f)) < 1e-6
+FAILED = []
+
+
+def loop_check(out, f):
+    """A looping GIF: frame count and the sum of the delays must match the cycle exactly."""
+    n = int(subprocess.run(['ffprobe', '-v', 'error', '-count_frames', '-select_streams', 'v:0', '-show_entries', 'stream=nb_read_frames',
+                            '-of', 'csv=p=0', out], capture_output=True, text=True).stdout.strip() or 0)
+    d = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'packet=duration_time', '-of', 'csv=p=0', out],
+                       capture_output=True, text=True).stdout.split()
+    total = sum(float(x) for x in d if x not in ('', 'N/A'))
+    want = LOOP * f
+    if whole(f) and n == round(want) and abs(total - LOOP) <= 0.02:   # delays are whole hundredths: 8 fps sums to ±0.01 s
+        print(f'  loop: {n} frames = {LOOP:g} s × {f} fps, delays sum to {total:.2f} s')
+        return True
+    ok = [r for r in range(8, 31) if whole(r)]
+    print(f'FAIL loop: {n} frames, delays {total:.2f} s; a {LOOP:g} s cycle at {f} fps needs {want:g} frames and {LOOP:g} s'
+          f' — pick a rate where duration × rate is whole: --gif-fps {min(ok, key=lambda r: (abs(r - f), r)) if ok else "?"} (whole: {", ".join(map(str, ok)) or "none in 8–30: change the duration"})')
+    FAILED.append(out)
+    return False
 
 
 def gif(src, out):
     w0, f0 = int(arg('--width', 720)), int(arg('--gif-fps', 15))
     widths = [w0] + [w for w in (640, 560, 480, 400, 360, 320) if w < w0]
-    rates = [f0] + [f for f in (12, 10, 8) if f < f0]
+    rates = [f0] + [f for f in (12, 10, 8) if f < f0 and whole(f)]   # a loop steps down only to whole frame counts
     tries = [(w, f0) for w in widths] + [(widths[-1], f) for f in rates[1:]]
     cut = ['-ss', f'{RANGE[0]}', '-t', f'{RANGE[1] - RANGE[0]}'] if RANGE else []
     for n, (w, f) in enumerate(tries):
@@ -42,6 +66,7 @@ def gif(src, out):
     over = size > MB
     print(f"{out}: {size:.1f} MB ({w} px, {f} fps{', ' + str(n) + ' step(s) down' if n else ''})"
           + (f'  — still over {MB} MB at {w} px {f} fps: cut a moment with --range a,b or pass a larger --mb' if over else ''))
+    if LOOP is not None: loop_check(out, f)
     return not over
 
 
@@ -62,3 +87,4 @@ for f in FMTS:
     # --src without --out writes to the current folder, never next to a source that may sit in someone's outputs
     out = arg('--out', None) or (stem + ('.gif' if GIF else '_share.mp4') if SRC else f"renders/{f}{'.gif' if GIF else '_share.mp4'}")
     gif(src, out) if GIF else mp4(src, out)
+if FAILED: sys.exit(1)
