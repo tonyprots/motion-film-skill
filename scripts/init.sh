@@ -23,11 +23,18 @@ mkdir -p "$DEST"/film/lib "$DEST"/scripts/providers "$DEST"/docs "$DEST"/audio/v
 cp "$SKILL"/engine/index.html "$SKILL"/engine/player.html "$SKILL"/engine/core.js "$SKILL"/engine/type.js "$SKILL"/engine/film.js "$DEST"/film/
 cp "$SKILL"/engine/lib/*.js "$DEST"/film/lib/
 for f in render.mjs png.mjs sync.mjs sfx.mjs capture.mjs preset.mjs beats.py music.py music_source.py vo.py layout_vo.py captions.py \
-         mix.py review.py tile.py voice.py extract_lines.py script_lint.py plan_check.py blindpack.py notes.py player.mjs share.py sfx_fetch.py vision.py broll.py lottie.py overlay_prep.py; do cp "$SKILL/scripts/$f" "$DEST/scripts/"; done
+         mix.py review.py tile.py voice.py extract_lines.py script_lint.py plan_check.py story_check.mjs scenes.mjs blindpack.py notes.py player.mjs share.py sfx_fetch.py vision.py broll.py lottie.py overlay_prep.py; do cp "$SKILL/scripts/$f" "$DEST/scripts/"; done
 cp "$SKILL"/scripts/providers/*.py "$DEST"/scripts/providers/
 cp "$SKILL"/templates/brief.md "$SKILL"/templates/timeline.json "$SKILL"/templates/SCRIPT.md "$DEST"/
 cp "$SKILL"/templates/sfx_layout.py "$DEST"/scripts/
 cp "$SKILL"/templates/docs/*.md "$DEST"/docs/
+cp -R "$SKILL/library/assets/icons" "$DEST/assets/icons"
+# private puppet packs (never published, publish/guard_private.py): every local project can mount them
+[ -d "$SKILL/private/puppets" ] && mkdir -p "$DEST/assets/puppets" && cp -R "$SKILL/private/puppets/." "$DEST/assets/puppets/"
+cp "$SKILL/library/catalog.json" "$SKILL/library/registry-index.json" "$SKILL/library/source-index.json" "$DEST/docs/"
+cp "$SKILL/library/ports-manifest.json" "$DEST/docs/"
+mkdir -p "$DEST/docs/licenses"
+for f in LICENSE-rendercomp LICENSE-remotion-ui LICENSE-onda LICENSE-hyperframes LICENSE-anidoodle NOTICE-anidoodle; do cp "$SKILL/$f" "$DEST/docs/licenses/"; done
 printf '{ "type": "commonjs", "private": true }\n' > "$DEST"/package.json   # a parent "type": "module" breaks motion.test.js
 date -u +"created %Y-%m-%dT%H:%M:%SZ by motion-film init" > "$DEST"/.owner
 printf 'node_modules\n.venv\nrenders/\nreview/\naudio/vo/_*\n' > "$DEST"/.gitignore

@@ -1,0 +1,2784 @@
+{
+  "version": 1,
+  "checked_on": "2026-10-26",
+  "items": [
+    {
+      "id": "prop:accumulate",
+      "name": "accumulate",
+      "category": "native",
+      "status": "ready",
+      "runtime": "PROPS",
+      "kind": "accumulate",
+      "tags": [
+        "accumulate",
+        "prop",
+        "explain"
+      ],
+      "source": "local",
+      "license": "MIT"
+    },
+    {
+      "id": "prop:meter",
+      "name": "meter",
+      "category": "native",
+      "status": "ready",
+      "runtime": "PROPS",
+      "kind": "meter",
+      "tags": [
+        "meter",
+        "prop",
+        "explain"
+      ],
+      "source": "local",
+      "license": "MIT"
+    },
+    {
+      "id": "prop:compare",
+      "name": "compare",
+      "category": "native",
+      "status": "ready",
+      "runtime": "PROPS",
+      "kind": "compare",
+      "tags": [
+        "compare",
+        "prop",
+        "explain"
+      ],
+      "source": "local",
+      "license": "MIT"
+    },
+    {
+      "id": "prop:connect",
+      "name": "connect",
+      "category": "native",
+      "status": "ready",
+      "runtime": "PROPS",
+      "kind": "connect",
+      "tags": [
+        "connect",
+        "prop",
+        "explain"
+      ],
+      "source": "local",
+      "license": "MIT"
+    },
+    {
+      "id": "prop:reveal",
+      "name": "reveal",
+      "category": "native",
+      "status": "ready",
+      "runtime": "PROPS",
+      "kind": "reveal",
+      "tags": [
+        "reveal",
+        "prop",
+        "explain"
+      ],
+      "source": "local",
+      "license": "MIT"
+    },
+    {
+      "id": "prop:assemble",
+      "name": "assemble",
+      "category": "native",
+      "status": "ready",
+      "runtime": "PROPS",
+      "kind": "assemble",
+      "tags": [
+        "assemble",
+        "prop",
+        "explain"
+      ],
+      "source": "local",
+      "license": "MIT"
+    },
+    {
+      "id": "block:number",
+      "name": "number",
+      "category": "native",
+      "status": "ready",
+      "runtime": "BLOCKS",
+      "kind": "rolling-number",
+      "defaults": {
+        "mode": "spring"
+      },
+      "tags": [
+        "number",
+        "count",
+        "kpi"
+      ],
+      "source": "adapted; see library provenance",
+      "license": "MIT/Apache-2.0; see notices",
+      "intended_use": "A numeric fact changes",
+      "limitations": "Ordinary number is preferred for small frames.",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "evidence": {
+        "method": "candidate bakeoff with forward/backward/random seeks and independent visual selection",
+        "checked_on": "2026-10-26",
+        "regression": "tests/test_blocks.mjs"
+      }
+    },
+    {
+      "id": "block:number-drum",
+      "name": "number-drum",
+      "category": "native",
+      "status": "ready",
+      "runtime": "BLOCKS",
+      "kind": "rolling-number",
+      "defaults": {
+        "mode": "drum"
+      },
+      "tags": [
+        "number",
+        "odometer",
+        "hero"
+      ],
+      "source": "adapted; see library provenance",
+      "license": "MIT/Apache-2.0; see notices",
+      "intended_use": "One large hero number with mechanical carry",
+      "limitations": "Intermediate rolling digits are not a readable factual value; use settled endpoints for reading.",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "evidence": {
+        "method": "candidate bakeoff with forward/backward/random seeks and independent visual selection",
+        "checked_on": "2026-10-26",
+        "regression": "tests/test_blocks.mjs"
+      }
+    },
+    {
+      "id": "block:kanban-flow",
+      "name": "kanban-flow",
+      "category": "native",
+      "status": "ready",
+      "runtime": "BLOCKS",
+      "kind": "kanban-flow",
+      "defaults": {
+        "mode": "reflow"
+      },
+      "tags": [
+        "workflow",
+        "states",
+        "cards",
+        "process"
+      ],
+      "source": "adapted; see library provenance",
+      "license": "MIT/Apache-2.0; see notices",
+      "intended_use": "Items move between named states",
+      "limitations": "2–3 columns, up to 8 cards, one move per card. Dense portrait boards must be split; overlaps during movement are intentional.",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "evidence": {
+        "method": "candidate bakeoff with forward/backward/random seeks and independent visual selection",
+        "checked_on": "2026-10-26",
+        "regression": "tests/test_blocks.mjs"
+      }
+    },
+    {
+      "id": "block:bar-chart",
+      "name": "bar-chart",
+      "category": "native",
+      "status": "ready",
+      "runtime": "BLOCKS",
+      "kind": "data-chart",
+      "defaults": {
+        "mode": "stagger"
+      },
+      "tags": [
+        "data",
+        "bars",
+        "comparison",
+        "chart"
+      ],
+      "source": "adapted; see library provenance",
+      "license": "MIT/Apache-2.0; see notices",
+      "intended_use": "Compare 2–6 non-negative values",
+      "limitations": "At 360px landscape may require larger labels or fewer values; phone portrait was reviewed. No automatic label fitting.",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "evidence": {
+        "method": "candidate bakeoff with forward/backward/random seeks and independent visual selection",
+        "checked_on": "2026-10-26",
+        "regression": "tests/test_blocks.mjs"
+      }
+    },
+    {
+      "id": "block:horizontal-bars",
+      "name": "horizontal-bars",
+      "category": "native",
+      "status": "ready",
+      "runtime": "BLOCKS",
+      "kind": "data-chart",
+      "defaults": {
+        "mode": "stagger",
+        "layout": "horizontal"
+      },
+      "tags": [
+        "data",
+        "rank",
+        "comparison",
+        "chart"
+      ],
+      "source": "adapted; see library provenance",
+      "license": "MIT/Apache-2.0; see notices",
+      "intended_use": "Compare categories with longer names",
+      "limitations": "Review label width and value fit in each frame; no automatic text fitting.",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "evidence": {
+        "method": "candidate bakeoff with forward/backward/random seeks and independent visual selection",
+        "checked_on": "2026-10-26",
+        "regression": "tests/test_blocks.mjs"
+      }
+    },
+    {
+      "id": "block:before-after-text",
+      "name": "before-after-text",
+      "category": "native",
+      "status": "ready",
+      "runtime": "BLOCKS",
+      "kind": "before-after",
+      "defaults": {
+        "mode": "cut"
+      },
+      "tags": [
+        "text",
+        "comparison",
+        "before",
+        "after"
+      ],
+      "source": "adapted; see library provenance",
+      "license": "MIT/Apache-2.0; see notices",
+      "intended_use": "Replace a whole text state",
+      "limitations": "Uses cut. Text wipe was rejected because it cuts words.",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "evidence": {
+        "method": "candidate bakeoff with forward/backward/random seeks and independent visual selection",
+        "checked_on": "2026-10-26",
+        "regression": "tests/test_blocks.mjs"
+      }
+    },
+    {
+      "id": "block:before-after-image",
+      "name": "before-after-image",
+      "category": "native",
+      "status": "ready",
+      "runtime": "BLOCKS",
+      "kind": "before-after",
+      "defaults": {
+        "mode": "wipe"
+      },
+      "tags": [
+        "image",
+        "comparison",
+        "wipe",
+        "before",
+        "after"
+      ],
+      "source": "adapted; see library provenance",
+      "license": "MIT/Apache-2.0; see notices",
+      "intended_use": "Reveal a spatial difference between aligned images",
+      "limitations": "Use aligned local images and await decoding; a simple cut may better explain count/state changes.",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "evidence": {
+        "method": "candidate bakeoff with forward/backward/random seeks and independent visual selection",
+        "checked_on": "2026-10-26",
+        "regression": "tests/test_blocks.mjs"
+      }
+    },
+    {
+      "id": "icon:lucide:arrow-down",
+      "name": "arrow-down",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "arrow",
+        "down"
+      ],
+      "asset": "assets/icons/lucide/arrow-down.svg",
+      "runtime_id": "lucide:arrow-down",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/arrow-down.svg",
+      "git_blob_sha": "3244b63e3147e5e8b359f20458106bc74572d331",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:check",
+      "name": "check",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "check"
+      ],
+      "asset": "assets/icons/lucide/check.svg",
+      "runtime_id": "lucide:check",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/check.svg",
+      "git_blob_sha": "5abe1527434e7b251bde0661f99af96178976d8c",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:arrow-up",
+      "name": "arrow-up",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "arrow",
+        "up"
+      ],
+      "asset": "assets/icons/lucide/arrow-up.svg",
+      "runtime_id": "lucide:arrow-up",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/arrow-up.svg",
+      "git_blob_sha": "50a81cb370d77bccdab4e91c1aeff36b763cdfbf",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:arrow-right",
+      "name": "arrow-right",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "arrow",
+        "right"
+      ],
+      "asset": "assets/icons/lucide/arrow-right.svg",
+      "runtime_id": "lucide:arrow-right",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/arrow-right.svg",
+      "git_blob_sha": "433ded3fcc5f7bd2b6a59356c6ffe8eceac6b7e3",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:arrow-left",
+      "name": "arrow-left",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "arrow",
+        "left"
+      ],
+      "asset": "assets/icons/lucide/arrow-left.svg",
+      "runtime_id": "lucide:arrow-left",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/arrow-left.svg",
+      "git_blob_sha": "b40bff851c85eff44f678eb7984fc6070d7ea721",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:x",
+      "name": "x",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "x"
+      ],
+      "asset": "assets/icons/lucide/x.svg",
+      "runtime_id": "lucide:x",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/x.svg",
+      "git_blob_sha": "e31794349d3eecea1b3ae8e974b68bb8f4becda7",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:chevron-right",
+      "name": "chevron-right",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "chevron",
+        "right"
+      ],
+      "asset": "assets/icons/lucide/chevron-right.svg",
+      "runtime_id": "lucide:chevron-right",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/chevron-right.svg",
+      "git_blob_sha": "db62a0c20181edd6173722b2a483e0b85e30f240",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:plus",
+      "name": "plus",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "plus"
+      ],
+      "asset": "assets/icons/lucide/plus.svg",
+      "runtime_id": "lucide:plus",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/plus.svg",
+      "git_blob_sha": "41f92bb93eb6626368d71c9884127bbcf7d3ccdf",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:users",
+      "name": "users",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "users"
+      ],
+      "asset": "assets/icons/lucide/users.svg",
+      "runtime_id": "lucide:users",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/users.svg",
+      "git_blob_sha": "e31958f8795715f31b86d3c633652c20acb3a325",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:minus",
+      "name": "minus",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "minus"
+      ],
+      "asset": "assets/icons/lucide/minus.svg",
+      "runtime_id": "lucide:minus",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/minus.svg",
+      "git_blob_sha": "75093e27c20965c9e37fb9dcef9f939746c67578",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:search",
+      "name": "search",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "search"
+      ],
+      "asset": "assets/icons/lucide/search.svg",
+      "runtime_id": "lucide:search",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/search.svg",
+      "git_blob_sha": "03e442a5440cff92c219fe3a3c1f2b0788d30701",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:user",
+      "name": "user",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "user"
+      ],
+      "asset": "assets/icons/lucide/user.svg",
+      "runtime_id": "lucide:user",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/user.svg",
+      "git_blob_sha": "8e61592bbf912f26d2e6583dffd9b1e8ebec0193",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:calendar",
+      "name": "calendar",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "calendar"
+      ],
+      "asset": "assets/icons/lucide/calendar.svg",
+      "runtime_id": "lucide:calendar",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/calendar.svg",
+      "git_blob_sha": "4679497031a9540a311f6223da003ce26f638e24",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:mail",
+      "name": "mail",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "mail"
+      ],
+      "asset": "assets/icons/lucide/mail.svg",
+      "runtime_id": "lucide:mail",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/mail.svg",
+      "git_blob_sha": "4cff729d97c4b4daacb4d86220bf45b8e5c199fe",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:file",
+      "name": "file",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "file"
+      ],
+      "asset": "assets/icons/lucide/file.svg",
+      "runtime_id": "lucide:file",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/file.svg",
+      "git_blob_sha": "161be7a29fb7c7b808eb57722fc544231a5aa5e4",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:house",
+      "name": "house",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "house"
+      ],
+      "asset": "assets/icons/lucide/house.svg",
+      "runtime_id": "lucide:house",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/house.svg",
+      "git_blob_sha": "10e4097e290fdb2f1f919b264bf4e3095348de7c",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:folder",
+      "name": "folder",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "folder"
+      ],
+      "asset": "assets/icons/lucide/folder.svg",
+      "runtime_id": "lucide:folder",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/folder.svg",
+      "git_blob_sha": "ef69b345f200f1542ad9a2dfca7d41d036910f4b",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:clock",
+      "name": "clock",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "clock"
+      ],
+      "asset": "assets/icons/lucide/clock.svg",
+      "runtime_id": "lucide:clock",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/clock.svg",
+      "git_blob_sha": "b6ae2834e60fc09547007a89067994e8b5ea55b5",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:file-text",
+      "name": "file-text",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "file",
+        "text"
+      ],
+      "asset": "assets/icons/lucide/file-text.svg",
+      "runtime_id": "lucide:file-text",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/file-text.svg",
+      "git_blob_sha": "67dc5b9d1a07a1b501ba87d62563b914c059096e",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:settings",
+      "name": "settings",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "settings"
+      ],
+      "asset": "assets/icons/lucide/settings.svg",
+      "runtime_id": "lucide:settings",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/settings.svg",
+      "git_blob_sha": "4c6263af909841a3911f41a385021778eacba736",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:chart-column",
+      "name": "chart-column",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "chart",
+        "column"
+      ],
+      "asset": "assets/icons/lucide/chart-column.svg",
+      "runtime_id": "lucide:chart-column",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/chart-column.svg",
+      "git_blob_sha": "ef98cf9b608890ebf96f8220e5e1814bbf89e1c7",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:chart-line",
+      "name": "chart-line",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "chart",
+        "line"
+      ],
+      "asset": "assets/icons/lucide/chart-line.svg",
+      "runtime_id": "lucide:chart-line",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/chart-line.svg",
+      "git_blob_sha": "e5fc87c5480da9dbd42c800057a90f0f595648c1",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:chart-pie",
+      "name": "chart-pie",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "chart",
+        "pie"
+      ],
+      "asset": "assets/icons/lucide/chart-pie.svg",
+      "runtime_id": "lucide:chart-pie",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/chart-pie.svg",
+      "git_blob_sha": "264a0b0e051e924bdf031cd53bd2cfde552a6da2",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:key",
+      "name": "key",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "key"
+      ],
+      "asset": "assets/icons/lucide/key.svg",
+      "runtime_id": "lucide:key",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/key.svg",
+      "git_blob_sha": "e9e4eab5a61c49b05af3c361abd20e623e8d0535",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:map-pin",
+      "name": "map-pin",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "map",
+        "pin"
+      ],
+      "asset": "assets/icons/lucide/map-pin.svg",
+      "runtime_id": "lucide:map-pin",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/map-pin.svg",
+      "git_blob_sha": "5d73fbd48b1e663493efaa4523b6c105f996146b",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:shield",
+      "name": "shield",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "shield"
+      ],
+      "asset": "assets/icons/lucide/shield.svg",
+      "runtime_id": "lucide:shield",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/shield.svg",
+      "git_blob_sha": "e40d7d2ba8de46aa649c1ed5b1fce7d6ed2939bd",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:lock",
+      "name": "lock",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "lock"
+      ],
+      "asset": "assets/icons/lucide/lock.svg",
+      "runtime_id": "lucide:lock",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/lock.svg",
+      "git_blob_sha": "b2b32d1293ad7b767e5b7907daaa2846e3898910",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:monitor",
+      "name": "monitor",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "monitor"
+      ],
+      "asset": "assets/icons/lucide/monitor.svg",
+      "runtime_id": "lucide:monitor",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/monitor.svg",
+      "git_blob_sha": "e869f2f27acef115bc121a0bf62e1d01834c6b17",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:globe",
+      "name": "globe",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "globe"
+      ],
+      "asset": "assets/icons/lucide/globe.svg",
+      "runtime_id": "lucide:globe",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/globe.svg",
+      "git_blob_sha": "53c80ee35dd294b0193642f0731010e033ba0618",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:smartphone",
+      "name": "smartphone",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "smartphone"
+      ],
+      "asset": "assets/icons/lucide/smartphone.svg",
+      "runtime_id": "lucide:smartphone",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/smartphone.svg",
+      "git_blob_sha": "fc840174a324d965ad4dd420a1c99530a414c326",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:laptop",
+      "name": "laptop",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "laptop"
+      ],
+      "asset": "assets/icons/lucide/laptop.svg",
+      "runtime_id": "lucide:laptop",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/laptop.svg",
+      "git_blob_sha": "613afff3caa54ee0be639577fa09add361c777a7",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:database",
+      "name": "database",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "database"
+      ],
+      "asset": "assets/icons/lucide/database.svg",
+      "runtime_id": "lucide:database",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/database.svg",
+      "git_blob_sha": "f95db0e3f40633742b292b2f64f5d9c37e3eb157",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:server",
+      "name": "server",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "server"
+      ],
+      "asset": "assets/icons/lucide/server.svg",
+      "runtime_id": "lucide:server",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/server.svg",
+      "git_blob_sha": "a8b6ad92b3cc90688bfaa4d259dce75b26c81d2e",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:upload",
+      "name": "upload",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "upload"
+      ],
+      "asset": "assets/icons/lucide/upload.svg",
+      "runtime_id": "lucide:upload",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/upload.svg",
+      "git_blob_sha": "ce355073f92b8947dd9e439c6ff67e6a13b837ae",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:download",
+      "name": "download",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "download"
+      ],
+      "asset": "assets/icons/lucide/download.svg",
+      "runtime_id": "lucide:download",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/download.svg",
+      "git_blob_sha": "5c75527bde1fe8259efb72c5b590bedfae28c05e",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:link",
+      "name": "link",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "link"
+      ],
+      "asset": "assets/icons/lucide/link.svg",
+      "runtime_id": "lucide:link",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/link.svg",
+      "git_blob_sha": "645e746a888689bb7b37e35b39873037d6b9f6be",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:cloud",
+      "name": "cloud",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "cloud"
+      ],
+      "asset": "assets/icons/lucide/cloud.svg",
+      "runtime_id": "lucide:cloud",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/cloud.svg",
+      "git_blob_sha": "96c52fc8ef271af07d51f254431c8fb4e408c0bb",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:git-branch",
+      "name": "git-branch",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "git",
+        "branch"
+      ],
+      "asset": "assets/icons/lucide/git-branch.svg",
+      "runtime_id": "lucide:git-branch",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/git-branch.svg",
+      "git_blob_sha": "06398f448481cb8276a9afa449b81ca13bae39d2",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:workflow",
+      "name": "workflow",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "workflow"
+      ],
+      "asset": "assets/icons/lucide/workflow.svg",
+      "runtime_id": "lucide:workflow",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/workflow.svg",
+      "git_blob_sha": "20784a2ab7cedbf81fc5f8a6a8f6fcdc5d6552ea",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:lucide:wallet",
+      "name": "wallet",
+      "category": "icons",
+      "status": "asset",
+      "pack": "lucide",
+      "tags": [
+        "wallet"
+      ],
+      "asset": "assets/icons/lucide/wallet.svg",
+      "runtime_id": "lucide:wallet",
+      "source": "https://github.com/lucide-icons/lucide/blob/main/icons/wallet.svg",
+      "git_blob_sha": "9d63559bba6089c644b17d7bb6243a1fae01001e",
+      "license": "ISC + MIT Feather notices"
+    },
+    {
+      "id": "icon:tabler:arrow-left",
+      "name": "arrow-left",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "arrow",
+        "left"
+      ],
+      "asset": "assets/icons/tabler/arrow-left.svg",
+      "runtime_id": "tabler:arrow-left",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/arrow-left.svg",
+      "git_blob_sha": "182b91c5efc24129dd14bd29d31a842f2e5362d2",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:arrow-up",
+      "name": "arrow-up",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "arrow",
+        "up"
+      ],
+      "asset": "assets/icons/tabler/arrow-up.svg",
+      "runtime_id": "tabler:arrow-up",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/arrow-up.svg",
+      "git_blob_sha": "60b0cbcb428b633cf689d3b47510c505f377b9cf",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:arrow-right",
+      "name": "arrow-right",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "arrow",
+        "right"
+      ],
+      "asset": "assets/icons/tabler/arrow-right.svg",
+      "runtime_id": "tabler:arrow-right",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/arrow-right.svg",
+      "git_blob_sha": "658e5c4d13a51221f38bc07f4ebf0dfcd4d55260",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:chevron-right",
+      "name": "chevron-right",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "chevron",
+        "right"
+      ],
+      "asset": "assets/icons/tabler/chevron-right.svg",
+      "runtime_id": "tabler:chevron-right",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/chevron-right.svg",
+      "git_blob_sha": "91195257d5e343125828dc54b3dbbc55d2babbac",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:check",
+      "name": "check",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "check"
+      ],
+      "asset": "assets/icons/tabler/check.svg",
+      "runtime_id": "tabler:check",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/check.svg",
+      "git_blob_sha": "8457c556102d84eb91162fc04bd527eeb883fd62",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:x",
+      "name": "x",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "x"
+      ],
+      "asset": "assets/icons/tabler/x.svg",
+      "runtime_id": "tabler:x",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/x.svg",
+      "git_blob_sha": "d038c3d978ca4364a2bc184adeeef63ff63a5c95",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:plus",
+      "name": "plus",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "plus"
+      ],
+      "asset": "assets/icons/tabler/plus.svg",
+      "runtime_id": "tabler:plus",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/plus.svg",
+      "git_blob_sha": "388566402af6ce21eb52e683834d943f9a468f43",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:arrow-down",
+      "name": "arrow-down",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "arrow",
+        "down"
+      ],
+      "asset": "assets/icons/tabler/arrow-down.svg",
+      "runtime_id": "tabler:arrow-down",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/arrow-down.svg",
+      "git_blob_sha": "a49052ebf5b4b79dc2c885ac019a75c4be83b242",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:minus",
+      "name": "minus",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "minus"
+      ],
+      "asset": "assets/icons/tabler/minus.svg",
+      "runtime_id": "tabler:minus",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/minus.svg",
+      "git_blob_sha": "361d40ae1f79d7a57c7afb303dfa5f16b72db6bf",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:clock",
+      "name": "clock",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "clock"
+      ],
+      "asset": "assets/icons/tabler/clock.svg",
+      "runtime_id": "tabler:clock",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/clock.svg",
+      "git_blob_sha": "9c31e876efddef0342f81a8799075b50d19c1d52",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:calendar",
+      "name": "calendar",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "calendar"
+      ],
+      "asset": "assets/icons/tabler/calendar.svg",
+      "runtime_id": "tabler:calendar",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/calendar.svg",
+      "git_blob_sha": "84acf27c2bb01a7a1ab3b85be710ead9054876cb",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:search",
+      "name": "search",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "search"
+      ],
+      "asset": "assets/icons/tabler/search.svg",
+      "runtime_id": "tabler:search",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/search.svg",
+      "git_blob_sha": "e894f96200eb75972169fc7c58be7df14ecb8645",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:user",
+      "name": "user",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "user"
+      ],
+      "asset": "assets/icons/tabler/user.svg",
+      "runtime_id": "tabler:user",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/user.svg",
+      "git_blob_sha": "6cdc9ac644e810aeed1b2d15df46aa6e0a0332fd",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:users",
+      "name": "users",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "users"
+      ],
+      "asset": "assets/icons/tabler/users.svg",
+      "runtime_id": "tabler:users",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/users.svg",
+      "git_blob_sha": "8dd81b6b67641d997d8761a0e26746fc080becb6",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:file",
+      "name": "file",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "file"
+      ],
+      "asset": "assets/icons/tabler/file.svg",
+      "runtime_id": "tabler:file",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/file.svg",
+      "git_blob_sha": "f4a530c5665eaf512849f0909c28867c9ce94920",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:mail",
+      "name": "mail",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "mail"
+      ],
+      "asset": "assets/icons/tabler/mail.svg",
+      "runtime_id": "tabler:mail",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/mail.svg",
+      "git_blob_sha": "ba0355a71f969f147e1f6838c4a8de68789b4d02",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:chart-line",
+      "name": "chart-line",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "chart",
+        "line"
+      ],
+      "asset": "assets/icons/tabler/chart-line.svg",
+      "runtime_id": "tabler:chart-line",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/chart-line.svg",
+      "git_blob_sha": "0e52c5e4468541538df1b452fc17e70c5f81d580",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:settings",
+      "name": "settings",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "settings"
+      ],
+      "asset": "assets/icons/tabler/settings.svg",
+      "runtime_id": "tabler:settings",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/settings.svg",
+      "git_blob_sha": "c94891403e451a07bf69053e98d1a57e424759fc",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:chart-pie",
+      "name": "chart-pie",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "chart",
+        "pie"
+      ],
+      "asset": "assets/icons/tabler/chart-pie.svg",
+      "runtime_id": "tabler:chart-pie",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/chart-pie.svg",
+      "git_blob_sha": "db5418b265dd7ae8cf6c403c2ee91c6221c763a0",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:folder",
+      "name": "folder",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "folder"
+      ],
+      "asset": "assets/icons/tabler/folder.svg",
+      "runtime_id": "tabler:folder",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/folder.svg",
+      "git_blob_sha": "354a3df83fa73a23432e5e85f4df9c346d140018",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:home",
+      "name": "home",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "home"
+      ],
+      "asset": "assets/icons/tabler/home.svg",
+      "runtime_id": "tabler:home",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/home.svg",
+      "git_blob_sha": "185788d9ea4bedc5f604eff05ed64441ffb70074",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:shield",
+      "name": "shield",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "shield"
+      ],
+      "asset": "assets/icons/tabler/shield.svg",
+      "runtime_id": "tabler:shield",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/shield.svg",
+      "git_blob_sha": "fdfac0021e79e95d780c80857ebf52a8dd0fe6ed",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:chart-bar",
+      "name": "chart-bar",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "chart",
+        "bar"
+      ],
+      "asset": "assets/icons/tabler/chart-bar.svg",
+      "runtime_id": "tabler:chart-bar",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/chart-bar.svg",
+      "git_blob_sha": "df44d129eb6dd8cad94103cc701f7a924dc8a367",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:file-text",
+      "name": "file-text",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "file",
+        "text"
+      ],
+      "asset": "assets/icons/tabler/file-text.svg",
+      "runtime_id": "tabler:file-text",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/file-text.svg",
+      "git_blob_sha": "e1d777f26168c95becb6636300590733e73919be",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:device-mobile",
+      "name": "device-mobile",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "device",
+        "mobile"
+      ],
+      "asset": "assets/icons/tabler/device-mobile.svg",
+      "runtime_id": "tabler:device-mobile",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/device-mobile.svg",
+      "git_blob_sha": "2fc6f41f05acb6c14946db54b3986080e127b50e",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:key",
+      "name": "key",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "key"
+      ],
+      "asset": "assets/icons/tabler/key.svg",
+      "runtime_id": "tabler:key",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/key.svg",
+      "git_blob_sha": "0e34069488a866e1a2cc112d3ef75b3244ce63ed",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:map-pin",
+      "name": "map-pin",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "map",
+        "pin"
+      ],
+      "asset": "assets/icons/tabler/map-pin.svg",
+      "runtime_id": "tabler:map-pin",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/map-pin.svg",
+      "git_blob_sha": "7291ed17118aebcf2b81f28ab08fa3af52233cc4",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:database",
+      "name": "database",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "database"
+      ],
+      "asset": "assets/icons/tabler/database.svg",
+      "runtime_id": "tabler:database",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/database.svg",
+      "git_blob_sha": "0f5f7d864396aa3b773a89faaade4e6a0e72eb5d",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:device-laptop",
+      "name": "device-laptop",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "device",
+        "laptop"
+      ],
+      "asset": "assets/icons/tabler/device-laptop.svg",
+      "runtime_id": "tabler:device-laptop",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/device-laptop.svg",
+      "git_blob_sha": "95806ec8ad348ef3919e25cac9152f2d7adfe391",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:world",
+      "name": "world",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "world"
+      ],
+      "asset": "assets/icons/tabler/world.svg",
+      "runtime_id": "tabler:world",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/world.svg",
+      "git_blob_sha": "d8c29cd38ba88ac7fe3d05aed8e067dedf48a162",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:device-desktop",
+      "name": "device-desktop",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "device",
+        "desktop"
+      ],
+      "asset": "assets/icons/tabler/device-desktop.svg",
+      "runtime_id": "tabler:device-desktop",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/device-desktop.svg",
+      "git_blob_sha": "33ec1295640213d114104fd40c38a6f67376fceb",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:lock",
+      "name": "lock",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "lock"
+      ],
+      "asset": "assets/icons/tabler/lock.svg",
+      "runtime_id": "tabler:lock",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/lock.svg",
+      "git_blob_sha": "f66fe54b54c750afcddaf213926b06e08708b77a",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:sitemap",
+      "name": "sitemap",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "sitemap"
+      ],
+      "asset": "assets/icons/tabler/sitemap.svg",
+      "runtime_id": "tabler:sitemap",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/sitemap.svg",
+      "git_blob_sha": "741ee9461d63b113c79f96e33aa93868735646aa",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:download",
+      "name": "download",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "download"
+      ],
+      "asset": "assets/icons/tabler/download.svg",
+      "runtime_id": "tabler:download",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/download.svg",
+      "git_blob_sha": "2d108580a85f3a7e5bddffbef778434178b6349d",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:git-branch",
+      "name": "git-branch",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "git",
+        "branch"
+      ],
+      "asset": "assets/icons/tabler/git-branch.svg",
+      "runtime_id": "tabler:git-branch",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/git-branch.svg",
+      "git_blob_sha": "221cea8bedfeeb1d283f48b6a8132cf841387b72",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:wallet",
+      "name": "wallet",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "wallet"
+      ],
+      "asset": "assets/icons/tabler/wallet.svg",
+      "runtime_id": "tabler:wallet",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/wallet.svg",
+      "git_blob_sha": "1c6d84550fa5494f5bcd67429ee18cf10b541143",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:cloud",
+      "name": "cloud",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "cloud"
+      ],
+      "asset": "assets/icons/tabler/cloud.svg",
+      "runtime_id": "tabler:cloud",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/cloud.svg",
+      "git_blob_sha": "7fe307a569e6cfa022ffa66a9567a1c4de33ccea",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:upload",
+      "name": "upload",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "upload"
+      ],
+      "asset": "assets/icons/tabler/upload.svg",
+      "runtime_id": "tabler:upload",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/upload.svg",
+      "git_blob_sha": "b20864d2e084b028d4b9a1b7238480d336a1e706",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:link",
+      "name": "link",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "link"
+      ],
+      "asset": "assets/icons/tabler/link.svg",
+      "runtime_id": "tabler:link",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/link.svg",
+      "git_blob_sha": "4e4ef78d00b94a2832f5b0cfc009da5cbffe7e45",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:tabler:server",
+      "name": "server",
+      "category": "icons",
+      "status": "asset",
+      "pack": "tabler",
+      "tags": [
+        "server"
+      ],
+      "asset": "assets/icons/tabler/server.svg",
+      "runtime_id": "tabler:server",
+      "source": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/server.svg",
+      "git_blob_sha": "2cd69135f2c2885a60284966bcd0eb4444a73b76",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:arrow-up",
+      "name": "arrow-up",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "arrow",
+        "up"
+      ],
+      "asset": "assets/icons/phosphor/arrow-up.svg",
+      "runtime_id": "phosphor:arrow-up",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/arrow-up-duotone.svg",
+      "git_blob_sha": "32a1e23f3dee91557c37d6531b82814ae464cdf5",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:arrow-left",
+      "name": "arrow-left",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "arrow",
+        "left"
+      ],
+      "asset": "assets/icons/phosphor/arrow-left.svg",
+      "runtime_id": "phosphor:arrow-left",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/arrow-left-duotone.svg",
+      "git_blob_sha": "3dfbbeac8bf5ac2a46e9cd5f895b47f1b7bbafc8",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:caret-right",
+      "name": "caret-right",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "caret",
+        "right"
+      ],
+      "asset": "assets/icons/phosphor/caret-right.svg",
+      "runtime_id": "phosphor:caret-right",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/caret-right-duotone.svg",
+      "git_blob_sha": "0044afe529cabd8a3fc95acd817fd2a1cb3a7f48",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:x",
+      "name": "x",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "x"
+      ],
+      "asset": "assets/icons/phosphor/x.svg",
+      "runtime_id": "phosphor:x",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/x-duotone.svg",
+      "git_blob_sha": "d3d654c50430dfaac76c5eee16dafab44bf4b148",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:check",
+      "name": "check",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "check"
+      ],
+      "asset": "assets/icons/phosphor/check.svg",
+      "runtime_id": "phosphor:check",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/check-duotone.svg",
+      "git_blob_sha": "50b0b3867d627c9e656bd87b8db3543211dd1b7c",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:arrow-right",
+      "name": "arrow-right",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "arrow",
+        "right"
+      ],
+      "asset": "assets/icons/phosphor/arrow-right.svg",
+      "runtime_id": "phosphor:arrow-right",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/arrow-right-duotone.svg",
+      "git_blob_sha": "4eaf0cc3c2976d693c46d26c5cd5b155e9c2d609",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:plus",
+      "name": "plus",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "plus"
+      ],
+      "asset": "assets/icons/phosphor/plus.svg",
+      "runtime_id": "phosphor:plus",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/plus-duotone.svg",
+      "git_blob_sha": "3c07b40cd78dffe33e70bc355bef71a79a77f6b2",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:user",
+      "name": "user",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "user"
+      ],
+      "asset": "assets/icons/phosphor/user.svg",
+      "runtime_id": "phosphor:user",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/user-duotone.svg",
+      "git_blob_sha": "c24f5716cb965903297c93f3ac3f68f861e6d9d4",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:minus",
+      "name": "minus",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "minus"
+      ],
+      "asset": "assets/icons/phosphor/minus.svg",
+      "runtime_id": "phosphor:minus",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/minus-duotone.svg",
+      "git_blob_sha": "f47d92e0040d713f3369c0014a4f8eba87fff556",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:arrow-down",
+      "name": "arrow-down",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "arrow",
+        "down"
+      ],
+      "asset": "assets/icons/phosphor/arrow-down.svg",
+      "runtime_id": "phosphor:arrow-down",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/arrow-down-duotone.svg",
+      "git_blob_sha": "9b87193416a6fcbdfbfd4b3ef08487b0b1924865",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:calendar",
+      "name": "calendar",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "calendar"
+      ],
+      "asset": "assets/icons/phosphor/calendar.svg",
+      "runtime_id": "phosphor:calendar",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/calendar-duotone.svg",
+      "git_blob_sha": "01ecde5f31d93a5df2c657481d9e0752e900500c",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:envelope",
+      "name": "envelope",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "envelope"
+      ],
+      "asset": "assets/icons/phosphor/envelope.svg",
+      "runtime_id": "phosphor:envelope",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/envelope-duotone.svg",
+      "git_blob_sha": "9237e2c38d65cb0cc4ce44e22deb7525133b4900",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:users",
+      "name": "users",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "users"
+      ],
+      "asset": "assets/icons/phosphor/users.svg",
+      "runtime_id": "phosphor:users",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/users-duotone.svg",
+      "git_blob_sha": "77dc2862c8cd5ea2b1916a1ac7027ac195f9a0fc",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:magnifying-glass",
+      "name": "magnifying-glass",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "magnifying",
+        "glass"
+      ],
+      "asset": "assets/icons/phosphor/magnifying-glass.svg",
+      "runtime_id": "phosphor:magnifying-glass",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/magnifying-glass-duotone.svg",
+      "git_blob_sha": "10a6dc90e7f9acf45e50a8e3c60b570cf4113d6e",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:clock",
+      "name": "clock",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "clock"
+      ],
+      "asset": "assets/icons/phosphor/clock.svg",
+      "runtime_id": "phosphor:clock",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/clock-duotone.svg",
+      "git_blob_sha": "5a2e6bc8b2fee8ab949a8ca7ffb5d0e7d5373efe",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:file",
+      "name": "file",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "file"
+      ],
+      "asset": "assets/icons/phosphor/file.svg",
+      "runtime_id": "phosphor:file",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/file-duotone.svg",
+      "git_blob_sha": "ff8a54b2bf8216baa2f2acf51ee32cf5a7597d29",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:file-text",
+      "name": "file-text",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "file",
+        "text"
+      ],
+      "asset": "assets/icons/phosphor/file-text.svg",
+      "runtime_id": "phosphor:file-text",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/file-text-duotone.svg",
+      "git_blob_sha": "daff55db854ffd779edda46423bad37478bdc941",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:house",
+      "name": "house",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "house"
+      ],
+      "asset": "assets/icons/phosphor/house.svg",
+      "runtime_id": "phosphor:house",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/house-duotone.svg",
+      "git_blob_sha": "3ff860fa0dfbb517f42c5bdb6705d24ca5183df2",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:gear",
+      "name": "gear",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "gear"
+      ],
+      "asset": "assets/icons/phosphor/gear.svg",
+      "runtime_id": "phosphor:gear",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/gear-duotone.svg",
+      "git_blob_sha": "421e65f9e1908e3e53f60a9747b3ae620f748783",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:chart-bar",
+      "name": "chart-bar",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "chart",
+        "bar"
+      ],
+      "asset": "assets/icons/phosphor/chart-bar.svg",
+      "runtime_id": "phosphor:chart-bar",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/chart-bar-duotone.svg",
+      "git_blob_sha": "fe482a826d810f1d7815612c4cb2e4eca0f8d0cb",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:chart-line",
+      "name": "chart-line",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "chart",
+        "line"
+      ],
+      "asset": "assets/icons/phosphor/chart-line.svg",
+      "runtime_id": "phosphor:chart-line",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/chart-line-duotone.svg",
+      "git_blob_sha": "7856ed7db17cab9982f8d45af332a4d695cff50f",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:chart-pie",
+      "name": "chart-pie",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "chart",
+        "pie"
+      ],
+      "asset": "assets/icons/phosphor/chart-pie.svg",
+      "runtime_id": "phosphor:chart-pie",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/chart-pie-duotone.svg",
+      "git_blob_sha": "d4e0b5435a31f4c8c45cd239510b4279b1aef3f7",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:folder",
+      "name": "folder",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "folder"
+      ],
+      "asset": "assets/icons/phosphor/folder.svg",
+      "runtime_id": "phosphor:folder",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/folder-duotone.svg",
+      "git_blob_sha": "1865dd2de75a1b8eef747a80ead32e63b2c95ee2",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:shield",
+      "name": "shield",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "shield"
+      ],
+      "asset": "assets/icons/phosphor/shield.svg",
+      "runtime_id": "phosphor:shield",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/shield-duotone.svg",
+      "git_blob_sha": "daf6062dcfb1f1ccd077e62332083f74ff5feb40",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:lock",
+      "name": "lock",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "lock"
+      ],
+      "asset": "assets/icons/phosphor/lock.svg",
+      "runtime_id": "phosphor:lock",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/lock-duotone.svg",
+      "git_blob_sha": "67f18f44fadf19069738854a3dc1848625171af9",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:globe",
+      "name": "globe",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "globe"
+      ],
+      "asset": "assets/icons/phosphor/globe.svg",
+      "runtime_id": "phosphor:globe",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/globe-duotone.svg",
+      "git_blob_sha": "83497b10d808c34aece8869ca438152c190e1fb1",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:key",
+      "name": "key",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "key"
+      ],
+      "asset": "assets/icons/phosphor/key.svg",
+      "runtime_id": "phosphor:key",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/key-duotone.svg",
+      "git_blob_sha": "7dc84a039642f2f7f191ae19d9280e5f1bc6f2da",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:map-pin",
+      "name": "map-pin",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "map",
+        "pin"
+      ],
+      "asset": "assets/icons/phosphor/map-pin.svg",
+      "runtime_id": "phosphor:map-pin",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/map-pin-duotone.svg",
+      "git_blob_sha": "bb08181c85944b3f2321b3f3525afcf152619cc5",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:monitor",
+      "name": "monitor",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "monitor"
+      ],
+      "asset": "assets/icons/phosphor/monitor.svg",
+      "runtime_id": "phosphor:monitor",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/monitor-duotone.svg",
+      "git_blob_sha": "e105ce52ee62274f7313f36e1f3c4103fd8ab6d3",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:laptop",
+      "name": "laptop",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "laptop"
+      ],
+      "asset": "assets/icons/phosphor/laptop.svg",
+      "runtime_id": "phosphor:laptop",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/laptop-duotone.svg",
+      "git_blob_sha": "d3b7ab47aa7d133b6f640d3a0fabc120133bbd9b",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:device-mobile",
+      "name": "device-mobile",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "device",
+        "mobile"
+      ],
+      "asset": "assets/icons/phosphor/device-mobile.svg",
+      "runtime_id": "phosphor:device-mobile",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/device-mobile-duotone.svg",
+      "git_blob_sha": "f7dc1a41ad9ef127e3eadab86ef7d5495d05e2a6",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:database",
+      "name": "database",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "database"
+      ],
+      "asset": "assets/icons/phosphor/database.svg",
+      "runtime_id": "phosphor:database",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/database-duotone.svg",
+      "git_blob_sha": "a0fec33023d0551b69259b7852b916f52cae561e",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:hard-drives",
+      "name": "hard-drives",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "hard",
+        "drives"
+      ],
+      "asset": "assets/icons/phosphor/hard-drives.svg",
+      "runtime_id": "phosphor:hard-drives",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/hard-drives-duotone.svg",
+      "git_blob_sha": "41db986f108166dbe3be27ab9e4f482f691d6b93",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:cloud",
+      "name": "cloud",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "cloud"
+      ],
+      "asset": "assets/icons/phosphor/cloud.svg",
+      "runtime_id": "phosphor:cloud",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/cloud-duotone.svg",
+      "git_blob_sha": "fe2b65562a8edbc7f982cc210c482623b4176bca",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:download",
+      "name": "download",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "download"
+      ],
+      "asset": "assets/icons/phosphor/download.svg",
+      "runtime_id": "phosphor:download",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/download-duotone.svg",
+      "git_blob_sha": "426e2bc4e993575822fa35fd5a41614fc147d5a1",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:link",
+      "name": "link",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "link"
+      ],
+      "asset": "assets/icons/phosphor/link.svg",
+      "runtime_id": "phosphor:link",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/link-duotone.svg",
+      "git_blob_sha": "3296fd2c976cdbab86435971eea72c076124951f",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:upload",
+      "name": "upload",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "upload"
+      ],
+      "asset": "assets/icons/phosphor/upload.svg",
+      "runtime_id": "phosphor:upload",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/upload-duotone.svg",
+      "git_blob_sha": "01bde2354db02a9945013c26e7bebafb4b2186a0",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:flow-arrow",
+      "name": "flow-arrow",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "flow",
+        "arrow"
+      ],
+      "asset": "assets/icons/phosphor/flow-arrow.svg",
+      "runtime_id": "phosphor:flow-arrow",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/flow-arrow-duotone.svg",
+      "git_blob_sha": "493af9645eb45ba3f6f8b47f5e87b6367f0d4472",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:git-branch",
+      "name": "git-branch",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "git",
+        "branch"
+      ],
+      "asset": "assets/icons/phosphor/git-branch.svg",
+      "runtime_id": "phosphor:git-branch",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/git-branch-duotone.svg",
+      "git_blob_sha": "733925883ef45ef3775f369c64403042d20e7623",
+      "license": "MIT"
+    },
+    {
+      "id": "icon:phosphor:wallet",
+      "name": "wallet",
+      "category": "icons",
+      "status": "asset",
+      "pack": "phosphor",
+      "tags": [
+        "wallet"
+      ],
+      "asset": "assets/icons/phosphor/wallet.svg",
+      "runtime_id": "phosphor:wallet",
+      "source": "https://github.com/phosphor-icons/core/blob/main/assets/duotone/wallet-duotone.svg",
+      "git_blob_sha": "a19ffa68bee296b5b40036153ff1cff55b93271b",
+      "license": "MIT"
+    },
+    {
+      "id": "illustration:server",
+      "name": "server",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "server",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "server"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:visitor",
+      "name": "visitor",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "visitor",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "visitor"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:keyboard",
+      "name": "keyboard",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "keyboard",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "keyboard"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:envelope",
+      "name": "envelope",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "envelope",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "envelope"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:bill",
+      "name": "bill",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "bill",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "bill"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:gift",
+      "name": "gift",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "gift",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "gift"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:shield",
+      "name": "shield",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "shield",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "shield"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:gavel",
+      "name": "gavel",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "gavel",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "gavel"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:globe",
+      "name": "globe",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "globe",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "globe"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:image",
+      "name": "image",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "image",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "image"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:document",
+      "name": "document",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "document",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "document"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:phone",
+      "name": "phone",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "phone",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "phone",
+        "call",
+        "wiretap",
+        "cord",
+        "cut"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:calendar",
+      "name": "calendar",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "calendar",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "calendar",
+        "date",
+        "renewal",
+        "schedule",
+        "recurring"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:card",
+      "name": "card",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "card",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "card",
+        "payment",
+        "refund",
+        "charge",
+        "declined"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:coins",
+      "name": "coins",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "coins",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "money",
+        "coins",
+        "amount",
+        "price",
+        "fine"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:chat",
+      "name": "chat",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "chat",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "chat",
+        "message",
+        "prompt",
+        "assistant",
+        "typing"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:form",
+      "name": "form",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "form",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "form",
+        "registration",
+        "field",
+        "missing",
+        "input"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:stamp",
+      "name": "stamp",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "stamp",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "stamp",
+        "approved",
+        "rejected",
+        "mark",
+        "seal"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:decision",
+      "name": "decision",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "decision",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "file",
+        "decision",
+        "court",
+        "contract",
+        "certificate",
+        "signature",
+        "seal"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:lock",
+      "name": "lock",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "lock",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "lock",
+        "security",
+        "privacy",
+        "access"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:scales",
+      "name": "scales",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "scales",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "balance",
+        "scales",
+        "law",
+        "justice",
+        "comparison"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:recordings",
+      "name": "recordings",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "recordings",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "record",
+        "sessions",
+        "recordings",
+        "replay",
+        "video"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "illustration:camera",
+      "name": "camera",
+      "category": "illustrations",
+      "status": "component",
+      "runtime": "ILLUSTRATIONS",
+      "kind": "camera",
+      "tags": [
+        "objects",
+        "diagram",
+        "state",
+        "camera",
+        "surveillance",
+        "tracking",
+        "record"
+      ],
+      "source": "original motion-film artwork",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "Illustrative object, not real product UI; skins line/flat/mono/sketch; inspect all labels at phone size.",
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "actor:presenter",
+      "name": "presenter",
+      "category": "choreography",
+      "status": "component",
+      "runtime": "ACTOR",
+      "tags": [
+        "character",
+        "presenter",
+        "gestures",
+        "rig",
+        "face"
+      ],
+      "source": "original motion-film rig; baked Anidoodle hands",
+      "license": "MIT AND Apache-2.0",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "causal:connector",
+      "name": "connector",
+      "category": "choreography",
+      "status": "component",
+      "runtime": "CAUSAL",
+      "tags": [
+        "wire",
+        "transfer",
+        "data",
+        "cause",
+        "connection"
+      ],
+      "source": "original motion-film code",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "causal:wave",
+      "name": "wave",
+      "category": "choreography",
+      "status": "component",
+      "runtime": "CAUSAL",
+      "tags": [
+        "wave",
+        "spatial",
+        "stagger",
+        "field"
+      ],
+      "source": "original motion-film code",
+      "license": "MIT",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "documentation": "reference/EDITORIAL.md"
+    },
+    {
+      "id": "morph:handoff",
+      "name": "handoff",
+      "category": "choreography",
+      "status": "component",
+      "runtime": "MORPH",
+      "tags": [
+        "morph",
+        "handoff",
+        "continuity",
+        "shape",
+        "transition"
+      ],
+      "source": "https://github.com/alexgreensh/anidoodle",
+      "license": "Apache-2.0",
+      "tested_formats": [
+        "16x9",
+        "9x16"
+      ],
+      "limitations": "One simple closed contour; no holes or arbitrary SVG; see MORPH.md",
+      "documentation": "reference/MORPH.md"
+    }
+  ]
+}

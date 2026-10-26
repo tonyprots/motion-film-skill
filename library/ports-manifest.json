@@ -1,0 +1,265 @@
+{
+  "checked_on": "2026-10-26",
+  "method": "GitHub plugin fetch_file, no installation or execution",
+  "files": [
+    {
+      "id": "license-remotionui",
+      "repository": "riaz37/remotion-ui",
+      "upstream_path": "LICENSE",
+      "url": "https://github.com/riaz37/remotion-ui/blob/main/LICENSE",
+      "git_blob_sha": "def0b4e072346a476e2161d1fa2bb3fa624ba0f9",
+      "license": "MIT"
+    },
+    {
+      "id": "onda-count",
+      "repository": "degueba/onda",
+      "upstream_path": "registry/components/count-up/CountUp.tsx",
+      "url": "https://github.com/degueba/onda/blob/main/registry/components/count-up/CountUp.tsx",
+      "git_blob_sha": "c8d34b7fee90f8fb70e0088d8c443669dc2048e9",
+      "license": "MIT"
+    },
+    {
+      "id": "license-rendercomp",
+      "repository": "RenderComp/free-remotion-templates",
+      "upstream_path": "LICENSE",
+      "url": "https://github.com/RenderComp/free-remotion-templates/blob/main/LICENSE",
+      "git_blob_sha": "ce53e1738e9002569c99b35539b657a4ced4ce11",
+      "license": "MIT"
+    },
+    {
+      "id": "remotionui-kanban",
+      "repository": "riaz37/remotion-ui",
+      "upstream_path": "apps/web/registry/bases/default/scenes/kanban-move/index.tsx",
+      "url": "https://github.com/riaz37/remotion-ui/blob/main/apps/web/registry/bases/default/scenes/kanban-move/index.tsx",
+      "git_blob_sha": "8b9e0f7b1665b739a7c3a03595ac23668ac74720",
+      "license": "MIT"
+    },
+    {
+      "id": "license-hyperframes",
+      "repository": "heygen-com/hyperframes",
+      "upstream_path": "LICENSE",
+      "url": "https://github.com/heygen-com/hyperframes/blob/main/LICENSE",
+      "git_blob_sha": "ae06b37e1c5116ccfaa615ac25ec1aabf5658d8c",
+      "license": "Apache-2.0"
+    },
+    {
+      "id": "license-onda",
+      "repository": "degueba/onda",
+      "upstream_path": "LICENSE",
+      "url": "https://github.com/degueba/onda/blob/main/LICENSE",
+      "git_blob_sha": "74436cdb70b66cabdcd2197755fd5670251615f0",
+      "license": "MIT"
+    },
+    {
+      "id": "hyperframes-data-chart",
+      "repository": "heygen-com/hyperframes",
+      "upstream_path": "registry/blocks/data-chart/data-chart.html",
+      "url": "https://github.com/heygen-com/hyperframes/blob/main/registry/blocks/data-chart/data-chart.html",
+      "git_blob_sha": "328576615db0588f77202adf791595a59acdee3c",
+      "license": "Apache-2.0"
+    },
+    {
+      "id": "rendercomp-kpi",
+      "repository": "RenderComp/free-remotion-templates",
+      "upstream_path": "src/components/kpi-counter/KpiCounter.tsx",
+      "url": "https://github.com/RenderComp/free-remotion-templates/blob/main/src/components/kpi-counter/KpiCounter.tsx",
+      "git_blob_sha": "bcc40a2f42b21730d26a6fdf7ce4a734aaa04407",
+      "license": "MIT"
+    },
+    {
+      "id": "hyperframes-before-after-readme",
+      "repository": "heygen-com/hyperframes",
+      "upstream_path": "registry/components/before-after-wipe/README.md",
+      "url": "https://github.com/heygen-com/hyperframes/blob/main/registry/components/before-after-wipe/README.md",
+      "git_blob_sha": "5f5cafed9632ab28aeaeca170806264517dc5040",
+      "license": "Apache-2.0"
+    },
+    {
+      "id": "hyperframes-before-after",
+      "repository": "heygen-com/hyperframes",
+      "upstream_path": "registry/components/before-after-wipe/before-after-wipe.html",
+      "url": "https://github.com/heygen-com/hyperframes/blob/main/registry/components/before-after-wipe/before-after-wipe.html",
+      "git_blob_sha": "7efe185bfd096b1d0330b5e6ec9e577faf997949",
+      "license": "Apache-2.0"
+    },
+    {
+      "id": "onda-bars",
+      "repository": "degueba/onda",
+      "upstream_path": "registry/components/bar-chart/BarChart.tsx",
+      "url": "https://github.com/degueba/onda/blob/main/registry/components/bar-chart/BarChart.tsx",
+      "git_blob_sha": "4d192f0d7e7d815364c67b5aef1a4489e0e54d91",
+      "license": "MIT"
+    },
+    {
+      "id": "onda-bars-schema",
+      "repository": "degueba/onda",
+      "upstream_path": "registry/components/bar-chart/schema.ts",
+      "url": "https://github.com/degueba/onda/blob/main/registry/components/bar-chart/schema.ts",
+      "git_blob_sha": "ebe61e111914315e169f51e1068afaa969ac3692",
+      "license": "MIT"
+    },
+    {
+      "id": "onda-motion",
+      "repository": "degueba/onda",
+      "upstream_path": "lib/motion.ts",
+      "url": "https://github.com/degueba/onda/blob/main/lib/motion.ts",
+      "git_blob_sha": "4fe89807386e2504bcd5a1ce333b5d3f39cc10f7",
+      "license": "MIT"
+    },
+    {
+      "id": "remotionui-layout",
+      "repository": "riaz37/remotion-ui",
+      "upstream_path": "apps/web/registry/bases/default/lib/layout.ts",
+      "url": "https://github.com/riaz37/remotion-ui/blob/main/apps/web/registry/bases/default/lib/layout.ts",
+      "git_blob_sha": "66324504ddf9cb051a74fd7a3947c6fe71e63884",
+      "license": "MIT"
+    },
+    {
+      "id": "onda-count-schema",
+      "repository": "degueba/onda",
+      "upstream_path": "registry/components/count-up/schema.ts",
+      "url": "https://github.com/degueba/onda/blob/main/registry/components/count-up/schema.ts",
+      "git_blob_sha": "c2a0846b493b7b54dfdc520613386b2198fb2c1c",
+      "license": "MIT"
+    },
+    {
+      "id": "remotionui-motion",
+      "repository": "riaz37/remotion-ui",
+      "upstream_path": "apps/web/registry/bases/default/lib/motion-tokens.ts",
+      "url": "https://github.com/riaz37/remotion-ui/blob/main/apps/web/registry/bases/default/lib/motion-tokens.ts",
+      "git_blob_sha": "164d290f4f38817415345c2e146952eee3c9272d",
+      "license": "MIT"
+    },
+    {
+      "repository": "alexgreensh/anidoodle",
+      "commit": "f746cbd8a7032463bd0bc88ee8ff852599193b8c",
+      "upstream_path": "plugins/anidoodle/skills/anidoodle/engine/src/canvas-core/morph.ts",
+      "git_blob_sha": "93436c327ab25fb55cc09993a8e9db15e5c6b608",
+      "url": "https://github.com/alexgreensh/anidoodle/blob/main/plugins/anidoodle/skills/anidoodle/engine/src/canvas-core/morph.ts",
+      "license": "Apache-2.0",
+      "modified": "seconds, bounded finite inputs, immutable endpoints, SVG adapter; no blot/cover/canvas modules imported"
+    },
+    {
+      "id": "anidoodle-baked-hands",
+      "repository": "alexgreensh/anidoodle",
+      "commit": "f746cbd8a7032463bd0bc88ee8ff852599193b8c",
+      "upstream_path": "plugins/anidoodle/skills/anidoodle/engine/src/canvas-core/character/human/hands.ts",
+      "git_blob_sha": "91f78ca278900633274cf03f7b246fb45c03e277",
+      "support_blobs": {
+        "character/math3.ts": "587c465ec3a663388da96e361842ed5ae78652ef",
+        "character/shape2d.ts": "9c80dbaf3238e22941348de7eea48dc635c04249"
+      },
+      "url": "https://github.com/alexgreensh/anidoodle/blob/f746cbd8a7032463bd0bc88ee8ff852599193b8c/plugins/anidoodle/skills/anidoodle/engine/src/canvas-core/character/human/hands.ts",
+      "license": "Apache-2.0",
+      "local_artifact": "engine/lib/actor-hands.js",
+      "sha256": "d9218cd270064e5268e8ffaba84d7fb920676f02e4270be4c20ba98ae9f4cc1a",
+      "modified": "open/point/relaxed projected and baked to SVG, simplified 0.22px; frozen data only; no 3D, IK/FK or upstream runtime"
+    }
+  ],
+  "failed_lookups": [
+    {
+      "id": "license-bits",
+      "repository": "av/remotion-bits",
+      "path": "LICENSE.txt",
+      "ok": false,
+      "error": "GitHub API error 404: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/repos/contents#get-repository-content\",\"status\":\"404\"}"
+    },
+    {
+      "id": "notice-hyperframes",
+      "repository": "heygen-com/hyperframes",
+      "path": "NOTICE",
+      "ok": false,
+      "error": "GitHub API error 404: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/repos/contents#get-repository-content\",\"status\":\"404\"}"
+    },
+    {
+      "id": "license-bits-lower",
+      "repository": "av/remotion-bits",
+      "path": "license",
+      "ok": false,
+      "error": "GitHub API error 404: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/repos/contents#get-repository-content\",\"status\":\"404\"}"
+    },
+    {
+      "id": "notice-hyperframes-md",
+      "repository": "heygen-com/hyperframes",
+      "path": "NOTICE.md",
+      "ok": false,
+      "error": "GitHub API error 404: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/repos/contents#get-repository-content\",\"status\":\"404\"}"
+    },
+    {
+      "id": "license-bits-md",
+      "repository": "av/remotion-bits",
+      "path": "LICENSE.md",
+      "ok": false,
+      "error": "GitHub API error 404: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/repos/contents#get-repository-content\",\"status\":\"404\"}"
+    },
+    {
+      "id": "license-bits-root",
+      "repository": "av/remotion-bits",
+      "path": "LICENSE",
+      "ok": false,
+      "error": "GitHub API error 404: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/repos/contents#get-repository-content\",\"status\":\"404\"}"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "hyperframes-before-after",
+      "decision": "adapt",
+      "new_mechanic": "two real content slots, divider wipe, elastic hold"
+    },
+    {
+      "id": "remotionui-kanban",
+      "decision": "adapt_with_fixes",
+      "new_mechanic": "card transfer, gap closing, deterministic slot math",
+      "required_fixes": [
+        "same-time arrival tie-break",
+        "arbitrary column population/layout"
+      ]
+    },
+    {
+      "id": "rendercomp-kpi",
+      "decision": "adapt_core_only",
+      "new_mechanic": "rolling digit drums with carry",
+      "required_fixes": [
+        "explicit nonnegative contract or sign handling",
+        "variable from/to number width"
+      ]
+    },
+    {
+      "id": "onda-bars",
+      "decision": "adapt_with_fixes",
+      "new_mechanic": "multiple data bars with stagger",
+      "required_fixes": [
+        "positive max",
+        "first maximum accent rather than all ties",
+        "visible data values if required"
+      ]
+    },
+    {
+      "id": "hyperframes-data-chart",
+      "decision": "conditional",
+      "new_mechanic": "bar-and-line dual-axis chart",
+      "required_fixes": [
+        "remove sample data/network fonts",
+        "voice marks",
+        "seek callbacks validation",
+        "9x16 layout"
+      ]
+    },
+    {
+      "id": "snapcn-status",
+      "decision": "defer_full_port",
+      "new_mechanic": "measured baseline/width, rotating status and accumulating chips",
+      "reason": "1053 lines, React measurement/render gates and coupled UI-core"
+    },
+    {
+      "id": "onda-count",
+      "decision": "skip_duplicate",
+      "new_mechanic": "simple count-up already available"
+    },
+    {
+      "id": "bits-count",
+      "decision": "hold_license_and_duplicate",
+      "reason": "full license text not found; simple count-up duplicates existing helper"
+    }
+  ]
+}

@@ -28,12 +28,12 @@
     "must_avoid": ""
   },
 
-  // Colour tokens written into film/index.html :root. Hex values. House rule: ONE accent.
+  // Colour tokens written into film/index.html :root. Hex values. One accent by default (RULES "Look").
   "colors": {
     "bg": "",      // canvas / page background
     "ink": "",     // headline text
     "ink2": "",    // body / secondary text
-    "accent": "",  // the one accent: logo or primary button colour
+    "accent": "",  // the main accent: logo or primary button colour
     "card": ""     // UI cards and panels
   },
 
@@ -60,7 +60,7 @@
     "bpm": null,          // tempo of the synthesized score, e.g. 120
     "formats": [],        // any of "16x9", "1x1", "4x5", "9x16". The first one is the primary format.
     "music": {
-      "source": "",       // "synth" (original score in code), "file" (+ "path"), "elevenlabs" / "openrouter" (+ "prompt"), "none"
+      "source": "",       // "synth" (original score in code), "file" (+ "path"), "ace" (local), "elevenlabs" / "openrouter" (+ "prompt"), "none"
       "chords": [],       // one chord per bar, cycled, e.g. ["Am", "F", "C", "G"]
       "seed": null        // any integer; change it for a different arrangement of the same parts
     }
@@ -77,6 +77,10 @@
   },
   // Which provider transcribes takes to check them against the script (defaults to the voice provider).
   "transcribe": { "provider": "" },
+
+  // The series style (reference/STYLES.md): only the switches that differ from the defaults. Lands in the brief's "Style" row.
+  // E.g. { "captions": "top, word by word", "character": "ACTOR presenter", "palette": "chapter worlds" }
+  "style": {},
 
   // House notes copied into brief.md. One string per rule, in your own words.
   "notes": []

@@ -4,6 +4,15 @@ All commands run from the project root. Python scripts run as `.venv/bin/python 
 shared venv); `voice.py` and the providers need only the standard library.
 
 ## 1. Voice first: it sets the length and the grid
+**Placement mode:** `timeline.json` → `vo_layout.timing: "speech" | "music"`. Choose `speech` for a new short conversational
+vertical film and `music` for a musical edit. Omitting it preserves legacy `music`; existing projects do not change.
+Speech does not round scene/phrase starts to bars/half-beats; `pre`, `air`, `hold`, `gap`, `after` and `tail` remain explicit
+seconds. Marks become fractional coordinates on the current grid, including a measured grid. Takes and pace do not change.
+Only total duration rounds up to a frame. `audio/vo_layout_metrics.json` reports `grid_padding_s`, duration and seam silence.
+Compare two project copies with identical takes, changing only `timing`; repeat layout → vo → sync → animatic. Choose by
+natural seams and readability, not shortest duration. Tie musical accents to selected speech marks; the synth score keeps
+its pulse without hitting every word.
+
 1. `SCRIPT.md` approved (STORY + `**Voice:** "…" {pre air hold mood pace stress}` lines; rules in STORY.md).
    `python3 scripts/script_lint.py SCRIPT.md` → errors fixed.
 2. `python3 scripts/extract_lines.py SCRIPT.md .` → `audio/vo/lines.json` (ids s1a, s2a, s2b…, character count). If a

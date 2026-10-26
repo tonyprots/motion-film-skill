@@ -1,6 +1,6 @@
 # Notice: third-party work in this repository
 
-motion-film is built on two projects. Their authors keep their rights; our MIT licence (`LICENSE`) covers only what we
+motion-film incorporates the projects listed below. Their authors keep their rights; our MIT licence (`LICENSE`) covers only what we
 wrote. Details of every change: `UPSTREAM.md`.
 
 ## Motion Reel Kit — Lukas Margerie
@@ -29,3 +29,36 @@ If you are the author and want any of this changed, open an issue — we will ac
 The only bundled font is Geist (SIL Open Font License 1.1) in `examples/readme-demo/preset/fonts/`, with its licence
 next to it. The demo media in `docs/media/` were made with this skill and are covered by our MIT licence. Playwright (Apache-2.0) and the Python packages in `requirements.lock` are installed from their
 registries under their own licences.
+
+## Native scene adaptations and local SVGs
+
+`engine/lib/blocks.js` adapts selected formulas and layouts from:
+
+- [RenderComp/free-remotion-templates](https://github.com/RenderComp/free-remotion-templates): KPI odometer,
+  Copyright 2026 Trimora Inc., MIT (`LICENSE-rendercomp`).
+- [riaz37/remotion-ui](https://github.com/riaz37/remotion-ui): kanban move,
+  Copyright 2026 RemotionUI, MIT (`LICENSE-remotion-ui`).
+- [degueba/onda](https://github.com/degueba/onda): chart/count layout,
+  Copyright 2026 Rodrigo Botelho, MIT (`LICENSE-onda`).
+- [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes): chart and before/after wipe,
+  Copyright 2026 HeyGen, Inc., Apache-2.0 (`LICENSE-hyperframes`).
+
+Adaptations replace React and live timelines with pure absolute-time drawing, local data, precision normalization,
+format-aware reflow, occupied-slot calculation and raster invalidation. Exact source blob pins: `library/ports-manifest.json`.
+
+`library/assets/icons/` contains 40 SVGs from each project: [Lucide](https://github.com/lucide-icons/lucide)
+(ISC, plus MIT Feather notices), [Tabler](https://github.com/tabler/tabler-icons) (MIT),
+[Phosphor](https://github.com/phosphor-icons/core) (MIT). Keep each pack's full LICENSE with copied assets.
+Their source pins and SHA-256 hashes are in `library/assets/icons/manifest.json`.
+
+External registry and source indexes contain metadata and links only; their entries are not installed or relicensed.
+
+## anidoodle morphology
+
+`engine/lib/morph.js` adapts `canvas-core/morph.ts` from [alexgreensh/anidoodle](https://github.com/alexgreensh/anidoodle),
+Copyright 2026 Alex Greenshpun, Apache-2.0. Full grant and upstream notice: `LICENSE-anidoodle`, `NOTICE-anidoodle`.
+Changes: plain JavaScript, seconds-based time/velocity, input validation, copied endpoints and SVG rendering.
+`engine/lib/actor-hands.js` additionally contains SVG hand silhouettes derived from `character/human/hands.ts` and
+math3/shape2d: open, point and relaxed poses projected to 2D and simplified at 0.22px. Frozen data only, no 3D runtime.
+The assembled presenter includes these Apache-2.0 hands; its head, body and expression rig remain original.
+The rest of the engine, audio pack, full character head/FK rig and reference images are not included.

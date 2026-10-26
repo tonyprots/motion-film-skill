@@ -39,6 +39,13 @@ def bt(x):   # beat → seconds on the measured grid, same as sync.mjs
 out = []   # (level, what)
 def say(level, msg): out.append((level, msg))
 
+if TL.get('visual_format') == 'image-per-phrase':
+    visual = load('visual-events.json')
+    if not visual or visual.get('version') != 1 or not isinstance(visual.get('events'), list):
+        say('FAIL', 'image-per-phrase requires visual-events.json version:1 with events; captions are not prop actions')
+    else:
+        say('NOT CHECKED', 'visual event declarations are not rendered evidence: run render.mjs --story --all, then independent critique')
+
 cues = (load('cues.json') or {}).get('cues', [])
 vo = load('audio/vo_placed.json', [])
 caps = load('captions.json', [])

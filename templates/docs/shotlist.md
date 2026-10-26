@@ -20,6 +20,18 @@ number in "On-screen text" is in the voice or a source. Check: `python3 scripts/
 | … | | | | | | | | | | | |
 | n | | | | End card: logo + CTA | | | | | | | |
 
+## Visual logic before voicing
+
+Three semantic hooks: first line, first image, promise and payoff beat. For the main metaphor, record the selected answer
+and why alternatives lost. Preserve the hook in a user-supplied finished script.
+
+| Beat / phrase | Thesis | Why this prop | Before | Action on a word | After | Carrier into next beat |
+|---|---|---|---|---|---|---|
+| | | | | | | |
+
+For format 9 transfer real actions into `visual-events.json` (PROPS.md); `render.mjs --story --all` supplies evidence whose
+meaning is checked by an independent critic.
+
 ## Music
 Synth sections (timeline.json music.sections) or supplied track + where its drops fall.
 

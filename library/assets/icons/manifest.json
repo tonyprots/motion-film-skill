@@ -1,0 +1,965 @@
+{
+  "checked_on": "2026-10-26",
+  "items": [
+    {
+      "pack": "lucide",
+      "name": "arrow-down",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/arrow-down.svg",
+      "sha": "3244b63e3147e5e8b359f20458106bc74572d331",
+      "sha256": "2b641c7a59d39450edfed72067fcc9940a1a316a737346af23b4b9103c0689f2"
+    },
+    {
+      "pack": "lucide",
+      "name": "check",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/check.svg",
+      "sha": "5abe1527434e7b251bde0661f99af96178976d8c",
+      "sha256": "7f33acc9a77a61659531044525fc008edebe215bf4dcf1c789c8674ad3277db0"
+    },
+    {
+      "pack": "lucide",
+      "name": "arrow-up",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/arrow-up.svg",
+      "sha": "50a81cb370d77bccdab4e91c1aeff36b763cdfbf",
+      "sha256": "8c22c25874c80bb062bef985d207d8f1d4a4d7847237d0a8cf720a3235968518"
+    },
+    {
+      "pack": "lucide",
+      "name": "arrow-right",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/arrow-right.svg",
+      "sha": "433ded3fcc5f7bd2b6a59356c6ffe8eceac6b7e3",
+      "sha256": "288397fdb73bb4f783cf9eabb726ff47357df1d4e3f1201dd748090579f108b9"
+    },
+    {
+      "pack": "lucide",
+      "name": "arrow-left",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/arrow-left.svg",
+      "sha": "b40bff851c85eff44f678eb7984fc6070d7ea721",
+      "sha256": "c5f4b88076108eb1a0d95336e1aa7e7bb1419a3a92af96f6247d88cd3456f933"
+    },
+    {
+      "pack": "lucide",
+      "name": "x",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/x.svg",
+      "sha": "e31794349d3eecea1b3ae8e974b68bb8f4becda7",
+      "sha256": "4a9cdab38fbb96162e7dace28e33f4ca0e49d8963a6162abc3d4691b7d675117"
+    },
+    {
+      "pack": "lucide",
+      "name": "chevron-right",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/chevron-right.svg",
+      "sha": "db62a0c20181edd6173722b2a483e0b85e30f240",
+      "sha256": "2758143d7b2434e4aa7307dfd34405c87909ff4052f21b5f3f40d45224b4f19b"
+    },
+    {
+      "pack": "lucide",
+      "name": "plus",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/plus.svg",
+      "sha": "41f92bb93eb6626368d71c9884127bbcf7d3ccdf",
+      "sha256": "7f6af73bf1ff6c4bca3f18351c8d1bdec6749c0c2530c4de5da85d520c21df17"
+    },
+    {
+      "pack": "lucide",
+      "name": "users",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/users.svg",
+      "sha": "e31958f8795715f31b86d3c633652c20acb3a325",
+      "sha256": "eeed488a1ec95ba730dd69996536fb65061d6ea273afb2429ae47e65eebf401c"
+    },
+    {
+      "pack": "lucide",
+      "name": "minus",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/minus.svg",
+      "sha": "75093e27c20965c9e37fb9dcef9f939746c67578",
+      "sha256": "a0c743ab6dbf545d8a6e19ef3874f48ede686ce68d25e231bd81f540d97b1f19"
+    },
+    {
+      "pack": "lucide",
+      "name": "search",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/search.svg",
+      "sha": "03e442a5440cff92c219fe3a3c1f2b0788d30701",
+      "sha256": "283d371c2e433817bb9c0c8310caa6c77fa4177c0f4f1168d9c83b97af7389dc"
+    },
+    {
+      "pack": "lucide",
+      "name": "user",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/user.svg",
+      "sha": "8e61592bbf912f26d2e6583dffd9b1e8ebec0193",
+      "sha256": "eae3b3b2400031ddd5ec869327d127a96014e5f63aa6e06658dd5d4e90661aa8"
+    },
+    {
+      "pack": "lucide",
+      "name": "calendar",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/calendar.svg",
+      "sha": "4679497031a9540a311f6223da003ce26f638e24",
+      "sha256": "312ac8e715ac2b71bcc942dec2e8de9c1929085474f08885af35b563f6aa7a0b"
+    },
+    {
+      "pack": "lucide",
+      "name": "mail",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/mail.svg",
+      "sha": "4cff729d97c4b4daacb4d86220bf45b8e5c199fe",
+      "sha256": "3236a51d5b8ce9b0528cf2e6ad07e527bd636dded6f5a9d656072052b99caea8"
+    },
+    {
+      "pack": "lucide",
+      "name": "file",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/file.svg",
+      "sha": "161be7a29fb7c7b808eb57722fc544231a5aa5e4",
+      "sha256": "499039795d7412d67664ff79d2eb6b7412e746b24c18c8fd8aba383c24ddada0"
+    },
+    {
+      "pack": "lucide",
+      "name": "house",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/house.svg",
+      "sha": "10e4097e290fdb2f1f919b264bf4e3095348de7c",
+      "sha256": "28216c479005731ef5e382e7d8627eda2b129b019eb1f3d9de9f5915576d448e"
+    },
+    {
+      "pack": "lucide",
+      "name": "folder",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/folder.svg",
+      "sha": "ef69b345f200f1542ad9a2dfca7d41d036910f4b",
+      "sha256": "f0d92b94b797a8ab7d4c4ae33c3236c47f64068351b4e14bdb5014ee42898a39"
+    },
+    {
+      "pack": "lucide",
+      "name": "clock",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/clock.svg",
+      "sha": "b6ae2834e60fc09547007a89067994e8b5ea55b5",
+      "sha256": "e9d3e3acf4d1c280fcf8092293439dc0a4756a908ceb859de144b12451cd1cb9"
+    },
+    {
+      "pack": "lucide",
+      "name": "file-text",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/file-text.svg",
+      "sha": "67dc5b9d1a07a1b501ba87d62563b914c059096e",
+      "sha256": "52ca55846c202335fb870c8aa23e9345630ec10489303756d62e750f7109605c"
+    },
+    {
+      "pack": "lucide",
+      "name": "settings",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/settings.svg",
+      "sha": "4c6263af909841a3911f41a385021778eacba736",
+      "sha256": "0ae27fd0f81999229e3127ac96c5b32edfea448e291d509e76212b917551d66b"
+    },
+    {
+      "pack": "lucide",
+      "name": "chart-column",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/chart-column.svg",
+      "sha": "ef98cf9b608890ebf96f8220e5e1814bbf89e1c7",
+      "sha256": "80664a4c5ca1bca10bcb88c1a99f62593c94d61d72d3a4bbf577eb3f3ea4da57"
+    },
+    {
+      "pack": "lucide",
+      "name": "chart-line",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/chart-line.svg",
+      "sha": "e5fc87c5480da9dbd42c800057a90f0f595648c1",
+      "sha256": "8736da84214736c4fd579b52b8a41f454cddf0dba9578618eee5ae8e22f40645"
+    },
+    {
+      "pack": "lucide",
+      "name": "chart-pie",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/chart-pie.svg",
+      "sha": "264a0b0e051e924bdf031cd53bd2cfde552a6da2",
+      "sha256": "1ae765b638fe588b392f7da6e2c274fb438b257d936f9f4c7d548c73d5f9d8a1"
+    },
+    {
+      "pack": "lucide",
+      "name": "key",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/key.svg",
+      "sha": "e9e4eab5a61c49b05af3c361abd20e623e8d0535",
+      "sha256": "1f0bdf32374dacfca8cfc7f942c59d27a438e409dccaef11a8ce57de9365ae60"
+    },
+    {
+      "pack": "lucide",
+      "name": "map-pin",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/map-pin.svg",
+      "sha": "5d73fbd48b1e663493efaa4523b6c105f996146b",
+      "sha256": "16f1042a62f1bda20ebab8bfc1cb79c0be285c980dea6c2c733a17902631405b"
+    },
+    {
+      "pack": "lucide",
+      "name": "shield",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/shield.svg",
+      "sha": "e40d7d2ba8de46aa649c1ed5b1fce7d6ed2939bd",
+      "sha256": "be32f6a86df7cbe43a83c439dd8849e5bcf5145e484d23420c20d8b98a78e82b"
+    },
+    {
+      "pack": "lucide",
+      "name": "lock",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/lock.svg",
+      "sha": "b2b32d1293ad7b767e5b7907daaa2846e3898910",
+      "sha256": "d2cfe60cac8deaef36442b5c8218c1e61abe18222784b2a370ea090d13fca840"
+    },
+    {
+      "pack": "lucide",
+      "name": "monitor",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/monitor.svg",
+      "sha": "e869f2f27acef115bc121a0bf62e1d01834c6b17",
+      "sha256": "d1a443233345724859de8e4fb48968ba91e885e12ddbd710701548bd91b39428"
+    },
+    {
+      "pack": "lucide",
+      "name": "globe",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/globe.svg",
+      "sha": "53c80ee35dd294b0193642f0731010e033ba0618",
+      "sha256": "82c6b8fa0b8e8d775ec9becd86f74a4e50bff7bee4c81f7362de45348504f14d"
+    },
+    {
+      "pack": "lucide",
+      "name": "smartphone",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/smartphone.svg",
+      "sha": "fc840174a324d965ad4dd420a1c99530a414c326",
+      "sha256": "f9fdb700b50feb5fc6436f53eb9813e9eb56a9071ac4cdcba69c7f7c1c13877d"
+    },
+    {
+      "pack": "lucide",
+      "name": "laptop",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/laptop.svg",
+      "sha": "613afff3caa54ee0be639577fa09add361c777a7",
+      "sha256": "b8389056d3b7125670b60a4bd03e6d4ecc440e228f4140e7b66c4e97dcb0dc70"
+    },
+    {
+      "pack": "lucide",
+      "name": "database",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/database.svg",
+      "sha": "f95db0e3f40633742b292b2f64f5d9c37e3eb157",
+      "sha256": "471eb14bc8d144896a82dfc4aa9daf350f769f0896f4bef33e50aabdbb51130d"
+    },
+    {
+      "pack": "lucide",
+      "name": "server",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/server.svg",
+      "sha": "a8b6ad92b3cc90688bfaa4d259dce75b26c81d2e",
+      "sha256": "f7bea54b609dc488f3b848995014041846b2443fd2a880653e9e583d7a034f61"
+    },
+    {
+      "pack": "lucide",
+      "name": "upload",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/upload.svg",
+      "sha": "ce355073f92b8947dd9e439c6ff67e6a13b837ae",
+      "sha256": "42816ee1fa0e9d3b82272a97615c1e562b0e9de64780ebf21963bc1db0ceffd1"
+    },
+    {
+      "pack": "lucide",
+      "name": "download",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/download.svg",
+      "sha": "5c75527bde1fe8259efb72c5b590bedfae28c05e",
+      "sha256": "3daeee13ded5a3afa2198b1bb4e2262d163922f97d96ac6ff9953e8ed4fe039d"
+    },
+    {
+      "pack": "lucide",
+      "name": "link",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/link.svg",
+      "sha": "645e746a888689bb7b37e35b39873037d6b9f6be",
+      "sha256": "4f3237183dcaabfac92f4e94c776a9a9e45c3c5e77a921061a6b34b61eb5413f"
+    },
+    {
+      "pack": "lucide",
+      "name": "cloud",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/cloud.svg",
+      "sha": "96c52fc8ef271af07d51f254431c8fb4e408c0bb",
+      "sha256": "28a34022ed00177eb1f218eea5d2b7af30d09b529187fe32219e4dd8ea2b9740"
+    },
+    {
+      "pack": "lucide",
+      "name": "git-branch",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/git-branch.svg",
+      "sha": "06398f448481cb8276a9afa449b81ca13bae39d2",
+      "sha256": "041f04acc8f92657b849540f0440e2e85d0df0b8da2365611e81b9bebfafc4eb"
+    },
+    {
+      "pack": "lucide",
+      "name": "workflow",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/workflow.svg",
+      "sha": "20784a2ab7cedbf81fc5f8a6a8f6fcdc5d6552ea",
+      "sha256": "ae99ea8f56a2835a2cca35b2fbb57643ab73443610970dba23e24bd9df75cfec"
+    },
+    {
+      "pack": "lucide",
+      "name": "wallet",
+      "repo": "lucide-icons/lucide",
+      "upstream_path": "icons/wallet.svg",
+      "sha": "9d63559bba6089c644b17d7bb6243a1fae01001e",
+      "sha256": "76c9596f629a2abf9cfabb573452f3113ed7e9502c699aa811e630f156eb7556"
+    },
+    {
+      "pack": "tabler",
+      "name": "arrow-left",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/arrow-left.svg",
+      "sha": "182b91c5efc24129dd14bd29d31a842f2e5362d2",
+      "sha256": "12af90f1bb49b7ae62792ecf38d2fa8b39daa4753e39ebc3520d07482a90704f"
+    },
+    {
+      "pack": "tabler",
+      "name": "arrow-up",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/arrow-up.svg",
+      "sha": "60b0cbcb428b633cf689d3b47510c505f377b9cf",
+      "sha256": "c0a58436629c59996826b7980b0cbdfff51bfa289eefb2cceee494a964c5105e"
+    },
+    {
+      "pack": "tabler",
+      "name": "arrow-right",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/arrow-right.svg",
+      "sha": "658e5c4d13a51221f38bc07f4ebf0dfcd4d55260",
+      "sha256": "7e602a26d53e78ceb788f38cb89ec1d1091130c56d7829ca294b7ed0642277c6"
+    },
+    {
+      "pack": "tabler",
+      "name": "chevron-right",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/chevron-right.svg",
+      "sha": "91195257d5e343125828dc54b3dbbc55d2babbac",
+      "sha256": "83733bb6e03e1d20fd2674d06a493642c8ea6eef76c44ebb2239b9ef17dedff7"
+    },
+    {
+      "pack": "tabler",
+      "name": "check",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/check.svg",
+      "sha": "8457c556102d84eb91162fc04bd527eeb883fd62",
+      "sha256": "e206067a7d570997b5b3a7d30ab287c0b15a492787649a8b96dff8fad2862fbe"
+    },
+    {
+      "pack": "tabler",
+      "name": "x",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/x.svg",
+      "sha": "d038c3d978ca4364a2bc184adeeef63ff63a5c95",
+      "sha256": "9350785360414c39450c3505f17d1745e55a7534edace8548e30cf49e3727d43"
+    },
+    {
+      "pack": "tabler",
+      "name": "plus",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/plus.svg",
+      "sha": "388566402af6ce21eb52e683834d943f9a468f43",
+      "sha256": "9cc497d4cc1eb38cf9daae18f41ffdc1a5e2a8431d70247b0854978f303f28d6"
+    },
+    {
+      "pack": "tabler",
+      "name": "arrow-down",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/arrow-down.svg",
+      "sha": "a49052ebf5b4b79dc2c885ac019a75c4be83b242",
+      "sha256": "34efc2d5737ffa3f29f8056e6d861ea8218d8f40858539a959a9482811f6bd05"
+    },
+    {
+      "pack": "tabler",
+      "name": "minus",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/minus.svg",
+      "sha": "361d40ae1f79d7a57c7afb303dfa5f16b72db6bf",
+      "sha256": "a6556d9c556316b946c28af277be016b4d56ad8618dc2a731ce455100438c0ea"
+    },
+    {
+      "pack": "tabler",
+      "name": "clock",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/clock.svg",
+      "sha": "9c31e876efddef0342f81a8799075b50d19c1d52",
+      "sha256": "971b0b2d3b5b17ae240cd3aac1a09710ab680d8c41900f1a37a0e430994d7fda"
+    },
+    {
+      "pack": "tabler",
+      "name": "calendar",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/calendar.svg",
+      "sha": "84acf27c2bb01a7a1ab3b85be710ead9054876cb",
+      "sha256": "4861f170e9b1fa72eaa7cdefc3c7ca64ca6a10b9c2e3a13e1aceb4725f266d8d"
+    },
+    {
+      "pack": "tabler",
+      "name": "search",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/search.svg",
+      "sha": "e894f96200eb75972169fc7c58be7df14ecb8645",
+      "sha256": "3dd53b9606283dfa0adcb0b10a7d9a4432369d4bebcfacf67f80fbe358381c34"
+    },
+    {
+      "pack": "tabler",
+      "name": "user",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/user.svg",
+      "sha": "6cdc9ac644e810aeed1b2d15df46aa6e0a0332fd",
+      "sha256": "63554429f551522ea578a9bf72d1d350bd0ffdb8ede3af92a05e92d71cab6b9c"
+    },
+    {
+      "pack": "tabler",
+      "name": "users",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/users.svg",
+      "sha": "8dd81b6b67641d997d8761a0e26746fc080becb6",
+      "sha256": "a9892bcba1adad20184c0b50641b1a96a56fb9ef5135ff60462c664874021cc3"
+    },
+    {
+      "pack": "tabler",
+      "name": "file",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/file.svg",
+      "sha": "f4a530c5665eaf512849f0909c28867c9ce94920",
+      "sha256": "c3995cdcfc6b74ff439efd5a8817c14ac4f821ae4435c0d2e6c021e3f39a6808"
+    },
+    {
+      "pack": "tabler",
+      "name": "mail",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/mail.svg",
+      "sha": "ba0355a71f969f147e1f6838c4a8de68789b4d02",
+      "sha256": "94ca7eed1a9b89c7d3345e7c62a622060a502645b4ae10b7ed160294583d3c33"
+    },
+    {
+      "pack": "tabler",
+      "name": "chart-line",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/chart-line.svg",
+      "sha": "0e52c5e4468541538df1b452fc17e70c5f81d580",
+      "sha256": "91ae4d96cfc8926df2c715438bd539da2703dc158828336c227ce23e62ca7cb4"
+    },
+    {
+      "pack": "tabler",
+      "name": "settings",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/settings.svg",
+      "sha": "c94891403e451a07bf69053e98d1a57e424759fc",
+      "sha256": "ef9cf42d822c00b4fad5bc5eeceddd4e1ec3774bb7ddd09891d0fba274bc3e95"
+    },
+    {
+      "pack": "tabler",
+      "name": "chart-pie",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/chart-pie.svg",
+      "sha": "db5418b265dd7ae8cf6c403c2ee91c6221c763a0",
+      "sha256": "cf800f8dc1b3d6474dc79f6914c168b299e67752d1ff6e6bf653774d185e5f1f"
+    },
+    {
+      "pack": "tabler",
+      "name": "folder",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/folder.svg",
+      "sha": "354a3df83fa73a23432e5e85f4df9c346d140018",
+      "sha256": "acdf398775addb8104673e5a8ef29d01d40184c6a5b3c62a93f10309cf9ef253"
+    },
+    {
+      "pack": "tabler",
+      "name": "home",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/home.svg",
+      "sha": "185788d9ea4bedc5f604eff05ed64441ffb70074",
+      "sha256": "069600f461f3e967685765723a851af7b35f24b715e03d41a2928152cf75644c"
+    },
+    {
+      "pack": "tabler",
+      "name": "shield",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/shield.svg",
+      "sha": "fdfac0021e79e95d780c80857ebf52a8dd0fe6ed",
+      "sha256": "254faf50fe337be66083b5292d7a1d548bb24289a26a3496e367ea341c7869da"
+    },
+    {
+      "pack": "tabler",
+      "name": "chart-bar",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/chart-bar.svg",
+      "sha": "df44d129eb6dd8cad94103cc701f7a924dc8a367",
+      "sha256": "ca1d3717da5007a46a2cf7521f9df558fd6e159874696dd400626809ead41162"
+    },
+    {
+      "pack": "tabler",
+      "name": "file-text",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/file-text.svg",
+      "sha": "e1d777f26168c95becb6636300590733e73919be",
+      "sha256": "afc807ae397fc2419ac5cbca6a1e085a5f761277397682cbad3d907ca78693f5"
+    },
+    {
+      "pack": "tabler",
+      "name": "device-mobile",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/device-mobile.svg",
+      "sha": "2fc6f41f05acb6c14946db54b3986080e127b50e",
+      "sha256": "2f9d4b1a140f3b9c9057efa5964bc8a7a135ce5d32dfe4752ebdad9d086d5413"
+    },
+    {
+      "pack": "tabler",
+      "name": "key",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/key.svg",
+      "sha": "0e34069488a866e1a2cc112d3ef75b3244ce63ed",
+      "sha256": "2aed9dbae011d377c94cfee3ea68326fa98a7510964a9995dfe59c6610219046"
+    },
+    {
+      "pack": "tabler",
+      "name": "map-pin",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/map-pin.svg",
+      "sha": "7291ed17118aebcf2b81f28ab08fa3af52233cc4",
+      "sha256": "682a0c629579341afd218175d96489747a35bf0a75e3177616f819320cb69f67"
+    },
+    {
+      "pack": "tabler",
+      "name": "database",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/database.svg",
+      "sha": "0f5f7d864396aa3b773a89faaade4e6a0e72eb5d",
+      "sha256": "7cdcca11c1555d48e19c2fcd2fce4420cbec734f3fa3d28274f8167a796ee0d6"
+    },
+    {
+      "pack": "tabler",
+      "name": "device-laptop",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/device-laptop.svg",
+      "sha": "95806ec8ad348ef3919e25cac9152f2d7adfe391",
+      "sha256": "2a0fffa65ddefd1017cbd7bd71675d72b5ca0748176cc39cda17600108665ed9"
+    },
+    {
+      "pack": "tabler",
+      "name": "world",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/world.svg",
+      "sha": "d8c29cd38ba88ac7fe3d05aed8e067dedf48a162",
+      "sha256": "d0dfc538f966d03b72a9fe872fbb567d5e84db9d24b95af032305404ef71f587"
+    },
+    {
+      "pack": "tabler",
+      "name": "device-desktop",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/device-desktop.svg",
+      "sha": "33ec1295640213d114104fd40c38a6f67376fceb",
+      "sha256": "2fdd2150904a844185250f26453a02f31ee9d77a1f936a1df9c2ecd77cfc788d"
+    },
+    {
+      "pack": "tabler",
+      "name": "lock",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/lock.svg",
+      "sha": "f66fe54b54c750afcddaf213926b06e08708b77a",
+      "sha256": "407856048124fdd63239f75a3640ca8f20a9acbc1f49cac9de0bcdb1cb42ec5f"
+    },
+    {
+      "pack": "tabler",
+      "name": "sitemap",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/sitemap.svg",
+      "sha": "741ee9461d63b113c79f96e33aa93868735646aa",
+      "sha256": "bca7c29b1f76238c1f0f54f241f1c38524aa9de314100a7d459a2ba9ffe29ea8"
+    },
+    {
+      "pack": "tabler",
+      "name": "download",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/download.svg",
+      "sha": "2d108580a85f3a7e5bddffbef778434178b6349d",
+      "sha256": "c13f6f9cf87deee99e331622169efd59cd764b376994540347e50d6bb5e2e0ef"
+    },
+    {
+      "pack": "tabler",
+      "name": "git-branch",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/git-branch.svg",
+      "sha": "221cea8bedfeeb1d283f48b6a8132cf841387b72",
+      "sha256": "7c45a13d2b0e6a6915730471345ebf7fbe0374bcd61d19679d59c5ffa38a234b"
+    },
+    {
+      "pack": "tabler",
+      "name": "wallet",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/wallet.svg",
+      "sha": "1c6d84550fa5494f5bcd67429ee18cf10b541143",
+      "sha256": "1cfac2833c5f65a9e3d3309ccc21c6c1cebec4fabf49a30ab75987cf09fb9a38"
+    },
+    {
+      "pack": "tabler",
+      "name": "cloud",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/cloud.svg",
+      "sha": "7fe307a569e6cfa022ffa66a9567a1c4de33ccea",
+      "sha256": "abbbc58eb9bdd3e5b1f41b28b1d9743274d79762d248c88d72455c47f674f8e2"
+    },
+    {
+      "pack": "tabler",
+      "name": "upload",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/upload.svg",
+      "sha": "b20864d2e084b028d4b9a1b7238480d336a1e706",
+      "sha256": "8e6f247503da3f943a6751c2859c63cac81d8f2f6b66cf3baac6beb57a33ca01"
+    },
+    {
+      "pack": "tabler",
+      "name": "link",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/link.svg",
+      "sha": "4e4ef78d00b94a2832f5b0cfc009da5cbffe7e45",
+      "sha256": "27e34930284da308ed31c4ddc9c14fc333db08be5b6c42bcbf99f77ec5bad626"
+    },
+    {
+      "pack": "tabler",
+      "name": "server",
+      "repo": "tabler/tabler-icons",
+      "upstream_path": "icons/outline/server.svg",
+      "sha": "2cd69135f2c2885a60284966bcd0eb4444a73b76",
+      "sha256": "6c4aa71ca6fd11a738abf7972ad893f808e2e25d6181b5b329784050f95490d2"
+    },
+    {
+      "pack": "phosphor",
+      "name": "arrow-up",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/arrow-up-duotone.svg",
+      "sha": "32a1e23f3dee91557c37d6531b82814ae464cdf5",
+      "sha256": "d77b5f82f631582750d30a6cd8384904ab53928eadbfc881f3e172a9926ecb76"
+    },
+    {
+      "pack": "phosphor",
+      "name": "arrow-left",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/arrow-left-duotone.svg",
+      "sha": "3dfbbeac8bf5ac2a46e9cd5f895b47f1b7bbafc8",
+      "sha256": "0e2893869efbf29601a4b0583fb202827a2c489839446731eb5be662749401f2"
+    },
+    {
+      "pack": "phosphor",
+      "name": "caret-right",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/caret-right-duotone.svg",
+      "sha": "0044afe529cabd8a3fc95acd817fd2a1cb3a7f48",
+      "sha256": "1298bc9758c5e12ed20490acffa212f4bb27c167b194c3aa41054dfdf91c33f4"
+    },
+    {
+      "pack": "phosphor",
+      "name": "x",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/x-duotone.svg",
+      "sha": "d3d654c50430dfaac76c5eee16dafab44bf4b148",
+      "sha256": "461ffbf05414c4b2e19a3dbbc1f71bf6027c08347929084c80506dbf95b0f5ac"
+    },
+    {
+      "pack": "phosphor",
+      "name": "check",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/check-duotone.svg",
+      "sha": "50b0b3867d627c9e656bd87b8db3543211dd1b7c",
+      "sha256": "046ae0ee8f25ffd16a3b333edf562e347e54b9985152ea316e4b12f1cccc677e"
+    },
+    {
+      "pack": "phosphor",
+      "name": "arrow-right",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/arrow-right-duotone.svg",
+      "sha": "4eaf0cc3c2976d693c46d26c5cd5b155e9c2d609",
+      "sha256": "422440dacb53fc077c33bb734c9ba3f4f40ef7214dff4532242fccef84d43e37"
+    },
+    {
+      "pack": "phosphor",
+      "name": "plus",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/plus-duotone.svg",
+      "sha": "3c07b40cd78dffe33e70bc355bef71a79a77f6b2",
+      "sha256": "2d7e36b938d2d8547cabd83fc4cfb1058ebe4e2391bdc0a58e8058c5c86845bd"
+    },
+    {
+      "pack": "phosphor",
+      "name": "user",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/user-duotone.svg",
+      "sha": "c24f5716cb965903297c93f3ac3f68f861e6d9d4",
+      "sha256": "edc1da7ba587a6bf250b19a72b93d68a857fd9d9302c8f732330c9359fd37958"
+    },
+    {
+      "pack": "phosphor",
+      "name": "minus",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/minus-duotone.svg",
+      "sha": "f47d92e0040d713f3369c0014a4f8eba87fff556",
+      "sha256": "3d33e3bff42a522a4b89ceb3d41f0885b85c900f675e1cc0d6d0291f07ee12b6"
+    },
+    {
+      "pack": "phosphor",
+      "name": "arrow-down",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/arrow-down-duotone.svg",
+      "sha": "9b87193416a6fcbdfbfd4b3ef08487b0b1924865",
+      "sha256": "1d8fafdef7a91c3c337cd455cc1ed4de3d1faafad4ad5770ec87441a1ca7d29d"
+    },
+    {
+      "pack": "phosphor",
+      "name": "calendar",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/calendar-duotone.svg",
+      "sha": "01ecde5f31d93a5df2c657481d9e0752e900500c",
+      "sha256": "dfb06637ea758fc1dbff0c90d374a748ee482de35804a7e834e490dbb76fdefe"
+    },
+    {
+      "pack": "phosphor",
+      "name": "envelope",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/envelope-duotone.svg",
+      "sha": "9237e2c38d65cb0cc4ce44e22deb7525133b4900",
+      "sha256": "fc9b570188cf61107370aafa5da36fb18c5500c9d271f254f11fca47d81c8af9"
+    },
+    {
+      "pack": "phosphor",
+      "name": "users",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/users-duotone.svg",
+      "sha": "77dc2862c8cd5ea2b1916a1ac7027ac195f9a0fc",
+      "sha256": "e55b770ecd5533ab79cdb127519e0d3be004d108cd21506601887068bc140ab3"
+    },
+    {
+      "pack": "phosphor",
+      "name": "magnifying-glass",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/magnifying-glass-duotone.svg",
+      "sha": "10a6dc90e7f9acf45e50a8e3c60b570cf4113d6e",
+      "sha256": "4d4805b059b49add1e3424b53b05ba8f5bd6031ca551540b32b0a61cfb0ec7d9"
+    },
+    {
+      "pack": "phosphor",
+      "name": "clock",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/clock-duotone.svg",
+      "sha": "5a2e6bc8b2fee8ab949a8ca7ffb5d0e7d5373efe",
+      "sha256": "9fcc32f106739d65d71bf938d2fb926b4f0845bb0f0934ca5eb308f71fdf7ad5"
+    },
+    {
+      "pack": "phosphor",
+      "name": "file",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/file-duotone.svg",
+      "sha": "ff8a54b2bf8216baa2f2acf51ee32cf5a7597d29",
+      "sha256": "7e9d6d237e81741b4fb67b0f6398e64e88100ff8a5bc49e9ebaa25fe137a0336"
+    },
+    {
+      "pack": "phosphor",
+      "name": "file-text",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/file-text-duotone.svg",
+      "sha": "daff55db854ffd779edda46423bad37478bdc941",
+      "sha256": "2843d192111fa60ef4d54457d51fbdefb2fcbeb73f02e794a10965fef62efe1a"
+    },
+    {
+      "pack": "phosphor",
+      "name": "house",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/house-duotone.svg",
+      "sha": "3ff860fa0dfbb517f42c5bdb6705d24ca5183df2",
+      "sha256": "8ef72773ff7d2bfec6bf9d9de8543ff520ad50dbaef6bbbb50a1fcc5024bcc45"
+    },
+    {
+      "pack": "phosphor",
+      "name": "gear",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/gear-duotone.svg",
+      "sha": "421e65f9e1908e3e53f60a9747b3ae620f748783",
+      "sha256": "548ea6d813ae294c4c822bef1ee8f806db62a65d26dc7a24b1ff11812cb573de"
+    },
+    {
+      "pack": "phosphor",
+      "name": "chart-bar",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/chart-bar-duotone.svg",
+      "sha": "fe482a826d810f1d7815612c4cb2e4eca0f8d0cb",
+      "sha256": "4c9853d8965d7190f80bf8cca32225f8c03386f813b25240a7e82ca21c669eea"
+    },
+    {
+      "pack": "phosphor",
+      "name": "chart-line",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/chart-line-duotone.svg",
+      "sha": "7856ed7db17cab9982f8d45af332a4d695cff50f",
+      "sha256": "0de348b6d55ada817d8c318e6f5d36bd3f90ec384285c3069d26da558e8ba9b3"
+    },
+    {
+      "pack": "phosphor",
+      "name": "chart-pie",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/chart-pie-duotone.svg",
+      "sha": "d4e0b5435a31f4c8c45cd239510b4279b1aef3f7",
+      "sha256": "86cd25588d04bbcf6214625024b61f44d4bbe65390f419a45c69a7b1764bd236"
+    },
+    {
+      "pack": "phosphor",
+      "name": "folder",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/folder-duotone.svg",
+      "sha": "1865dd2de75a1b8eef747a80ead32e63b2c95ee2",
+      "sha256": "57adad53c4738409a1384e28cc1e8c000a889c5287d93844fc9f18748d853d69"
+    },
+    {
+      "pack": "phosphor",
+      "name": "shield",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/shield-duotone.svg",
+      "sha": "daf6062dcfb1f1ccd077e62332083f74ff5feb40",
+      "sha256": "48b414979a53f09ef553260983ec369ff2b430414b322fa036362170309ab2cc"
+    },
+    {
+      "pack": "phosphor",
+      "name": "lock",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/lock-duotone.svg",
+      "sha": "67f18f44fadf19069738854a3dc1848625171af9",
+      "sha256": "c8cea77f2461432ca8b3e0b888ff6686e174a5bc7b002cdbbe4ea9b2c089288d"
+    },
+    {
+      "pack": "phosphor",
+      "name": "globe",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/globe-duotone.svg",
+      "sha": "83497b10d808c34aece8869ca438152c190e1fb1",
+      "sha256": "4b9ca792aa0b1609ba27205e90a67c5a8e5f15bc98b85ff8299b4feaf3cecc1c"
+    },
+    {
+      "pack": "phosphor",
+      "name": "key",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/key-duotone.svg",
+      "sha": "7dc84a039642f2f7f191ae19d9280e5f1bc6f2da",
+      "sha256": "dc6960281afe40fdfa5bddb07d7f5f8a4d098298885df40888fd9c7e320ff42f"
+    },
+    {
+      "pack": "phosphor",
+      "name": "map-pin",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/map-pin-duotone.svg",
+      "sha": "bb08181c85944b3f2321b3f3525afcf152619cc5",
+      "sha256": "bb38fe185d90cb0cda53d7a73bd5cab8686aeaf69596f26047ccd08b6b794af0"
+    },
+    {
+      "pack": "phosphor",
+      "name": "monitor",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/monitor-duotone.svg",
+      "sha": "e105ce52ee62274f7313f36e1f3c4103fd8ab6d3",
+      "sha256": "6d66ec94a7bf4d48ef278ab5b3190124d6979804994f638c74e8e7a21c5a9511"
+    },
+    {
+      "pack": "phosphor",
+      "name": "laptop",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/laptop-duotone.svg",
+      "sha": "d3b7ab47aa7d133b6f640d3a0fabc120133bbd9b",
+      "sha256": "a8147318bd6a1fadff40cba31810148a4fd481aff43c2604d11ec35f4eace5cb"
+    },
+    {
+      "pack": "phosphor",
+      "name": "device-mobile",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/device-mobile-duotone.svg",
+      "sha": "f7dc1a41ad9ef127e3eadab86ef7d5495d05e2a6",
+      "sha256": "3bfc1c4dd8d0a705c0135ec834d72a2ec6a4553b6e8532b0459e0b8486114791"
+    },
+    {
+      "pack": "phosphor",
+      "name": "database",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/database-duotone.svg",
+      "sha": "a0fec33023d0551b69259b7852b916f52cae561e",
+      "sha256": "539a05b299c24be6646df67994b825dd2d197a9e7141433010a34ca658a822ac"
+    },
+    {
+      "pack": "phosphor",
+      "name": "hard-drives",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/hard-drives-duotone.svg",
+      "sha": "41db986f108166dbe3be27ab9e4f482f691d6b93",
+      "sha256": "071006ea8fbf21a766f2f457520c745863a11c0d9bca3d7a0a319cd2123530cd"
+    },
+    {
+      "pack": "phosphor",
+      "name": "cloud",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/cloud-duotone.svg",
+      "sha": "fe2b65562a8edbc7f982cc210c482623b4176bca",
+      "sha256": "577cbd42492828150e501c972d11642a929ba3cb68e82abfd6e806a9ee926e95"
+    },
+    {
+      "pack": "phosphor",
+      "name": "download",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/download-duotone.svg",
+      "sha": "426e2bc4e993575822fa35fd5a41614fc147d5a1",
+      "sha256": "a094cd58900fc025f17dd26f3abe99c493e6baff28993b3b3d5522a22dbd8ee2"
+    },
+    {
+      "pack": "phosphor",
+      "name": "link",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/link-duotone.svg",
+      "sha": "3296fd2c976cdbab86435971eea72c076124951f",
+      "sha256": "4f705f576d26396a472650be8baffe3afa96c2970c096bc4b913a5b019d8a3d9"
+    },
+    {
+      "pack": "phosphor",
+      "name": "upload",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/upload-duotone.svg",
+      "sha": "01bde2354db02a9945013c26e7bebafb4b2186a0",
+      "sha256": "4df1376b85025ca81e82b5efb7474ca7398968b1c7effa13dedbdf75609756db"
+    },
+    {
+      "pack": "phosphor",
+      "name": "flow-arrow",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/flow-arrow-duotone.svg",
+      "sha": "493af9645eb45ba3f6f8b47f5e87b6367f0d4472",
+      "sha256": "bfcceb64bac1ae2de0daf95d7067562fd31d8fb9a7e1e799cea5d214e9dc169a"
+    },
+    {
+      "pack": "phosphor",
+      "name": "git-branch",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/git-branch-duotone.svg",
+      "sha": "733925883ef45ef3775f369c64403042d20e7623",
+      "sha256": "048e8569daa3f44b71878f169003e156a57205653ebf8cb9be0da496ae4c349e"
+    },
+    {
+      "pack": "phosphor",
+      "name": "wallet",
+      "repo": "phosphor-icons/core",
+      "upstream_path": "assets/duotone/wallet-duotone.svg",
+      "sha": "a19ffa68bee296b5b40036153ff1cff55b93271b",
+      "sha256": "4b941d8788adadcaa55de0ea4a01c3e8c6eb3126aa0327a9148f1ec71b112e1a"
+    }
+  ]
+}

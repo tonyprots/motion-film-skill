@@ -2,7 +2,7 @@
 
 The arc (`reference/STORY.md`) decides **in what order** the film leads to its idea. The format decides **in what language** it
 shows it: what holds the frame, how scenes follow one another, what carries the proof. These are two independent axes: the
-results of a study can be shot as "data at true scale", or as a "statement" if the finding is a position, not a number.
+results of a study can be shot as "data at true scale", or as a "statement" if the finding is a position, not a number. All four axes of a film (arc, format, brand, style) — `reference/STYLES.md`.
 
 A film gets **one** main format. Another format is allowed only as a single chapter (for example, a counter scene inside a
 demo), and it is written down in the shotlist. A mix of three languages reads as a reel of tricks with no idea.
@@ -61,7 +61,7 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
   the pause. A push toward text that can't be read otherwise is not editing: it means the scene needs a sign card (RULES.md).
 - **Voice:** leads, the screen proves; the title is the scene's thesis.
 - **Overrides:** nothing — this is the format the general rules were written for.
-- **Build:** `CAM` (camera, cursor, focus), real screenshots in `assets/shots/`, live components (`C.ui`, ENGINE.md "Live components") where the cursor changes the screen, `Motion.indicator`, `swapAlpha`; for one or two shots where a big screen is itself the scene's point, `uiShot` (RULES.md "A screen in 3D").
+- **Build:** `CAM` (camera, cursor, focus), real screenshots in `assets/shots/`, live components (`C.ui`, ENGINE.md "Live components") where the cursor changes the screen, `Motion.indicator`, `swapAlpha`; for one or two shots where a big screen is itself the scene's point, `uiShot` (ENGINE.md "A screen in 3D").
 - **Risk:** a slideshow of screenshots: one layout in every scene (headline + window + caption) and a camera that travels to
   the text on every window. Every scene must do something, not just show.
 
@@ -87,7 +87,7 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
 - **Essence.** Not a single cut: every scene grows out of the shape of the previous one. A dot becomes a pill, the pill a photo,
   the photo a grid, a cell a screen.
 - **Use when:** a short launch (15–45 s), a set of features that flow into one another naturally; a loop for the feed (4–14 s
-  without a voice — the short route, SKILL.md "Loop").
+  without a voice — the short route, ENGINE.md "Loop").
 - **Don't use:** a film longer than ~45 s (the chain of transformations tires); an argument with a turn that needs a pause and a
   change of shot; material made of unrelated screens.
 - **Signature:** `render.mjs --seams` finds zero hard cuts; every change has a shared element that changes size, radius or
@@ -174,7 +174,7 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
   smooth flow).
 - **Editing:** a hard cut at the change of era, inside an era its own grammar. The last era is the brand's language.
 - **Voice:** one for all eras, tying them together.
-- **Overrides:** one display face, one interface face and one material (RULES.md: "the house fonts of the preset") apply inside an era, not across the whole film.
+- **Overrides:** one display face and one interface face (RULES.md "Look") apply inside an era, not across the whole film.
 - **Build:** an era is a set of tokens (typeface, palette, motion roles) in `timeline.json "motion"` per chapter; the styling is
   written in the scene.
 - **Risk:** parody. Eras are recognised by typography and motion, not by costumes and clichés.
@@ -192,7 +192,7 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
 - **Signature:** at least 80 % of voice phrases change the object's state (value, colour, detail, shape); the camera does
   not move (except one cut at the turn); apart from the karaoke caption, the chapter label and the counter there is no text
   to read in frame.
-- **Stage:** the karaoke caption sits at the bottom as everywhere (in 9:16 above the bottom platform zone), the object in
+- **Stage:** the karaoke caption sits where the style puts it (RULES "Captions"), by default at the bottom (in 9:16 above the bottom platform zone), the object in
   the centre; the through-line set and the counter go at the top or along an edge, not under the caption. A list gets a through-line set with a place for each item and an `n/N` counter in the corner, a chapter label in
   small monospace (`01 — supabase`). The story's turn is a change of world: the light background goes dark, or a chapter
   gets its own colour.
@@ -207,8 +207,11 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
   is no headline; karaoke does its job); "close every scene on one frame with thesis and result" (the object's last state
   closes the scene); "something new every 2–4 s" (here 1–2 s); "screenshots ≥ half the stage, ≥ 3 s"; the default length
   1:00–2:30 (here 30–60 s).
-- **Build:** `CAPTIONS.karaoke` on word marks (ENGINE.md); the object is a `prop(t, state)` function in `film.js`, states
-  switched by springs on word marks; a counter with monospaced digits is written in the scene. 16:9 is derived via `C.pick`.
+- **Build:** `CAPTIONS.karaoke` on word marks (ENGINE.md); use `PROPS.mount` recipes (PROPS.md) or your own
+  `prop(t, state)`. Change state on word marks; derive 16:9 via `C.pick`. For new films use `vo_layout.timing: "speech"`.
+  Set `visual_format: "image-per-phrase"`, link phrases to changes in `visual-events.json`, run `render.mjs --story --all`.
+  Coverage counts phrases with observed states and pixels; the critic checks meaning and the 80% signature from pairs/clips.
+  Captions, camera moves and decorative shaking do not substitute for an action.
 - **Risk:** objects for their own sake. Every state is something the voice said; an object that doesn't change with a word
   is a slide.
 

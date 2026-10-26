@@ -122,12 +122,25 @@ if (fs.existsSync(briefFile)) {
     'Reference film': b.reference, 'Music': T.music?.source,
     'Voiceover': V.provider === 'none' ? 'none' : [V.provider, V.voice].filter(filled).join(': '),
     'CTA / end card': b.cta, 'Must show': b.must_show, 'Must avoid': b.must_avoid,
+    'Style': filled(P.style) ? Object.entries(P.style).filter(([, v]) => filled(v)).map(([k, v]) => `${k}: ${v}`).join('; ') : null,
   };
-  let src = fs.readFileSync(briefFile, 'utf8').replace(/^\| ([^|]+?) \| \? \|/gm, (m, k) => (filled(val[k]) ? `| ${k} | ${val[k]} |` : m));
-  if (filled(P.notes)) src = src.replace(/## Notes\s*$/, `## Notes\n${[].concat(P.notes).map((n) => `- ${n}`).join('\n')}\n`);
-  src = src.replace('# Brief', `# Brief\n\nPreset: \`${path.basename(PRESET)}\` (${P.name || ''}). Fields it did not fill still say \`?\`.`);
+  // the skill's own brief is Russian, the public one English: match a row by either label
+  const RU = { 'Тема / продукт': 'Product', 'Аудитория / площадка': 'Audience / platform', 'Длительность (с)': 'Duration (s)',
+    'Форматы': 'Formats', 'Цвета бренда': 'Brand colours', 'Шрифты': 'Fonts', 'Ролики-образцы': 'Reference film',
+    'Музыка': 'Music', 'Голос': 'Voiceover', 'CTA / финальная плашка': 'CTA / end card', 'Обязательно показать': 'Must show',
+    'Обязательно избежать': 'Must avoid', 'Стиль (STYLES.md)': 'Style', 'Style (STYLES.md)': 'Style' };
+  let hits = 0;
+  let src = fs.readFileSync(briefFile, 'utf8').replace(/^\| ([^|]+?) \| \? \|/gm, (m, k) => {
+    const v = val[RU[k] || k];
+    if (!filled(v)) return m;
+    hits++; return `| ${k} | ${v} |`;
+  });
+  if (filled(P.notes)) src = src.replace(/## (Notes|Заметки)\s*$/, (m, h) => `## ${h}\n${[].concat(P.notes).map((n) => `- ${n}`).join('\n')}\n`);
+  src = src.replace(/^# (Brief|Бриф)$/m, (m, h) => `${m}\n\n` + (h === 'Бриф'
+    ? `Пресет: \`${path.basename(PRESET)}\` (${P.name || ''}). Поля, которые он не заполнил, остались \`?\`.`
+    : `Preset: \`${path.basename(PRESET)}\` (${P.name || ''}). Fields it did not fill still say \`?\`.`));
   fs.writeFileSync(briefFile, src);
-  done.push('brief.md prefilled');
+  done.push(`brief.md: ${hits} field${hits === 1 ? '' : 's'} prefilled from the preset`);
 }
 
 fs.writeFileSync(path.join(PROJ, 'preset.json'), JSON.stringify({ from: path.basename(PRESET), ...P }, null, 2) + '\n');

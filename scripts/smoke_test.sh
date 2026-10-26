@@ -9,6 +9,12 @@ set -e
 SKILL="$(cd "$(dirname "$0")/.." && pwd)"
 WORK="${1:-$(mktemp -d)}/smoke-film"
 sh "$SKILL/scripts/init.sh" "$WORK" --preset blank
+"$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_layout_vo.py'
+node "$SKILL/tests/test_story.mjs"
+node "$SKILL/tests/test_blocks.mjs"
+node "$SKILL/tests/test_editorial.mjs"
+node "$SKILL/tests/test_frame_clock.mjs"
+node "$SKILL/tests/test_morph.cjs"
 cd "$WORK"
 .venv/bin/python scripts/music_source.py
 node scripts/sync.mjs >/dev/null

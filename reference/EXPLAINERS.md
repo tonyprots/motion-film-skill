@@ -1,9 +1,9 @@
 # Explainer formats
 
 When to read: at step 2, if the film explains a mechanism, a conclusion or how numbers move, read the table "Choosing
-by voice fragment"; read the general rules and a card if format 9–14 is chosen or taken as a chapter. Otherwise don't
-read it. These are extra cards for `reference/FORMATS.md`: the same choice rules, one main format per film, the line
-"Format: <name> — <why>; the runner-up was <name> — <why not>".
+by voice fragment"; read the general rules and a card if format 10–15 is chosen or taken as a chapter. Otherwise don't
+read it. These are extra cards for `reference/FORMATS.md`: the same choice rules, one main format per film, the "Format" line
+per FORMATS "Where it is recorded".
 
 _Based on huashu-art-motion (MIT, alchaincyf), reworked for our engine._
 
@@ -52,26 +52,26 @@ C.put(S.ring, { css: { strokeDashoffset: String(1 - C.sp(q(t), 's3.2', 'accent')
 
 | The voice fragment… | Take | Don't take |
 |---|---|---|
-| how one thing becomes another | 11. Transformation | 9: without documents it becomes a fake archive |
-| scale, "what's inside", a system | 14. Object metaphor, 7. Dive | 9: same |
-| an event, a story, a quote; screenshots and documents exist | 9. Investigation desk | 14: an illustration lowers trust |
-| reasoning step by step, "why" | 10. Whiteboard | swapping the whole screen at each step |
-| three reasons, stages, chapters | 13. Kinetic list | 11: nothing to transform |
-| a product, steps in an interface | 1. Product demo on a hero | 11, 14: the interface is never redrawn |
-| numbers, growth, shares that people will check | 12. Honest chart | 5, if the numbers must be shown physically |
-| one number | the counter from 5 | 12: a chart for one number is empty |
+| how one thing becomes another | 12. Transformation | 10: without documents it becomes a fake archive |
+| scale, "what's inside", a system | 15. Object metaphor, 7. Dive | 10: same |
+| an event, a story, a quote; screenshots and documents exist | 10. Investigation desk | 15: an illustration lowers trust |
+| reasoning step by step, "why" | 11. Whiteboard | swapping the whole screen at each step |
+| three reasons, stages, chapters | 14. Kinetic list | 12: nothing to transform |
+| a product, steps in an interface | 1. Product demo on a hero | 12, 15: the interface is never redrawn |
+| numbers, growth, shares that people will check | 13. Honest chart | 5, if the numbers must be shown physically |
+| one number | the counter from 5 | 13: a chart for one number is empty |
 
 ## Cards
 
 Fields as in FORMATS.md, plus **camera** and **timings**; "risk" is expanded into three **mistakes**.
 
-### 9. Investigation desk (Vox)
+### 10. Investigation desk (Vox)
 
 - **Essence.** The argument lies on a desk of real material: screenshots, documents, clippings, photos. The camera moves
   over the desk like a reporter's eye; highlighter and red circling land in the tempo of the voice.
 - **Take:** a news breakdown, the history of a product or market, a quote the viewer must see in the original. Matches
   our "never redraw the interface": the material goes in as it is.
-- **Don't take:** the material would have to be invented; a mechanism (11, 14); step-by-step reasoning (10).
+- **Don't take:** the material would have to be invented; a mechanism (12, 15); step-by-step reasoning (11).
 - **Signature:** real material from the sources is on the desk, and the highlighter marks at least one line exactly when
   the voice reads it.
 - **Camera:** stands while something happens on a card. To the next card 0.5–0.9 s, push to a line 1.0–1.5 s, along the
@@ -96,12 +96,12 @@ Fields as in FORMATS.md, plus **camera** and **timings**; "risk" is expanded int
   a jittering paper texture; (3) "slide in → label → circle" more than three times in a row. Text to be read is on the
   top layer.
 
-### 10. Whiteboard
+### 11. Whiteboard
 
 - **Essence.** The voice says a phrase — a line, a word, an icon appears on a big board. The camera follows the
   argument, pulls out at the end, and the reasoning is visible as one map.
 - **Take:** cause and effect, "why it is so", the history of an idea; concepts are connected and can be laid out in space.
-- **Don't take:** exact data (12), a real interface (1), emotion and brand. A whiteboard doesn't improve understanding,
+- **Don't take:** exact data (13), a real interface (1), emotion and brand. A whiteboard doesn't improve understanding,
   it holds attention.
 - **Signature:** lines are drawn in the tempo of the voice, ~0.5 s behind it; the final pull-out shows the whole board.
 - **Camera:** a move of ~0.23 frame widths over 1.2–2.4 s, the old area stays visible (~75 % overlap). A far jump —
@@ -112,7 +112,7 @@ Fields as in FORMATS.md, plus **camera** and **timings**; "risk" is expanded int
 - **Edit:** no cuts, the transition is a camera move; a new area is a new point.
 - **Voice:** even. The board holds images and keywords: if more than half the words match the voice, there are too few
   drawings.
-- **Overrides:** "cut on action", J/L cuts; "the scene headline is on screen whole within ~1 s" (RULES, "Voice films")
+- **Overrides:** "cut on action", J/L cuts; "the scene headline is on screen whole within ~1 s" (RULES, "Rhythm")
   — an area's heading is written at 7.5 characters/s.
 - **Build:** the board is one SVG several frames wide, the camera is `CAM.rig`, the ending is a key with `z` < 1. A
   stroke is a `path` with `pathLength="1"`, duration = length / ~1300 px/s, `C.ease.inOut` inside. Handwritten text —
@@ -130,13 +130,13 @@ Fields as in FORMATS.md, plus **camera** and **timings**; "risk" is expanded int
   pull-out: the map is gone; (3) many colours, a thin even line, a complex illustration drawn on camera (reveal it
   ready-made with the camera).
 
-### 11. Transformation (3b1b)
+### 12. Transformation (3b1b)
 
 - **Essence.** The frame holds only what is being talked about, and it turns into the next concept: a grid into a column
   of dots, a curve into another curve. Almost no cuts.
 - **Take:** a mechanism where each phrase is an action on an object ("squeeze the image into a column", "multiply by the
   weight"): a model, an algorithm, a calculation.
-- **Don't take:** a position, a story, a slogan — nothing to transform; real data over time (12); a launch or a brand film.
+- **Don't take:** a position, a story, a slogan — nothing to transform; real data over time (13); a launch or a brand film.
 - **Signature:** at least one change of concept is made by transforming one object without a cut; a concept's colour is
   the same in the formula and in the diagram.
 - **Camera:** stands → push to the next object ~1 s → stands. A fast push of 0.28 s — on the conclusion, once or twice
@@ -146,8 +146,8 @@ Fields as in FORMATS.md, plus **camera** and **timings**; "risk" is expanded int
 - **Edit:** the last frame of a step = the first frame of the next. Change of topic — exit upward through a mask or fly
   into the object (general rule 8). A formula symbol travels to the place of the same symbol in the new formula.
 - **Voice:** one phrase — one transformation: it starts on the action verb and has landed by the end of the phrase.
-- **Overrides:** "one accent colour" (RULES, "Look") → 3–4 concept colours; "at most 6–8 per wave" — a uniform mass
-  counts as one element.
+- **Overrides:** "at most 6–8 per wave" — a uniform mass counts as one element. Colour: 3–4 concept colours (RULES
+  "Look" allows this).
 - **Build:** the object is a set of elements with two positions each, the move is `heavy` (no overshoot) offset by
   `C.stagger(i, 0.01)`. Morphing an outline — only GSAP MorphSVG (ENGINE.md, "GSAP"). Concept colours are variables in
   `:root` (`--c-signal`), the same one in the formula and in the diagram; on a light background darker than usual,
@@ -159,19 +159,18 @@ Fields as in FORMATS.md, plus **camera** and **timings**; "risk" is expanded int
 - **Mistakes:** (1) glow and a dark gradient "to look scientific"; (2) transformations fast and frequent, no rest;
   (3) a concept's colour changes mid-film, or more than four colours. The first frame is the object, not a heading.
 
-### 12. Honest chart
+### 13. Honest chart
 
 - **Essence.** Axes → data → one label. Bars from zero, units and source on the chart; the animation decides how a
   number appears, not what it is.
 - **Take:** revenue, shares, growth, market, "before and after" — figures people will retell and check.
-- **Don't take:** one number (the counter from 5); the source can't be named; a mechanism (11).
+- **Don't take:** one number (the counter from 5); the source can't be named; a mechanism (12).
 - **Signature:** the title is the conclusion in one phrase, the label marks one thing, the source sits bottom left.
 - **Camera:** stands while the chart grows. The voice names a point — push ~1 s or move 0.7 s; a fast push — on the one
   or two main numbers of the film.
 - **Timings:** stages of 0.5–1.3 s: frame → grid lines left to right (0.12 s apart) → axis labels → data → hero colour →
   label. Bars 0.22 s apart, ~1.3 s in total; a line 1.5–2 s; a count 0.9–1.3 s, slowing down. A chart 2.5–6 s.
-- **Growth in one place.** Bars from zero, a line over time, a counter — only in one scene. Other charts enter already
-  built; only the highlight changes in them: the hero colour and the label.
+- **Growth in one place** (the general rule above): in the other charts only the highlight changes — the hero colour and the label.
 - **Edit:** a cut with the layout unchanged; a panel slide; a push into a point. Turn one chart into another only for
   the same data.
 - **Voice:** the bar has finished growing and the label has landed on the word with the number. "Grew by" — the
@@ -189,7 +188,7 @@ Fields as in FORMATS.md, plus **camera** and **timings**; "risk" is expanded int
 - **Mistakes:** (1) a truncated axis: bars only from zero, a line not from zero — with a note; lie factor (visible
   effect ÷ effect in the data) 0.95–1.05; (2) many colours, everything is the hero; (3) bounce, 3D bars, spinning.
 
-### 13. Kinetic list
+### 14. Kinetic list
 
 An addition to "4. Kinetic statement": there the words build a construction, here the text carries structure — reasons,
 stages, chapters. More often a chapter inside another format. Below is only what 4 doesn't have.
@@ -209,12 +208,12 @@ stages, chapters. More often a chapter inside another format. Below is only what
 - **Mistakes:** (1) everything the same size and entering at once; (2) the word drifts while it is being read; (3) the
   same layout more than three screens in a row without a break — slides.
 
-### 14. Object metaphor (Kurzgesagt)
+### 15. Object metaphor (Kurzgesagt)
 
-Close to "7. Dive" and to 11; its own part is that an abstraction is drawn as an object in the film's world.
+Close to "7. Dive" and to 12; its own part is that an abstraction is drawn as an object in the film's world.
 
 - **Essence.** A concept becomes an object (a cache — a shelf, a queue — a conveyor) in a world with a background; the
-  camera moves between scales. **Take:** a system, "what's inside". **Don't take:** real events (9); little time for
+  camera moves between scales. **Take:** a system, "what's inside". **Don't take:** real events (10); little time for
   craft.
 - **Signature:** every concept the voice names is drawn as an object.
 - **Camera and timings:** the background (particles, water, clouds) moves all the time and quietly, the hero stands after
@@ -222,13 +221,13 @@ Close to "7. Dive" and to 11; its own part is that an abstraction is drawn as an
   gets at least one change of state: appearing, transforming, going inside, pulling out.
 - **Overrides:** the same as 7, if there is a fly-through across scales.
 - **Build:** flat shapes without outlines, shade — the same hue one step darker, highlight — a light arc; 3–5 parallax
-  layers (layer shift = camera shift × depth); a light background, 2–3 saturated accents. No mascots and no faces on
-  objects (RULES, "Characters and people").
+  layers (layer shift = camera shift × depth); a light background, 2–3 saturated accents. A character on request or
+  when the situation calls for it (RULES, "Characters and people"), in the same flat style.
 - **Mistakes:** (1) everything "breathes", not just the background; (2) a linear zoom or a stretched raster instead of
   redrawing the level; (3) a busy palette or a black outline — a children's book.
 
 ## What was left out
 
-The source's API (canvas2D, MO/CAM/DG/TY/CH); dark palettes, neon glow, glass cards; a hand drawn in code; "story with
-a character" (needs a frame-by-frame character); the product-presentation format (covered by "1. Product demo on a
+The source's API (canvas2D, MO/CAM/DG/TY/CH); dark palettes, neon glow, glass cards; this source's hand and "story with
+a character" (our own presenter with hands is `ACTOR`, EDITORIAL.md); the product-presentation format (covered by "1. Product demo on a
 hero"); a `multiply` highlighter (`mix-blend-mode` is banned); red-up / green-down from the Chinese market.

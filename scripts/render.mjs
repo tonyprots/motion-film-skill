@@ -12,6 +12,8 @@
 //   node scripts/render.mjs --range 3,5 [--blur 0]                a clip of seconds 3–5 → renders/clip_<fmt>_3-5.mp4 (motion checks)
 //   node scripts/render.mjs --mux [--all]                         re-mux the current audio/mix.wav into existing renders without re-rendering
 //   node scripts/render.mjs --verify [--all]                      determinism check: 12 probes, cold vs after seeking elsewhere
+//   node scripts/render.mjs --story [--all]                       visual-events.json: observed state + pixels before/after,
+//                                                                 phrase coverage → review/story_<fmt>.json; meaning stays with the critic
 //   node scripts/render.mjs --lint [--all] [--phase 0.6]          text in frame, once per beat: size, contrast, 9:16 zones, one phrase twice,
 //                                                                 words cut by the frame edge or a mask (caption cut, side cut = PROBLEM),
 //                                                                 screens cut at the side by their window, an «Illustration» plate
@@ -35,6 +37,7 @@ import os from 'node:os';
 import { spawn, spawnSync, fork } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { decodePNG } from './png.mjs';
+import { reviewStory } from './story_check.mjs';
 import { createRequire } from 'node:module';
 
 const ROOT = process.cwd();
@@ -49,7 +52,7 @@ const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i < 0 ? d : (ar
 const has = (k) => argv.includes(`--${k}`);
 // --help prints the usage above; an unknown flag stops here — without this, a typo or --help fell through to a full final render
 const KNOWN = ['all', 'animatic', 'at', 'audio', 'blur', 'chunk', 'crf', 'deband', 'draft', 'fmt', 'fps', 'frames', 'gpu', 'grain', 'lint', 'lut',
-  'master', 'mux', 'no-finish', 'phase', 'range', 'seams', 'sheet', 'verify', 'workers'];
+  'master', 'mux', 'no-finish', 'phase', 'range', 'seams', 'sheet', 'story', 'verify', 'workers'];
 const unknown = argv.filter((a) => a.startsWith('--') && !KNOWN.includes(a.slice(2)));
 if (unknown.length) {
   const usage = fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n').filter((l) => l.startsWith('//')).slice(0, 24).map((l) => l.slice(3)).join('\n');
@@ -112,7 +115,7 @@ async function openFilm(fmt, variant = null) {
   // hold = the time of the output frame this shot belongs to (motion-blur sub-frames share it): footage.js picks the
   // recording's frame from it, so a 25 fps source is never averaged across two of its own frames
   const png = async (t, hold = t) => {
-    await page.evaluate(([t, hold]) => { window.FRAME_T = hold; return window.seek(t); }, [t, hold]);
+    await page.evaluate(([t, hold]) => { window.FRAME_T = hold; return window.seek(t, hold); }, [t, hold]);
     const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', optimizeForSpeed: true });
     return Buffer.from(data, 'base64');
   };
@@ -128,7 +131,7 @@ function ffmpeg(a) {
 const write = (s, buf) => new Promise((ok, bad) => s.write(buf, (e) => (e ? bad(e) : ok())));
 
 // ------------------------------------------------------------------ video: frames → ffmpeg
-const VIDEO = !['sheet', 'verify', 'at', 'lint', 'seams'].some(has);
+const VIDEO = !['sheet', 'verify', 'at', 'lint', 'seams', 'story'].some(has);
 const CRF = +opt('crf', DRAFT ? 22 : 16);   // --crf 0 = lossless (x264 needs its own profile for that: used to prove parallel == serial)
 // Finish (timeline.json "finish", CLI flags override): frames reach ffmpeg as 16-bit RGB (the motion-blur average keeps its
 // fractions), are optionally debanded and graded with a .cube LUT in 16 bits, and are dithered (error diffusion) only at the
@@ -479,6 +482,8 @@ for (const fmt of FORMATS) {
       if (spawnSync('ffmpeg', argsFor(label)).status) run('ffmpeg', argsFor(''));   // ffmpeg without drawtext: unlabeled
       console.log('wrote', path.relative(ROOT, out), `(${times.length} beats, ${rows} rows)`);
     }
+  } else if (has('story')) {
+    await reviewStory({ ROOT, TL, fmt, F });
   } else if (has('lint')) {
     const k = 1080 / Math.min(F.W, F.H), times = beatTimes(F, +opt('phase', 0.6)), found = new Map();
     const note = (level, key, t, msg) => { const f = found.get(key); if (f) { f.n++; return; } found.set(key, { level, t: +t.toFixed(3), msg, n: 1 }); };

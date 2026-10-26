@@ -7,7 +7,7 @@ A film lands one idea. Write the STORY block at the top of `SCRIPT.md` and get i
 ```
 ## STORY
 - Type and arc: <a type from the table below, or your own arc as steps joined by "→">
-- Format: <visual language from reference/FORMATS.md> — <why this one>
+- Format: <visual language from reference/FORMATS.md> — <why this one>; the runner-up was <name> — <why not>
 - Logline: <who> can't <what>, because <why>; <solution> changes that.
 - One sentence the viewer repeats: "<the idea in ≤ 20 words>"
 - Argument chain: <3–6 steps by which the film leads to that sentence; the step that carries the thesis gets the most time and the music drop>
@@ -29,6 +29,21 @@ turn sits in the middle and makes the solution necessary.
 The one sentence, the chain and "not about" are the thesis contract: the blind reader checks the finished film against them
 (`reference/BLIND.md`). They also guard the edits: a step of the chain is not cut "for the pace" without asking the user. A film
 "about fewer screens" that spends most of its time showing screens argues with itself: time on a step is part of the argument.
+
+## Hook and visual logic
+
+Before voicing, inside script approval:
+1. For a new hook, compare three different promises (result, contradiction, concrete loss), not three paraphrases.
+   For each, name the first line, first image, question opened and beat that pays it off. Choose by sources and payoff.
+   Preserve a script supplied by the user instead of rewriting it just to generate options.
+2. Compare 2–3 prop answers for the main metaphor. For key beats use a table:
+   thesis / why this prop / before / action on a word / after / carrier into the next beat.
+   Scaling a card alone does not explain a mechanism. States must show the mechanism asserted by the voice.
+3. In a list, decide what accumulates across items and why the whole is stronger than the examples. A progress counter
+   is not evidence. Promise an answer at the end only with a real payoff, without delaying useful information for suspense.
+
+This is part of the two passes in step 2, without an extra approval. Carry the chosen chain into the shotlist. Link
+observable changes to phrases in `visual-events.json` (PROPS.md); an independent critic judges the meaning.
 
 ## Arcs by film type
 
@@ -72,8 +87,9 @@ A new arc that worked is a candidate for this table.
 - `mood`: neutral · intrigue · concern · relief · confident · warm · excited (or any short English adjective pair). Change mood at least at every act; ≥ 3 moods per film. Models that read direction as text get the mood in words; ElevenLabs v4 reads no direction and gets mood as `voice_settings` (stability, style, speed: the `MOOD` table in `scripts/providers/elevenlabs.py`), and `pace` changes the speed. The table is a starting point: listen to takes on your voice and tune it.
 - `pace`: slow · fast. Slow for the hook and the closing line.
 - `hold`: a mute beat (picture + music only) after a key moment — 1–2 per film.
-- `air` 1–1.5 s only after 1–2 climaxes (the key number, the turn, the hero moment); `pre` ≥ 1 s before the closing line. The
-  other lines are fine with the defaults: every scene starts on a bar, so an extra pause on a seam rounds up to the next one.
+- `air` 1–1.5 s only after 1–2 climaxes (the key number, the turn, the hero moment); `pre` ≥ 1 s before the closing line; `air` after
+  the closing line is the tail under the logo, not a seam, and may run longer. The other lines are fine with the defaults:
+  in `music` mode every scene starts on a bar, so an extra pause on a seam rounds up to the next one.
   Voice silence on a scene seam is 1–2 s; 3 s or more reads as a dropout.
 
 ## Golden template (launch or decision, 1:20–2:00)

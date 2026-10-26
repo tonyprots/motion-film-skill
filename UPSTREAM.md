@@ -14,7 +14,7 @@ From the kit, as is or lightly edited:
 - `scripts/` — `capture.mjs`, `beats.py`, `music.py`, `sfx.mjs`, `mix.py`, `review.py` as is; `sync.mjs` (+ captions),
   `vo.py` (main guard, provider-neutral doc), `preset.mjs` (multi-weight local fonts, voiceover/transcribe/vo_layout),
   `render.mjs` (fast PNG decode + parallel chunks, see below), `init.sh` (rewritten)
-- `reference/` — `RULES.md` (+ "Voice films"), `CRITIQUE.md` (+ voice-film failure modes, language, stop rule),
+- `reference/` — `RULES.md`, `CRITIQUE.md` (+ voice-film failure modes, language, stop rule),
   `ENGINE.md` (+ layout, render speed), `AUDIO.md` (rewritten)
 - `templates/docs/*`, `templates/timeline.json`, `presets/blank` (voiceover fields reworked)
 
@@ -28,7 +28,33 @@ Dropped: Fish Audio voiceover (replaced by providers), `install.sh` (global inst
 - `reference/EXPLAINERS.md`: the explainer grammars (`references/09-视频动画语法.md`, `动画语法/*.md`) and the per-genre base
   camera (`references/镜头语言.md`), translated and rewritten for our engine. Their code (canvas2D, `clips/*.js`) is not used.
 
+## 2c. Scene and SVG library — 2026-10-26
+
+`engine/lib/blocks.js` adapts selected formulas/layouts from RenderComp/free-remotion-templates (KPI odometer, MIT,
+Copyright 2026 Trimora Inc.), riaz37/remotion-ui (kanban-move, MIT, Copyright 2026 RemotionUI), degueba/onda
+(CountUp/BarChart, MIT, Copyright 2026 Rodrigo Botelho), and heygen-com/hyperframes (chart/wipe, Apache-2.0,
+Copyright 2026 HeyGen, Inc.). Full grants: `LICENSE-rendercomp`, `LICENSE-remotion-ui`, `LICENSE-onda`, `LICENSE-hyperframes`.
+Exact source blob pins: `library/ports-manifest.json`.
+
+Changes replace React/live timelines with absolute-time `C.seek`, normalize counter precision, recompute occupied board
+slots, reflow portrait layout, handle zero-valued charts and invalidate stale SVG/mask rasterization. Fixed-slot boards
+and text wipes were rejected. Local icons: 40 each from Lucide (ISC plus MIT Feather notices), Tabler (MIT) and Phosphor
+duotone (MIT); keep full LICENSE files beside packs. Source pins and SHA-256: `library/assets/icons/manifest.json`.
+`graphics.js` and the offline catalog are our code. External indexes contain metadata/links only, with no automatic
+bundling of external code or assets. Full credits are also listed in `NOTICE.md`.
+
 ## 3. Our own (workspace)
+`engine/lib/morph.js` is a separate adaptation of `alexgreensh/anidoodle` `canvas-core/morph.ts`, Copyright 2026
+Alex Greenshpun, Apache-2.0 (`LICENSE-anidoodle`, `NOTICE-anidoodle`); pin in `library/ports-manifest.json`.
+Changes: JavaScript, seconds-based time/velocity, validated inputs, copied endpoints and SVG adapter.
+`engine/lib/actor-hands.js` contains baked SVG open/point/relaxed hands derived from `character/human/hands.ts`, same author
+and Apache-2.0 grant. Changes: 2D projection, 0.22px simplification, frozen geometry without a 3D runtime. Source pins for
+hands/math3/shape2d and the data hash are in `library/ports-manifest.json`. Other engine/audio/image modules, full head and
+FK rig are not bundled.
+
+- `engine/lib/actor.js`, `causal.js`, `illustrations.js`: original SVG head/body artwork, presenter rig, object states,
+  spatial wave and causal transfer. Hands load separately from `actor-hands.js` under the Apache-2.0 attribution above;
+  the assembled character is no longer wholly original artwork.
 - `scripts/providers/` — registry and providers: `elevenlabs`, `openrouter`, `openai`.
 - `scripts/voice.py`, `layout_vo.py` (generalised from the first film), `captions.py`, `music_source.py`, `png.mjs`, `tile.py`.
 - `engine/lib/captions.js` (generalised from the first film), `templates/SCRIPT.md`, `templates/brief.md`, `templates/sfx_layout.py`.

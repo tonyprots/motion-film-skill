@@ -234,6 +234,7 @@
     pending: [],
     gates: [],              // promises frame 0 waits for (pushed in build(): a Lottie file loading, a decoded asset)
     fonts: [],              // film.js: e.g. C.fonts = ['500 100px Display', '400 40px UI'] — awaited before frame 0
+    get frameTime() { return window.FRAME_T; }, // output-frame clock for discrete text/pages during shutter sampling
   };
 
   // ------------------------------------------------------------------ boot (called at the end of film.js)
@@ -245,12 +246,23 @@
     window.FPS = FPS; window.DURATION = DUR; window.FILM = { W, H, FMT };
     window.CUTS = SCENES.filter((S) => (S.cut ?? S.pre === 0) && beatOf(S.from) > 0).map((S) => bt(S.from)).sort((a, b) => a - b);
     // a hook that needs a file for this frame (footage) pushes its promise to C.pending; the renderer awaits what seek returns
-    window.seek = (t) => { paint(Math.max(0, Math.min(DUR - 1e-6, t))); return C.pending.length ? Promise.all(C.pending.splice(0)) : undefined; };
+    window.seek = (t, frame = t) => {
+      if (!Number.isFinite(t) || !Number.isFinite(frame)) throw new Error('seek needs finite sample and frame times');
+      // One-argument seeks always reset the frame clock; a previous renderer sample must not leak into preview/verify.
+      window.FRAME_T = Math.max(0, Math.min(DUR - 1e-6, frame));
+      paint(Math.max(0, Math.min(DUR - 1e-6, t)));
+      return C.pending.length ? Promise.all(C.pending.splice(0)) : undefined;
+    };
     window.READY = (async () => {
       // a missing face must be loud (the render logs [page] warnings) but not fatal: the stack falls back
       await Promise.all(C.fonts.map((f) => document.fonts.load(f).then((r) => { if (!r.length) console.warn(`font not loaded: ${f} (falling back)`); },
         () => console.warn(`font failed: ${f} — check the @font-face url in film/index.html (falling back)`))));
       await document.fonts.ready;
+      // preset.mjs writes local('Helvetica Neue') when a preset has no font file: the film then looks finished in the
+      // system face and nobody notices (2026-10-26, a whole benchmark round). Say so on every render.
+      for (const sheet of document.styleSheets) for (const r of (() => { try { return sheet.cssRules; } catch { return []; } })())
+        if (r instanceof CSSFontFaceRule && /local\(/.test(r.style.getPropertyValue('src')) && !/url\(/.test(r.style.getPropertyValue('src')))
+          console.warn(`font ${r.style.getPropertyValue('font-family')} is a local system face, not a brand file: put the font in assets/fonts/ and point @font-face at it`);
       const imgs = [...document.images];
       await Promise.all(imgs.map((i) => (i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; }))));
       await Promise.all(imgs.map((i) => i.decode().catch(() => 0)));

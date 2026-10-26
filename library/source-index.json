@@ -1,0 +1,1712 @@
+{
+  "checked_on": "2026-10-26",
+  "sources": [
+    {
+      "id": "3b1b-manim",
+      "name": "3b1b/manim",
+      "category": "math",
+      "tags": [
+        "math",
+        "animation"
+      ],
+      "url": "https://github.com/3b1b/manim",
+      "license": "MIT",
+      "license_url": "https://github.com/3b1b/manim/blob/master/LICENSE.md",
+      "license_blob_sha": "8a472c0f3b7773aa93c40c96a469bb30b60cd187",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "airbnb-lottie-web",
+      "name": "airbnb/lottie-web",
+      "category": "motion-assets",
+      "tags": [
+        "vector",
+        "animation",
+        "player"
+      ],
+      "url": "https://github.com/airbnb/lottie-web",
+      "license": "MIT",
+      "license_url": "https://github.com/airbnb/lottie-web/blob/master/LICENSE.md",
+      "license_blob_sha": "9c1cd7cb84357f4aa3d57ff961cd37d993055ef5",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "airbnb-visx",
+      "name": "airbnb/visx",
+      "category": "data",
+      "tags": [
+        "react",
+        "svg",
+        "charts"
+      ],
+      "url": "https://github.com/airbnb/visx",
+      "license": "MIT",
+      "license_url": "https://github.com/airbnb/visx/blob/master/LICENSE",
+      "license_blob_sha": "3ea864f49cbafba314e1ba9df9fae4acc242f2a8",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "ambientcg",
+      "name": "ambientCG",
+      "category": "textures",
+      "tags": [
+        "materials",
+        "hdr",
+        "pbr"
+      ],
+      "url": "https://ambientcg.com",
+      "license": "check selected asset",
+      "status": "license-needs-review"
+    },
+    {
+      "id": "animejs-anime",
+      "name": "animejs/anime",
+      "category": "motion",
+      "tags": [
+        "timeline",
+        "animation"
+      ],
+      "url": "https://github.com/animejs/anime",
+      "license": "not-confirmed",
+      "license_url": "https://github.com/animejs/anime",
+      "license_blob_sha": null,
+      "status": "license-needs-review",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "apache-echarts",
+      "name": "apache/echarts",
+      "category": "data",
+      "tags": [
+        "charts",
+        "maps",
+        "canvas",
+        "svg"
+      ],
+      "url": "https://github.com/apache/echarts",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/apache/echarts/blob/master/LICENSE",
+      "license_blob_sha": "c633765305b658c2b42837d2b72071d73c0379c5",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "artic",
+      "name": "Art Institute of Chicago",
+      "category": "culture",
+      "tags": [
+        "culture",
+        "art institute of chicago"
+      ],
+      "url": "https://api.artic.edu/docs/",
+      "license": "Inspect public-domain image status; description text differs",
+      "status": "per-asset-license",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "babylonjs-babylon.js",
+      "name": "BabylonJS/Babylon.js",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "engine",
+        "examples"
+      ],
+      "url": "https://github.com/BabylonJS/Babylon.js",
+      "license": "not-confirmed",
+      "license_url": "https://github.com/BabylonJS/Babylon.js",
+      "license_blob_sha": null,
+      "status": "license-needs-review",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "blenderkit",
+      "name": "BlenderKit",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "blenderkit"
+      ],
+      "url": "https://www.blenderkit.com/docs/licenses/",
+      "license": "CC0 or Royalty Free per asset; RF is not redistributable as an asset pack",
+      "status": "per-asset-license",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "bytepatterns-motion-lab",
+      "name": "bytepatterns/motion-lab",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "bytepatterns",
+        "motion",
+        "lab"
+      ],
+      "url": "https://github.com/bytepatterns/motion-lab",
+      "license": "MIT",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false,
+      "license_url": "https://github.com/bytepatterns/motion-lab/blob/main/LICENSE",
+      "license_blob_sha": "e9a978318ef2b0401e8069430a5da3a49d1236fc"
+    },
+    {
+      "id": "chartjs-chart.js",
+      "name": "chartjs/Chart.js",
+      "category": "data",
+      "tags": [
+        "charts",
+        "canvas"
+      ],
+      "url": "https://github.com/chartjs/Chart.js",
+      "license": "MIT",
+      "license_url": "https://github.com/chartjs/Chart.js/blob/master/LICENSE.md",
+      "license_blob_sha": "f216610fd7edadc57a11668b3ca5b7a400e5b96e",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "codrops-kinetictypepagetransition",
+      "name": "codrops/KineticTypePageTransition",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "codrops",
+        "kinetictypepagetransition"
+      ],
+      "url": "https://github.com/codrops/KineticTypePageTransition",
+      "license": "MIT",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false,
+      "license_url": "https://github.com/codrops/KineticTypePageTransition/blob/main/LICENSE",
+      "license_blob_sha": "e50a7c37aecf056cd37680fbfd7157b30b5afc10"
+    },
+    {
+      "id": "codrops-repetitivetypography",
+      "name": "codrops/RepetitiveTypography",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "codrops",
+        "repetitivetypography"
+      ],
+      "url": "https://github.com/codrops/RepetitiveTypography",
+      "license": "MIT",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false,
+      "license_url": "https://github.com/codrops/RepetitiveTypography/blob/main/LICENSE",
+      "license_blob_sha": "e50a7c37aecf056cd37680fbfd7157b30b5afc10"
+    },
+    {
+      "id": "d3-d3",
+      "name": "d3/d3",
+      "category": "data",
+      "tags": [
+        "charts",
+        "svg",
+        "scales"
+      ],
+      "url": "https://github.com/d3/d3",
+      "license": "ISC",
+      "license_url": "https://github.com/d3/d3/blob/main/LICENSE",
+      "license_blob_sha": "3594fffaf63c7a0dddc35ff82b781e224230bea1",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "d3-d3-geo",
+      "name": "d3/d3-geo",
+      "category": "maps",
+      "tags": [
+        "maps",
+        "projections"
+      ],
+      "url": "https://github.com/d3/d3-geo",
+      "license": "MIT",
+      "license_url": "https://github.com/d3/d3-geo/blob/main/LICENSE",
+      "license_blob_sha": "7286c0248ce2873e9c67729ef5b9d973a7294ed7",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "dagrejs-dagre",
+      "name": "dagrejs/dagre",
+      "category": "diagrams",
+      "tags": [
+        "graph",
+        "layout"
+      ],
+      "url": "https://github.com/dagrejs/dagre",
+      "license": "MIT",
+      "license_url": "https://github.com/dagrejs/dagre/blob/master/LICENSE",
+      "license_blob_sha": "7d7dd94248124266417a4438f2e8900578b637a8",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "degueba-onda",
+      "name": "degueba/onda",
+      "category": "scenes",
+      "tags": [
+        "components"
+      ],
+      "url": "https://github.com/degueba/onda",
+      "license": "MIT",
+      "license_url": "https://github.com/degueba/onda/blob/main/LICENSE",
+      "license_blob_sha": "74436cdb70b66cabdcd2197755fd5670251615f0",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "dimforge-rapier",
+      "name": "dimforge/rapier",
+      "category": "characters",
+      "tags": [
+        "characters",
+        "dimforge",
+        "rapier"
+      ],
+      "url": "https://github.com/dimforge/rapier",
+      "license": "Apache-2.0",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "donmccurdy-gltf-transform",
+      "name": "donmccurdy/glTF-Transform",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "donmccurdy",
+        "gltf",
+        "transform"
+      ],
+      "url": "https://github.com/donmccurdy/glTF-Transform",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "drawkit",
+      "name": "DrawKit",
+      "category": "illustrations",
+      "tags": [
+        "illustrations",
+        "drawkit"
+      ],
+      "url": "https://www.drawkit.com/license",
+      "license": "Selected access license; no raw redistribution",
+      "status": "restricted-not-bundled",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "excalidraw-excalidraw",
+      "name": "excalidraw/excalidraw",
+      "category": "diagrams",
+      "tags": [
+        "sketch",
+        "diagrams"
+      ],
+      "url": "https://github.com/excalidraw/excalidraw",
+      "license": "MIT",
+      "license_url": "https://github.com/excalidraw/excalidraw/blob/master/LICENSE",
+      "license_blob_sha": "8a844bc750a313db95d147bea9e4c9537b2cebc0",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "fontello-fontello",
+      "name": "fontello/fontello",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "fontello",
+        "fontello"
+      ],
+      "url": "https://github.com/fontello/fontello",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "fontsource",
+      "name": "Fontsource",
+      "category": "fonts",
+      "tags": [
+        "fonts",
+        "fontsource"
+      ],
+      "url": "https://fontsource.org/",
+      "license": "License and language coverage per font",
+      "status": "per-asset-license",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "google-draco",
+      "name": "google/draco",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "google",
+        "draco"
+      ],
+      "url": "https://github.com/google/draco",
+      "license": "Apache-2.0",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "google-material-design-icons",
+      "name": "google/material-design-icons",
+      "category": "icons",
+      "tags": [
+        "svg",
+        "icons"
+      ],
+      "url": "https://github.com/google/material-design-icons",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/google/material-design-icons/blob/master/LICENSE",
+      "license_blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "googlefonts-noto-emoji",
+      "name": "googlefonts/noto-emoji",
+      "category": "icons",
+      "tags": [
+        "icons",
+        "googlefonts",
+        "noto",
+        "emoji"
+      ],
+      "url": "https://github.com/googlefonts/noto-emoji",
+      "license": "OFL fonts; Apache-2.0 image/tools with exceptions; inspect flags",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "gre-gl-transitions",
+      "name": "gre/gl-transitions",
+      "category": "shaders",
+      "tags": [
+        "shader",
+        "transitions"
+      ],
+      "url": "https://github.com/gre/gl-transitions",
+      "license": "MIT",
+      "license_url": "https://github.com/gre/gl-transitions/blob/master/LICENSE",
+      "license_blob_sha": "7a1f053650848112e9448f829b3a5c81ea405e45",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "greensock-gsap",
+      "name": "greensock/GSAP",
+      "category": "motion",
+      "tags": [
+        "motion",
+        "greensock",
+        "gsap"
+      ],
+      "url": "https://github.com/greensock/GSAP",
+      "license": "GSAP Standard License; review full grant",
+      "status": "license-needs-review",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "heygen-com-hyperframes",
+      "name": "heygen-com/hyperframes",
+      "category": "scenes",
+      "tags": [
+        "html",
+        "scene",
+        "registry"
+      ],
+      "url": "https://github.com/heygen-com/hyperframes",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/heygen-com/hyperframes/blob/main/LICENSE",
+      "license_blob_sha": "ae06b37e1c5116ccfaa615ac25ec1aabf5658d8c",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "hfg-gmuend-openmoji",
+      "name": "hfg-gmuend/openmoji",
+      "category": "illustrations",
+      "tags": [
+        "color",
+        "emoji",
+        "svg"
+      ],
+      "url": "https://github.com/hfg-gmuend/openmoji",
+      "license": "not-confirmed",
+      "license_url": "https://github.com/hfg-gmuend/openmoji",
+      "license_blob_sha": null,
+      "status": "license-needs-review",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "humaaans",
+      "name": "Humaaans",
+      "category": "illustrations",
+      "tags": [
+        "illustrations",
+        "humaaans"
+      ],
+      "url": "https://humaaans.com/",
+      "license": "CC0",
+      "status": "provider-reviewed",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "iconify-iconify",
+      "name": "iconify/iconify",
+      "category": "icons",
+      "tags": [
+        "icons",
+        "iconify",
+        "iconify"
+      ],
+      "url": "https://github.com/iconify/iconify",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "iconoir-icons-iconoir",
+      "name": "iconoir-icons/iconoir",
+      "category": "icons",
+      "tags": [
+        "svg",
+        "outline"
+      ],
+      "url": "https://github.com/iconoir-icons/iconoir",
+      "license": "MIT",
+      "license_url": "https://github.com/iconoir-icons/iconoir/blob/main/LICENSE",
+      "license_blob_sha": "29a34a856af9e0622a8f2728662b94ef08133744",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "jdecked-twemoji",
+      "name": "jdecked/twemoji",
+      "category": "illustrations",
+      "tags": [
+        "color",
+        "emoji",
+        "svg"
+      ],
+      "url": "https://github.com/jdecked/twemoji",
+      "license": "MIT code; CC-BY-4.0 graphics",
+      "license_url": "https://github.com/jdecked/twemoji/blob/main/LICENSE-GRAPHICS",
+      "license_blob_sha": "dc8853a70cfa9d7e8933c080caa147815c659fab",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets; preserve graphics attribution"
+    },
+    {
+      "id": "jonobr1-two-js",
+      "name": "jonobr1/two.js",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "jonobr1",
+        "two.js"
+      ],
+      "url": "https://github.com/jonobr1/two.js",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "kenney",
+      "name": "Kenney",
+      "category": "graphics",
+      "tags": [
+        "3d",
+        "2d",
+        "ui",
+        "sprites"
+      ],
+      "url": "https://kenney.nl/assets",
+      "license": "CC0 asset packs",
+      "license_url": "https://kenney.nl/support",
+      "status": "source-license-checked"
+    },
+    {
+      "id": "kenney-mini-characters",
+      "name": "Kenney Mini Characters",
+      "category": "characters",
+      "tags": [
+        "characters",
+        "kenney mini characters"
+      ],
+      "url": "https://kenney.nl/assets/mini-characters",
+      "license": "CC0 selected pack",
+      "status": "provider-reviewed",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "kieler-elkjs",
+      "name": "kieler/elkjs",
+      "category": "diagrams",
+      "tags": [
+        "graph",
+        "layout"
+      ],
+      "url": "https://github.com/kieler/elkjs",
+      "license": "GPL-family",
+      "license_url": "https://github.com/kieler/elkjs/blob/master/LICENSE.md",
+      "license_blob_sha": "91dd37eefbe62d3d9fb7a1e7e2c7a9a1e2cdcbcc",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "liabru-matter-js",
+      "name": "liabru/matter-js",
+      "category": "characters",
+      "tags": [
+        "characters",
+        "liabru",
+        "matter"
+      ],
+      "url": "https://github.com/liabru/matter-js",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "lottiefiles",
+      "name": "LottieFiles",
+      "category": "motion-assets",
+      "tags": [
+        "lottie",
+        "animation"
+      ],
+      "url": "https://lottiefiles.com",
+      "license": "per-asset; runtime license is separate",
+      "status": "license-needs-review"
+    },
+    {
+      "id": "lottiefiles-dotlottie-web",
+      "name": "lottiefiles/dotlottie-web",
+      "category": "motion",
+      "tags": [
+        "motion",
+        "lottiefiles",
+        "dotlottie",
+        "web"
+      ],
+      "url": "https://github.com/LottieFiles/dotlottie-web",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "lucide-icons-lucide",
+      "name": "lucide-icons/lucide",
+      "category": "icons",
+      "tags": [
+        "icons",
+        "lucide",
+        "icons",
+        "lucide"
+      ],
+      "url": "https://github.com/lucide-icons/lucide",
+      "license": "NOASSERTION",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false,
+      "license_url": "https://github.com/lucide-icons/lucide/blob/main/LICENSE",
+      "license_blob_sha": "718bb3f0e44153809972abed31839375804bf652"
+    },
+    {
+      "id": "mafsapp-mafs",
+      "name": "Mafsapp/mafs",
+      "category": "math",
+      "tags": [
+        "math",
+        "geometry",
+        "plots"
+      ],
+      "url": "https://github.com/Mafsapp/mafs",
+      "license": "not-confirmed",
+      "license_url": "https://github.com/Mafsapp/mafs",
+      "license_blob_sha": null,
+      "status": "license-needs-review",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "manimcommunity-manim",
+      "name": "ManimCommunity/manim",
+      "category": "math",
+      "tags": [
+        "math",
+        "animation"
+      ],
+      "url": "https://github.com/ManimCommunity/manim",
+      "license": "MIT",
+      "license_url": "https://github.com/ManimCommunity/manim/blob/main/LICENSE",
+      "license_blob_sha": "774f5965700a59c2c7df2d4c234209d1da333c3e",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "manypixels",
+      "name": "ManyPixels",
+      "category": "illustrations",
+      "tags": [
+        "svg",
+        "illustrations",
+        "business"
+      ],
+      "url": "https://www.manypixels.co/gallery",
+      "license": "check selected asset and redistribution terms",
+      "status": "license-needs-review"
+    },
+    {
+      "id": "marioecg-codrops-kinetic-typo",
+      "name": "marioecg/codrops-kinetic-typo",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "marioecg",
+        "codrops",
+        "kinetic",
+        "typo"
+      ],
+      "url": "https://github.com/marioecg/codrops-kinetic-typo",
+      "license": "MIT",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false,
+      "license_url": "https://github.com/marioecg/codrops-kinetic-typo/blob/master/LICENSE",
+      "license_blob_sha": "ec0612f544b4d7da380d3de7dbd9a3732584a0a5"
+    },
+    {
+      "id": "mattdesl-canvas-sketch",
+      "name": "mattdesl/canvas-sketch",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "mattdesl",
+        "canvas",
+        "sketch"
+      ],
+      "url": "https://github.com/mattdesl/canvas-sketch",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "mattdesl-canvas-sketch-util",
+      "name": "mattdesl/canvas-sketch-util",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "mattdesl",
+        "canvas",
+        "sketch",
+        "util"
+      ],
+      "url": "https://github.com/mattdesl/canvas-sketch-util",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "mattdesl-svg-mesh-3d",
+      "name": "mattdesl/svg-mesh-3d",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "mattdesl",
+        "svg",
+        "mesh"
+      ],
+      "url": "https://github.com/mattdesl/svg-mesh-3d",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "mermaid-js-mermaid",
+      "name": "mermaid-js/mermaid",
+      "category": "diagrams",
+      "tags": [
+        "flow",
+        "sequence",
+        "timeline"
+      ],
+      "url": "https://github.com/mermaid-js/mermaid",
+      "license": "MIT",
+      "license_url": "https://github.com/mermaid-js/mermaid/blob/develop/LICENSE",
+      "license_blob_sha": "2e5daebd2ad0fb200080a27d98aec5f04902acdd",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "microsoft-fluentui-emoji",
+      "name": "microsoft/fluentui-emoji",
+      "category": "icons",
+      "tags": [
+        "icons",
+        "microsoft",
+        "fluentui",
+        "emoji"
+      ],
+      "url": "https://github.com/microsoft/fluentui-emoji",
+      "license": "MIT",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false,
+      "license_url": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE",
+      "license_blob_sha": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
+      "limitations": "3D variants are pre-rendered PNG images, not GLB meshes."
+    },
+    {
+      "id": "mixamo",
+      "name": "Mixamo",
+      "category": "characters",
+      "tags": [
+        "characters",
+        "mixamo"
+      ],
+      "url": "https://helpx.adobe.com/creative-cloud/faq/mixamo-faq.html",
+      "license": "Video use allowed; no raw asset-pack redistribution",
+      "status": "restricted-not-bundled",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "mojs-mojs",
+      "name": "mojs/mojs",
+      "category": "motion",
+      "tags": [
+        "motion",
+        "shapes"
+      ],
+      "url": "https://github.com/mojs/mojs",
+      "license": "MIT",
+      "license_url": "https://github.com/mojs/mojs/blob/main/LICENSE.md",
+      "license_blob_sha": "c56ebab06345848e69b880d2ac812f99bee88c15",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "motion-canvas-motion-canvas",
+      "name": "motion-canvas/motion-canvas",
+      "category": "motion",
+      "tags": [
+        "code",
+        "scenes",
+        "vector",
+        "animation"
+      ],
+      "url": "https://github.com/motion-canvas/motion-canvas",
+      "license": "MIT",
+      "license_url": "https://github.com/motion-canvas/motion-canvas/blob/main/LICENSE",
+      "license_blob_sha": "b30f04e173f68773714b7d9e2652caecbeec53f9",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "motiondivision-motion",
+      "name": "motiondivision/motion",
+      "category": "motion",
+      "tags": [
+        "animation"
+      ],
+      "url": "https://github.com/motiondivision/motion",
+      "license": "MIT",
+      "license_url": "https://github.com/motiondivision/motion/blob/main/LICENSE.md",
+      "license_blob_sha": "81110442c72270dd317667cc52181522647401f2",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "mrdoob-three.js",
+      "name": "mrdoob/three.js",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "scenes",
+        "examples"
+      ],
+      "url": "https://github.com/mrdoob/three.js",
+      "license": "MIT",
+      "license_url": "https://github.com/mrdoob/three.js/blob/dev/LICENSE",
+      "license_blob_sha": "8ada2a5f982916b0ba4b7a0aa7de347587e745d7",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "nasa-media",
+      "name": "NASA media",
+      "category": "science",
+      "tags": [
+        "science",
+        "nasa media"
+      ],
+      "url": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+      "license": "Media guidelines; third-party content, marks and endorsement exceptions",
+      "status": "per-asset-license",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "nvkelso-natural-earth-vector",
+      "name": "nvkelso/natural-earth-vector",
+      "category": "maps",
+      "tags": [
+        "map",
+        "datasets"
+      ],
+      "url": "https://github.com/nvkelso/natural-earth-vector",
+      "license": "custom-or-mixed",
+      "license_url": "https://github.com/nvkelso/natural-earth-vector/blob/master/LICENSE.md",
+      "license_blob_sha": "9dfbc3d55a4ab1dd758c253b2ee339888f632889",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "observablehq-plot",
+      "name": "observablehq/plot",
+      "category": "data",
+      "tags": [
+        "charts",
+        "statistics",
+        "svg"
+      ],
+      "url": "https://github.com/observablehq/plot",
+      "license": "ISC",
+      "license_url": "https://github.com/observablehq/plot/blob/main/LICENSE",
+      "license_blob_sha": "21be248f93dc018474f248e5d9d582a14faeda10",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "oframe-ogl",
+      "name": "oframe/ogl",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "oframe",
+        "ogl"
+      ],
+      "url": "https://github.com/oframe/ogl",
+      "license": "Unlicense declared in package.json; full grant not found",
+      "status": "license-needs-review",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "open-doodles",
+      "name": "Open Doodles",
+      "category": "illustrations",
+      "tags": [
+        "illustrations",
+        "open doodles"
+      ],
+      "url": "https://www.opendoodles.com/",
+      "license": "CC0",
+      "status": "provider-reviewed",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "open-peeps",
+      "name": "Open Peeps",
+      "category": "illustrations",
+      "tags": [
+        "illustrations",
+        "open peeps"
+      ],
+      "url": "https://www.openpeeps.com/",
+      "license": "CC0",
+      "status": "provider-reviewed",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "ordinary-folk-play",
+      "name": "Ordinary Folk Play",
+      "category": "motion",
+      "tags": [
+        "motion",
+        "ordinary folk play"
+      ],
+      "url": "https://www.ordinaryfolk.co/play",
+      "license": "Free download is not a redistribution grant; inspect each file",
+      "status": "reference-only",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "paper-design-shaders",
+      "name": "paper-design/shaders",
+      "category": "shaders",
+      "tags": [
+        "generative",
+        "backgrounds"
+      ],
+      "url": "https://github.com/paper-design/shaders",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/paper-design/shaders/blob/main/LICENSE",
+      "license_blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "patriciogonzalezvivo-lygia",
+      "name": "patriciogonzalezvivo/lygia",
+      "category": "shaders",
+      "tags": [
+        "shader",
+        "functions",
+        "textures"
+      ],
+      "url": "https://github.com/patriciogonzalezvivo/lygia",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/patriciogonzalezvivo/lygia/blob/main/LICENSE.md",
+      "license_blob_sha": "74482d28f0014fb2c737224ebd6a684d6e4371c3",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "pbeshai-d3-interpolate-path",
+      "name": "pbeshai/d3-interpolate-path",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "pbeshai",
+        "interpolate",
+        "path"
+      ],
+      "url": "https://github.com/pbeshai/d3-interpolate-path",
+      "license": "BSD-3-Clause",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "pexels",
+      "name": "Pexels",
+      "category": "footage",
+      "tags": [
+        "footage",
+        "pexels"
+      ],
+      "url": "https://www.pexels.com/license/",
+      "license": "Custom; no standalone stock redistribution; inspect context",
+      "status": "restricted-not-bundled",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "phosphor-icons-core",
+      "name": "phosphor-icons/core",
+      "category": "icons",
+      "tags": [
+        "icons",
+        "phosphor",
+        "icons",
+        "core"
+      ],
+      "url": "https://github.com/phosphor-icons/core",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "pixijs-pixijs",
+      "name": "pixijs/pixijs",
+      "category": "graphics",
+      "tags": [
+        "2d",
+        "canvas",
+        "webgl"
+      ],
+      "url": "https://github.com/pixijs/pixijs",
+      "license": "MIT",
+      "license_url": "https://github.com/pixijs/pixijs/blob/dev/LICENSE",
+      "license_blob_sha": "13f706e9d211dabcd69c80951b0f834f9c70f6c6",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "plotly-plotly.js",
+      "name": "plotly/plotly.js",
+      "category": "data",
+      "tags": [
+        "charts",
+        "scientific",
+        "3d"
+      ],
+      "url": "https://github.com/plotly/plotly.js",
+      "license": "MIT",
+      "license_url": "https://github.com/plotly/plotly.js/blob/main/LICENSE",
+      "license_blob_sha": "13ffac3c942fd6f6e8af7d4e58860bb306db3e2f",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "plouc-nivo",
+      "name": "plouc/nivo",
+      "category": "data",
+      "tags": [
+        "react",
+        "charts"
+      ],
+      "url": "https://github.com/plouc/nivo",
+      "license": "MIT",
+      "license_url": "https://github.com/plouc/nivo/blob/master/LICENSE.md",
+      "license_blob_sha": "faa45389ec025f8b26570481abc4c3412a27804c",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "pmndrs-drei",
+      "name": "pmndrs/drei",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "helpers",
+        "materials"
+      ],
+      "url": "https://github.com/pmndrs/drei",
+      "license": "MIT",
+      "license_url": "https://github.com/pmndrs/drei/blob/master/LICENSE",
+      "license_blob_sha": "55e1bd7f9a4bcd86361e735f17d740ee35757c7b",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "pmndrs-lamina",
+      "name": "pmndrs/lamina",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "pmndrs",
+        "lamina"
+      ],
+      "url": "https://github.com/pmndrs/lamina",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "archived-reference-only",
+      "archived": true
+    },
+    {
+      "id": "pmndrs-postprocessing",
+      "name": "pmndrs/postprocessing",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "pmndrs",
+        "postprocessing"
+      ],
+      "url": "https://github.com/pmndrs/postprocessing",
+      "license": "Zlib",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "pmndrs-react-three-fiber",
+      "name": "pmndrs/react-three-fiber",
+      "category": "3d",
+      "tags": [
+        "react",
+        "3d"
+      ],
+      "url": "https://github.com/pmndrs/react-three-fiber",
+      "license": "MIT",
+      "license_url": "https://github.com/pmndrs/react-three-fiber/blob/master/LICENSE",
+      "license_blob_sha": "493cfb3c8335c31bea327e0e27a8cb22004111d7",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "poly-pizza",
+      "name": "Poly Pizza",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "poly pizza"
+      ],
+      "url": "https://poly.pizza/",
+      "license": "Per-model CC0/CC-BY; inspect credits",
+      "status": "per-asset-license",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "polyhaven",
+      "name": "Poly Haven",
+      "category": "3d",
+      "tags": [
+        "models",
+        "hdr",
+        "textures"
+      ],
+      "url": "https://polyhaven.com",
+      "license": "CC0 assets",
+      "license_url": "https://polyhaven.com/license",
+      "status": "source-license-checked"
+    },
+    {
+      "id": "protectwise-troika",
+      "name": "protectwise/troika",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "protectwise",
+        "troika"
+      ],
+      "url": "https://github.com/protectwise/troika",
+      "license": "MIT",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false,
+      "license_url": "https://github.com/protectwise/troika/blob/main/LICENSE",
+      "license_blob_sha": "83453848344651786622bf7517e4118385ad43db"
+    },
+    {
+      "id": "quaternius-animation",
+      "name": "Quaternius Animation Library",
+      "category": "characters",
+      "tags": [
+        "characters",
+        "quaternius animation library"
+      ],
+      "url": "https://quaternius.com/packs/universalanimationlibrary.html",
+      "license": "CC0; selected tier and clips differ",
+      "status": "provider-reviewed",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "quaternius-characters",
+      "name": "Quaternius Base Characters",
+      "category": "characters",
+      "tags": [
+        "characters",
+        "quaternius base characters"
+      ],
+      "url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license": "CC0; inspect Standard/Source contents",
+      "status": "provider-reviewed",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "remix-design-remixicon",
+      "name": "Remix-Design/RemixIcon",
+      "category": "icons",
+      "tags": [
+        "svg",
+        "line",
+        "fill"
+      ],
+      "url": "https://github.com/Remix-Design/RemixIcon",
+      "license": "not-confirmed",
+      "license_url": "https://github.com/Remix-Design/RemixIcon",
+      "license_blob_sha": null,
+      "status": "license-needs-review",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "rendercomp-free-remotion-templates",
+      "name": "RenderComp/free-remotion-templates",
+      "category": "scenes",
+      "tags": [
+        "tsx",
+        "templates"
+      ],
+      "url": "https://github.com/RenderComp/free-remotion-templates",
+      "license": "MIT",
+      "license_url": "https://github.com/RenderComp/free-remotion-templates/blob/main/LICENSE",
+      "license_blob_sha": "ce53e1738e9002569c99b35539b657a4ced4ce11",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "riaz37-remotion-ui",
+      "name": "riaz37/remotion-ui",
+      "category": "scenes",
+      "tags": [
+        "react",
+        "scene",
+        "registry"
+      ],
+      "url": "https://github.com/riaz37/remotion-ui",
+      "license": "MIT",
+      "license_url": "https://github.com/riaz37/remotion-ui/blob/main/LICENSE",
+      "license_blob_sha": "def0b4e072346a476e2161d1fa2bb3fa624ba0f9",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "rive-app-rive-js",
+      "name": "rive-app/rive-js",
+      "category": "motion-assets",
+      "tags": [
+        "interactive",
+        "animation",
+        "player"
+      ],
+      "url": "https://github.com/rive-app/rive-js",
+      "license": "not-confirmed",
+      "license_url": "https://github.com/rive-app/rive-js",
+      "license_blob_sha": null,
+      "status": "license-needs-review",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "rive-app-rive-wasm",
+      "name": "rive-app/rive-wasm",
+      "category": "motion",
+      "tags": [
+        "motion",
+        "rive",
+        "app",
+        "rive",
+        "wasm"
+      ],
+      "url": "https://github.com/rive-app/rive-wasm",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "rough-stuff-rough",
+      "name": "rough-stuff/rough",
+      "category": "graphics",
+      "tags": [
+        "sketch",
+        "svg",
+        "canvas"
+      ],
+      "url": "https://github.com/rough-stuff/rough",
+      "license": "MIT",
+      "license_url": "https://github.com/rough-stuff/rough/blob/master/LICENSE",
+      "license_blob_sha": "8861089702095a79c71c21facc053cd679496bf1",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "rough-stuff-rough-notation",
+      "name": "rough-stuff/rough-notation",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "rough",
+        "stuff",
+        "rough",
+        "notation"
+      ],
+      "url": "https://github.com/rough-stuff/rough-notation",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "simple-icons-simple-icons",
+      "name": "simple-icons/simple-icons",
+      "category": "icons",
+      "tags": [
+        "icons",
+        "simple",
+        "icons",
+        "simple",
+        "icons"
+      ],
+      "url": "https://github.com/simple-icons/simple-icons",
+      "license": "CC0-1.0",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "smithsonian",
+      "name": "Smithsonian Open Access",
+      "category": "culture",
+      "tags": [
+        "culture",
+        "smithsonian open access"
+      ],
+      "url": "https://www.si.edu/openaccess/faq",
+      "license": "Only assets explicitly marked CC0",
+      "status": "per-asset-license",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "steveruizok-perfect-freehand",
+      "name": "steveruizok/perfect-freehand",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "steveruizok",
+        "perfect",
+        "freehand"
+      ],
+      "url": "https://github.com/steveruizok/perfect-freehand",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "storyset",
+      "name": "Storyset",
+      "category": "illustrations",
+      "tags": [
+        "illustrations",
+        "storyset"
+      ],
+      "url": "https://storyset.com/faqs",
+      "license": "Freepik license; attribution for free use; no open asset pack grant",
+      "status": "restricted-not-bundled",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "svgdotjs-svg.js",
+      "name": "svgdotjs/svg.js",
+      "category": "graphics",
+      "tags": [
+        "svg",
+        "drawing"
+      ],
+      "url": "https://github.com/svgdotjs/svg.js",
+      "license": "not-confirmed",
+      "license_url": "https://github.com/svgdotjs/svg.js",
+      "license_blob_sha": null,
+      "status": "license-needs-review",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "svgrepo",
+      "name": "SVG Repo",
+      "category": "graphics",
+      "tags": [
+        "svg",
+        "icons",
+        "illustrations"
+      ],
+      "url": "https://www.svgrepo.com",
+      "license": "per-asset; redistribution restrictions",
+      "license_url": "https://www.svgrepo.com/page/licensing/",
+      "status": "restricted-not-bundled"
+    },
+    {
+      "id": "tabler-tabler-icons",
+      "name": "tabler/tabler-icons",
+      "category": "icons",
+      "tags": [
+        "icons",
+        "tabler",
+        "tabler",
+        "icons"
+      ],
+      "url": "https://github.com/tabler/tabler-icons",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "tailwindlabs-heroicons",
+      "name": "tailwindlabs/heroicons",
+      "category": "icons",
+      "tags": [
+        "svg",
+        "outline",
+        "solid"
+      ],
+      "url": "https://github.com/tailwindlabs/heroicons",
+      "license": "MIT",
+      "license_url": "https://github.com/tailwindlabs/heroicons/blob/master/LICENSE",
+      "license_blob_sha": "d6a82290738a9f78946cbcb4594535d6984086dd",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "templarian-materialdesign",
+      "name": "Templarian/MaterialDesign",
+      "category": "icons",
+      "tags": [
+        "icons",
+        "templarian",
+        "materialdesign"
+      ],
+      "url": "https://github.com/Templarian/MaterialDesign",
+      "license": "Apache-2.0 icons/fonts with source exceptions; MIT code",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false,
+      "license_url": "https://github.com/Templarian/MaterialDesign/blob/master/LICENSE",
+      "license_blob_sha": "382f8a138afaaefe9ca2cfa80d33317f7814d997"
+    },
+    {
+      "id": "theatre-js-theatre",
+      "name": "theatre-js/theatre",
+      "category": "motion",
+      "tags": [
+        "motion",
+        "theatre",
+        "theatre"
+      ],
+      "url": "https://github.com/theatre-js/theatre",
+      "license": "Apache-2.0",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    },
+    {
+      "id": "topojson-world-atlas",
+      "name": "topojson/world-atlas",
+      "category": "maps",
+      "tags": [
+        "world",
+        "map",
+        "geometry"
+      ],
+      "url": "https://github.com/topojson/world-atlas",
+      "license": "ISC",
+      "license_url": "https://github.com/topojson/world-atlas/blob/master/LICENSE",
+      "license_blob_sha": "a24a8ec02450d643f6b8932a3d074eea4498c8e1",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "tweenjs-tween.js",
+      "name": "tweenjs/tween.js",
+      "category": "motion",
+      "tags": [
+        "tween",
+        "math"
+      ],
+      "url": "https://github.com/tweenjs/tween.js",
+      "license": "MIT",
+      "license_url": "https://github.com/tweenjs/tween.js/blob/main/LICENSE",
+      "license_blob_sha": "0de4f0b667617bcd4a7619c1a0c6b29a8d229442",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "adapt-time-and-local-assets"
+    },
+    {
+      "id": "undraw",
+      "name": "unDraw",
+      "category": "illustrations",
+      "tags": [
+        "svg",
+        "people",
+        "business"
+      ],
+      "url": "https://undraw.co",
+      "license": "custom; no pack redistribution/automated integration",
+      "license_url": "https://undraw.co/license",
+      "status": "restricted-not-bundled"
+    },
+    {
+      "id": "unsplash",
+      "name": "Unsplash",
+      "category": "photos",
+      "tags": [
+        "photos",
+        "unsplash"
+      ],
+      "url": "https://unsplash.com/license",
+      "license": "Custom; Unsplash+ differs; no competing stock service",
+      "status": "restricted-not-bundled",
+      "runtime_status": "not-adapted",
+      "integration": "select-and-review-individual-asset"
+    },
+    {
+      "id": "vega-vega",
+      "name": "vega/vega",
+      "category": "data",
+      "tags": [
+        "declarative",
+        "charts"
+      ],
+      "url": "https://github.com/vega/vega",
+      "license": "BSD-family",
+      "license_url": "https://github.com/vega/vega/blob/main/LICENSE",
+      "license_blob_sha": "eb5c50a9300fa45ff5ec16332f16ae49e74b742f",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "vega-vega-lite",
+      "name": "vega/vega-lite",
+      "category": "data",
+      "tags": [
+        "declarative",
+        "charts"
+      ],
+      "url": "https://github.com/vega/vega-lite",
+      "license": "BSD-family",
+      "license_url": "https://github.com/vega/vega-lite/blob/main/LICENSE",
+      "license_blob_sha": "850162439caa666a0761260bc6b7ecbc25a6dbf3",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "veltman-flubber",
+      "name": "veltman/flubber",
+      "category": "graphics",
+      "tags": [
+        "graphics",
+        "veltman",
+        "flubber"
+      ],
+      "url": "https://github.com/veltman/flubber",
+      "license": "MIT",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false,
+      "license_url": "https://github.com/veltman/flubber/blob/master/LICENSE",
+      "license_blob_sha": "6373181d9fc9946673965bb25bcd0ab52f7ff137"
+    },
+    {
+      "id": "xyflow-xyflow",
+      "name": "xyflow/xyflow",
+      "category": "diagrams",
+      "tags": [
+        "node",
+        "diagrams"
+      ],
+      "url": "https://github.com/xyflow/xyflow",
+      "license": "MIT",
+      "license_url": "https://github.com/xyflow/xyflow/blob/main/LICENSE",
+      "license_blob_sha": "072ff46d7c23dd8e18ccba11aa6563f14e524312",
+      "status": "source-license-checked",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-before-use"
+    },
+    {
+      "id": "zeux-meshoptimizer",
+      "name": "zeux/meshoptimizer",
+      "category": "3d",
+      "tags": [
+        "3d",
+        "zeux",
+        "meshoptimizer"
+      ],
+      "url": "https://github.com/zeux/meshoptimizer",
+      "license": "MIT",
+      "status": "metadata-license-only",
+      "runtime_status": "not-adapted",
+      "integration": "read-source-and-asset-license-before-use",
+      "archived": false
+    }
+  ]
+}

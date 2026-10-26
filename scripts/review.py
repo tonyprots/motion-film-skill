@@ -260,6 +260,22 @@ tw, th = (480, int(480 * H0 / W0) // 2 * 2) if W0 >= H0 else (270, int(270 * H0 
 M = {'round': R, 'source': V[P], 'fps': round(FPS, 3), 'duration': round(DUR, 3)}
 GATES = []   # (level, check, message): FAIL blocks the round, WARN goes to the critic, NOT CHECKED is never "clean"
 def gate(level, check, msg): GATES.append({'level': level, 'check': check, 'msg': msg})
+if TL.get('visual_format') == 'image-per-phrase':
+    import hashlib
+    for fmt in TL['formats']:
+        story_path = f'review/story_{fmt}.json'
+        if not os.path.exists(story_path):
+            gate('FAIL', 'story', f'{fmt}: no rendered phrase coverage; run render.mjs --story --all')
+            continue
+        story = json.load(open(story_path))
+        stale = [p for p, digest in story.get('inputs', {}).items()
+                 if (hashlib.sha256(open(p, 'rb').read()).hexdigest() if os.path.isfile(p) else None) != digest]
+        if not story.get('inputs') or stale:
+            gate('FAIL', 'story', f'{fmt}: stale story evidence; rerun --story ({stale[:3]})')
+        elif story.get('status') != 'EVIDENCE' or story.get('coverage', 0) < 0.8:
+            gate('FAIL', 'story', f'{fmt}: rendered phrase coverage did not pass: {story.get("coverage", 0):.0%}')
+        else:
+            gate('NOT CHECKED', 'meaning', f'{fmt}: rendered changes cover {story["coverage"]:.0%}; critic must verify meaning from pairs/clips')
 CUTS = json.load(open('review/cuts.json')).get(P, []) if os.path.exists('review/cuts.json') else None
 
 

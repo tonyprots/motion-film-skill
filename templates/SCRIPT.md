@@ -17,7 +17,7 @@
 ## 1. Hook · 0:00–0:06
 **Shot:** <what is on screen; real media by file name>
 **Title:** <the scene's headline, on screen from the first seconds of the scene>
-**Voice:** "<up to sixty characters, no number>" {pre=0.6 air=1.0 mood=intrigue pace=slow}
+**Voice:** "<up to sixty characters; one number allowed when it is the hook>" {pre=0.6 air=1.0 mood=intrigue pace=slow}
 
 ## 2. <Scene> · 0:06–0:20
 **Shot:** …

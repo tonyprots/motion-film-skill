@@ -12,7 +12,8 @@
 // already said drop to `dim` opacity, the current one stays full; key words take the accent. A new caption entry (or a
 // "|" page inside one) resets the whole phrase. Key words: per entry, a third element in captions.json
 //   ["s2a", "until someone hits it with a DDoS attack", {"key": ["DDoS"]}]   (several words: "DDoS attack")
-// exit: 'cut' drops the phrase on its last frame instead of the 4-frame blur-out (no dissolves in the film).
+// exit: 'cut' drops the phrase on its last frame instead of the 4-frame blur-out, and starts its next page on the mark.
+// Page selection uses C.frameTime so shutter samples do not average two phrases; word motion still follows t.
 // or film-wide: karaoke({ keys: ['Mostik'] }). Lines without word marks are timed by letter count (a console warning).
 (() => {
   const { scene, reg, put, el, sp, spHit, beatOf, bt, clamp, ease, lerp, pick, W, H, FPS, stage } = C;
@@ -129,8 +130,10 @@
         },
         run(t, b, S) {
           const f = 1 / FPS;
+          const pageTime = C.frameTime ?? t;
           for (const pg of S.pages) {
-            if (t < pg.t0 - 2 * f || t >= pg.t1) continue;
+            // A hard page cut cannot pre-roll over a still fully visible previous page.
+            if (pageTime < pg.t0 - (o.exit === 'cut' ? 0 : 2 * f) || pageTime >= pg.t1) continue;
             put(pg.box, { hide: false });
             const out = o.exit === 'cut' ? 0 : clamp((t - (pg.t1 - (F + 1) * f)) / (F * f));   // leaves together just before the next one; exit:'cut' = gone on the frame, no fade
             pg.words.forEach((w, i) => {
