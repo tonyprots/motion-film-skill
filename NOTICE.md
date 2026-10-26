@@ -51,6 +51,11 @@ format-aware reflow, occupied-slot calculation and raster invalidation. Exact so
 [Phosphor](https://github.com/phosphor-icons/core) (MIT). Keep each pack's full LICENSE with copied assets.
 Their source pins and SHA-256 hashes are in `library/assets/icons/manifest.json`.
 
+`library/assets/extras/noto/` contains 563 SVGs from [Noto Emoji](https://github.com/googlefonts/noto-emoji)
+(`2D/svg/`, Apache License 2.0, Copyright 2013 Google, Inc.), with that LICENSE beside them. The files were modified:
+Illustrator metadata, comments and unused ids removed, remaining ids shortened, coordinates rounded to 0.01 units; shapes and colours are
+unchanged. Source pins and SHA-256 hashes are in `library/assets/extras/noto/manifest.json`.
+
 External registry and source indexes contain metadata and links only; their entries are not installed or relicensed.
 
 ## anidoodle morphology

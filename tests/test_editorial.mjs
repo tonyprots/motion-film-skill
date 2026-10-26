@@ -43,7 +43,20 @@ const PUPPETS = { fixture: { ...PACK, base: '../assets/puppets/fixture/' } };
 const privatePack = fs.existsSync(path.join(fixture, 'assets/puppets/host-toon/puppet.json'));   // only where private/ exists
 if (privatePack) PUPPETS['host-toon'] = { ...JSON.parse(fs.readFileSync(path.join(fixture, 'assets/puppets/host-toon/puppet.json'), 'utf8')), base: '../assets/puppets/host-toon/' };
 const VOW = [[0.4, 0.9, 'мама'], [1.0, 1.6, 'объясняю'], [2.2, 2.7, 'да'], [3.1, 3.9, 'посмотрите']];
-fs.writeFileSync(path.join(fixture, 'film/data.js'), `window.TL={duration:8,fps:30,bpm:60,formats:['9x16','16x9'],marks:{done:8}};window.BEATS={};window.VO=[];window.CAPS=[];window.CAPW=[];window.UI={};window.SVG_ASSETS={};window.VOW=${JSON.stringify(VOW)};window.PUPPETS=${JSON.stringify(PUPPETS)};`);
+// sync.mjs bundles only the extras film code names literally, and warns about an unknown id.
+fs.writeFileSync(path.join(fixture, 'film/extras-probe.js'), `const a = 'noto:pill', b = "noto:money-bag", c = 'noto:no-such-thing', d = 'lucide:check';\n`);
+const synced = spawnSync(process.execPath, [path.join(fixture, 'scripts/sync.mjs')], { cwd: fixture, encoding: 'utf8', timeout: 120000 });
+assert.equal(synced.status, 0, synced.stderr);
+const bundled = JSON.parse(fs.readFileSync(path.join(fixture, 'film/data.js'), 'utf8').match(/window\.EXTRA_ASSETS = (.*);\n/)[1]);
+assert.deepEqual(Object.keys(bundled).sort(), ['noto:money-bag', 'noto:pill'], 'sync must bundle only the named extras');
+assert.match(synced.stderr + synced.stdout, /WARN unknown extra id\(s\): noto:no-such-thing/);
+fs.rmSync(path.join(fixture, 'film/extras-probe.js'));
+// Extras: real shipped SVGs (gradients, clips, Illustrator leftovers) plus two that must be refused.
+const EXTRA_SAMPLE = ['mobile-phone', 'money-bag', 'laptop', 'pill', 'package', 'magnifying-glass-tilted-left', 'briefcase', 'trophy'];
+const EXTRAS = Object.fromEntries(EXTRA_SAMPLE.map((n) => [`noto:${n}`, fs.readFileSync(path.join(fixture, `assets/extras/noto/${n}.svg`), 'utf8')]));
+EXTRAS['noto:evil'] = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" onclick="alert(1)"/></svg>';
+EXTRAS['noto:external'] = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="url(https://example.com/x)"/></svg>';
+fs.writeFileSync(path.join(fixture, 'film/data.js'), `window.TL={duration:8,fps:30,bpm:60,formats:['9x16','16x9'],marks:{done:8}};window.BEATS={};window.VO=[];window.CAPS=[];window.CAPW=[];window.UI={};window.SVG_ASSETS={};window.EXTRA_ASSETS=${JSON.stringify(EXTRAS)};window.VOW=${JSON.stringify(VOW)};window.PUPPETS=${JSON.stringify(PUPPETS)};`);
 const results = [], requests = [], pageErrors = [], deterministicRuns = [];
 async function test(name, fn) {
   try { await fn(); results.push({ name, ok: true }); console.log('PASS', name); }
@@ -150,8 +163,8 @@ try {
         } finally { await page.close(); }
       });
     }
-    setFilm(`S.kit=ILLUSTRATIONS.kinds.slice(11).map((k,i)=>ILLUSTRATIONS.object(root,k,{x:(i%4)*260,y:200+Math.floor(i/4)*200,w:250,skin:ILLUSTRATIONS.skins[i%4]}));`,
-      `const st={phone:{cut:(Math.sin(t*2)+1)/2,ring:(t*.7)%1,tag:'§ '+Math.floor(t*3)},calendar:{day:Math.floor(t*5)%35,marks:Math.floor(t*2)%6},card:{chip:(Math.sin(t*3)+1)/2,declined:t>3?1:0,amount:'−$'+Math.floor(t*9)},coins:{count:Math.floor(t*2)%9,amount:'$'+Math.floor(t*100)},chat:{shown:Math.floor(t)%4,typing:(t*.8)%1,caret:Math.floor(t*2)%2,input:'abc'.slice(0,Math.floor(t)%4)},form:{filled:Math.floor(t)%4,missing:Math.floor(t)%4-1,sent:t>3?1:0,v0:'A'},stamp:{press:(t%2)/2},decision:{signed:(t/3)%1,sealed:(t-1.5)*2},lock:{open:(Math.sin(t)+1)/2},scales:{tilt:Math.sin(t*1.7)},recordings:{count:Math.floor(t*3)%13,rec:Math.floor(t*2)%2},camera:{pan:Math.sin(t),view:(Math.cos(t)+1)/2,rec:Math.floor(t)%2}};S.kit.forEach((o,i)=>o.draw(st[ILLUSTRATIONS.kinds[11+i]]));`);
+    setFilm(`S.kit=ILLUSTRATIONS.kinds.slice(11).map((k,i)=>ILLUSTRATIONS.object(root,k,{x:(i%4)*260,y:150+Math.floor(i/4)*170,w:250,skin:ILLUSTRATIONS.skins[i%4]}));`,
+      `const st={phone:{cut:(Math.sin(t*2)+1)/2,ring:(t*.7)%1,tag:'§ '+Math.floor(t*3)},calendar:{day:Math.floor(t*5)%35,marks:Math.floor(t*2)%6},card:{chip:(Math.sin(t*3)+1)/2,declined:t>3?1:0,amount:'−$'+Math.floor(t*9)},coins:{count:Math.floor(t*2)%9,amount:'$'+Math.floor(t*100)},chat:{shown:Math.floor(t)%4,typing:(t*.8)%1,caret:Math.floor(t*2)%2,input:'abc'.slice(0,Math.floor(t)%4)},form:{filled:Math.floor(t)%4,missing:Math.floor(t)%4-1,sent:t>3?1:0,v0:'A'},stamp:{press:(t%2)/2},decision:{signed:(t/3)%1,sealed:(t-1.5)*2},lock:{open:(Math.sin(t)+1)/2},scales:{tilt:Math.sin(t*1.7)},recordings:{count:Math.floor(t*3)%13,rec:Math.floor(t*2)%2},camera:{pan:Math.sin(t),view:(Math.cos(t)+1)/2,rec:Math.floor(t)%2},agent:{work:t*.6,sleep:t<1?1-t:0,done:t>4?(t-4)*2:0,status:t>4?'DONE':'WORKING'},tokens:{level:(t*.4)%1.5,chips:Math.floor(t)%4,amount:''+Math.floor(t*300)},steps:{active:Math.min(2,t*.6-1),l0:'A',l1:'B',l2:'C'},slides:{count:Math.floor(t)%4,cursors:Math.floor(t*1.5)%4},funnel:{flow:t*.7,top:'5 000',bottom:''+Math.floor(t)},team:{count:Math.floor(t*1.2)%6,lead:Math.floor(t)%5,helmet:t>2?1:0},chip:{pick:(Math.sin(t)+1),model:'AI'}};S.kit.forEach((o,i)=>o.draw(st[ILLUSTRATIONS.kinds[11+i]]));`);
     await test(`${fmt}: stateful objects in every skin have deterministic seek and respect hidden scenes`, async () => {
       const page = await open(fmt);
       try { await det(page, 'objects-' + fmt); await hidden(page); }
@@ -175,6 +188,34 @@ try {
     }
   }
   setFilm('', '');
+  await test('AI-market objects: agent, tokens, steps, slides, funnel, team and chip keep their state contracts', async () => {
+    const page = await open('9x16');
+    try {
+      const r = await page.evaluate(() => {
+        const mk = (k, st) => { const o = ILLUSTRATIONS.object(C.stage, k, { x:0, y:0 }); o.draw(st); return o; }, vis = (n) => n.getAttribute('visibility') !== 'hidden';
+        const out = {};
+        let o = mk('agent', { sleep:1 }); out.sleep = [vis(o.root.querySelector('[data-part="zz"]')), vis(o.root.querySelector('[data-part="ring"]')), vis(o.root.querySelector('[data-part="pill"]'))];
+        o.draw({ work:.25, done:1, status:'DONE' }); out.work = [vis(o.root.querySelector('[data-part="ring"]')), vis(o.root.querySelector('[data-part="done"]')), o.root.querySelector('[data-field="status"]').textContent];
+        o = mk('tokens', { level:1.5, chips:1 }); out.tokens = [+o.root.querySelector('[data-part="base"]').getAttribute('height'), +o.root.querySelector('[data-part="over"]').getAttribute('height'), o.root.querySelectorAll('[data-coin]:not([visibility="hidden"])').length];
+        o.draw({ level:.5 }); out.under = [vis(o.root.querySelector('[data-part="over"]'))];
+        o = mk('steps', { active:1.6 }); out.steps = [...o.root.querySelectorAll('[data-flag]')].map(vis);
+        o = mk('slides', { count:2, cursors:3 }); out.slides = [[...o.root.querySelectorAll('[data-box]')].filter(vis).length, [...o.root.querySelectorAll('[data-tile]')].filter(vis).length];
+        o = mk('team', { count:3, lead:2, helmet:1 }); out.team = [[...o.root.querySelectorAll('[data-tile]')].filter(vis).length, [...o.root.querySelectorAll('[data-mark]')].filter(vis).map((n) => n.dataset.mark)];
+        o = mk('chip', { pick:2 }); out.chip = o.root.querySelector('[data-part="knob"]').getAttribute('transform');
+        o = mk('funnel', { flow:.37 }); const a = o.root.innerHTML; o.draw({ flow:1.37 }); out.funnel = a === o.root.innerHTML;
+        return out;
+      });
+      assert.deepEqual(r.sleep, [true, false, false]);
+      assert.deepEqual(r.work, [true, true, 'DONE']);
+      assert.ok(Math.abs(r.tokens[0] - 125.33) < .01 && Math.abs(r.tokens[1] - 62.67) < .01, 'tank: base fills 2/3, overage the rest'); assert.equal(r.tokens[2], 1);
+      assert.deepEqual(r.under, [false]);
+      assert.deepEqual(r.steps, [false, false, true], 'a fraction lights the nearest step');
+      assert.deepEqual(r.slides, [2, 3]);
+      assert.deepEqual(r.team, [3, ['2']]);
+      assert.equal(r.chip, 'translate(287.00 204)');
+      assert.ok(r.funnel, 'funnel flow must wrap every 1');
+    } finally { await page.close(); }
+  });
   await test('every illustration exists and resets omitted data to its own base', async () => {
     const page = await open('9x16');
     try {
@@ -217,6 +258,46 @@ try {
       assert.equal(new Set(info.filters).size, info.filters.length, 'sketch filters need unique ids');
       assert.ok(info.filters.every(Boolean));
       assert.deepEqual(info.styled, ['mono', '#f3f1e8', 'line']); assert.equal(info.reset, 'line');
+    } finally { await page.close(); }
+  });
+  await test('extras: shipped SVGs repaint in every skin, ids stay unique, mono keeps three inks, unsafe or unknown ids are refused, style({extras:false}) switches the layer off', async () => {
+    setFilm('', '');
+    const page = await open('9x16');
+    try {
+      const info = await page.evaluate((sample) => {
+        const dark = { ink:'#f3f1e8', paper:'#171b18', accent:'#ff7958' }, strip = (s) => s.replace(/mf-extra-\d+/g, 'X');
+        const out = { ids:ILLUSTRATIONS.extras(), invalid:[], empty:[], outline:{}, mono:new Set(), same:[], refused:[], dupIds:0 };
+        for (const n of sample) {
+          const id = 'noto:' + n, a = ILLUSTRATIONS.extra(C.stage, id), b = ILLUSTRATIONS.extra(C.stage, id, { skin:'line' });
+          if (strip(a.root.innerHTML) !== strip(b.root.innerHTML)) out.same.push(n);
+          const all = [...document.querySelectorAll('[id]')].map((x) => x.id); out.dupIds += all.length - new Set(all).size;
+          a.root.remove(); b.root.remove();
+          for (const skin of ILLUSTRATIONS.skins) {
+            const o = ILLUSTRATIONS.extra(C.stage, id, { x:40, y:60, w:220, skin, palette:skin === 'mono' ? dark : {} }), r = o.root.getBoundingClientRect();
+            if (/NaN|undefined|Infinity/.test(o.root.innerHTML)) out.invalid.push(n + ':' + skin);
+            const box = o.root.querySelector('svg > g:last-child').getBBox(); if (!(box.width > 1 && box.height > 1 && r.width > 200)) out.empty.push(n + ':' + skin);
+            out.outline[skin] = (out.outline[skin] || 0) + o.root.querySelectorAll('[stroke-linejoin="round"][stroke-width]').length;
+            if (skin === 'mono') o.root.querySelectorAll('*').forEach((x) => ['fill', 'stroke', 'stop-color'].forEach((k) => { const v = x.getAttribute(k); if (v && !v.startsWith('url(')) out.mono.add(v); }));
+            o.root.remove();
+          }
+        }
+        for (const id of ['noto:evil', 'noto:external', 'noto:nope']) try { ILLUSTRATIONS.extra(C.stage, id); } catch (e) { out.refused.push(id); }
+        try { ILLUSTRATIONS.extra(C.stage, 'noto:pill', { w:0 }); } catch (e) { out.refused.push('w0'); }
+        ILLUSTRATIONS.style({ skin:'mono', palette:dark }); const s = ILLUSTRATIONS.extra(C.stage, 'noto:pill'); out.styled = [s.skin, s.palette.paper]; s.root.remove();
+        ILLUSTRATIONS.style({ extras:false }); const off = ILLUSTRATIONS.extra(C.stage, 'noto:pill', { x:10, y:20 }); out.off = [off.off, off.root.innerHTML, off.root.dataset.extra, ILLUSTRATIONS.style().extras]; off.root.remove();
+        try { ILLUSTRATIONS.style({ extras:'no' }); } catch (e) { out.refused.push('extras'); }
+        ILLUSTRATIONS.style({ skin:'line', palette:{}, extras:true });
+        out.mono = [...out.mono]; return out;
+      }, EXTRA_SAMPLE);
+      assert.ok(info.ids.includes('noto:mobile-phone'));
+      assert.deepEqual(info.same, [], 'default extra skin differs from line');
+      assert.equal(info.dupIds, 0, 'two copies of one extra share an id');
+      assert.deepEqual(info.invalid, []); assert.deepEqual(info.empty, []);
+      assert.equal(info.outline.flat, 0, 'flat must not outline'); for (const s of ['line', 'mono', 'sketch']) assert.ok(info.outline[s] > 0, s + ' needs the outline');
+      for (const c of info.mono) assert.ok(['#f3f1e8', '#171b18', '#ff7958', 'none'].includes(c), 'mono extra painted ' + c);
+      assert.deepEqual(info.refused, ['noto:evil', 'noto:external', 'noto:nope', 'w0', 'extras']);
+      assert.deepEqual(info.off, [true, '', 'noto:pill', false], 'style({extras:false}) must leave an empty node');
+      assert.deepEqual(info.styled, ['mono', '#171b18']);
     } finally { await page.close(); }
   });
   await test('presenter pool: every preset renders every pose deterministically; default stays classic', async () => {

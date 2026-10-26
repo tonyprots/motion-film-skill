@@ -19,6 +19,14 @@ const aliases = { 'число':'number','числа':'number','счётчик':'
   'телефон':'phone','трубка':'phone','прослушка':'wiretap','календарь':'calendar','оплата':'payment','возврат':'refund','деньги':'money','монеты':'coins','штраф':'fine',
   'чат':'chat','сообщение':'message','штамп':'stamp','печать':'seal','решение':'decision','суд':'court','договор':'contract','замок':'lock','весы':'scales',
   'сессии':'sessions','записи':'recordings','камера':'camera','слежка':'surveillance','предмет':'objects','предметы':'objects',
+  'массовка':'extras','второстепенный':'extras','второстепенные':'extras','ноутбук':'laptop','компьютер':'computer','книга':'book','книги':'books','ключ':'key',
+  'лампочка':'bulb','часы':'clock','будильник':'alarm','машина':'automobile','автобус':'bus','самолёт':'airplane','самолет':'airplane','поезд':'train',
+  'дом':'house','банк':'bank','больница':'hospital','таблетка':'pill','шприц':'syringe','лупа':'magnifying','портфель':'briefcase','сумка':'bag',
+  'посылка':'package','коробка':'package','микрофон':'microphone','фотоаппарат':'camera','медаль':'medal','кубок':'trophy','огонь':'fire','бомба':'bomb',
+  'ракета':'rocket','батарейка':'battery','магнит':'magnet','зонт':'umbrella','очки':'glasses','мешок':'bag','кошелёк':'purse','кошелек':'purse','чек':'receipt',
+  'агент':'agent','агенты':'agent','бот':'bot','токены':'tokens','токен':'tokens','квота':'quota','баланс':'balance','тариф':'plans','тарифы':'plans',
+  'лесенка':'ladder','ступени':'steps','слайды':'slides','презентация':'presentation','дека':'deck','воронка':'funnel','отбор':'filter',
+  'команда':'team','инженер':'engineer','внедрение':'deployment','модель':'model','модели':'model','чип':'chip',
   'морфинг':'morph','превращение':'morph','перенос':'handoff','стык':'continuity',
   'шейдер':'shader','математика':'math','сравнение':'comparison','до':'before','после':'after','документ':'file','люди':'users' };
 function words(s) { return s.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean).map((w)=>aliases[w]||w); }

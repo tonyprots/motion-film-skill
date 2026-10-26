@@ -29,6 +29,8 @@ cp "$SKILL"/templates/brief.md "$SKILL"/templates/timeline.json "$SKILL"/templat
 cp "$SKILL"/templates/sfx_layout.py "$DEST"/scripts/
 cp "$SKILL"/templates/docs/*.md "$DEST"/docs/
 cp -R "$SKILL/library/assets/icons" "$DEST/assets/icons"
+# extras: secondary objects (Noto Emoji, Apache-2.0): sync.mjs bundles only the ids the film names
+[ -d "$SKILL/library/assets/extras" ] && cp -R "$SKILL/library/assets/extras" "$DEST/assets/extras"
 # private puppet packs (never published, publish/guard_private.py): every local project can mount them
 [ -d "$SKILL/private/puppets" ] && mkdir -p "$DEST/assets/puppets" && cp -R "$SKILL/private/puppets/." "$DEST/assets/puppets/"
 cp "$SKILL/library/catalog.json" "$SKILL/library/registry-index.json" "$SKILL/library/source-index.json" "$DEST/docs/"

@@ -94,8 +94,16 @@ Explore these mechanisms for a wider scene vocabulary; they are design recipes, 
 | Vector action | a prepared character/object animation | dotLottie `autoplay:false`; preload WASM/asset before `setFrame`; separate asset license | [dotLottie](https://github.com/LottieFiles/dotlottie-web) |
 
 **Objects from open sets.** No ready set of neutral objects with states and a compatible licence exists, so hero objects
-are drawn to the `EDITORIAL.md` contract (23 objects, skins `line`, `flat`, `mono`, `sketch`) and icons stay for chips
-and small signs. Verdicts as of 2026-10-26:
+are drawn to the `EDITORIAL.md` contract (30 objects, skins `line`, `flat`, `mono`, `sketch`), secondary objects come
+from the `extras` set, and icons stay for chips and small signs. Verdicts as of 2026-10-26:
+- Noto Emoji 2D/svg (Apache-2.0, LICENSE inside the svg folder) — taken as extras: 563 objects in
+  `library/assets/extras/noto/`, commit pin and hashes in `manifest.json`. In the film's skins it reads almost like our
+  own drawings. The 3D Noto exists only as a font and PNG; not taken;
+- Kenney (CC0) — 165 flat objects on one sheet. Objects are tilted, small details are lost, and light parts are meant for
+  a blue background and vanish on paper. Noto reads better;
+- Poly Haven (CC0) — photoreal 3D models of about 2.4 MB each that do not fit flat skins; a route for a 3D insert;
+- Health Icons (CC0) — line medical signs, the same role as icons;
+- Open Doodles, Open Peeps, Humaaans (CC0) — almost all people, few objects;
 - Lucide, Tabler, Phosphor, Iconoir, Heroicons (MIT/ISC) — signs, not the hero object of a frame;
 - Fluent Emoji (MIT) — wide vocabulary, but the sticker look fights any film style and it has no states; not bundled;
 - Twemoji (CC BY 4.0, attribution) and OpenMoji (CC BY-SA 4.0, share-alike) — not for an MIT library;

@@ -1,0 +1,5079 @@
+{
+ "checked_on": "2026-10-26",
+ "pack": "noto",
+ "repo": "googlefonts/noto-emoji",
+ "commit": "e20cbc2bbec1926686be9f9bee7d1d2cfa1fea0e",
+ "license": "Apache-2.0",
+ "license_path": "2D/svg/LICENSE",
+ "license_sha256": "611ceab36dae96644ca84e8ace6873821790192bf6f73b0d0624a21b24b4b332",
+ "modified": "Illustrator metadata, comments, editor labels and unused ids removed, remaining ids shortened; path numbers rounded to 0.01 of the 128-unit viewBox (max 75 of 16384 px differ at 128 px, antialiasing). Shapes and colours unchanged.",
+ "items": [
+  {
+   "name": "bouquet",
+   "emoji_name": "bouquet",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1f490.svg",
+   "sha": "87008df249eff1e3989f10ca9a2ae5a781e0a00f",
+   "sha256": "ccefe3177efe54eed6cdb7f3202ef322dfa27970bb865b2e0bd0dc175e5d65bf"
+  },
+  {
+   "name": "cherry-blossom",
+   "emoji_name": "cherry blossom",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1f338.svg",
+   "sha": "b774763d4bd86a4a2211b206f37106cd49bd3758",
+   "sha256": "6b999c0bc703addf0303faaded30ec173a11d400ae2179749227399c3d816c7d"
+  },
+  {
+   "name": "white-flower",
+   "emoji_name": "white flower",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1f4ae.svg",
+   "sha": "cbb8cdf1b5af42997ea40577efa4c56f3b15ccde",
+   "sha256": "869f8da2f2a467aafaa859ca482dfe7e8641e554db66b3f7f70b7a08877e29b1"
+  },
+  {
+   "name": "lotus",
+   "emoji_name": "lotus",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1fab7.svg",
+   "sha": "8f1f160a723374dababff89c82a829331a855925",
+   "sha256": "8702b734a10088465017d4053acc933bedfb42bb317fbd8f7b8fc8fc8afa0c10"
+  },
+  {
+   "name": "rosette",
+   "emoji_name": "rosette",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1f3f5.svg",
+   "sha": "b96af9da127486e94dd6e620636b143b615401ce",
+   "sha256": "24d3c5ae2e4e6f71556a9d3d20ae08d086b7e5873b965b4f8cd58cca59d41990"
+  },
+  {
+   "name": "rose",
+   "emoji_name": "rose",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1f339.svg",
+   "sha": "9944e20bdf212d57aeebc29bb48002927e29106d",
+   "sha256": "b593637e879b3554bdb4dfb69eb0909f15db3bd2d9ad210eb97ac78a8a64f5c8"
+  },
+  {
+   "name": "wilted-flower",
+   "emoji_name": "wilted flower",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1f940.svg",
+   "sha": "5cf7c238b45146795f85a070fa79b380c3fe7977",
+   "sha256": "de99fc362fc24769474f0843b660e77f5e02f39aea07a8dc5e7cdf10c36eb167"
+  },
+  {
+   "name": "hibiscus",
+   "emoji_name": "hibiscus",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1f33a.svg",
+   "sha": "5789572fe922320ac526148e89dbf25f97d6e2e6",
+   "sha256": "49ccd78f426d4ad74dc0dcdaa22b7cc656f927365f9017f879f8a27cd4d18417"
+  },
+  {
+   "name": "sunflower",
+   "emoji_name": "sunflower",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1f33b.svg",
+   "sha": "c996064212fed27322ff25be36931ed24ddcbbc6",
+   "sha256": "595b28bda697840cf3f0a21a3d7258f88fbc4b0ed1d6f11c4519dcecc91e6982"
+  },
+  {
+   "name": "blossom",
+   "emoji_name": "blossom",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1f33c.svg",
+   "sha": "a25eace18e94b681aab0e2e606c181a032844c07",
+   "sha256": "d07c47025af2527f1935babb198889d68a783f09b1344554233e230c08a984ce"
+  },
+  {
+   "name": "tulip",
+   "emoji_name": "tulip",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1f337.svg",
+   "sha": "ed392f8252465dd27c1aa17ae5a28d7fba183521",
+   "sha256": "2e6ded0b7f6ec9a4eeb62ac4c3a9ff8d4af010f7fc94a884f133e2b85e607311"
+  },
+  {
+   "name": "hyacinth",
+   "emoji_name": "hyacinth",
+   "group": "Animals & Nature",
+   "subgroup": "plant-flower",
+   "upstream_path": "2D/svg/emoji_u1fabb.svg",
+   "sha": "a13530be9b788d55eb80f9b4c67bd3bd0685f90a",
+   "sha256": "9317aa402e4ec5e02f2964424a366c68b0e3602dfea4a555ca93a61879f0f427"
+  },
+  {
+   "name": "seedling",
+   "emoji_name": "seedling",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f331.svg",
+   "sha": "2d2e419cb64eb28102f7a66b48a95e518597dcc1",
+   "sha256": "430d52c901fa0f2c616862ee961d08aca31493433152f1f77299d1c2806ee415"
+  },
+  {
+   "name": "potted-plant",
+   "emoji_name": "potted plant",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1fab4.svg",
+   "sha": "976a134a66aa47f7cf4ee9d905e03d3441b7ca23",
+   "sha256": "99710aacd0fc7daa68784b8bc4b86b4eb002d486a7d1c063ce1b9e888f47e208"
+  },
+  {
+   "name": "evergreen-tree",
+   "emoji_name": "evergreen tree",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f332.svg",
+   "sha": "b0beffe21a88cb67e65f6ffab6d18f9a45c9b03f",
+   "sha256": "659330ef6daaa439485865239a80772db80ce940f45881cf0da075d261dc0bf5"
+  },
+  {
+   "name": "deciduous-tree",
+   "emoji_name": "deciduous tree",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f333.svg",
+   "sha": "2d37f19edb534f883a41abec896d302c06153297",
+   "sha256": "5750db02e19a179f77d705a96eadc11c1f4b4089e26692dd506c088b1a9f35ce"
+  },
+  {
+   "name": "palm-tree",
+   "emoji_name": "palm tree",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f334.svg",
+   "sha": "d1f81ed4718dd95869bc4dabb5c9349c943f0a97",
+   "sha256": "3f2d4ad130b54f6951f174ac9f64f5922dedc90992561d6fac3be4ff2eff37ac"
+  },
+  {
+   "name": "cactus",
+   "emoji_name": "cactus",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f335.svg",
+   "sha": "c16e7a2870e9218179c8ea81d76bf3cd227e6538",
+   "sha256": "4781bde4a0f935c70db733ec3b22e5aa187fdb09f68b9f31b215e671b11e120a"
+  },
+  {
+   "name": "sheaf-of-rice",
+   "emoji_name": "sheaf of rice",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f33e.svg",
+   "sha": "51e37f6ede2d01e1dead0b40abbf0a7485051ad1",
+   "sha256": "b3a0204ce101dd09630e5ba717ebd5515c732c38d93e7408e22bb408125bc4fa"
+  },
+  {
+   "name": "herb",
+   "emoji_name": "herb",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f33f.svg",
+   "sha": "f04f78c0c4da17230184f39033aee4fb062e966f",
+   "sha256": "63e00f66baceb8679e7cfed9cc093e64e9e8c69a2ff24c70bf559afcbcedbe17"
+  },
+  {
+   "name": "shamrock",
+   "emoji_name": "shamrock",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u2618.svg",
+   "sha": "4176fa0f888f25da60cd13047b654e8ce22899a5",
+   "sha256": "43e46b64255d9cb34df7adf76123ede5354e7f6c3f49e1700599731560e9491b"
+  },
+  {
+   "name": "four-leaf-clover",
+   "emoji_name": "four leaf clover",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f340.svg",
+   "sha": "8ac5cc60c2c4620146c533e554d7645fe4c15db7",
+   "sha256": "b3a306c6174c8e82bbbabb963c782cc3d87a28bce1736ce26970f2a87fd49ecf"
+  },
+  {
+   "name": "maple-leaf",
+   "emoji_name": "maple leaf",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f341.svg",
+   "sha": "bd09107ee5a18c5fd408cdc878c611aed5b89112",
+   "sha256": "c272ee14b12256b4e8b6f72d0a6e0314d3df7513f5efa9eb50830d0874d42171"
+  },
+  {
+   "name": "fallen-leaf",
+   "emoji_name": "fallen leaf",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f342.svg",
+   "sha": "bb62029fcda0ba460722c564e3486c355fa87347",
+   "sha256": "5332882d5d33c9c4c6db98956132186f778553574c35fee65905b61f780d0eab"
+  },
+  {
+   "name": "leaf-fluttering-in-wind",
+   "emoji_name": "leaf fluttering in wind",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f343.svg",
+   "sha": "e4b4f0db5bd369d7c92d55fc376e1bbf45c080c4",
+   "sha256": "fff5100ac3f6ef48b30aad474c104b644d1799923499f323b6345ec7b79bc48e"
+  },
+  {
+   "name": "empty-nest",
+   "emoji_name": "empty nest",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1fab9.svg",
+   "sha": "47f733c1b580112ac35a2514738374931551a120",
+   "sha256": "fff796e84556726b3ee2450eab87b7722795f20812eead4d26c2cfff07c61358"
+  },
+  {
+   "name": "nest-with-eggs",
+   "emoji_name": "nest with eggs",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1faba.svg",
+   "sha": "fd6210ab5efda7a51c0a97e41394340706eb4746",
+   "sha256": "10aa5abdaf83be1cb1c5ad42af8397f771a80195df9fc7a0743ff57a698f740e"
+  },
+  {
+   "name": "mushroom",
+   "emoji_name": "mushroom",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1f344.svg",
+   "sha": "bda83018cd79766812b7f361b83d8f4feb65cf4c",
+   "sha256": "4fc0780e19c00247a7aa1d5f78285a77453ede2ae1c1051c7f2df65a515201e2"
+  },
+  {
+   "name": "leafless-tree",
+   "emoji_name": "leafless tree",
+   "group": "Animals & Nature",
+   "subgroup": "plant-other",
+   "upstream_path": "2D/svg/emoji_u1fabe.svg",
+   "sha": "1c33a8c66de1bbede45ebbbffa0127435e0d330d",
+   "sha256": "13b1ddd63ecf6b2c43e50b1a292a14a09636dcc29219c14f270ac7e90cb04cf4"
+  },
+  {
+   "name": "baby-bottle",
+   "emoji_name": "baby bottle",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f37c.svg",
+   "sha": "7c1819238640e38dbb292b1662b62af91126e5a2",
+   "sha256": "5c1b5b21a601479c150388df5312fec1f1f6479be8547abf252e6db3af29471c"
+  },
+  {
+   "name": "glass-of-milk",
+   "emoji_name": "glass of milk",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f95b.svg",
+   "sha": "0223ff04fa93a6d3b359e042a33ec0251f415722",
+   "sha256": "e7a80adb2ed624bff271b504006978aafb61f3b84de4eb67f2de8a921ee6aa17"
+  },
+  {
+   "name": "hot-beverage",
+   "emoji_name": "hot beverage",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u2615.svg",
+   "sha": "f260144febfcfbf431e4ef47a48a0023ae9898da",
+   "sha256": "548b0c6b391dad353d8fdaf93afa35e44c41511db651ad209ff83b837e7a63d0"
+  },
+  {
+   "name": "teapot",
+   "emoji_name": "teapot",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1fad6.svg",
+   "sha": "c16103878763de3ca55c87e13b749b1535da7613",
+   "sha256": "be58337bdcbea948d282599cfee97d5d1d1e5435a5388a64d5a125b3ff8aadbf"
+  },
+  {
+   "name": "teacup-without-handle",
+   "emoji_name": "teacup without handle",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f375.svg",
+   "sha": "1060cd3a9c0f559e472ecd05b1adaa4317948762",
+   "sha256": "c2db64b91c857095b91fd6e63b9e19e0d943dc2ffe34e2e69bb156a56783c6d1"
+  },
+  {
+   "name": "sake",
+   "emoji_name": "sake",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f376.svg",
+   "sha": "b4d0030035b4c0f0ad019cc3d345bbce831ea975",
+   "sha256": "30bba5281f1bc82fbacb5da1fb2b37001600e47f1b068f7948806bcc6c3284bc"
+  },
+  {
+   "name": "bottle-with-popping-cork",
+   "emoji_name": "bottle with popping cork",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f37e.svg",
+   "sha": "f732526eb01de92f20581032d1f2d7f011548aa9",
+   "sha256": "dbf12e22361ad877511c6049ad9479febda21d173e9eb9b770814f1d13980f31"
+  },
+  {
+   "name": "wine-glass",
+   "emoji_name": "wine glass",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f377.svg",
+   "sha": "235a52467c65928f9ec4b269afed04f903a3af39",
+   "sha256": "3aa26d367525199ada6af6b941464d5c9f80ed22a232d2b3a9142b301252df7c"
+  },
+  {
+   "name": "cocktail-glass",
+   "emoji_name": "cocktail glass",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f378.svg",
+   "sha": "a69a3696c788d16e51bc5685d8e8e9fa55df1ad1",
+   "sha256": "3b74a75231c1bd7ba4e276ee07efdd5d57138ef47f1d66eddcffaffe822877fb"
+  },
+  {
+   "name": "tropical-drink",
+   "emoji_name": "tropical drink",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f379.svg",
+   "sha": "d6787a3d07ff85f58ee703d238f116e2eccd284f",
+   "sha256": "0f43badf5261173587aacd5b44f5688b1ff9a5c75bbfbe3e3b94a3cc30d03188"
+  },
+  {
+   "name": "beer-mug",
+   "emoji_name": "beer mug",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f37a.svg",
+   "sha": "dae98bab3d7ad15035cbf88de6a9698991bf4c6c",
+   "sha256": "928637e2024aad3b08f937421bab87afc72511fad8d69c218af19a8d71d68f72"
+  },
+  {
+   "name": "clinking-beer-mugs",
+   "emoji_name": "clinking beer mugs",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f37b.svg",
+   "sha": "c358dc3b6648a368c91b957e1bc557460f44f39f",
+   "sha256": "24182f31e151a00444cd93aafcb31eca83469f5da2a6833785c086916ec52649"
+  },
+  {
+   "name": "clinking-glasses",
+   "emoji_name": "clinking glasses",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f942.svg",
+   "sha": "d896645f59860c62d0b21b9d7370ebf4a34e3eb2",
+   "sha256": "1bf555e9216f49be4e710597bdb5b93e756712e1c7065ae40f30c9a37c8d26a1"
+  },
+  {
+   "name": "tumbler-glass",
+   "emoji_name": "tumbler glass",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f943.svg",
+   "sha": "7ccd15f2ec7b88526110b14ff12b5c06616d6065",
+   "sha256": "4ca2151d58ac055fbe0a04a8ef973c674fdbd42316cc63cc59ed170d999f5a87"
+  },
+  {
+   "name": "pouring-liquid",
+   "emoji_name": "pouring liquid",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1fad7.svg",
+   "sha": "866681cef830d27386f1bbc1e46cf5e5537eaa9b",
+   "sha256": "f1c6a827e31f8ee9c7d7b0226ed0eb44f365ca5f7a88d29cca2d77c479ded4a3"
+  },
+  {
+   "name": "cup-with-straw",
+   "emoji_name": "cup with straw",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f964.svg",
+   "sha": "4fe839661216c0beb6b0d8c2a5eb265bcdede1b3",
+   "sha256": "c4e66d5c86899c7ecd7b9ea75b2c9380ba46dddae485dc8f04a1c3536fd76668"
+  },
+  {
+   "name": "bubble-tea",
+   "emoji_name": "bubble tea",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f9cb.svg",
+   "sha": "4c10f47cbd71d4b6abfe0a98aadb62a7b4aa7d07",
+   "sha256": "081aa87c633e16b37ffee165fadcebf9872ad01229c5e1f4c1c9512a0b4d043d"
+  },
+  {
+   "name": "beverage-box",
+   "emoji_name": "beverage box",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f9c3.svg",
+   "sha": "d415d34d5813a2da31df6c7bae2e28b33fc34c61",
+   "sha256": "682243930225383b2b2cb2f5e0db6f994fec31572bd3babb7b2499f295c146ff"
+  },
+  {
+   "name": "mate",
+   "emoji_name": "mate",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f9c9.svg",
+   "sha": "d1c8e6360bfce00b9a72f57efb8e3c98cf9ab970",
+   "sha256": "432f66fd969bb04500eaeb6dcc54859b9f5483c10fe2349a840c2e12d50cb5a2"
+  },
+  {
+   "name": "ice",
+   "emoji_name": "ice",
+   "group": "Food & Drink",
+   "subgroup": "drink",
+   "upstream_path": "2D/svg/emoji_u1f9ca.svg",
+   "sha": "af4a99915243b15ad0869ebde62090aac3beb303",
+   "sha256": "53be1c8ceaa4a73ae14dd05f6b8ff06c72522b59f9766b3b724b07974b6d9d76"
+  },
+  {
+   "name": "chopsticks",
+   "emoji_name": "chopsticks",
+   "group": "Food & Drink",
+   "subgroup": "dishware",
+   "upstream_path": "2D/svg/emoji_u1f962.svg",
+   "sha": "889824e51fd63b39783397d8cd6f111d43234eaf",
+   "sha256": "e4eb19093f270aaf55fa944f3e804b90f36e22093bcb5540e201e0a35f972b84"
+  },
+  {
+   "name": "fork-and-knife-with-plate",
+   "emoji_name": "fork and knife with plate",
+   "group": "Food & Drink",
+   "subgroup": "dishware",
+   "upstream_path": "2D/svg/emoji_u1f37d.svg",
+   "sha": "2b200cbb6d8e75826ae2cdc44198ca3e3e12d247",
+   "sha256": "8ac836c4c34c306410f070a6d958a80d5e7e89c6d85ddcaeeb521968f8caa660"
+  },
+  {
+   "name": "fork-and-knife",
+   "emoji_name": "fork and knife",
+   "group": "Food & Drink",
+   "subgroup": "dishware",
+   "upstream_path": "2D/svg/emoji_u1f374.svg",
+   "sha": "f512f8ecebfe9abe7606f009a2338fc7212ecb27",
+   "sha256": "f763714a18bad9b24b47fef3ef3c2df1ce38802b40ab128830db409926b68019"
+  },
+  {
+   "name": "spoon",
+   "emoji_name": "spoon",
+   "group": "Food & Drink",
+   "subgroup": "dishware",
+   "upstream_path": "2D/svg/emoji_u1f944.svg",
+   "sha": "de400ba0a3d3eb5f045347d2489fe7d45785ba8f",
+   "sha256": "be2291a7ec5bd57c33263a9f928c72be53d902fea2f7074a0ad64c2fa7072927"
+  },
+  {
+   "name": "kitchen-knife",
+   "emoji_name": "kitchen knife",
+   "group": "Food & Drink",
+   "subgroup": "dishware",
+   "upstream_path": "2D/svg/emoji_u1f52a.svg",
+   "sha": "ccca28c76dd93c15091059deac4fa4384460150a",
+   "sha256": "68f2c3914df48372012ff771c2abb511d6d442a40378cfa75871cdc69ee3ef9f"
+  },
+  {
+   "name": "jar",
+   "emoji_name": "jar",
+   "group": "Food & Drink",
+   "subgroup": "dishware",
+   "upstream_path": "2D/svg/emoji_u1fad9.svg",
+   "sha": "fca3c6753f7ac6b91b7de1e0477de3a793b48e8c",
+   "sha256": "019a167029827cab5f88ed472ada98e4d02c585dd2332233eb4c52613d9483a4"
+  },
+  {
+   "name": "amphora",
+   "emoji_name": "amphora",
+   "group": "Food & Drink",
+   "subgroup": "dishware",
+   "upstream_path": "2D/svg/emoji_u1f3fa.svg",
+   "sha": "bb372518f925b52437a7c46aec849168ae7db59f",
+   "sha256": "9a5b7ed6b4e11556050ffdab71a70530c5aa2db0ee0b1aebd2fad3d3b9bb5ba8"
+  },
+  {
+   "name": "globe-showing-europe-africa",
+   "emoji_name": "globe showing Europe-Africa",
+   "group": "Travel & Places",
+   "subgroup": "place-map",
+   "upstream_path": "2D/svg/emoji_u1f30d.svg",
+   "sha": "a91d83972884fe0cfaee85deb0ff63700dd07ff9",
+   "sha256": "94dc81bce6042bbfd92c63df600fc36eaafa5462e47bacc817345ce5bfbc8281"
+  },
+  {
+   "name": "globe-showing-americas",
+   "emoji_name": "globe showing Americas",
+   "group": "Travel & Places",
+   "subgroup": "place-map",
+   "upstream_path": "2D/svg/emoji_u1f30e.svg",
+   "sha": "feb7be4435955b92f9e2539145d963765a408d06",
+   "sha256": "350e47c0baf4a65be5f82bace2b385e53d889e60786e81a4714f28226c41c8ee"
+  },
+  {
+   "name": "globe-showing-asia-australia",
+   "emoji_name": "globe showing Asia-Australia",
+   "group": "Travel & Places",
+   "subgroup": "place-map",
+   "upstream_path": "2D/svg/emoji_u1f30f.svg",
+   "sha": "9dbcd3ffd0d473d4d87f39f47090daa54cf3b03b",
+   "sha256": "3b71f9778a5a11af4aa0609b2f7ecf6839cc4d99787160457e56b32c82905f63"
+  },
+  {
+   "name": "globe-with-meridians",
+   "emoji_name": "globe with meridians",
+   "group": "Travel & Places",
+   "subgroup": "place-map",
+   "upstream_path": "2D/svg/emoji_u1f310.svg",
+   "sha": "e700f78034a62a7c64cb90e2de1e2dbdd8013713",
+   "sha256": "9466eb0e0f6347dbc873666c7db6ab1bf82d08d7ba6724ac28300f7ef18b3af9"
+  },
+  {
+   "name": "world-map",
+   "emoji_name": "world map",
+   "group": "Travel & Places",
+   "subgroup": "place-map",
+   "upstream_path": "2D/svg/emoji_u1f5fa.svg",
+   "sha": "e27bc0808005ebde256a7b87151b2ac889d71f0b",
+   "sha256": "f7ab76df2cfd5c8eb370e64de71cbfcae2d584451af3836429320fd75d2303e1"
+  },
+  {
+   "name": "map-of-japan",
+   "emoji_name": "map of Japan",
+   "group": "Travel & Places",
+   "subgroup": "place-map",
+   "upstream_path": "2D/svg/emoji_u1f5fe.svg",
+   "sha": "7b417ff53bd385d6e06af8f0384b2bed3f1e5c6b",
+   "sha256": "f29aed6891d475eaa08c7c3e0114837b0a2d5e3420582acb4500f56d3d08cc3a"
+  },
+  {
+   "name": "compass",
+   "emoji_name": "compass",
+   "group": "Travel & Places",
+   "subgroup": "place-map",
+   "upstream_path": "2D/svg/emoji_u1f9ed.svg",
+   "sha": "4475dca496c41032644eec699151d843dedd708d",
+   "sha256": "a562ec60f4c8f631b2ebf09896af0702f333abc9f08c2260c99da7daf414c6c6"
+  },
+  {
+   "name": "stadium",
+   "emoji_name": "stadium",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3df.svg",
+   "sha": "7ffc78f0952cd4efa93661829a9ebe548805b6a3",
+   "sha256": "eb1aadd6e4bde92796de746700701616cb4e6d9640ff9b255733ae4ae033ba66"
+  },
+  {
+   "name": "classical-building",
+   "emoji_name": "classical building",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3db.svg",
+   "sha": "1f7f8eec96f761ec2ef37deda2a20b2f73ef42b0",
+   "sha256": "3ac0ea1df9d90dc0dde487d1d3a5012270c2c43b39ea6b2a41cc7a3addd3b168"
+  },
+  {
+   "name": "building-construction",
+   "emoji_name": "building construction",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3d7.svg",
+   "sha": "f537353a81c92e943721fae5ecc05de2d4e19025",
+   "sha256": "deea48cba4cc07590ce6f9360f7f5636500479c2b8b27580ec161717e7434037"
+  },
+  {
+   "name": "brick",
+   "emoji_name": "brick",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f9f1.svg",
+   "sha": "bc54536c6041f45a3c5bdb205d54b29c76276a3e",
+   "sha256": "8a5d19dc23a22bf04653f04c70d099190aa40b1c2a3ff5cf6f82b753701cd006"
+  },
+  {
+   "name": "rock",
+   "emoji_name": "rock",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1faa8.svg",
+   "sha": "379a00965ebd531a43ed7f91958d12bbc71fdb4c",
+   "sha256": "32e9951c80179ee2d02ce062af062eabc2d5c8c5ba33b506ffc5d8dfe99aa070"
+  },
+  {
+   "name": "wood",
+   "emoji_name": "wood",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1fab5.svg",
+   "sha": "c592ebc53180fd124ccc98007a4d72553de30b93",
+   "sha256": "3cbd5f4a8a6b07d52c4dc7ab9e0e0d55d36fe0af5736914225dfaa0cde3f39c9"
+  },
+  {
+   "name": "hut",
+   "emoji_name": "hut",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f6d6.svg",
+   "sha": "b65f920a3b21e23910c9622aece04610abf90e7d",
+   "sha256": "7870ea13160df3e35c6e557bc94a7bece41f752596e9a36edaeb8b2700d3b0c4"
+  },
+  {
+   "name": "houses",
+   "emoji_name": "houses",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3d8.svg",
+   "sha": "ad418e2ef878218a6937967d24a21f8100518194",
+   "sha256": "50cc84d60ff819bb403f867e4c269a3c387602cb92b6053c3f7667784cca8316"
+  },
+  {
+   "name": "derelict-house",
+   "emoji_name": "derelict house",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3da.svg",
+   "sha": "0ad50ac051884651348541ed1fd4dd3aeb695415",
+   "sha256": "1bd7c33b929965f63b9ddc7c2b14724ca16c027f6574194c9873997e3a73564d"
+  },
+  {
+   "name": "house",
+   "emoji_name": "house",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3e0.svg",
+   "sha": "f949b102a4582a730e2f496f3b4c880fd40c78c1",
+   "sha256": "3cbe0bb482e65d9c59155546c757073b23699f3ae3ab32407e86e7a7dd240df9"
+  },
+  {
+   "name": "house-with-garden",
+   "emoji_name": "house with garden",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3e1.svg",
+   "sha": "d638585e49b362732f8decf14088ee726e78cea9",
+   "sha256": "a69a5219499fdbb189cce3be3c39d9e5aadb2bfa2c15e6265fdb59c89383194b"
+  },
+  {
+   "name": "office-building",
+   "emoji_name": "office building",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3e2.svg",
+   "sha": "a75d208cff6208f9a04a7289dfb8af16fa666d44",
+   "sha256": "2051cef006f317322458b6312583f1fc76ac0f4bed78aefd95a64fdd35b73f6f"
+  },
+  {
+   "name": "japanese-post-office",
+   "emoji_name": "Japanese post office",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3e3.svg",
+   "sha": "e19530e03f1ba5842136ae29497cafb32d28408f",
+   "sha256": "5d84bbfe16485d0820047c0ff15ee8a73fe8fb70d600b2ac689126ff67501140"
+  },
+  {
+   "name": "post-office",
+   "emoji_name": "post office",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3e4.svg",
+   "sha": "4b4036afbd2e81857d97d6d779e3da3be5d87835",
+   "sha256": "23292c96e11e114b9b1583eb4e4885cb64a812249f8b5aab1fbbdd72590d68db"
+  },
+  {
+   "name": "hospital",
+   "emoji_name": "hospital",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3e5.svg",
+   "sha": "be9d22e94c7a51f9098f88fdfc0da2a237048f79",
+   "sha256": "f58355c05cfd93663843cb56482139556b8ddbccc1d1deafeab8b4c5be816fdb"
+  },
+  {
+   "name": "bank",
+   "emoji_name": "bank",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3e6.svg",
+   "sha": "4c072663ed9cb203199ee330d11898ee6fe684d1",
+   "sha256": "e29dc3e8239789d8ed524ef464d3c9bc3b3163085ed4ae4860dd5b4c7a6c7bdc"
+  },
+  {
+   "name": "hotel",
+   "emoji_name": "hotel",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3e8.svg",
+   "sha": "70367dc96c36f0a2a2f1c0f8cfc90fb775e66e9e",
+   "sha256": "6be2d73f1d73216622eaaf8f2cd4ce56c621713fe5682ea92a3c1a867223352a"
+  },
+  {
+   "name": "love-hotel",
+   "emoji_name": "love hotel",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3e9.svg",
+   "sha": "902ff04ecc85adcc3ce2ccadfaee382459bb5130",
+   "sha256": "e1e7dbf7a8f39f7d0a5ad1df953de7d1ac078fd09844e0f8d318e0bcc421d0ff"
+  },
+  {
+   "name": "convenience-store",
+   "emoji_name": "convenience store",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3ea.svg",
+   "sha": "b868931975df83a14af3efa3e0e0301da063a9b5",
+   "sha256": "a93041c0599b729b337538105f69c37c69f022f5a78758222d6de9d8a469dd91"
+  },
+  {
+   "name": "school",
+   "emoji_name": "school",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3eb.svg",
+   "sha": "e137b27eb8b0f0cdb41039a818dff670744a8377",
+   "sha256": "8fee8da49fa741e20f99a4c7d208a993a3e53e2556ae167e538ae8202800f380"
+  },
+  {
+   "name": "department-store",
+   "emoji_name": "department store",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3ec.svg",
+   "sha": "6cc7ecc628ef205ae60da5c4968753c9871bbb93",
+   "sha256": "aa7af97cfb670cc27696baa19fb4506df04a72635a25a90c642546a6609344d8"
+  },
+  {
+   "name": "factory",
+   "emoji_name": "factory",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3ed.svg",
+   "sha": "251284adb35beceba8f6f2407ad1871ca39cde49",
+   "sha256": "883c51ef4f19246ed52e42ef17274b5973b0888976c70ebba479ad5f326216b1"
+  },
+  {
+   "name": "japanese-castle",
+   "emoji_name": "Japanese castle",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3ef.svg",
+   "sha": "ef3bf1ac48e209017ea0eeb0a99342d1539e6e85",
+   "sha256": "c13384f18c7900eba3ebfe70c7ad2b95f15996c4169933c40311e7ef396c1516"
+  },
+  {
+   "name": "castle",
+   "emoji_name": "castle",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f3f0.svg",
+   "sha": "70571ba020c7df58b86e910311f3949e1702be5d",
+   "sha256": "1790e476443c41ea861ee59209ce957ef03e6a442f772ffc9f41f0c5952344f0"
+  },
+  {
+   "name": "wedding",
+   "emoji_name": "wedding",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f492.svg",
+   "sha": "9c2ded1975618c0f200b4f2b35f55f8b41de9870",
+   "sha256": "c98d58bd0092eb5b9371510a9c0a370478fdcd4711c4cd59cfb5be9ad3c1657f"
+  },
+  {
+   "name": "tokyo-tower",
+   "emoji_name": "Tokyo tower",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f5fc.svg",
+   "sha": "e48aa05f75348cb3e627ca47fc70e24e8b3b5398",
+   "sha256": "5034e72c4c98842f2bcea51425926b34caaeb24c1fbd46f6608cd2cea6717742"
+  },
+  {
+   "name": "statue-of-liberty",
+   "emoji_name": "Statue of Liberty",
+   "group": "Travel & Places",
+   "subgroup": "place-building",
+   "upstream_path": "2D/svg/emoji_u1f5fd.svg",
+   "sha": "359261ccd5442c50d651a8cd01666143279afc69",
+   "sha256": "827eaa8b947dea4e08c00cac9e5595d78594453802d666c0d2493e1865c81795"
+  },
+  {
+   "name": "fountain",
+   "emoji_name": "fountain",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u26f2.svg",
+   "sha": "87c48e82b85fb0f879c11ab5c60ccdbbca3c39c6",
+   "sha256": "0076afb7adbb467a745dfe050a9d1df103e4983c511e124cdea60f250cc62f4d"
+  },
+  {
+   "name": "tent",
+   "emoji_name": "tent",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u26fa.svg",
+   "sha": "493b971a7bc666279c5be61893a707a8037b0faa",
+   "sha256": "3b434f8b64bf3e8bf2569d72851b11c30f8cb64275309c31a4b37a104ff938b3"
+  },
+  {
+   "name": "foggy",
+   "emoji_name": "foggy",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f301.svg",
+   "sha": "14e463c4f9f1cd0f44f87dc31b8af8df4d9d6792",
+   "sha256": "e95b3d109c6e110f4bed944071432e62db41ae9df0d449a8062bcf39f175f541"
+  },
+  {
+   "name": "night-with-stars",
+   "emoji_name": "night with stars",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f303.svg",
+   "sha": "67fba656cd2bf5f42cd6bef8cece2c84b37b5995",
+   "sha256": "31a439fa0291ca8eec53655c1e4fe4841c9a0175f0ce2d070d5040a62a683aeb"
+  },
+  {
+   "name": "cityscape",
+   "emoji_name": "cityscape",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f3d9.svg",
+   "sha": "08f37c11fef5b457edbbd702ef1b9da80ba43a07",
+   "sha256": "2c388ecd9f7cf1036cafb208fddf669dda090c00f14df740b168648e4d5f86f4"
+  },
+  {
+   "name": "sunrise-over-mountains",
+   "emoji_name": "sunrise over mountains",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f304.svg",
+   "sha": "9e1486b9a9cc613e98df4e814ecf28c61221b368",
+   "sha256": "7c2b0118f22fc7590e38fd6562179bdb108b202dd692c65fa15619488e6c7566"
+  },
+  {
+   "name": "sunrise",
+   "emoji_name": "sunrise",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f305.svg",
+   "sha": "4395967979e9c260327fa9be5b55e5e811d77a4c",
+   "sha256": "80456cdb2000dbf13f6309607a13a9ff32646ebac1214d26eb8890f320521d3c"
+  },
+  {
+   "name": "cityscape-at-dusk",
+   "emoji_name": "cityscape at dusk",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f306.svg",
+   "sha": "fd6b15f954d6933c081be9f9077ee8931460ffee",
+   "sha256": "2ffe39bd315fb134a44253e670eb9a1332cf142c9cd02759403450b252d9149b"
+  },
+  {
+   "name": "sunset",
+   "emoji_name": "sunset",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f307.svg",
+   "sha": "e275c18bb6fb9c6262be4331327304a4403d35ff",
+   "sha256": "78dbcde8f37f6ffc6dcc4846d92e0fd305c811ed918ffa9c4d5328c93758be9e"
+  },
+  {
+   "name": "bridge-at-night",
+   "emoji_name": "bridge at night",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f309.svg",
+   "sha": "09c62bebcd92b18bea0d182d1283cc8dbef220f4",
+   "sha256": "c38df9b46245ece42e6e91736f60b72cb63243a77ceaec072e331500fd2bda42"
+  },
+  {
+   "name": "hot-springs",
+   "emoji_name": "hot springs",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u2668.svg",
+   "sha": "587faaaf124db91cabab208296f9c989257166c4",
+   "sha256": "adc29d23519861295e85da9342fc6f37d7572294348ad41b587734ef1964d342"
+  },
+  {
+   "name": "carousel-horse",
+   "emoji_name": "carousel horse",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f3a0.svg",
+   "sha": "811cbc6a224578b756c2cc30b60e177700a482eb",
+   "sha256": "37fcda090766b64716326d041b591960ca093bf722525c53917d89acfec2af6c"
+  },
+  {
+   "name": "playground-slide",
+   "emoji_name": "playground slide",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f6dd.svg",
+   "sha": "abc45faf0af6b24589d07e9e62535d094bedc68e",
+   "sha256": "28a0b18c6c0eaeae960c01f325a85e268975b8dad1694bac84501fb83a1430ac"
+  },
+  {
+   "name": "ferris-wheel",
+   "emoji_name": "ferris wheel",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f3a1.svg",
+   "sha": "6e32ee387d464ba93a8b533c3640ccf99e64dd51",
+   "sha256": "5726024fe5845211ba55d7dab0f04a4497d21bc10509bbc069ac72dec29c3386"
+  },
+  {
+   "name": "roller-coaster",
+   "emoji_name": "roller coaster",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f3a2.svg",
+   "sha": "2d20ec3e3469b2d1ed1fd1bbf9583ba4ee22c49c",
+   "sha256": "f7d8bf0f6d47f1335d662dd2cf5aeaac88343daf75a8944f40798a2e9d22adac"
+  },
+  {
+   "name": "barber-pole",
+   "emoji_name": "barber pole",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f488.svg",
+   "sha": "9ce9d4f889f539ecaed6038bd00bcbdc6f1a9fd1",
+   "sha256": "bc95a34391db36ca2e96674db1932f2a5ed25d8e1eb71b37ccc28142ad7cca8d"
+  },
+  {
+   "name": "circus-tent",
+   "emoji_name": "circus tent",
+   "group": "Travel & Places",
+   "subgroup": "place-other",
+   "upstream_path": "2D/svg/emoji_u1f3aa.svg",
+   "sha": "0f9dd278f5431bb58ad962600e5069bd5ba4cf97",
+   "sha256": "dbf9e0a170f27b5318ea3dc3cfa66fc00f512f4e11226be04986f4b755af8ab0"
+  },
+  {
+   "name": "locomotive",
+   "emoji_name": "locomotive",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f682.svg",
+   "sha": "d65ca15f42bed2b74427604ad0165e3a2b9975f1",
+   "sha256": "738adbc6b5db58adf5269974a291eb61bfd28187339e6af16fd97cb558447843"
+  },
+  {
+   "name": "railway-car",
+   "emoji_name": "railway car",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f683.svg",
+   "sha": "b4079f53a3a836016c8a3697aa84902000ffabc1",
+   "sha256": "7f7d30b1d39f9ed0ee118f8fb28b2a7d6968c46bdda84a23daa3d026fd61d0e6"
+  },
+  {
+   "name": "high-speed-train",
+   "emoji_name": "high-speed train",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f684.svg",
+   "sha": "48b32d18319057637f10486993e87875c85ef249",
+   "sha256": "2022b0862119b07f707a41b3dea450a692a51eac83c596b49faa577c811a958e"
+  },
+  {
+   "name": "bullet-train",
+   "emoji_name": "bullet train",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f685.svg",
+   "sha": "3fe61d1e6c59caeec5dbecbad1c7eb9d68a30db2",
+   "sha256": "2a94e2361cd39519aba8c3bd2f3fbacef5a88c7035dc44bedcf08062910c4475"
+  },
+  {
+   "name": "train",
+   "emoji_name": "train",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f686.svg",
+   "sha": "e6b13632dbbdc926db1d361b68c8ec77dc347be3",
+   "sha256": "f97ae0107bf3cef4a503840008104086355e04089ef0bda2eb4860feeee87833"
+  },
+  {
+   "name": "metro",
+   "emoji_name": "metro",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f687.svg",
+   "sha": "2827e583a17be94184ffa4b5ab4beef7a43531a2",
+   "sha256": "05584dcdd46f23616b1f575c17b5dcd086db89989d7e9cad30fe53e205a65712"
+  },
+  {
+   "name": "light-rail",
+   "emoji_name": "light rail",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f688.svg",
+   "sha": "793198303e856abcc252c41dbdcda953324f1a75",
+   "sha256": "17bd2fac227a29879f6921019f768e4227510c39106569e1b978b698154eae4f"
+  },
+  {
+   "name": "station",
+   "emoji_name": "station",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f689.svg",
+   "sha": "32cc5a4a6d662c2871d2e116a9dae0bc6c952a43",
+   "sha256": "ca32e65891bcf8a8e416fad12b6c68b6f84c771bc290e1ca5cbc4df0c198c65b"
+  },
+  {
+   "name": "tram",
+   "emoji_name": "tram",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f68a.svg",
+   "sha": "2271d779eba0004bab79c7e84dcbbec8090b68ed",
+   "sha256": "fb59683eba2e6cb6e248952e73eac5d17b53753a0ac2a7ad7381cfef36072ff4"
+  },
+  {
+   "name": "monorail",
+   "emoji_name": "monorail",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f69d.svg",
+   "sha": "1db7e8bd7a6a7b44efa8439a2884941e1c57bc86",
+   "sha256": "5504e88481f979b280d811c1de0e47b31a3404951216e00e2f4ac0a6c028e01f"
+  },
+  {
+   "name": "mountain-railway",
+   "emoji_name": "mountain railway",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f69e.svg",
+   "sha": "5328a766f95a673f5cf2e61759bdbda5c8e1bcf3",
+   "sha256": "09044e215164eec24e8678fb41d4935b5b74d0033b98400163f8ba22a5e88d7e"
+  },
+  {
+   "name": "tram-car",
+   "emoji_name": "tram car",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f68b.svg",
+   "sha": "f008d3f60b019b3b8fefe2c699faced8a3609431",
+   "sha256": "4e15e8335036b047fadc33aa1636c4961bd68952b97c21441a2c9538058ba1cb"
+  },
+  {
+   "name": "bus",
+   "emoji_name": "bus",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f68c.svg",
+   "sha": "c6367dac2bfd35b106e5a60d8cdb94a90a3d9a7c",
+   "sha256": "f92368433ea66ed73ebe59f8ee7d0467d36ec4ac7c96057192f55ad3a70c7fad"
+  },
+  {
+   "name": "oncoming-bus",
+   "emoji_name": "oncoming bus",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f68d.svg",
+   "sha": "42fe43622822baa88b914457b9973328cf787e3a",
+   "sha256": "68305c384a64a28d5191006f88e0b8570a8902638d86711bd8b2af5f018ccf89"
+  },
+  {
+   "name": "trolleybus",
+   "emoji_name": "trolleybus",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f68e.svg",
+   "sha": "74708ae8e3216b24db54aaf1b1beae8ed24b553c",
+   "sha256": "167cf9f959872427e912589b99962ad578154a832087310d8526abe726b70243"
+  },
+  {
+   "name": "minibus",
+   "emoji_name": "minibus",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f690.svg",
+   "sha": "c34f6cc1e716f5d34f301471ca1fc8faf93cbeb5",
+   "sha256": "919eb6b7daea8e55c977e339c53fa93fbfba5a50ec71d0b9bab8af5fed4e79fb"
+  },
+  {
+   "name": "ambulance",
+   "emoji_name": "ambulance",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f691.svg",
+   "sha": "ee31bf8be2fd6725cfd2e01f1584fbd124e46760",
+   "sha256": "386a93ddf70d2cd5eece2d744409c2957ff1ca9149e998b586ba69d2e339b29f"
+  },
+  {
+   "name": "fire-engine",
+   "emoji_name": "fire engine",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f692.svg",
+   "sha": "4e870815a79a240544701a044c38f105e71f4762",
+   "sha256": "9b7dd2523cc7ad76930483d7c8be91d97961416a726f2426aec754462862862f"
+  },
+  {
+   "name": "police-car",
+   "emoji_name": "police car",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f693.svg",
+   "sha": "e5541f6d0f7744f0df312e9485c10cfca8fec555",
+   "sha256": "2e95226c295d96979225cfb28308de7a46c4aa481192f1c2ceb62771ac00ebfa"
+  },
+  {
+   "name": "oncoming-police-car",
+   "emoji_name": "oncoming police car",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f694.svg",
+   "sha": "e63e882a52d070b72328c08dac47f0d244270931",
+   "sha256": "07103990950dbb9adfe1c77613c12add55b11a4f9e80cc1052243d1581cf5dc7"
+  },
+  {
+   "name": "taxi",
+   "emoji_name": "taxi",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f695.svg",
+   "sha": "0f6848e3ace7aed33dc4e685c7bccb7539021b5f",
+   "sha256": "bdf97ae3f7ef4403031690ad90b69f8bda29b5e0d455b8f29ebbfd330a419f67"
+  },
+  {
+   "name": "oncoming-taxi",
+   "emoji_name": "oncoming taxi",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f696.svg",
+   "sha": "8691e3b53992e1af1383fbbbbb30ec9a42058103",
+   "sha256": "590ad0e3d0731ce50516ab54563122266f952c86f37c85bae43429811e75d608"
+  },
+  {
+   "name": "automobile",
+   "emoji_name": "automobile",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f697.svg",
+   "sha": "75489bbe40513b04295bb6886a9ea064a261c0b2",
+   "sha256": "7added21d3ef22410d7387f6e77856b65514da641425d3b0834f96e3f49d65c7"
+  },
+  {
+   "name": "oncoming-automobile",
+   "emoji_name": "oncoming automobile",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f698.svg",
+   "sha": "7847a669535bc8c3da33981109df64f1c01c8c79",
+   "sha256": "2a8d015dba9d2c539f68bcbe24eabcbf67fe8ea0515a389dd4403bb07ddb19bb"
+  },
+  {
+   "name": "sport-utility-vehicle",
+   "emoji_name": "sport utility vehicle",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f699.svg",
+   "sha": "30235ebaebdd7b5aa45ce15a858707ed2bddb65e",
+   "sha256": "bc4017840405010232994b0094dbd18c1f3d5d237ede5ae4e82218a4fbac8d03"
+  },
+  {
+   "name": "pickup-truck",
+   "emoji_name": "pickup truck",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6fb.svg",
+   "sha": "57334113e81afb8325e2ecb6735d05285bd4f276",
+   "sha256": "cc010417f5a7274a85da8e2dc701844c84e65b61586799e096e9350497b5e09e"
+  },
+  {
+   "name": "delivery-truck",
+   "emoji_name": "delivery truck",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f69a.svg",
+   "sha": "0578bb981f068cdb0e59a456795e6b52f9132752",
+   "sha256": "764d402a488e0432adaba78c7226f1d92eeb4ae0903155b0d1b3f118670661ac"
+  },
+  {
+   "name": "articulated-lorry",
+   "emoji_name": "articulated lorry",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f69b.svg",
+   "sha": "61654fcc948b0bc15cd13846d39810a1a204ab22",
+   "sha256": "33a441def496377852bdfd5c02cc47e7bc817fa788da29481e12c5c343e272ae"
+  },
+  {
+   "name": "tractor",
+   "emoji_name": "tractor",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f69c.svg",
+   "sha": "7b581d7682513b19a0b7e2a123d3060376207a5a",
+   "sha256": "d779325e3f22ecbad4807b2dcc44b15061b4f3b62ac51f4ed8f311acdc889b2f"
+  },
+  {
+   "name": "racing-car",
+   "emoji_name": "racing car",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f3ce.svg",
+   "sha": "5895ad621fe024b2d1d404d013c75125c9101e97",
+   "sha256": "2854f49497d4e20df3258130ba25765d8f1291c0194faa65e5f74d63edf171f3"
+  },
+  {
+   "name": "motorcycle",
+   "emoji_name": "motorcycle",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f3cd.svg",
+   "sha": "9187d655e43b4f0c427108090a45fd4b22d754a3",
+   "sha256": "b8b575c217ae88422edcb4a8c77ddd5e67828a6e40a980188e21583d1d3b25ac"
+  },
+  {
+   "name": "motor-scooter",
+   "emoji_name": "motor scooter",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6f5.svg",
+   "sha": "329bd76b6810726c8c4c00f58f4b7bfcca1cf92b",
+   "sha256": "53fb7ff26e10723515a573d1132c71751a75176b1d4ce6bbd86e90c867da67ad"
+  },
+  {
+   "name": "manual-wheelchair",
+   "emoji_name": "manual wheelchair",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f9bd.svg",
+   "sha": "dd4a7793d6ebdbae10df4a0a6401a8a053d7c754",
+   "sha256": "7f9c830f9758dca179f23b29fbc360dd8d282acbccae40365d28b10055297bbd"
+  },
+  {
+   "name": "motorized-wheelchair",
+   "emoji_name": "motorized wheelchair",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f9bc.svg",
+   "sha": "d0bd303757d6ad3f455608ea9148c1e605dfd3e4",
+   "sha256": "50f1eab7b6caaf4e2104237a2e37e101b6f41b0d02a7050a3041bb28179a92b7"
+  },
+  {
+   "name": "auto-rickshaw",
+   "emoji_name": "auto rickshaw",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6fa.svg",
+   "sha": "3d86026eeff72c5d8e87b045d0a2eb307d756a39",
+   "sha256": "342b0fdf9caf1d404636eed2c962c638d993c3499adf7d5b5fae716446139d46"
+  },
+  {
+   "name": "bicycle",
+   "emoji_name": "bicycle",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6b2.svg",
+   "sha": "fcb6237c357940d89a7adc2e86f90d6a021f28d6",
+   "sha256": "b7cb84a6fc83f4e5b8286a3821e9223c5007e970b92df204b2b40f5ca7fc705c"
+  },
+  {
+   "name": "kick-scooter",
+   "emoji_name": "kick scooter",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6f4.svg",
+   "sha": "61a0974b40ba24cce0334f5a9deb1709073bbaef",
+   "sha256": "c4b91e9efca64e533bd2a700f2485716e45bbac3ddcf2eb3d5a4aa98b51e6be1"
+  },
+  {
+   "name": "skateboard",
+   "emoji_name": "skateboard",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6f9.svg",
+   "sha": "6c3cd78a53e6db6ae08322ecc059a6307ed41aa7",
+   "sha256": "f8cbceaea0ff8ed7dd32a14bf38072b5b8689285a9632bcdad223b91c02eb9e5"
+  },
+  {
+   "name": "roller-skate",
+   "emoji_name": "roller skate",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6fc.svg",
+   "sha": "42ffdfb3a8d4485e9c73871d095c8c7fe9c1d3ff",
+   "sha256": "cd1af000579be5d68c852add3d95231bf1d780d33ce6f8ba29f12f11fcebf594"
+  },
+  {
+   "name": "bus-stop",
+   "emoji_name": "bus stop",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f68f.svg",
+   "sha": "69413de7580df7a1fc1d4d4cd415b2781986a666",
+   "sha256": "1c55f06016fc4094df9fcef894279547a536242c65c7567aedc00c45da3a609d"
+  },
+  {
+   "name": "motorway",
+   "emoji_name": "motorway",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6e3.svg",
+   "sha": "59da7560b3501d992e25250ea444a79c36d4a719",
+   "sha256": "bb913d9b656c3c2c7c745f618c31a760bd6181d6d2c7bdea155ba6b5f7d41f03"
+  },
+  {
+   "name": "railway-track",
+   "emoji_name": "railway track",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6e4.svg",
+   "sha": "7159f380f3a9af424c76d698c377c4a07df0a105",
+   "sha256": "7e7e9be5298f77527c1c6811285cab74f64a4580f44da283500635448e7a88a0"
+  },
+  {
+   "name": "oil-drum",
+   "emoji_name": "oil drum",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6e2.svg",
+   "sha": "a52886be4baf495aa53ebcc1cda2710114560bff",
+   "sha256": "7156b8865d70b1de26f6c570b94e5c9132fce0fc52e52c6aac1dfa31ee68ccde"
+  },
+  {
+   "name": "fuel-pump",
+   "emoji_name": "fuel pump",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u26fd.svg",
+   "sha": "962d90d1c1178df85d6a138f8d05f0bc1c0e0814",
+   "sha256": "131989fffd0a6ce4ddb8092ff6bf284e7dbddc97046f0747c26ed97e197f8500"
+  },
+  {
+   "name": "wheel",
+   "emoji_name": "wheel",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6de.svg",
+   "sha": "2001f07af42446c23212c27b6282b2a8cfd7d2f1",
+   "sha256": "0b575d8b8cdba2613f52b3bc33153e65e96dd8a645e3aa966f601e52476d3cf0"
+  },
+  {
+   "name": "police-car-light",
+   "emoji_name": "police car light",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6a8.svg",
+   "sha": "9741d2d5ac44d53b0e333a0b4a102a97f8013642",
+   "sha256": "ab97c7840c2f6049affc1f68a0478d62a339b0b31bdce049ec0922df33a41bc5"
+  },
+  {
+   "name": "horizontal-traffic-light",
+   "emoji_name": "horizontal traffic light",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6a5.svg",
+   "sha": "31fddd7f9c6b78e52e727c92841d374b39669734",
+   "sha256": "96852d573c726a3cc66387cc5c0c6496a0b9846ddf7be1d907d63f6aa9ef5c63"
+  },
+  {
+   "name": "vertical-traffic-light",
+   "emoji_name": "vertical traffic light",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6a6.svg",
+   "sha": "78602a37442d05d972ee8e227037de0d8d2b48ee",
+   "sha256": "12c3fd6a5588782e83078bc92239dba08ca938790ebe78cae1f4f427f72bca25"
+  },
+  {
+   "name": "stop-sign",
+   "emoji_name": "stop sign",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6d1.svg",
+   "sha": "ec5d89928481e400bfcdd989071a5f0708166bba",
+   "sha256": "f7a48abeb97fcd604520584004bd42dde38253a9720c9f3540b0f725caffe278"
+  },
+  {
+   "name": "construction",
+   "emoji_name": "construction",
+   "group": "Travel & Places",
+   "subgroup": "transport-ground",
+   "upstream_path": "2D/svg/emoji_u1f6a7.svg",
+   "sha": "0b57d2f1c17acbf16c63f828fcc3ce2eceafc173",
+   "sha256": "49ca54ce3014326a12d77c5d457a7949d9680264f2f6b013da6a265ddcd7fe4d"
+  },
+  {
+   "name": "lighthouse",
+   "emoji_name": "lighthouse",
+   "group": "Travel & Places",
+   "subgroup": "transport-water",
+   "upstream_path": "2D/svg/emoji_u1f6d9.svg",
+   "sha": "f706757c88e65e20d6ebc9af9c4f2d2dffb83227",
+   "sha256": "7abb3a94c326259dd9340234d33d746b55882550d44ec214df55fee2d2d95c19"
+  },
+  {
+   "name": "anchor",
+   "emoji_name": "anchor",
+   "group": "Travel & Places",
+   "subgroup": "transport-water",
+   "upstream_path": "2D/svg/emoji_u2693.svg",
+   "sha": "e9c44db6e9cd686bb51f97509abda7de55b76a2c",
+   "sha256": "f8329b4c8f5fffbe6fdc3f19676bf2f7d9b6cffe35ce9f3c6ee575b19ee3b618"
+  },
+  {
+   "name": "ring-buoy",
+   "emoji_name": "ring buoy",
+   "group": "Travel & Places",
+   "subgroup": "transport-water",
+   "upstream_path": "2D/svg/emoji_u1f6df.svg",
+   "sha": "136817171229fdcfcdd7bd181dc366dd45360797",
+   "sha256": "03383aaabf554d77eeb29ff799d7d8ec777e672a316359ad37456b5c376df6ca"
+  },
+  {
+   "name": "sailboat",
+   "emoji_name": "sailboat",
+   "group": "Travel & Places",
+   "subgroup": "transport-water",
+   "upstream_path": "2D/svg/emoji_u26f5.svg",
+   "sha": "739ab191192f2441918948ea0bb0dec776cca8cb",
+   "sha256": "f52d96e6d225a96430acdba93be4961aa99c6f8db5b6485031d160a1bdd2fb23"
+  },
+  {
+   "name": "canoe",
+   "emoji_name": "canoe",
+   "group": "Travel & Places",
+   "subgroup": "transport-water",
+   "upstream_path": "2D/svg/emoji_u1f6f6.svg",
+   "sha": "ac670074d0ec305b92f11505857400bba2cea8ce",
+   "sha256": "c01ef49e244b795fec45c459a30f311143eb240139f540a623dd2f79467fce2b"
+  },
+  {
+   "name": "speedboat",
+   "emoji_name": "speedboat",
+   "group": "Travel & Places",
+   "subgroup": "transport-water",
+   "upstream_path": "2D/svg/emoji_u1f6a4.svg",
+   "sha": "694bd64b4de2fed47108202d9396d4df4013d5f1",
+   "sha256": "90f1f711b5f5d29c6b3d6fc1f7905d78c4c452e487afe7b1b92fdb7af85ae269"
+  },
+  {
+   "name": "passenger-ship",
+   "emoji_name": "passenger ship",
+   "group": "Travel & Places",
+   "subgroup": "transport-water",
+   "upstream_path": "2D/svg/emoji_u1f6f3.svg",
+   "sha": "f57c074a475cea4eed5bebfb2f0f62e97f5198ec",
+   "sha256": "41de32225ebd448d6cb4af84b5996c2d411b158044b9c63d6b5437febe70a34e"
+  },
+  {
+   "name": "ferry",
+   "emoji_name": "ferry",
+   "group": "Travel & Places",
+   "subgroup": "transport-water",
+   "upstream_path": "2D/svg/emoji_u26f4.svg",
+   "sha": "892bfc0a0a5392a4f608c2efeb2a57e594040190",
+   "sha256": "bad63b6d9c3c5ab77b1259d9f3e6a991cdf4533424945f0ef379aa25514360d6"
+  },
+  {
+   "name": "motor-boat",
+   "emoji_name": "motor boat",
+   "group": "Travel & Places",
+   "subgroup": "transport-water",
+   "upstream_path": "2D/svg/emoji_u1f6e5.svg",
+   "sha": "e80a414a9c549d9941b3e272b7bac7ae02f2f816",
+   "sha256": "f7db74ed05a8355ee75b25e3b7f30ea25d51aa58e6b53326c9e48afe660d0734"
+  },
+  {
+   "name": "ship",
+   "emoji_name": "ship",
+   "group": "Travel & Places",
+   "subgroup": "transport-water",
+   "upstream_path": "2D/svg/emoji_u1f6a2.svg",
+   "sha": "feb6d13b617671d3d1ea482b4e06ca48bf457143",
+   "sha256": "009c8955babdd0fa5810bbbb7c4f139f0d3c5e3ba59ffea18e3be16ef0fda0a1"
+  },
+  {
+   "name": "airplane",
+   "emoji_name": "airplane",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u2708.svg",
+   "sha": "e942b8dd18f6b2abcdb335f1487d0366bc32d31c",
+   "sha256": "88c03242de3952554d4bed83d2e5aea552cfff5871a3a208398a8a67f5466625"
+  },
+  {
+   "name": "small-airplane",
+   "emoji_name": "small airplane",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f6e9.svg",
+   "sha": "8c4c53f62025ec25c53ac9d38382e36dcbd95708",
+   "sha256": "44f4a2642dfb047629cb9d868aeea70a5fc1e6de0eef5e759e28af7ec8cd83a2"
+  },
+  {
+   "name": "airplane-departure",
+   "emoji_name": "airplane departure",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f6eb.svg",
+   "sha": "dcc71f14ce5b681b0ae2848ece006a9fa982a8a2",
+   "sha256": "a53881c408f8d533d0473a341c4c4de3e6727328db9610b3ca0c8e89ce7e1336"
+  },
+  {
+   "name": "airplane-arrival",
+   "emoji_name": "airplane arrival",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f6ec.svg",
+   "sha": "ef20b72d31ac5e9e151243f8e3d83d96c02155da",
+   "sha256": "6e59d0cbeb134a8fa101cd73ee004f4a5236e3c12082da8e2a3afb5940e17e02"
+  },
+  {
+   "name": "parachute",
+   "emoji_name": "parachute",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1fa82.svg",
+   "sha": "e2b31b888a9ff091e07a989240d0c6bb3cf7d981",
+   "sha256": "d57e44222bc4272b4472e6719bc1824215bec7187755549821697e0f8da5cd35"
+  },
+  {
+   "name": "seat",
+   "emoji_name": "seat",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f4ba.svg",
+   "sha": "bfbad3124c28f7548ca7019430f74fe03eee3ea3",
+   "sha256": "4be27399b592666edfcb8371ca33b2e232e9ecb2d57f264ee8810ea4e64478ac"
+  },
+  {
+   "name": "helicopter",
+   "emoji_name": "helicopter",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f681.svg",
+   "sha": "b6fb879c547f9bec960c19ed12871a6646ea3ba3",
+   "sha256": "403a8565ce54342be2b6706dc1468f2701e6e41e84f604ddb4e4fcf2ec6a3c64"
+  },
+  {
+   "name": "suspension-railway",
+   "emoji_name": "suspension railway",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f69f.svg",
+   "sha": "5fb8f3fe8639031dfacc3d95914458d92d68384e",
+   "sha256": "639ecefb83eaaf4c4ef5ca99dac71557bfe5e1352cd475597064a1659b6893ab"
+  },
+  {
+   "name": "mountain-cableway",
+   "emoji_name": "mountain cableway",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f6a0.svg",
+   "sha": "74cf0387ddfe6b9c8153bbbd54e33e909909d656",
+   "sha256": "adeff3b957e9d97c69e2fbd4adc04e935864d68f5a015eb34a3893ec071a53aa"
+  },
+  {
+   "name": "aerial-tramway",
+   "emoji_name": "aerial tramway",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f6a1.svg",
+   "sha": "c463b2e6b860bc23c60b57892f0823191aa0cbc0",
+   "sha256": "8a3fcaa0a290f6b3e0f7e147ccd1ec03e6dfd444a479f85210c6d14459113a5f"
+  },
+  {
+   "name": "satellite",
+   "emoji_name": "satellite",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f6f0.svg",
+   "sha": "0d0a8d79708cfe2b772cc7a6eadb60ea1a340616",
+   "sha256": "587e2c33d0b01ac89bbbc684dc6671c73bb4dd96d746aff860c3e255fdb4b373"
+  },
+  {
+   "name": "rocket",
+   "emoji_name": "rocket",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f680.svg",
+   "sha": "7b242363b581fba2e979368d9de1971446b2b72b",
+   "sha256": "88fe8c46f585a2c6f8f6e144c7d801508260878534dea4b09a73eac108f947f3"
+  },
+  {
+   "name": "flying-saucer",
+   "emoji_name": "flying saucer",
+   "group": "Travel & Places",
+   "subgroup": "transport-air",
+   "upstream_path": "2D/svg/emoji_u1f6f8.svg",
+   "sha": "56a6e433357f3105e4d801efa60d721e6b2e70f4",
+   "sha256": "e67a6256456e0ff62a5ef62321230268c1595f25b7db46eee090e7f7a8ac5d25"
+  },
+  {
+   "name": "bellhop-bell",
+   "emoji_name": "bellhop bell",
+   "group": "Travel & Places",
+   "subgroup": "hotel",
+   "upstream_path": "2D/svg/emoji_u1f6ce.svg",
+   "sha": "529bd38962831850d1755d975b2fcb4525d0da6e",
+   "sha256": "fccdfa51b0c9f74d61fc837364ddb76e38acb08f3f682851877ab0defa413c83"
+  },
+  {
+   "name": "luggage",
+   "emoji_name": "luggage",
+   "group": "Travel & Places",
+   "subgroup": "hotel",
+   "upstream_path": "2D/svg/emoji_u1f9f3.svg",
+   "sha": "a3b713bf017da967a2545d876ecffa8cc9fceac8",
+   "sha256": "3982f43e8581fa0906c8b2b9259a0006903360925ef6304d2957a7f3a410ec2b"
+  },
+  {
+   "name": "hourglass-done",
+   "emoji_name": "hourglass done",
+   "group": "Travel & Places",
+   "subgroup": "time",
+   "upstream_path": "2D/svg/emoji_u231b.svg",
+   "sha": "2616fc54edc6981ba3dad3498f8e74bd02e522fa",
+   "sha256": "a6fd792a7141861f2c7fecda7298472645ca9555b7985da79a53ad8284da7884"
+  },
+  {
+   "name": "hourglass-not-done",
+   "emoji_name": "hourglass not done",
+   "group": "Travel & Places",
+   "subgroup": "time",
+   "upstream_path": "2D/svg/emoji_u23f3.svg",
+   "sha": "6677ab39daa033ea4e87887ba2b490642f358f68",
+   "sha256": "0194f0c1aa1dd1a77071b91499ef067457b9b985e9447d8b0c77dbafaad7b637"
+  },
+  {
+   "name": "watch",
+   "emoji_name": "watch",
+   "group": "Travel & Places",
+   "subgroup": "time",
+   "upstream_path": "2D/svg/emoji_u231a.svg",
+   "sha": "9c582321b96db45d69d0f302cf1f6bb349a56531",
+   "sha256": "c193b0fd79fea252d33c60ba1d3280ac1b124f82e3fe06250d465fbe3ca8c86a"
+  },
+  {
+   "name": "alarm-clock",
+   "emoji_name": "alarm clock",
+   "group": "Travel & Places",
+   "subgroup": "time",
+   "upstream_path": "2D/svg/emoji_u23f0.svg",
+   "sha": "dabd00621876e4fd1e911784a49e7c2f2539337c",
+   "sha256": "7d4bb3daabb24287dc3748523ea148ad27ca024f0a4e85c6aa1f52f04fb08743"
+  },
+  {
+   "name": "stopwatch",
+   "emoji_name": "stopwatch",
+   "group": "Travel & Places",
+   "subgroup": "time",
+   "upstream_path": "2D/svg/emoji_u23f1.svg",
+   "sha": "1ce11f8ad3598674ba35b0ce8b5c7d6a8d15be39",
+   "sha256": "25ccc33ac147824ee8fbadb86ff349f0d47151c004b71afbe829c6cc2e072ab7"
+  },
+  {
+   "name": "timer-clock",
+   "emoji_name": "timer clock",
+   "group": "Travel & Places",
+   "subgroup": "time",
+   "upstream_path": "2D/svg/emoji_u23f2.svg",
+   "sha": "e307cd3f83c30a6f931577c6cf0784d828f6d4a6",
+   "sha256": "04db383eefb5c218b7e5977b55e8610fd391d36b2e85f34fbddced8b777c0a3c"
+  },
+  {
+   "name": "mantelpiece-clock",
+   "emoji_name": "mantelpiece clock",
+   "group": "Travel & Places",
+   "subgroup": "time",
+   "upstream_path": "2D/svg/emoji_u1f570.svg",
+   "sha": "91974d2b9f0ce3c8131d3629ce8156ea1c9a29a2",
+   "sha256": "3f15e0d27d0f85ae566225046596e485512ff4501baf91176f9ac023fde6eb8b"
+  },
+  {
+   "name": "new-moon",
+   "emoji_name": "new moon",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f311.svg",
+   "sha": "cf9cef8f6bda52d42ec54f3fd42d714f79a46e35",
+   "sha256": "a2c0cc76e22e2f0c43e4e5fe2579e322d082f48b4cb8d568fec79ead5a7e5f77"
+  },
+  {
+   "name": "waxing-crescent-moon",
+   "emoji_name": "waxing crescent moon",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f312.svg",
+   "sha": "d642fa043879ccf9ac59239b7eb8e6a7b3d08e43",
+   "sha256": "3a5813b67d7fc5535f6f446bbbc6ec558f7483d389c6803a2fff4adff6b15918"
+  },
+  {
+   "name": "first-quarter-moon",
+   "emoji_name": "first quarter moon",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f313.svg",
+   "sha": "8e8cfeaf99c2ab9779f429a820c6ba9cd3b096a9",
+   "sha256": "1cf461f2e120a1d1723eb729e8c7f896a75459606d04c2e49a712c033734932a"
+  },
+  {
+   "name": "waxing-gibbous-moon",
+   "emoji_name": "waxing gibbous moon",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f314.svg",
+   "sha": "6ad36c84d9b8bd7a9b675fb8c231b4da94b4981a",
+   "sha256": "733590d51a32ffe7335e39b55b96a238bd8eeac86bd2cc7d7824a19da46ab03d"
+  },
+  {
+   "name": "full-moon",
+   "emoji_name": "full moon",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f315.svg",
+   "sha": "50a4f22975f97dd4694b5824783f4c8f3b38ac1d",
+   "sha256": "18d477537e8c5d2e67425b63c11e4065386722af75b351086190b69685ca7ace"
+  },
+  {
+   "name": "waning-gibbous-moon",
+   "emoji_name": "waning gibbous moon",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f316.svg",
+   "sha": "f881eece1c5553d3e4e9548a80cc9fe483e4e0be",
+   "sha256": "f0ea298b7b86c65a909b32f6fc6c39033c2720591c8b6e767ac2655e6e680c3e"
+  },
+  {
+   "name": "last-quarter-moon",
+   "emoji_name": "last quarter moon",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f317.svg",
+   "sha": "9c27058c6df0b293d60df968c92566a1f882d231",
+   "sha256": "8965aa5067e796a80c9bbcdcffa0b62d95ed47a5d60aa9c72de3872d216cae16"
+  },
+  {
+   "name": "waning-crescent-moon",
+   "emoji_name": "waning crescent moon",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f318.svg",
+   "sha": "4148745b07b62c1b77ad23dc10a4b5e955b565b9",
+   "sha256": "35dad06697f5a6751b18aeea9f7cb0323ea72528f54e7ee947b9fb364357b691"
+  },
+  {
+   "name": "crescent-moon",
+   "emoji_name": "crescent moon",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f319.svg",
+   "sha": "175db6c63121a2c66850096bec1f7a8ac7f8abc6",
+   "sha256": "2d79580fcb61919d1e6f9b5db588e5fdc1c72641f199d4fa918ab907f442ace0"
+  },
+  {
+   "name": "new-moon-face",
+   "emoji_name": "new moon face",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f31a.svg",
+   "sha": "69ad2c49d3318b7a9ae61f87a5ae27ac2743709b",
+   "sha256": "e616120b2264aac7f51e425eb3060b124a171899d5c9cd3517e5df9461bce4a8"
+  },
+  {
+   "name": "first-quarter-moon-face",
+   "emoji_name": "first quarter moon face",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f31b.svg",
+   "sha": "1c7cf75827901dc298a483ba03da160a674dfc74",
+   "sha256": "7ecb75dab508c66ed9ff73975bc7593dca9197272196c0800c3e0e24c1db974f"
+  },
+  {
+   "name": "last-quarter-moon-face",
+   "emoji_name": "last quarter moon face",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f31c.svg",
+   "sha": "9f313145ff6cacbbf0748bd00caf69995ca76cc4",
+   "sha256": "81319c5f945cb1f0f775870af3e49c921d75c5d52e640d74b535d071b949336c"
+  },
+  {
+   "name": "thermometer",
+   "emoji_name": "thermometer",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f321.svg",
+   "sha": "d220f1938a2886693dca7a10ec17f316f843ef19",
+   "sha256": "261277135bd83d129045cc4251aae42640256af39ab1e58ecedd881b2f04d048"
+  },
+  {
+   "name": "sun",
+   "emoji_name": "sun",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u2600.svg",
+   "sha": "f5f26693a721992c216b755bdd287c7235edb3c2",
+   "sha256": "6d1d2b202d91ae0aa9fda172d3a4f89d3200df41cfe6e922ce58292ded1f9858"
+  },
+  {
+   "name": "full-moon-face",
+   "emoji_name": "full moon face",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f31d.svg",
+   "sha": "de280e85633f046b53d6ca4a4ae6cb5bc53f9da7",
+   "sha256": "89d8426cd969ff572d0268ecfe9428a8ad161fdd7bdd08fc3bdf9ad16d4081f0"
+  },
+  {
+   "name": "sun-with-face",
+   "emoji_name": "sun with face",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f31e.svg",
+   "sha": "8d26d1959c6046a7f450360e47c43cfc89042e95",
+   "sha256": "f96aff1e106ce2e1c52e1cec9ae606c8067b84bf986b917a0123ea6d44b5a766"
+  },
+  {
+   "name": "ringed-planet",
+   "emoji_name": "ringed planet",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1fa90.svg",
+   "sha": "b386ae13fd2241a1f8f0a0d5e5764de73dbfb7e8",
+   "sha256": "7191836f02fd64572311894859918831e9ee28d2b86b21f325a2dcfb26882915"
+  },
+  {
+   "name": "star",
+   "emoji_name": "star",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u2b50.svg",
+   "sha": "15b21182037c2d9f3ab5c19cf787ef61fb8fb3ee",
+   "sha256": "c554054c8e1272e3730ee3ad5ead2168d8a6657bc65a7e3f6d2305a4d5f7a4c3"
+  },
+  {
+   "name": "glowing-star",
+   "emoji_name": "glowing star",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f31f.svg",
+   "sha": "680301898ac6e4d4bfe9009f3728c8fa1ec6b96f",
+   "sha256": "ef06f2823136dc72ccb36c62772c3248924f770fa17e2767511d2e574a6c18c2"
+  },
+  {
+   "name": "shooting-star",
+   "emoji_name": "shooting star",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f320.svg",
+   "sha": "de9187168501f2fcaff7db13d25c8b13f90ccb5f",
+   "sha256": "301086454a87fe412f8fcb4d0c854ec3b412e76f7435f34d7050e7f999199b38"
+  },
+  {
+   "name": "milky-way",
+   "emoji_name": "milky way",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f30c.svg",
+   "sha": "d81874e22e61c24bd25518f8ea85bc876f1b0d49",
+   "sha256": "149076163e6da5964f0cb3fe54f65bff33d782d4f7abc7c451c4f3519490f670"
+  },
+  {
+   "name": "cloud",
+   "emoji_name": "cloud",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u2601.svg",
+   "sha": "3c86290e6b35b3c6ae34eac410a1cc1a43939513",
+   "sha256": "50211d73a9dbb6362d54bf44b7caa9a0f69303dd0a2a1ac7055889a293637474"
+  },
+  {
+   "name": "sun-behind-cloud",
+   "emoji_name": "sun behind cloud",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u26c5.svg",
+   "sha": "2456413a57792ddff09943f0b802bdb49242d4a7",
+   "sha256": "62a01c8935aa40afc632f0d3477cae9fa204b50be1fdc58cd5c0eca78316d623"
+  },
+  {
+   "name": "cloud-with-lightning-and-rain",
+   "emoji_name": "cloud with lightning and rain",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u26c8.svg",
+   "sha": "cf075b570f60fa366adefc7597b701292a59157d",
+   "sha256": "e1edb785f08feb3a7633cfe402c7e0e583710af27eac589c6c922a96fefa1bae"
+  },
+  {
+   "name": "sun-behind-small-cloud",
+   "emoji_name": "sun behind small cloud",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f324.svg",
+   "sha": "09655d694d6227beaa446885374c87c64b49dc20",
+   "sha256": "d35cd2c1dd790d91585d66b529a7df2f17054af0cb454cf26066fb77709030c7"
+  },
+  {
+   "name": "sun-behind-large-cloud",
+   "emoji_name": "sun behind large cloud",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f325.svg",
+   "sha": "8ce6c28bddfff8b10fa2bc0cff5d524c46336869",
+   "sha256": "a05ad037506904e87a109a5f03bbec784cf8927596406daf8cf8d08b8725df16"
+  },
+  {
+   "name": "sun-behind-rain-cloud",
+   "emoji_name": "sun behind rain cloud",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f326.svg",
+   "sha": "e22514524f5b6177c004c32777e4ef4a42f640c2",
+   "sha256": "02117a90fd423358755cb806ad4fcbe808e8c09f93b0269fd5e5ce4328a10696"
+  },
+  {
+   "name": "cloud-with-rain",
+   "emoji_name": "cloud with rain",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f327.svg",
+   "sha": "5de20d75006081fc41a79b0e12127e39a53722ce",
+   "sha256": "9cc8ce737fbdd578985ab894d976121c699df04e127a5069908c7ab35fdb433b"
+  },
+  {
+   "name": "cloud-with-snow",
+   "emoji_name": "cloud with snow",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f328.svg",
+   "sha": "5a90f17d69208895445f7cbc6abe4df208025e5f",
+   "sha256": "ac343f605cd747251469cd2c6837c48d22319f989aeababe76fa17e2bf366265"
+  },
+  {
+   "name": "cloud-with-lightning",
+   "emoji_name": "cloud with lightning",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f329.svg",
+   "sha": "6642acffce8c68a6e9efa14acb3f144edba88ccd",
+   "sha256": "59f512e0c68c77fefccc308558e5977a607bea8c6859744f171639885ef6a9fd"
+  },
+  {
+   "name": "tornado",
+   "emoji_name": "tornado",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f32a.svg",
+   "sha": "a9a89fd4217dc625b757585df2f610a43214ba42",
+   "sha256": "77c4412b6df14db51ba856aff632fe37ce7a34b4fee4c3f330753381ec95ec69"
+  },
+  {
+   "name": "fog",
+   "emoji_name": "fog",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f32b.svg",
+   "sha": "2bb6b3a4193cd73fd711b8b1fac003d3bf2245ce",
+   "sha256": "21a5efa50120cf3415c609b7b3f4d660af7e26dd977db0adc291d8ca95adfd76"
+  },
+  {
+   "name": "wind-face",
+   "emoji_name": "wind face",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f32c.svg",
+   "sha": "6524b4095ffdf3ea6654ac9cba730f9d1dce9fc1",
+   "sha256": "2c3386a6c79e3aeb6ae1eeda751da9ddb410c242f53eab7eccab46c14f139a60"
+  },
+  {
+   "name": "cyclone",
+   "emoji_name": "cyclone",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f300.svg",
+   "sha": "993899e726333e855b1ce20884d81f5111c27b73",
+   "sha256": "0698e3093337ac54849e9f929920a561d60c63b20507466da59bbbba5b50cb51"
+  },
+  {
+   "name": "rainbow",
+   "emoji_name": "rainbow",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f308.svg",
+   "sha": "b5ee709a233fa65a6df0e2853882ce13acb89e96",
+   "sha256": "a75f682feea89f70ec03094bf807244c2fb43b2af457269ca622f2f60cf5b279"
+  },
+  {
+   "name": "closed-umbrella",
+   "emoji_name": "closed umbrella",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f302.svg",
+   "sha": "64c1eea4d96c639ec4b84ed37f1f83bada84c323",
+   "sha256": "e29f2aaf5e267c8b007d33f159368a41d9443a25e5ecbe18891822b2988acfa0"
+  },
+  {
+   "name": "umbrella",
+   "emoji_name": "umbrella",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u2602.svg",
+   "sha": "eeb1dff20123118fd96450b1b97647b884aab244",
+   "sha256": "bbe6f86a52f09075630315a6a99f1c31c444c56bf2e927123454280d57fa3acd"
+  },
+  {
+   "name": "umbrella-with-rain-drops",
+   "emoji_name": "umbrella with rain drops",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u2614.svg",
+   "sha": "3fd889a189941aaa0af0c378029f930a1778bafc",
+   "sha256": "5e06d2247f90929a7d653ffd4a3cf2fb835550b6589b8d0609a6840b457af473"
+  },
+  {
+   "name": "umbrella-on-ground",
+   "emoji_name": "umbrella on ground",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u26f1.svg",
+   "sha": "de701dd78e7ce96ed032657b960340a45f71a7f0",
+   "sha256": "38080b5b09f72f148966590bfca8b1b179d6e9e5338873bc63ad9fe611336552"
+  },
+  {
+   "name": "high-voltage",
+   "emoji_name": "high voltage",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u26a1.svg",
+   "sha": "e82079a8de629966f0d627a7fbe173cde446b405",
+   "sha256": "a86427eae21457df6af9c0d0a244c3ceee9f22c55776a0d2f6cb67a92243c450"
+  },
+  {
+   "name": "snowflake",
+   "emoji_name": "snowflake",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u2744.svg",
+   "sha": "18fca4e74b80fd5d709250a2a2b04963e6855ddd",
+   "sha256": "19dc4e00ec258f9f211b6384aef2e1b7199f5b92b132c98d4817fcc60c135b58"
+  },
+  {
+   "name": "snowman",
+   "emoji_name": "snowman",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u2603.svg",
+   "sha": "f6f39f659d054ba8ffbeb9f6435d9a2351400d75",
+   "sha256": "74f1596619371220787ba84d0ce0b66da6a85891c358bdd0819a47f7185e3734"
+  },
+  {
+   "name": "snowman-without-snow",
+   "emoji_name": "snowman without snow",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u26c4.svg",
+   "sha": "639a0fb4f0fdca1d90eaacefb289facf37e27443",
+   "sha256": "c127f6cf69bcd7b0e86af387255121a1eddf31d1b70be0723d98844043e96c2b"
+  },
+  {
+   "name": "comet",
+   "emoji_name": "comet",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u2604.svg",
+   "sha": "771c37b69ad3b35d1e7d12264229332757c0c2ce",
+   "sha256": "deb5fe60fb823afa50312f31abe6b583fd2a3e7f6d00974b6bc80fd9d78c9e90"
+  },
+  {
+   "name": "meteor",
+   "emoji_name": "meteor",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1fa8b.svg",
+   "sha": "1fb01cd34be5a161abcd386f417914a2a3c58446",
+   "sha256": "353a1d12264076a4512bf38ef0cb8e215d83f043c3ae54f7adddb5e0e3c49f98"
+  },
+  {
+   "name": "fire",
+   "emoji_name": "fire",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f525.svg",
+   "sha": "e94a652938f7c0d4524eb2ffaf685af39ce97040",
+   "sha256": "a31c9aaa20f098c6bfd02edfe33d37ddbd7683c503c5b20b74e79521455ad831"
+  },
+  {
+   "name": "droplet",
+   "emoji_name": "droplet",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f4a7.svg",
+   "sha": "72d450032118ca479b384297485eb41d1e98da65",
+   "sha256": "9723e1d0b4d1495af104294662ad8d572c1f50bad45818e9345d3ce6ef5e9388"
+  },
+  {
+   "name": "water-wave",
+   "emoji_name": "water wave",
+   "group": "Travel & Places",
+   "subgroup": "sky & weather",
+   "upstream_path": "2D/svg/emoji_u1f30a.svg",
+   "sha": "bf249a53547069373a5db09bd5cbbe8e34e24a81",
+   "sha256": "cadf4c66e8162e4689b9aa3183fa8bf2b800c8bee89f58af9f00874451bb538d"
+  },
+  {
+   "name": "jack-o-lantern",
+   "emoji_name": "jack-o-lantern",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f383.svg",
+   "sha": "81e01b26bfb15db08b54c4601d68d9366a5d0665",
+   "sha256": "8d8ec7bb707d8bc6b38c91fec5b3ba4b155fc7e2e9f5144610738d8551845bfd"
+  },
+  {
+   "name": "christmas-tree",
+   "emoji_name": "Christmas tree",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f384.svg",
+   "sha": "f2ed3d356c0eaafb6d282102b3d0ed82463828bc",
+   "sha256": "d58c3b7a3f77ebf94b0dca1c8f92327ffeb777dd3666ca8e35a052ca3b8d370e"
+  },
+  {
+   "name": "fireworks",
+   "emoji_name": "fireworks",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f386.svg",
+   "sha": "9babafb6ba00dec92f2899b61ac46e1acfba9b76",
+   "sha256": "723ffd6582eaeb093d7527d11f94ffdaa37106283e9a2894f5c55127f97eac83"
+  },
+  {
+   "name": "sparkler",
+   "emoji_name": "sparkler",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f387.svg",
+   "sha": "b07d6454b055533f733933b0b43d20e3a1868502",
+   "sha256": "d5aad50d0bf56cb9b237eb95a986d01c4371a8edca950c3fae5e82ed96be6b4e"
+  },
+  {
+   "name": "firecracker",
+   "emoji_name": "firecracker",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f9e8.svg",
+   "sha": "f55a94a051cc58dfc4f13f319b6d3adebefe5e6b",
+   "sha256": "a7f0391101e8121ec0c95749ea1efba1383b5491c352d130ad1f4270cd2adcd2"
+  },
+  {
+   "name": "sparkles",
+   "emoji_name": "sparkles",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u2728.svg",
+   "sha": "35d540e9b364e0e57c160d1eb5890981a0d9012c",
+   "sha256": "26195c9d0ad5b13e30f65d5349864a037e80b3c5f58aa6d75ae23a6a9b50cc79"
+  },
+  {
+   "name": "balloon",
+   "emoji_name": "balloon",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f388.svg",
+   "sha": "39d20d079d6368f01e95a5c47a2278aef9894e3b",
+   "sha256": "297944055ac7b29163dac8bef04a96575822126f69817bcdab363259eab7c8cb"
+  },
+  {
+   "name": "party-popper",
+   "emoji_name": "party popper",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f389.svg",
+   "sha": "b0a47d8f835c8b729e1e2c5d4bafc948f49a4963",
+   "sha256": "d4fc19500b7e9b713ed7b6c6b21fa70d2dc3ad1954ccb99041b929417e38c7e7"
+  },
+  {
+   "name": "confetti-ball",
+   "emoji_name": "confetti ball",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f38a.svg",
+   "sha": "2c91b0c939d4a9799465785b5f46ed748926e5b2",
+   "sha256": "69d77577cc861ccbc97bf9082406c43ce01565ac2d265bd3a3f930687c906fec"
+  },
+  {
+   "name": "tanabata-tree",
+   "emoji_name": "tanabata tree",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f38b.svg",
+   "sha": "f30d12d84802924f8dc79f28d166252d045d97c1",
+   "sha256": "1a91f652c9aa0737737b6ae8edc227daabac4ab54d638f8ecbb48ba834b8bf83"
+  },
+  {
+   "name": "pine-decoration",
+   "emoji_name": "pine decoration",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f38d.svg",
+   "sha": "52d39e7e7f61709332a450ec2c5f4095bce41650",
+   "sha256": "fd8a74faec3e3157eeb27e4f5e436db19d0c7923093ad275f4224f91cbdb9bd4"
+  },
+  {
+   "name": "japanese-dolls",
+   "emoji_name": "Japanese dolls",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f38e.svg",
+   "sha": "5420343249e7e10432a49b9c5f5c12955c255cfd",
+   "sha256": "9617103dfa27da2cb46f78c6a29ce5de9d160b8eb5d2924e44b748451db250a9"
+  },
+  {
+   "name": "carp-streamer",
+   "emoji_name": "carp streamer",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f38f.svg",
+   "sha": "6b2965a2eea263c5d2deb15dc4ad3564bdae8a8a",
+   "sha256": "9380c6fb8df43140a40afd43b611f966a292e1029e4f5fbedc92f7ac39e17381"
+  },
+  {
+   "name": "wind-chime",
+   "emoji_name": "wind chime",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f390.svg",
+   "sha": "d5e0d161e0241a8af3dda79326069462b0bd01bb",
+   "sha256": "98ae09cf4769bff2baef1825a532eb5a2e39d4c6708cf829dcc5eca70b12109c"
+  },
+  {
+   "name": "moon-viewing-ceremony",
+   "emoji_name": "moon viewing ceremony",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f391.svg",
+   "sha": "eea7358a0a5745cb9ad73a795be6c5533ba47bc3",
+   "sha256": "d7876f9dc9c21bd651e9b3436974dac7b71a2ad3019ddc0995fc7a9b15532324"
+  },
+  {
+   "name": "red-envelope",
+   "emoji_name": "red envelope",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f9e7.svg",
+   "sha": "34ad136be186347ac6967c24153f5914102993e3",
+   "sha256": "4e2b78f34a407f82e0fcc533b843fcd64f7a5a8378dc1beccfc6974e7436d7ec"
+  },
+  {
+   "name": "ribbon",
+   "emoji_name": "ribbon",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f380.svg",
+   "sha": "80265556e5aa3f6d41e86c45fbbf18831c6ab53e",
+   "sha256": "57e58c002a19fc1e005172613a80728e9fcd0d0b29712c818befbf2b2abecf75"
+  },
+  {
+   "name": "wrapped-gift",
+   "emoji_name": "wrapped gift",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f381.svg",
+   "sha": "73a6e7b1ff94275379601739ac2d8a4d9db60c9d",
+   "sha256": "cbe7aafc37d627313d4385f723fe78a9dddef93597f2d890c1fd050256d33cb8"
+  },
+  {
+   "name": "reminder-ribbon",
+   "emoji_name": "reminder ribbon",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f397.svg",
+   "sha": "55401c158a311fb12ad7c68f76497b18ec91a7f0",
+   "sha256": "92dfb061dd13b3695409ffbd7d7a766563ec6c0ac40c22206764873417e51af2"
+  },
+  {
+   "name": "admission-tickets",
+   "emoji_name": "admission tickets",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f39f.svg",
+   "sha": "3b90911f4bdba4436f63366f9d549430dee337ad",
+   "sha256": "8343beb5857bfb2d6af59ed3788b3a6e2445b7633b57adb07f809dd786025848"
+  },
+  {
+   "name": "ticket",
+   "emoji_name": "ticket",
+   "group": "Activities",
+   "subgroup": "event",
+   "upstream_path": "2D/svg/emoji_u1f3ab.svg",
+   "sha": "4bfed0356164a5ec7cfed08ce4c75f538abf0f7e",
+   "sha256": "ad9d94aaebbbc3a0eb4a06db88441b1e00c7381ece1270f06e2acbb711abc495"
+  },
+  {
+   "name": "military-medal",
+   "emoji_name": "military medal",
+   "group": "Activities",
+   "subgroup": "award-medal",
+   "upstream_path": "2D/svg/emoji_u1f396.svg",
+   "sha": "9f3bb327068f3f8ffa0094376d3351e41c3c75ec",
+   "sha256": "c4c2ad69c9c468eece9ab773f1d2a9706fa88492389970e4725f63f5c7b58559"
+  },
+  {
+   "name": "trophy",
+   "emoji_name": "trophy",
+   "group": "Activities",
+   "subgroup": "award-medal",
+   "upstream_path": "2D/svg/emoji_u1f3c6.svg",
+   "sha": "d033197d35ba11e0d9712527187c52578c02f77f",
+   "sha256": "fed740e60ceb24f4ac13822029df28a856fcbc777c6331a369ee46f85f94c1b0"
+  },
+  {
+   "name": "sports-medal",
+   "emoji_name": "sports medal",
+   "group": "Activities",
+   "subgroup": "award-medal",
+   "upstream_path": "2D/svg/emoji_u1f3c5.svg",
+   "sha": "52b95a59f54f44d926cb85d3ae603b8a563c4e2c",
+   "sha256": "b03d58a85c4004d729642a768fbd77d55ce0c18cefc9849a38174fe3ad78f0db"
+  },
+  {
+   "name": "1st-place-medal",
+   "emoji_name": "1st place medal",
+   "group": "Activities",
+   "subgroup": "award-medal",
+   "upstream_path": "2D/svg/emoji_u1f947.svg",
+   "sha": "2283cf6fa8c9c8504121cfb867097fe7339a1566",
+   "sha256": "b567554c977ed0e7f900fda5115cab310f2582d06c7d08cae6f88a2c0d385b13"
+  },
+  {
+   "name": "2nd-place-medal",
+   "emoji_name": "2nd place medal",
+   "group": "Activities",
+   "subgroup": "award-medal",
+   "upstream_path": "2D/svg/emoji_u1f948.svg",
+   "sha": "20bdd4d74c805d5862ce1d34f1692cc7a8dffa45",
+   "sha256": "5c1fb15a591cc0b68fc3ba98adaf2cc706a5e6b759ab9c9d4d07f2c92287002a"
+  },
+  {
+   "name": "3rd-place-medal",
+   "emoji_name": "3rd place medal",
+   "group": "Activities",
+   "subgroup": "award-medal",
+   "upstream_path": "2D/svg/emoji_u1f949.svg",
+   "sha": "8ec9606e796c949033ce2a89767069337e367143",
+   "sha256": "fb1509862e207087a7510b66157566a80048ab3f8ca11b634381d3adfdc9c6a5"
+  },
+  {
+   "name": "bullseye",
+   "emoji_name": "bullseye",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f3af.svg",
+   "sha": "fc7b9b20159d66fb65c7d4de40a8c2ec80b2eaa7",
+   "sha256": "96aa866f3d7789985f7726ba483cc4303cbea1db8fb52d8d62cabd022dc3b759"
+  },
+  {
+   "name": "yo-yo",
+   "emoji_name": "yo-yo",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1fa80.svg",
+   "sha": "fcf3f8798e0e44dded140d21c3ec912476257f75",
+   "sha256": "98cc637caece2da29fd2d7820070e8a2913171995030473e2bb53acda6b1439c"
+  },
+  {
+   "name": "kite",
+   "emoji_name": "kite",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1fa81.svg",
+   "sha": "2fb1c26108dbce7103cfcd93a55a72b9e28d081c",
+   "sha256": "0a5f562be6381f1d2531400e6bc9f8d8cab831179b0c599b3c880504a076232e"
+  },
+  {
+   "name": "water-pistol",
+   "emoji_name": "water pistol",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f52b.svg",
+   "sha": "2a90350cd220a93f51fb8909cf80292137e81eec",
+   "sha256": "986b71bd353ed58207ce46fd3ebb1053e0f4f44875617e8dc99aef637b65abb7"
+  },
+  {
+   "name": "pool-8-ball",
+   "emoji_name": "pool 8 ball",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f3b1.svg",
+   "sha": "3ca5946560ccacaec536d54ec1104540cd101b04",
+   "sha256": "bd8c360c665d8202e9cdc62d1ce4f86ac7b1f098b0ddbe1982ecd39d4a4a0f85"
+  },
+  {
+   "name": "crystal-ball",
+   "emoji_name": "crystal ball",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f52e.svg",
+   "sha": "0110b2c784ccfcc2fef09bee36876f17e3ebbedf",
+   "sha256": "c9e3062c86457514c0591ba0d3d56849899053610e11e06ab3f2e3bce3b9fdf2"
+  },
+  {
+   "name": "magic-wand",
+   "emoji_name": "magic wand",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1fa84.svg",
+   "sha": "8f14a968832a727aa955a95eaf8e66075fd845ff",
+   "sha256": "19c17bfe1167534c853313b3d7f958834d7d7245f1bfc3323627c254eab10b40"
+  },
+  {
+   "name": "video-game",
+   "emoji_name": "video game",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f3ae.svg",
+   "sha": "35a024646431d90c1662f230f9b311eb705eec8d",
+   "sha256": "ff293bcc09b9f5c15f60ac411beb3fb92ddefef6b9b4e2b88456bf7da7892965"
+  },
+  {
+   "name": "joystick",
+   "emoji_name": "joystick",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f579.svg",
+   "sha": "4562a5060755e98db583c46c14946658d2d253d0",
+   "sha256": "a6097fc0e890c320b606fa1e2db02010f0c3d325bb05a3ad84aa70e5a56740ba"
+  },
+  {
+   "name": "slot-machine",
+   "emoji_name": "slot machine",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f3b0.svg",
+   "sha": "06571079e151616bab93ae1b9650e720a14b9e02",
+   "sha256": "f8502272a49679a510744325f5295f79664b92cc68e2484f58cc7ceb45a01f7e"
+  },
+  {
+   "name": "game-die",
+   "emoji_name": "game die",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f3b2.svg",
+   "sha": "52f6bdbdf1198a75d6e1c2bbb125be48df93e12d",
+   "sha256": "d1cbef5d407cee3a67d489d8c1b73469719207e13e8b005f56de87afcabf219d"
+  },
+  {
+   "name": "puzzle-piece",
+   "emoji_name": "puzzle piece",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f9e9.svg",
+   "sha": "5e8121abae7896fca6e1a437c96a65601c34cf5e",
+   "sha256": "e71c458c446cdfbf5b6839ed0511980b1dc4fd5f515c7e5c4822a04822fc4d3c"
+  },
+  {
+   "name": "teddy-bear",
+   "emoji_name": "teddy bear",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f9f8.svg",
+   "sha": "24ab0ea605a2e4fa07009af6439b77244b0f6280",
+   "sha256": "c1ea10115d9583632e114771a60da26b0535d2901a1ac6c1bcca66aa2c28a2db"
+  },
+  {
+   "name": "pinata",
+   "emoji_name": "piñata",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1fa85.svg",
+   "sha": "f8e9d12fc454bb941b5d016fad56cecbf750bac7",
+   "sha256": "25b952ee3401d5f2c5134db644564ac9942e0fd986c512a14ffe857695b40943"
+  },
+  {
+   "name": "mirror-ball",
+   "emoji_name": "mirror ball",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1faa9.svg",
+   "sha": "ef03c332e075df76633dccd0b1338720c79201e7",
+   "sha256": "6ac61a913c3710c0a94ab9b42527ad0237cfb45a1fb56e5d7eccf1a2e4b8c70d"
+  },
+  {
+   "name": "nesting-dolls",
+   "emoji_name": "nesting dolls",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1fa86.svg",
+   "sha": "b6b979abfeea8f31f9e579943c63a528de9ffae1",
+   "sha256": "b58a3cc5cdd0dfb92947c5897ccaca7b18c01f9a054f00bd3f885b8e027fecf2"
+  },
+  {
+   "name": "spade-suit",
+   "emoji_name": "spade suit",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u2660.svg",
+   "sha": "9170850e961c849d0ca3b119703505ff176aebf8",
+   "sha256": "bedeb61af0a261e3e1da2402d833b9a2715e34880befc998c1e262c3b68158e3"
+  },
+  {
+   "name": "heart-suit",
+   "emoji_name": "heart suit",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u2665.svg",
+   "sha": "46438bf3622a9573248b39a3e82e41d6e250d11c",
+   "sha256": "d0d4e31d14c792e8bc00eab7c1a124ed921a4bb7e460d16872784b64463b7a7e"
+  },
+  {
+   "name": "diamond-suit",
+   "emoji_name": "diamond suit",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u2666.svg",
+   "sha": "e695cb4d6a21457dffa921279b91d60adb5eef9c",
+   "sha256": "7d74c32ca1e7eb9d2649b13414ad1cdd002c73884193b1d37a2c5f05a6972f9e"
+  },
+  {
+   "name": "club-suit",
+   "emoji_name": "club suit",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u2663.svg",
+   "sha": "1dd0bfb13060a80c34f551a1593b4f6e8dbbcbab",
+   "sha256": "92f6f4962c1dbbf9a89e302551646a96032f8b072bb0b309f648fd2ba64cf4d0"
+  },
+  {
+   "name": "chess-pawn",
+   "emoji_name": "chess pawn",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u265f.svg",
+   "sha": "e55720ad418946b7d31fe395142c22fb76fe4f21",
+   "sha256": "9316d3a1a5e5b4f778556b402a00deea1958288a2f413ec38dc25ee4b681ff44"
+  },
+  {
+   "name": "joker",
+   "emoji_name": "joker",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f0cf.svg",
+   "sha": "6062151d012b98adab9b2bd634c2a91af1d0ee23",
+   "sha256": "c1193a489db051ba7be12694f9c541ba7e58c10d035371389de0ae37e1e1ae98"
+  },
+  {
+   "name": "mahjong-red-dragon",
+   "emoji_name": "mahjong red dragon",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f004.svg",
+   "sha": "7473bc32f27939dc3282dac69a65ede19f057057",
+   "sha256": "8dd90edc422d36223315699019adf63973a9574ff0b7e9271ed209408927ffc1"
+  },
+  {
+   "name": "flower-playing-cards",
+   "emoji_name": "flower playing cards",
+   "group": "Activities",
+   "subgroup": "game",
+   "upstream_path": "2D/svg/emoji_u1f3b4.svg",
+   "sha": "446983758b2236e2a861b6f25047d489e35d23f0",
+   "sha256": "7177ed3c65b67f235631a3efce62302338bf8bbfca77005aee9374e90cd81a1b"
+  },
+  {
+   "name": "performing-arts",
+   "emoji_name": "performing arts",
+   "group": "Activities",
+   "subgroup": "arts & crafts",
+   "upstream_path": "2D/svg/emoji_u1f3ad.svg",
+   "sha": "85367bb422068073383ffe534aeb6c4e28df00b4",
+   "sha256": "a780b810990c0ff72e9a78dd0b9aaca2fc236d4f839dacf2bd9c9579d580a1d0"
+  },
+  {
+   "name": "framed-picture",
+   "emoji_name": "framed picture",
+   "group": "Activities",
+   "subgroup": "arts & crafts",
+   "upstream_path": "2D/svg/emoji_u1f5bc.svg",
+   "sha": "64da056135f8d89085025d3297d7894cbc076883",
+   "sha256": "f5d84055a2072d61f02189c4868a6690d6fc5c6f2a1fc90eaa11954293116b9e"
+  },
+  {
+   "name": "artist-palette",
+   "emoji_name": "artist palette",
+   "group": "Activities",
+   "subgroup": "arts & crafts",
+   "upstream_path": "2D/svg/emoji_u1f3a8.svg",
+   "sha": "fe5bdca12a0a38d15cff05fb891a40e5ac9b0d2a",
+   "sha256": "a86c31005ae5ba4881a7098f51de704f450278458bff7c722560cacfd1418ca4"
+  },
+  {
+   "name": "thread",
+   "emoji_name": "thread",
+   "group": "Activities",
+   "subgroup": "arts & crafts",
+   "upstream_path": "2D/svg/emoji_u1f9f5.svg",
+   "sha": "0d6e72b903795a8d6c66e5db74774a22401773c8",
+   "sha256": "4aa45526ef89da42a8590ffd77015b0a2bdd9689873d9d9750785e4ccd3da9ea"
+  },
+  {
+   "name": "sewing-needle",
+   "emoji_name": "sewing needle",
+   "group": "Activities",
+   "subgroup": "arts & crafts",
+   "upstream_path": "2D/svg/emoji_u1faa1.svg",
+   "sha": "aa70b52cf6286976714e2acf51e19b59bafc4b8a",
+   "sha256": "3a6d2ae8d7ea0f5da38c496200d438174ddacb08eb7de91b3d79d3afd3db1a9b"
+  },
+  {
+   "name": "yarn",
+   "emoji_name": "yarn",
+   "group": "Activities",
+   "subgroup": "arts & crafts",
+   "upstream_path": "2D/svg/emoji_u1f9f6.svg",
+   "sha": "72ea5518d44f00a42303e3027a6995b04819e0ba",
+   "sha256": "2143e5de7731897cf840ec1e67c4870930337943bf6d1c4c55eb4ed4eff19fec"
+  },
+  {
+   "name": "knot",
+   "emoji_name": "knot",
+   "group": "Activities",
+   "subgroup": "arts & crafts",
+   "upstream_path": "2D/svg/emoji_u1faa2.svg",
+   "sha": "b6b2eeaf7c39aa6ebe0c02a771e5dfe235b8b9b6",
+   "sha256": "05d2bc36e5bad87b8650b8a5b3acafc54d75b08c768928326962985ecc3bb2c0"
+  },
+  {
+   "name": "glasses",
+   "emoji_name": "glasses",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f453.svg",
+   "sha": "cec31269feb784b76d3702c730a6c326d05caf27",
+   "sha256": "43a63d294479fdf3b7a94bde4530c9af9312eef3527e4d7f99db6e0b209ba034"
+  },
+  {
+   "name": "sunglasses",
+   "emoji_name": "sunglasses",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f576.svg",
+   "sha": "2d124fcd5ef926b5701d699ddf7c1a4d4a598b05",
+   "sha256": "3a6e9e036272dda4b930e3d98646382b4c2e3fdf39fde7ddde20d39e7743ca3c"
+  },
+  {
+   "name": "goggles",
+   "emoji_name": "goggles",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f97d.svg",
+   "sha": "30796a20a0bff3dbe2af9fd2a837543cae0fc4e1",
+   "sha256": "2166c7d9a957564efacc37917c093c36e17c7320d960cf87ab37ac29b2ca0268"
+  },
+  {
+   "name": "lab-coat",
+   "emoji_name": "lab coat",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f97c.svg",
+   "sha": "ec9884e739b5a835561011cd2729e7728ddc3f3c",
+   "sha256": "4b7bc3875fda0e0ee4c8e4923d92446d1c85dc312ec1db419f45b5a666afc93b"
+  },
+  {
+   "name": "safety-vest",
+   "emoji_name": "safety vest",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f9ba.svg",
+   "sha": "b8ff1d7fecd0ac4bdc1cebae0d6815f9a43ef661",
+   "sha256": "0a52c319a5e6bd51150ac5677e81318c76e77f7cf249c37ca5959d901240321d"
+  },
+  {
+   "name": "necktie",
+   "emoji_name": "necktie",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f454.svg",
+   "sha": "a7ce935eee02aabd664466ff184d31e40fdc4e7a",
+   "sha256": "435fec95af1391c185b7f2f12da9533347651c1a549770cda43c8357d80a60e7"
+  },
+  {
+   "name": "t-shirt",
+   "emoji_name": "t-shirt",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f455.svg",
+   "sha": "3900fdbb3862fe6927c6c9ebbabcc6816c30f0d3",
+   "sha256": "c6a702f5e27a38c7c4e324aac5c227e84fbde34224aaeb8346a8e90e9ff1a674"
+  },
+  {
+   "name": "jeans",
+   "emoji_name": "jeans",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f456.svg",
+   "sha": "1d870ca963b8e1e378e5a1f38f5f8206ac87b573",
+   "sha256": "3dc260cd2fee4bb42d1671e3abfcbcc3ce353f43e861d08266ab14eea42f4a45"
+  },
+  {
+   "name": "scarf",
+   "emoji_name": "scarf",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f9e3.svg",
+   "sha": "82017f92d0d7a2cbfdd6fbbd7b84318946b91215",
+   "sha256": "ceab74998a33cd9a44cb5a9f175c33adb1ba80561101654e5bfd93323b8ee0bc"
+  },
+  {
+   "name": "gloves",
+   "emoji_name": "gloves",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f9e4.svg",
+   "sha": "b32cef2b05c289d1cfbada1e79a6f2c76bf3bf5f",
+   "sha256": "5bfec4970550927c2f55e869d61f4eed896dbb0aaa48bcad33ec6d702b7cf48f"
+  },
+  {
+   "name": "coat",
+   "emoji_name": "coat",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f9e5.svg",
+   "sha": "d71414b7297f23ba97823c5a2b4a5edd276a7a57",
+   "sha256": "5c1adc0b8b82a2a791e79a8096051e373fc8ae8c04cb6400dfbd96dcc715e14f"
+  },
+  {
+   "name": "socks",
+   "emoji_name": "socks",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f9e6.svg",
+   "sha": "eeee979113155cc779751d32cd0b2bccaa9f1c6e",
+   "sha256": "dfe734e158c035e11c8c59f2f55b20877b0c5626cfdec713c2d6ac46125b0c9a"
+  },
+  {
+   "name": "dress",
+   "emoji_name": "dress",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f457.svg",
+   "sha": "07130800449a9649e366d079343205d608d0a62a",
+   "sha256": "d9fc77ec04ca8e0d8bf04cc1ebc50ac88ee543cb9d598f43b1138fe58e6e28c1"
+  },
+  {
+   "name": "kimono",
+   "emoji_name": "kimono",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f458.svg",
+   "sha": "70333372539432c75c96bf951700f2d6b092cd59",
+   "sha256": "098112e27c704c899fdbadcb101488dc9508d4385118ef56e60a4f3fd5387408"
+  },
+  {
+   "name": "sari",
+   "emoji_name": "sari",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f97b.svg",
+   "sha": "b841fddb2e4989be5bc9ee2ec8489a0ed5bdd603",
+   "sha256": "baafe3372635079bdbace631c3939286a5835f31aa60591e81b1d5f2bfe2a618"
+  },
+  {
+   "name": "one-piece-swimsuit",
+   "emoji_name": "one-piece swimsuit",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1fa71.svg",
+   "sha": "24d964ee23440e3d33d47e3ecee438c8b9dfed75",
+   "sha256": "593cb2d56d12bb38188daac8f90e5210d47adb98eab25763e224830a93293c4a"
+  },
+  {
+   "name": "briefs",
+   "emoji_name": "briefs",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1fa72.svg",
+   "sha": "d26b994fd9882529e8939b5a5d55a897655adf6f",
+   "sha256": "bf5a68c6d064f63c86e536cdaa1906608dc04f9b3acdbf150536f38de4878659"
+  },
+  {
+   "name": "shorts",
+   "emoji_name": "shorts",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1fa73.svg",
+   "sha": "b7b5e813837449890b403c83c74f2796363691b3",
+   "sha256": "465ab5f69c59e05612135e0d3e86e8df8f1187ab067d7755b984f15d238cd53e"
+  },
+  {
+   "name": "bikini",
+   "emoji_name": "bikini",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f459.svg",
+   "sha": "c6d6fe881509b289ae51d8c1abafbd23f08c39f3",
+   "sha256": "f22d65f13138f9ffdd7396ea5bb01de9fe107c7bfd8a56301581dc982157ceb4"
+  },
+  {
+   "name": "womans-clothes",
+   "emoji_name": "woman’s clothes",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f45a.svg",
+   "sha": "f5430aa0856cbd8f9b438367f405e060166d6c95",
+   "sha256": "80a7141416ebf57e750a7c2cafeda9a78b97de20d444b4cdbe1ddc51c323483d"
+  },
+  {
+   "name": "folding-hand-fan",
+   "emoji_name": "folding hand fan",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1faad.svg",
+   "sha": "e58fce2f6795fc91708a0dbe89232f3567abda40",
+   "sha256": "93e8ef6a1217df186311f517b0cec7b2d3b79e9e3000dc9c9f3ac55eb565f066"
+  },
+  {
+   "name": "purse",
+   "emoji_name": "purse",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f45b.svg",
+   "sha": "07dd560b5d252816f58415427e3a20ff14e1dc73",
+   "sha256": "d782715e777fd5a460db842d73fec61e657bfa6a188281a21d55b1ea38850d1b"
+  },
+  {
+   "name": "handbag",
+   "emoji_name": "handbag",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f45c.svg",
+   "sha": "0f9b71b74e30e35e51ef61fb7387f3c5767ff1f4",
+   "sha256": "a8ad22a59a1d60a1944a5e545aaab7a58f60cb2c02a51a4513dbaa8eb83e3d4b"
+  },
+  {
+   "name": "clutch-bag",
+   "emoji_name": "clutch bag",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f45d.svg",
+   "sha": "786888029626bc5ca9fd43445b19f5c206b96fd9",
+   "sha256": "d9ef1c7c9a545fe81c5b2a71cc48725b68e7e4706647d50f1ffbeacfdbd42663"
+  },
+  {
+   "name": "shopping-bags",
+   "emoji_name": "shopping bags",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f6cd.svg",
+   "sha": "c185dc38fa00709469ec154adbd94a25f9c679d6",
+   "sha256": "b1510289ddcc3d1e2896459fb8adf2675464b77f9ff2d60e7d6f6320d23b1e77"
+  },
+  {
+   "name": "backpack",
+   "emoji_name": "backpack",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f392.svg",
+   "sha": "92e98865f8a39a9bfc6b31aeb81eba74b9a89fef",
+   "sha256": "8df9b20e86cccdec864de0731e2a5bde34ee7fe5b7f5590f6ed4c6e8c7fd9cb2"
+  },
+  {
+   "name": "thong-sandal",
+   "emoji_name": "thong sandal",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1fa74.svg",
+   "sha": "0de4ba506a024628c9d2d6a5c1d57272c6337ae9",
+   "sha256": "78b7ba23193d23adde2889704d65d20c68b0aa849a92ff26b37c250062761507"
+  },
+  {
+   "name": "mans-shoe",
+   "emoji_name": "man’s shoe",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f45e.svg",
+   "sha": "a9ffda27dd8ef8fa9588cfc3f020125106fad821",
+   "sha256": "749878b8d350d68272b339878b84aade728bb788f1cc22de86268f29f7751b96"
+  },
+  {
+   "name": "running-shoe",
+   "emoji_name": "running shoe",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f45f.svg",
+   "sha": "8a4aa85f9d6cc94ff0830252af70cd3cd635e582",
+   "sha256": "b9f88792dd9419016e104ed6f7c2faf5a34e3385c1d99689bbcedd2019aacf23"
+  },
+  {
+   "name": "hiking-boot",
+   "emoji_name": "hiking boot",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f97e.svg",
+   "sha": "e1fc43f94dab9e738bb64424644702ee51a4b19c",
+   "sha256": "f597544f3aa695db988c238efe2a0b816cab3b7708df89651aa662e0e1e77166"
+  },
+  {
+   "name": "flat-shoe",
+   "emoji_name": "flat shoe",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f97f.svg",
+   "sha": "82b7473ce115247116780a9d8c4ed946567dc063",
+   "sha256": "90c7efbf1f4cba0efa3cd8b60a00386052c7de987ade51471d0c690dc3c62eb1"
+  },
+  {
+   "name": "high-heeled-shoe",
+   "emoji_name": "high-heeled shoe",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f460.svg",
+   "sha": "1a21072212666d54f145235fb6185f99047d0a64",
+   "sha256": "42f5acae98ac7cbcdc73d5090c6f0cc760630e819561d33f11f9375b59d0abed"
+  },
+  {
+   "name": "womans-sandal",
+   "emoji_name": "woman’s sandal",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f461.svg",
+   "sha": "6603e50d9797481160cfa3ac8ff81a87a02b0072",
+   "sha256": "a8eeaf41297472c545aa34cc8cb38086a3ecfba8d8b3a6d32aa17cb868743bbb"
+  },
+  {
+   "name": "ballet-shoes",
+   "emoji_name": "ballet shoes",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1fa70.svg",
+   "sha": "be09cff8d84d65d016efc173c529a345993d3b5e",
+   "sha256": "3c6b262cf27060296065b27fd5986f5e5d67d675f9207e51d0900ddc3a5a248b"
+  },
+  {
+   "name": "womans-boot",
+   "emoji_name": "woman’s boot",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f462.svg",
+   "sha": "e996ccb245508c7dd5b10afd87a5932c8cccaa52",
+   "sha256": "d1eea5f173e9e9fa75a57d1f7f07a3fcbddaee0875b7b22d1d88241e9d55091c"
+  },
+  {
+   "name": "hair-pick",
+   "emoji_name": "hair pick",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1faae.svg",
+   "sha": "82fb50f9aeb64804b39bb1d1bc132182edb9744b",
+   "sha256": "289d821b15f3cb5997d7b830a73a3e27f46a05f54f0c520c4c4d4727dbef3fb3"
+  },
+  {
+   "name": "crown",
+   "emoji_name": "crown",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f451.svg",
+   "sha": "e0697713abc14e84522a99f33ddf2a45dd834566",
+   "sha256": "cbba7e7c923a0579fec78db79574be9ddea7038373c4d71c350885da4b4accd4"
+  },
+  {
+   "name": "womans-hat",
+   "emoji_name": "woman’s hat",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f452.svg",
+   "sha": "e1ae6ba2e77fb20953c04585ef2dcd9b5b3559cd",
+   "sha256": "23367dba02e845d9e3ac0bbd5f7135e572d31d7b2d22f591e1b853aa9600db35"
+  },
+  {
+   "name": "top-hat",
+   "emoji_name": "top hat",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f3a9.svg",
+   "sha": "173cb40f8f0e93ee8fbbf789dfa001c3c2b80c5e",
+   "sha256": "ba0c831dfda9161226d1c31dde4b944e9fdbac402bc004920e847e92565a3817"
+  },
+  {
+   "name": "graduation-cap",
+   "emoji_name": "graduation cap",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f393.svg",
+   "sha": "84372b7b1536439eee814a9605e9169b64678790",
+   "sha256": "d2839647b057e9a3f47d0b568b62b7d0fdbd4a6549f984992ea21caf27b0c479"
+  },
+  {
+   "name": "billed-cap",
+   "emoji_name": "billed cap",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f9e2.svg",
+   "sha": "def41a401a3ac524850a1946ac4b3b34cd3fdf19",
+   "sha256": "38d3ff84ee54c0eddabf65b4bb0acb518286b5527f3e7c6dbda65cd1dfea5b11"
+  },
+  {
+   "name": "military-helmet",
+   "emoji_name": "military helmet",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1fa96.svg",
+   "sha": "1214c2acb08524bf5ce6c28a11a920919b9a3c6e",
+   "sha256": "5594b042df12d7f70378506d0735a5282832ae6cc3237687fe91e67950347cc0"
+  },
+  {
+   "name": "rescue-workers-helmet",
+   "emoji_name": "rescue worker’s helmet",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u26d1.svg",
+   "sha": "d57992e3e7072729b0e9c56d47cfa65f90f8bc99",
+   "sha256": "761326b2a7b80c9dcab1469cb1824e5690845a6fc8223d4d0d2760b16913f001"
+  },
+  {
+   "name": "prayer-beads",
+   "emoji_name": "prayer beads",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f4ff.svg",
+   "sha": "1742ad553ef29044e958c566dcc1d47108f568ed",
+   "sha256": "8e985e629114f9f009dca700277a20dd699ed2a4521e53e6fe3f9e79c8afcb7d"
+  },
+  {
+   "name": "lipstick",
+   "emoji_name": "lipstick",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f484.svg",
+   "sha": "0c255a0b9f5b3c261379db02f24f5f69d7f57a89",
+   "sha256": "fcc47c2e5a5c028c24c4b3f1cdc1d8ceb8a42c6bfa4f9928144ad7b0e4209c23"
+  },
+  {
+   "name": "ring",
+   "emoji_name": "ring",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f48d.svg",
+   "sha": "e9ba8a94fa44232bad6586ce2d573897f574099e",
+   "sha256": "6ffb26f336188bf4d2b84c78baf4adf5a1f3f110d4c4320231d595988a96ff5d"
+  },
+  {
+   "name": "gem-stone",
+   "emoji_name": "gem stone",
+   "group": "Objects",
+   "subgroup": "clothing",
+   "upstream_path": "2D/svg/emoji_u1f48e.svg",
+   "sha": "0e254cebc80e8fc6e18118135e14fb448873c867",
+   "sha256": "d04c931d9f0029d2c7660c6355395e6afddf6d816890d7bd214b4eab34f6540c"
+  },
+  {
+   "name": "muted-speaker",
+   "emoji_name": "muted speaker",
+   "group": "Objects",
+   "subgroup": "sound",
+   "upstream_path": "2D/svg/emoji_u1f507.svg",
+   "sha": "a90b1c6d8d78eb0aa00c81e69bd7031b4dae89f7",
+   "sha256": "e4a413ac7ddc1bfa0eaf816bad999ee7de3e9320af32714726866f11be5db615"
+  },
+  {
+   "name": "speaker-low-volume",
+   "emoji_name": "speaker low volume",
+   "group": "Objects",
+   "subgroup": "sound",
+   "upstream_path": "2D/svg/emoji_u1f508.svg",
+   "sha": "105f79e57d73488f7cfc5caf4289c3ac083bc4f0",
+   "sha256": "eca9cdb165dc74ad6e95df62c088ab0eb21b722a2d9a59af4f0c8d3082dea517"
+  },
+  {
+   "name": "speaker-medium-volume",
+   "emoji_name": "speaker medium volume",
+   "group": "Objects",
+   "subgroup": "sound",
+   "upstream_path": "2D/svg/emoji_u1f509.svg",
+   "sha": "8c0e73b9b3a4dc928d8abad9114f39da4aab37dc",
+   "sha256": "094596a1af7cd11f029bd492dc7159b0640e1af426e22c0ee8e53ea2a1ccc7a4"
+  },
+  {
+   "name": "speaker-high-volume",
+   "emoji_name": "speaker high volume",
+   "group": "Objects",
+   "subgroup": "sound",
+   "upstream_path": "2D/svg/emoji_u1f50a.svg",
+   "sha": "649f3a4278e1e0b2bade49858bb1b31073f465f4",
+   "sha256": "2b36368396c992810e3081035b29f9d5d2fbb982cf3af74c7dab94e12b713c23"
+  },
+  {
+   "name": "loudspeaker",
+   "emoji_name": "loudspeaker",
+   "group": "Objects",
+   "subgroup": "sound",
+   "upstream_path": "2D/svg/emoji_u1f4e2.svg",
+   "sha": "bd8daa0caf8e198a2e80dfe0a37ff4c8c4bd58c9",
+   "sha256": "1775c2e51bcc0abe41580e82acfe6502f22baa4f05b719073a3261d3fa64b654"
+  },
+  {
+   "name": "megaphone",
+   "emoji_name": "megaphone",
+   "group": "Objects",
+   "subgroup": "sound",
+   "upstream_path": "2D/svg/emoji_u1f4e3.svg",
+   "sha": "a46e571b8757e21f8e2146c9fe4ea4bf589f5bf2",
+   "sha256": "a9fdf848513457f11d8a661888b92278768f46e0d5dc47a4d642d476d6cad3be"
+  },
+  {
+   "name": "postal-horn",
+   "emoji_name": "postal horn",
+   "group": "Objects",
+   "subgroup": "sound",
+   "upstream_path": "2D/svg/emoji_u1f4ef.svg",
+   "sha": "c512f57ae28ea34e3317a59cafae1d81eb3045a6",
+   "sha256": "01e71c529372390bf0dd89bc63c2f51685019c2476ed56d4d8d65201379c7957"
+  },
+  {
+   "name": "bell",
+   "emoji_name": "bell",
+   "group": "Objects",
+   "subgroup": "sound",
+   "upstream_path": "2D/svg/emoji_u1f514.svg",
+   "sha": "aa2fd17a53434a4e7c12179416fa769cc4b170cd",
+   "sha256": "0855bd4f1c1fcdb56432391f13ffb17fa90f235ecde03ef808082e5a44a7eabe"
+  },
+  {
+   "name": "bell-with-slash",
+   "emoji_name": "bell with slash",
+   "group": "Objects",
+   "subgroup": "sound",
+   "upstream_path": "2D/svg/emoji_u1f515.svg",
+   "sha": "c1eeefefef682ca0d880c1200904d7ec36564410",
+   "sha256": "11e6d8ab049f8ca6167efd93f1d662b7f54990fd4d55a07f31c1ed63e051be39"
+  },
+  {
+   "name": "musical-score",
+   "emoji_name": "musical score",
+   "group": "Objects",
+   "subgroup": "music",
+   "upstream_path": "2D/svg/emoji_u1f3bc.svg",
+   "sha": "76f0c7f7d881af889710fbbed11d92347c462689",
+   "sha256": "9cacf6dae5183730e9299b3acc1c36edb5151bae5c49a2319cd11df5f69b9668"
+  },
+  {
+   "name": "musical-note",
+   "emoji_name": "musical note",
+   "group": "Objects",
+   "subgroup": "music",
+   "upstream_path": "2D/svg/emoji_u1f3b5.svg",
+   "sha": "4977a8faaefa3b79fa3223d42e38fa1c9b1ced5f",
+   "sha256": "ef053d5b787436ef192e46253f22cb14d3a45692b2c8f99b2e231bcf50986ae0"
+  },
+  {
+   "name": "musical-notes",
+   "emoji_name": "musical notes",
+   "group": "Objects",
+   "subgroup": "music",
+   "upstream_path": "2D/svg/emoji_u1f3b6.svg",
+   "sha": "31a6ae255c1d6dcca6311658b81819e3f5c5bd71",
+   "sha256": "5fb7c2af588a92b9b05fbe3e3d697c654952f712a79afd1c3a28168be8baf31b"
+  },
+  {
+   "name": "studio-microphone",
+   "emoji_name": "studio microphone",
+   "group": "Objects",
+   "subgroup": "music",
+   "upstream_path": "2D/svg/emoji_u1f399.svg",
+   "sha": "e996bc1f32108a47b958073b4fa937d4ac55fc72",
+   "sha256": "61dfadfc96329a8a3817d350645fbb6a4b73c5a9c15fac277c2460627cfe2f02"
+  },
+  {
+   "name": "level-slider",
+   "emoji_name": "level slider",
+   "group": "Objects",
+   "subgroup": "music",
+   "upstream_path": "2D/svg/emoji_u1f39a.svg",
+   "sha": "d176bd5f33a5e3047803c8d54cd6ad3475115e23",
+   "sha256": "ce74c1682e2ae9c0e00b2c2e7f6f8cdd39ed8c8082e8e19de43871f1e78c50ad"
+  },
+  {
+   "name": "control-knobs",
+   "emoji_name": "control knobs",
+   "group": "Objects",
+   "subgroup": "music",
+   "upstream_path": "2D/svg/emoji_u1f39b.svg",
+   "sha": "9d52e1a12f57a861599407b8a6abf29d5a5c5c75",
+   "sha256": "09afe215eae8d83b09ef7f98377d167881e00e8db030cf7bceeeac9327e2a503"
+  },
+  {
+   "name": "microphone",
+   "emoji_name": "microphone",
+   "group": "Objects",
+   "subgroup": "music",
+   "upstream_path": "2D/svg/emoji_u1f3a4.svg",
+   "sha": "9e5c0dc404a723db7d9d4e778bb7dc97e3736873",
+   "sha256": "7c16b6ccd1edab36bec8d9197b2b89aefdbd5af7382ab054e8267f0304735ac5"
+  },
+  {
+   "name": "headphone",
+   "emoji_name": "headphone",
+   "group": "Objects",
+   "subgroup": "music",
+   "upstream_path": "2D/svg/emoji_u1f3a7.svg",
+   "sha": "c75597b6fc90c60f7652b5ae25289fa51d32dc9a",
+   "sha256": "b6d78c73c3c04e29c36ab33271b1de9bf61c8df790e47fbd3b883e7637215744"
+  },
+  {
+   "name": "radio",
+   "emoji_name": "radio",
+   "group": "Objects",
+   "subgroup": "music",
+   "upstream_path": "2D/svg/emoji_u1f4fb.svg",
+   "sha": "afa34f41c104d34a400690d8d82be88ecf5513df",
+   "sha256": "be207bbb0e4d5cbd7c2db8df6635ece9d1a759f181c5b26bdc1f2a7c52d25332"
+  },
+  {
+   "name": "saxophone",
+   "emoji_name": "saxophone",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1f3b7.svg",
+   "sha": "f384d47a39821e67e0e7cebfa1f3eae525de5883",
+   "sha256": "ea0d46f1de160762a7e90f6604b71c9f8e513938bd85cb50eed37ac1cda19448"
+  },
+  {
+   "name": "trumpet",
+   "emoji_name": "trumpet",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1f3ba.svg",
+   "sha": "7339835e272900f7a3226ef6247e01c46c6e44f0",
+   "sha256": "fe4b7aa7c469a314b5908fc603d2ea323264bc2294737e4944b6024c5439d27f"
+  },
+  {
+   "name": "trombone",
+   "emoji_name": "trombone",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1fa8a.svg",
+   "sha": "4ae6cd9efd8a3389f5c55f51402882d9e5a87e21",
+   "sha256": "87975edd9d3c5fb78a014a8dfd6622aece99a8e3baa11e6571a09061f64e56c2"
+  },
+  {
+   "name": "accordion",
+   "emoji_name": "accordion",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1fa97.svg",
+   "sha": "e67dfd9a231989c422eb8818a6b70e4d6b643b5f",
+   "sha256": "763aebb694cc0a0033fcbe801986f72260446c877c66c3e421918168b592cf4f"
+  },
+  {
+   "name": "guitar",
+   "emoji_name": "guitar",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1f3b8.svg",
+   "sha": "4fbd30ecbc9a317b45f782911ced220959419f71",
+   "sha256": "6eeb3cdcb53e5a3f7092a90f8fd30a6c20db84cab9c807b6569cca5800e197d4"
+  },
+  {
+   "name": "musical-keyboard",
+   "emoji_name": "musical keyboard",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1f3b9.svg",
+   "sha": "4c747f08a11ba72be47f7b6803de16e6c496392f",
+   "sha256": "db56ee5cb80dba0bf8b43871012bfa0eb487643717ffa5e293cc84a5a4a244b1"
+  },
+  {
+   "name": "violin",
+   "emoji_name": "violin",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1f3bb.svg",
+   "sha": "43164914110d46e2b76e5b1055cb48b8982ffecc",
+   "sha256": "25a11893c312e97e84ea50388ed7a08bc6f2b9823b9771c9e86568490e8993fc"
+  },
+  {
+   "name": "banjo",
+   "emoji_name": "banjo",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1fa95.svg",
+   "sha": "9e8e92ede71daef28573cdc2e5e99cdc2a0b9588",
+   "sha256": "13f9285f39c686d987d17aae57beaf991184cb13d2732febe8954355a2c20b77"
+  },
+  {
+   "name": "drum",
+   "emoji_name": "drum",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1f941.svg",
+   "sha": "c7e4a76dcb9ef0435fa4d15d9babf59eba9d304e",
+   "sha256": "7bdf3c06f4de3558fe78bc999fa1ea96aecd5e137539c82e7f9b0e07fbf33df7"
+  },
+  {
+   "name": "long-drum",
+   "emoji_name": "long drum",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1fa98.svg",
+   "sha": "b1125df1280bf9d2ca8680d33779fa9c94b0e789",
+   "sha256": "01eba228e6b3454bd448fb6469fe8d61243143982b5042cf2636149e927f297b"
+  },
+  {
+   "name": "maracas",
+   "emoji_name": "maracas",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1fa87.svg",
+   "sha": "a50293cca8723a41cb25ea942aad66214dcd4ee9",
+   "sha256": "3819bddea37aa8656d19529f81d713911e3b65ad73cf3a8954ac16937562ff1c"
+  },
+  {
+   "name": "flute",
+   "emoji_name": "flute",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1fa88.svg",
+   "sha": "76ac379f1c9cb5a3d128fd2d4f2f8b941e9fb620",
+   "sha256": "39f53af40ccf73c35222228242ea1a81c187584428620bec0958b9b6a042d500"
+  },
+  {
+   "name": "harp",
+   "emoji_name": "harp",
+   "group": "Objects",
+   "subgroup": "musical-instrument",
+   "upstream_path": "2D/svg/emoji_u1fa89.svg",
+   "sha": "917ff39481e420af2a3c9c6daeb39ee9b29b1862",
+   "sha256": "29f259025747bea22a9901cbe2332d72a9cbc9825821ed1944f9327d8257f925"
+  },
+  {
+   "name": "mobile-phone",
+   "emoji_name": "mobile phone",
+   "group": "Objects",
+   "subgroup": "phone",
+   "upstream_path": "2D/svg/emoji_u1f4f1.svg",
+   "sha": "85f78aadca63de7bbfcc923f329c5057d7ea82f4",
+   "sha256": "cb1f7e7a7eaf984e039ceeb76b7b9763c263861cbcfd6ae8f08f9fba167f7124"
+  },
+  {
+   "name": "mobile-phone-with-arrow",
+   "emoji_name": "mobile phone with arrow",
+   "group": "Objects",
+   "subgroup": "phone",
+   "upstream_path": "2D/svg/emoji_u1f4f2.svg",
+   "sha": "b51ff412852d4137f13340dc0b76340b975eba7a",
+   "sha256": "85c4ba0d224611489070f911f3a12817e48b24e57f98c6423955a5a49999d734"
+  },
+  {
+   "name": "telephone",
+   "emoji_name": "telephone",
+   "group": "Objects",
+   "subgroup": "phone",
+   "upstream_path": "2D/svg/emoji_u260e.svg",
+   "sha": "aff43514df6b0b30ef582467ac27034d61d3164e",
+   "sha256": "cc1bdf8dbfd9c0f306d338059ee88b4e12a414436166395cc07818570a78297c"
+  },
+  {
+   "name": "telephone-receiver",
+   "emoji_name": "telephone receiver",
+   "group": "Objects",
+   "subgroup": "phone",
+   "upstream_path": "2D/svg/emoji_u1f4de.svg",
+   "sha": "d5cbe0307d2b79b35b8b4c28d162232cb7dd72b3",
+   "sha256": "6d9630aeec8cfd8c5c1f14d02d88f938884829692ead023dd95b35ce85ab6146"
+  },
+  {
+   "name": "pager",
+   "emoji_name": "pager",
+   "group": "Objects",
+   "subgroup": "phone",
+   "upstream_path": "2D/svg/emoji_u1f4df.svg",
+   "sha": "139992197efe7fb49734d55da937387d5bad22ef",
+   "sha256": "bbaee5b8905ce888953442ce94afa8416e4fb7f615c3640d939dead930405a85"
+  },
+  {
+   "name": "fax-machine",
+   "emoji_name": "fax machine",
+   "group": "Objects",
+   "subgroup": "phone",
+   "upstream_path": "2D/svg/emoji_u1f4e0.svg",
+   "sha": "6cee22f67d080650184c56a5edecef5fb3794c97",
+   "sha256": "20cf38eaf54b3c26b5a68d93400580b80ca132e5fbe9758528c0cccf66457feb"
+  },
+  {
+   "name": "battery",
+   "emoji_name": "battery",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f50b.svg",
+   "sha": "e3b3d055f55cda7bd3dd3d7b3c2a95e14513cc16",
+   "sha256": "5c3d7601c1648c03b54a4dd782e26d78d08d952b40af02bf07bc1a51018d5c9c"
+  },
+  {
+   "name": "low-battery",
+   "emoji_name": "low battery",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1faab.svg",
+   "sha": "dc305c4a84bb289a69fcbd28018ce2e1dff2be80",
+   "sha256": "968c961b35054fd4fc9710cee7dfa447da3e33650ed6ffa2bd94831bd247880c"
+  },
+  {
+   "name": "electric-plug",
+   "emoji_name": "electric plug",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f50c.svg",
+   "sha": "859065c260a2ba80ae40ee82d3149de9df2b3ece",
+   "sha256": "67041ade778aa1e7d3850c75bb67d23b0a8ad173563e631b6b6ab5a2e8af7b33"
+  },
+  {
+   "name": "laptop",
+   "emoji_name": "laptop",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f4bb.svg",
+   "sha": "4acc4c39bfcd4b9e3ba675c065833098eabd1cea",
+   "sha256": "d45cb76fc1814ed5bd0d3acb54535cec963bf028e96d7e21f6cddcbce21a4fe1"
+  },
+  {
+   "name": "desktop-computer",
+   "emoji_name": "desktop computer",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f5a5.svg",
+   "sha": "ff5516f21d8974e47b7a0d9d845e499a18a1f58e",
+   "sha256": "a7676c295afd343c30215cdbf8a9e47d83f67cf3eeae50ec973782f9e22a0934"
+  },
+  {
+   "name": "printer",
+   "emoji_name": "printer",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f5a8.svg",
+   "sha": "621b6e10cd5122c4369f947ae0b4a987ed3521f0",
+   "sha256": "3653fb6bce706be01738e4f0a23453280ab1b3375a6b43db033a27c0240e2594"
+  },
+  {
+   "name": "keyboard",
+   "emoji_name": "keyboard",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u2328.svg",
+   "sha": "ada585a83a677117b334229112649ab9abf00887",
+   "sha256": "14ef32693f7a2d1af9d99039f5fe6f8ce5b2d2fe77458995063f3195889b24b0"
+  },
+  {
+   "name": "computer-mouse",
+   "emoji_name": "computer mouse",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f5b1.svg",
+   "sha": "fc341e7c0964e843c5bc249889b23518d043393a",
+   "sha256": "eeaf51ae72f8fef025993eb16099b6f28d95105d9d6e3b4d2929f01719c1aacf"
+  },
+  {
+   "name": "trackball",
+   "emoji_name": "trackball",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f5b2.svg",
+   "sha": "13620f7fefc2b771c5132f372e943dbde1c8aa4f",
+   "sha256": "e3ab55af469e4d8e462fafbebc6fc4258727b03b3a70afc414de5d946c040e46"
+  },
+  {
+   "name": "computer-disk",
+   "emoji_name": "computer disk",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f4bd.svg",
+   "sha": "f882fb10911a2fa6181ef01d93cbc5291b394b67",
+   "sha256": "49240e5f53e73379dc1e67e573b22f3ae1eb5d7f9c69c695c5b64e08684288a4"
+  },
+  {
+   "name": "floppy-disk",
+   "emoji_name": "floppy disk",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f4be.svg",
+   "sha": "f4533baee93af18ea773e0679d19ffb0db0c33af",
+   "sha256": "814428d96dad1f2f03645c833fb6054a9eabb2e37834bf270a5bb71326c98706"
+  },
+  {
+   "name": "optical-disk",
+   "emoji_name": "optical disk",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f4bf.svg",
+   "sha": "35f43c378c82e6142df01be9262797abb8c1a464",
+   "sha256": "1be9ca553e88a64d59bb61a49287ea617602720aa4accbcc340a5675c1402225"
+  },
+  {
+   "name": "dvd",
+   "emoji_name": "dvd",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f4c0.svg",
+   "sha": "b0f7b87d1c553ca1cf0cd2d638dd09ce845d54b2",
+   "sha256": "3bec516892758f0df0ae3255a2c3f63ac0d00b22e9d205dbec26d039a0747837"
+  },
+  {
+   "name": "abacus",
+   "emoji_name": "abacus",
+   "group": "Objects",
+   "subgroup": "computer",
+   "upstream_path": "2D/svg/emoji_u1f9ee.svg",
+   "sha": "7a1f2e7d5c8831092e89c34c8413634ff513b630",
+   "sha256": "8f79a51d5995ce8b493d969fb099d511684b6d222c7673d9627fba0c9b37be95"
+  },
+  {
+   "name": "movie-camera",
+   "emoji_name": "movie camera",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f3a5.svg",
+   "sha": "5e46283d70338f5e9f3961f3aa853adbd30f16e8",
+   "sha256": "2ef60fee7791576f3c2ecb93129e5ad586380fea363595ba9ac36c836e185264"
+  },
+  {
+   "name": "film-frames",
+   "emoji_name": "film frames",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f39e.svg",
+   "sha": "9a8f5189893732539e1d1dd7ef34ad17ebf2415f",
+   "sha256": "b5f64eedfecf3123a0b41bb901d0cbe367da409d3ea312fa195bd845395245a6"
+  },
+  {
+   "name": "film-projector",
+   "emoji_name": "film projector",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f4fd.svg",
+   "sha": "154339d7aae458e1cf7c00a1869cc823efb6bcd2",
+   "sha256": "f48ef2cec64b0e83ee54242afdfe708067263710611796b8b8defe3f31621b34"
+  },
+  {
+   "name": "clapper-board",
+   "emoji_name": "clapper board",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f3ac.svg",
+   "sha": "2e3edb5c84cf335d210578173d1c7437cfc1a156",
+   "sha256": "1320272479cd03461fb0fdb60dde3aabfebc8fc6bab6155e8f5898ea4cb48dac"
+  },
+  {
+   "name": "television",
+   "emoji_name": "television",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f4fa.svg",
+   "sha": "9308e8348bfb1502fdd432fbff532cbd33775e81",
+   "sha256": "e1936402a8710b897ce70e800d75217c862ba4af4f046869cb0f4be27c4e0eb6"
+  },
+  {
+   "name": "camera",
+   "emoji_name": "camera",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f4f7.svg",
+   "sha": "623a4241c67f1675903d57400ac3dc43ed55aa2a",
+   "sha256": "4ef9077b24b9c7f57dcc7f87520d39095f0f0151b663ae89b26ec83b61903be2"
+  },
+  {
+   "name": "camera-with-flash",
+   "emoji_name": "camera with flash",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f4f8.svg",
+   "sha": "8b559dcd7a8acade0954a91ecfb6e30eaae70691",
+   "sha256": "180cb51cda3e688d9e44daecc00a17ed234d0cff5a625743fd7f696698ca2694"
+  },
+  {
+   "name": "video-camera",
+   "emoji_name": "video camera",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f4f9.svg",
+   "sha": "0e99b1a80e9f11876fb98efe6c770086b9422e6a",
+   "sha256": "40d817c31bac1d1a11471b6e67f3b4d89ca21e97a983ed382cd301a17f0461f7"
+  },
+  {
+   "name": "videocassette",
+   "emoji_name": "videocassette",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f4fc.svg",
+   "sha": "a77846456d18ce2619b00b0221df7bb0c5cb4514",
+   "sha256": "eff7865116e85943e87697f0ff08712c7631d4a8ab54431f8549348d625f17ea"
+  },
+  {
+   "name": "magnifying-glass-tilted-left",
+   "emoji_name": "magnifying glass tilted left",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f50d.svg",
+   "sha": "3e2470b0fa0994600c9a6c570d6bf3f60ec616ad",
+   "sha256": "51cf44babe95e6c658b0b11ad4348daeff817fb89a7693a2dd1c8f21679404bb"
+  },
+  {
+   "name": "magnifying-glass-tilted-right",
+   "emoji_name": "magnifying glass tilted right",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f50e.svg",
+   "sha": "5d07b9479a50ec869bf4e946667d9e3eb7836745",
+   "sha256": "7bb742c8c90fa9ec84b97329c0e895f22763a187af2b284c81c12723efd0eb72"
+  },
+  {
+   "name": "candle",
+   "emoji_name": "candle",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f56f.svg",
+   "sha": "cdc02fbd7fc512b805996410267611b7755ab5f7",
+   "sha256": "ba22b1075f4ba8780e0c535fbd8cf69a101bbf67227500ebc3c290e50792b3f4"
+  },
+  {
+   "name": "light-bulb",
+   "emoji_name": "light bulb",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f4a1.svg",
+   "sha": "44bd7b80928ef513365e1740503733f7ae06a8bb",
+   "sha256": "e596e5c8dc7d554a488c43a7ac6213e28c947c8e9ee4d78123d7b62cee083a8c"
+  },
+  {
+   "name": "flashlight",
+   "emoji_name": "flashlight",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f526.svg",
+   "sha": "c8558a5f3fde3807e21e2af9b59b1505f17a5532",
+   "sha256": "7e9bf13b2f2dee4ed3d5299a631cb27d9f33540835ae83bb543616c6c56cb77e"
+  },
+  {
+   "name": "red-paper-lantern",
+   "emoji_name": "red paper lantern",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1f3ee.svg",
+   "sha": "c0d31e1348d9c5d3b6c3ecbce2fdea32cb133ff9",
+   "sha256": "e671ea18dffbb22ea19cc6579e6414a13a271e6d14257d721aa948a77eaf44eb"
+  },
+  {
+   "name": "diya-lamp",
+   "emoji_name": "diya lamp",
+   "group": "Objects",
+   "subgroup": "light & video",
+   "upstream_path": "2D/svg/emoji_u1fa94.svg",
+   "sha": "2ad5fa12481e8759d715f3dee5f257dddf6663a5",
+   "sha256": "e5db2325ee1200ab2b8c7c621d3d02ce116a535cb0a916bfef535c473bdc8d98"
+  },
+  {
+   "name": "notebook-with-decorative-cover",
+   "emoji_name": "notebook with decorative cover",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4d4.svg",
+   "sha": "82c5abbba2830403816279fca41294ef4c4945c1",
+   "sha256": "38fdcfe49633322874d2c9e8104ad29750f8e05e10385dc257db0bf21478bed8"
+  },
+  {
+   "name": "closed-book",
+   "emoji_name": "closed book",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4d5.svg",
+   "sha": "a2d7d51930854197b177119a26e808d86c40fa21",
+   "sha256": "e1a86d289a09cfc69b1c3ef4a64cc29aad3c7c32808e67668b9e8ad83220b8df"
+  },
+  {
+   "name": "open-book",
+   "emoji_name": "open book",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4d6.svg",
+   "sha": "a5ebdb36fee7244f6d168d87d6f82d341af35aa0",
+   "sha256": "373d53c3e01db99655da9c9e50706e32308133a68ad4b430adb66826fffff7e2"
+  },
+  {
+   "name": "green-book",
+   "emoji_name": "green book",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4d7.svg",
+   "sha": "797eadf334165dddf340bd11b29cd918bcf00448",
+   "sha256": "fcd90084d3ecbe645b0a89b8eba16f9f229f0bac3c5bc94ebda9783fd82a9e74"
+  },
+  {
+   "name": "blue-book",
+   "emoji_name": "blue book",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4d8.svg",
+   "sha": "6658a697b0f4e0a216fa550a0d6b63e3201f12be",
+   "sha256": "bfe811dfdc7dc443018ebd8b262ec5929f79bd62bd9e630e4bf1910d9d550b82"
+  },
+  {
+   "name": "orange-book",
+   "emoji_name": "orange book",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4d9.svg",
+   "sha": "7da2024f2350b28674f2ed0a572e2d4a719c5022",
+   "sha256": "a76b202229ff0f0997a2e30edd718f3a16ce6199cd69917e3d8d7e8d3e49118d"
+  },
+  {
+   "name": "books",
+   "emoji_name": "books",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4da.svg",
+   "sha": "0b5afed9439ce2a302b1fc5f79ce163c42dd7e3f",
+   "sha256": "b73e6a1feb932d6644ba6ffc2a79da7380e506fdc8e991c3df6a29ddb7baa133"
+  },
+  {
+   "name": "notebook",
+   "emoji_name": "notebook",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4d3.svg",
+   "sha": "c8a66c05b6bf4719751939a40ddb52ad02574b06",
+   "sha256": "b000f9a45ae88ec996c23ca80432acf07f85ffc1b029bdbc287a74acaba7d2b7"
+  },
+  {
+   "name": "ledger",
+   "emoji_name": "ledger",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4d2.svg",
+   "sha": "b53102d314063b527a91b02bd6159354d9cfa43a",
+   "sha256": "ecc6b034b8453c09b32c6f8fc3e2ee2e9b3cbd3cbb98b303f7133b0f292a51a0"
+  },
+  {
+   "name": "page-with-curl",
+   "emoji_name": "page with curl",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4c3.svg",
+   "sha": "4d0780651ab2a25a38a112f6b578c6f17c3ffcac",
+   "sha256": "27fb71a8cdc858f724769652f8c8d78f083a7f4dcab6391196453a0324060a98"
+  },
+  {
+   "name": "scroll",
+   "emoji_name": "scroll",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4dc.svg",
+   "sha": "248b09c867046803eb68698b785d57ab28a2d55b",
+   "sha256": "d31bce36c57d25c5c28b2ac3164b79f1c5ca065f741fc370b74106a97036587b"
+  },
+  {
+   "name": "page-facing-up",
+   "emoji_name": "page facing up",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4c4.svg",
+   "sha": "00e7272a55a5eaae35320ae9e3c0adc1f3f0291f",
+   "sha256": "d81bde3b9371faf7110962ef17fe4295ab7411d4a5b863273e2383db8d8a47f2"
+  },
+  {
+   "name": "newspaper",
+   "emoji_name": "newspaper",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4f0.svg",
+   "sha": "821643955c397eb63c1e3c463179d31199aa3852",
+   "sha256": "2bd416621a548b10a6e99432d88d0ede3cec0810b31f5d547bc722f46e6ed9fc"
+  },
+  {
+   "name": "rolled-up-newspaper",
+   "emoji_name": "rolled-up newspaper",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f5de.svg",
+   "sha": "7b92630c4fb4304c73e3b458281adf58e6cbbf10",
+   "sha256": "dff844bf1934315b8571968aa7234e9d58e4f0abafd625e41847a5f1feab14ed"
+  },
+  {
+   "name": "bookmark-tabs",
+   "emoji_name": "bookmark tabs",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f4d1.svg",
+   "sha": "a6eb41ece2a1fee3b486ffd91c2cf5d04233a399",
+   "sha256": "11f3b85208e3c3a1e888674aa0e44503a9d2eba2b3402a11936c6fc5dba7fd83"
+  },
+  {
+   "name": "bookmark",
+   "emoji_name": "bookmark",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f516.svg",
+   "sha": "a4124234649d7e644b0cf87a3ec8f56a2632798f",
+   "sha256": "01c46a4ff0a2afdb3b8b35bd44e5d17a32e175d8e815042ade78d280521113b3"
+  },
+  {
+   "name": "label",
+   "emoji_name": "label",
+   "group": "Objects",
+   "subgroup": "book-paper",
+   "upstream_path": "2D/svg/emoji_u1f3f7.svg",
+   "sha": "2178d565551856246f51655d2a41ac2d5a61c0be",
+   "sha256": "62148134b7f47ecf5a9f892b5c25b5edf0b7a43f33f6ba4d5a64f9a78c13cf6a"
+  },
+  {
+   "name": "coin",
+   "emoji_name": "coin",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1fa99.svg",
+   "sha": "863fe6571105a04b281fb758f3d2980b66ed2378",
+   "sha256": "2540a7250cecea2f616e31dd387aee1c161a739d728fc5e82efafec276f6a4b0"
+  },
+  {
+   "name": "money-bag",
+   "emoji_name": "money bag",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1f4b0.svg",
+   "sha": "0d281d87d8c5a163a867b1faaf615810a5aafe4c",
+   "sha256": "ff5baedff9a2f7fab1452c02e89837e47196809799dd74e45c57a623e86bff46"
+  },
+  {
+   "name": "treasure-chest",
+   "emoji_name": "treasure chest",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1fa8e.svg",
+   "sha": "4525a4ce3b6c908358f01253d01d7d7b324ba8d3",
+   "sha256": "59a60b64edd3f9df5579670cb9a8a4cca2403427f3ee85d386bc9b2dbba8cab0"
+  },
+  {
+   "name": "yen-banknote",
+   "emoji_name": "yen banknote",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1f4b4.svg",
+   "sha": "079678f764bce0b17ac2eeddeea4e0e5f039359a",
+   "sha256": "260111032a666d7f204bbe3fe9eb24697c24d377f2a1b14716ce6b4efbc154be"
+  },
+  {
+   "name": "dollar-banknote",
+   "emoji_name": "dollar banknote",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1f4b5.svg",
+   "sha": "9ddaa8b1557ff79f78b7ad2a186efd06af663140",
+   "sha256": "437a2b3dca4f76c36ee65dae37f45726b47a28eec5e847ccbfff6e65850b433b"
+  },
+  {
+   "name": "euro-banknote",
+   "emoji_name": "euro banknote",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1f4b6.svg",
+   "sha": "14cc11c341fc81edd7ca40d45d82e0ca72ed62b3",
+   "sha256": "1d88f0204a65a0c6ff9f83968d7de986dce48bad7e8cc35dc03123b8091e30cc"
+  },
+  {
+   "name": "pound-banknote",
+   "emoji_name": "pound banknote",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1f4b7.svg",
+   "sha": "2edd961141809b7522cef9739a8ad5a12e503129",
+   "sha256": "d7191a85a25d6d911a1aa67684ae9f99e82692aebeb6cb8aff943c1755080a8a"
+  },
+  {
+   "name": "money-with-wings",
+   "emoji_name": "money with wings",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1f4b8.svg",
+   "sha": "939b9335acbc1ebe4e0771713b180aeed67c6292",
+   "sha256": "f67db797d70e74f4987108181d5a4729aa58338dcb9fb365b6cccc52732ca621"
+  },
+  {
+   "name": "credit-card",
+   "emoji_name": "credit card",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1f4b3.svg",
+   "sha": "f0ad725dc9e29538a2bf26085796b3154e2b36f1",
+   "sha256": "a2655acfe028050e66b8cf2c2e6a2f369651a1de614a5fb5e3041d2d6bc57c2b"
+  },
+  {
+   "name": "receipt",
+   "emoji_name": "receipt",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1f9fe.svg",
+   "sha": "753bd150af3442bea5ab548d0fd505d6a2946fb1",
+   "sha256": "660e6ef72e66a99d0cba63dd96f082eaa94fdc5c7ceb3181cb3341774635d760"
+  },
+  {
+   "name": "chart-increasing-with-yen",
+   "emoji_name": "chart increasing with yen",
+   "group": "Objects",
+   "subgroup": "money",
+   "upstream_path": "2D/svg/emoji_u1f4b9.svg",
+   "sha": "ffca949db435f8f0ed9581c7d854ffff1293613a",
+   "sha256": "2300815d3f34394a84b81985d938d165fb1ea3070792218720375f88cd567dce"
+  },
+  {
+   "name": "envelope",
+   "emoji_name": "envelope",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u2709.svg",
+   "sha": "2206f1f1b0c43656bc7d2b78fb4b3b4dc4bb95ee",
+   "sha256": "5dd4e834a90f157584e4cf75e82704efb9ece3904fb33732ba6a3b3691b1dd73"
+  },
+  {
+   "name": "e-mail",
+   "emoji_name": "e-mail",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4e7.svg",
+   "sha": "f76a481d537118815c896959f5bc6db9fd4077fd",
+   "sha256": "9fa34791af8053cfd84b23f84c64ebd79b33581d19509e5d23a73fcfcfbd3548"
+  },
+  {
+   "name": "incoming-envelope",
+   "emoji_name": "incoming envelope",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4e8.svg",
+   "sha": "2df9cbd474a145b682b2a79d2532b7db2cb832f8",
+   "sha256": "57fd3b310bb13b1ea125a7ee831fd1b42e80166c08e168617b7c3246d060de6a"
+  },
+  {
+   "name": "envelope-with-arrow",
+   "emoji_name": "envelope with arrow",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4e9.svg",
+   "sha": "3d0e4e499fe3ad89af6360085c57c28315ad98ef",
+   "sha256": "4f2568d85efd72a87d5f69a0d7ed7cf18444592152983e6ecf137cd66d104d49"
+  },
+  {
+   "name": "outbox-tray",
+   "emoji_name": "outbox tray",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4e4.svg",
+   "sha": "095566f7d45be737ef6ad896f0750e16b76894f9",
+   "sha256": "81fc7dda7176f8306e85e5dabb8086117f5c50d564627708f6e004bbacbd1ce4"
+  },
+  {
+   "name": "inbox-tray",
+   "emoji_name": "inbox tray",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4e5.svg",
+   "sha": "3e9b1d6d35cf00e7579fe857feef4fd5463aea79",
+   "sha256": "08bbd3f163a28c1bc4228e1f50647a89866140ffe0b3801f6632a294e7f8dc69"
+  },
+  {
+   "name": "package",
+   "emoji_name": "package",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4e6.svg",
+   "sha": "945ba614bb566a151c578073ed9b9887d16a5ace",
+   "sha256": "a54706da6313294e000b4b2bc4d6ec7bfd21aac45fcb545c8babc06d4d0a48e8"
+  },
+  {
+   "name": "closed-mailbox-with-raised-flag",
+   "emoji_name": "closed mailbox with raised flag",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4eb.svg",
+   "sha": "55b6aeda1f86896b6b325ef642da2e6375bec7d9",
+   "sha256": "7c8161cb433598cb17524409985252e540cda10c97f14acb3b74087f4c9b3bee"
+  },
+  {
+   "name": "closed-mailbox-with-lowered-flag",
+   "emoji_name": "closed mailbox with lowered flag",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4ea.svg",
+   "sha": "9312ca95d05db30e3f612e5a168263eb1b3a9f9d",
+   "sha256": "8b463e81872dbd2200612d8ca5c71bb5f1053f36d68099dcc751a411e158b51a"
+  },
+  {
+   "name": "open-mailbox-with-raised-flag",
+   "emoji_name": "open mailbox with raised flag",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4ec.svg",
+   "sha": "2652efe61a646561cc14fe993db22fae3907da3c",
+   "sha256": "f241047394a503c8c6cf201ce876434baa2514113edf9f1669a8638ee08ff8e7"
+  },
+  {
+   "name": "open-mailbox-with-lowered-flag",
+   "emoji_name": "open mailbox with lowered flag",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4ed.svg",
+   "sha": "60def7f96f6982e7bf3e41f82a8db63298956d10",
+   "sha256": "14c231532355e73cd615c014be7a4af80c4582b0a657f996f9d45d7ab917b264"
+  },
+  {
+   "name": "postbox",
+   "emoji_name": "postbox",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f4ee.svg",
+   "sha": "a48b5ee0f10fc8bd8bc615ec986aa05de64d14a2",
+   "sha256": "d939541bb3161a3b31c8d8029e051104fb6e7550cf9be1d19836b149155b631f"
+  },
+  {
+   "name": "ballot-box-with-ballot",
+   "emoji_name": "ballot box with ballot",
+   "group": "Objects",
+   "subgroup": "mail",
+   "upstream_path": "2D/svg/emoji_u1f5f3.svg",
+   "sha": "11678d701c3b49c23c7092b39dde5acb51447522",
+   "sha256": "c8e7027feefd8a249c728b4a1359c21f299d704b8e399fa8ba3531738ba97418"
+  },
+  {
+   "name": "pencil",
+   "emoji_name": "pencil",
+   "group": "Objects",
+   "subgroup": "writing",
+   "upstream_path": "2D/svg/emoji_u270f.svg",
+   "sha": "7052c8194da9dd54196e61cf14017a26466fed45",
+   "sha256": "2e225b2de1e073cb86cb242ffec002a2af6dc877631ab0bd71fcc4e45c2c9415"
+  },
+  {
+   "name": "black-nib",
+   "emoji_name": "black nib",
+   "group": "Objects",
+   "subgroup": "writing",
+   "upstream_path": "2D/svg/emoji_u2712.svg",
+   "sha": "1f87e791fc1bda9d7c3c8d476b86aa572604ca14",
+   "sha256": "32642cb03630e85828b23a291904ba557db4df1b739bf24cadd0518f2be09e50"
+  },
+  {
+   "name": "fountain-pen",
+   "emoji_name": "fountain pen",
+   "group": "Objects",
+   "subgroup": "writing",
+   "upstream_path": "2D/svg/emoji_u1f58b.svg",
+   "sha": "7caa6ecc582899ff2906739ac1fbf596f904a034",
+   "sha256": "69e70f15b3ac7ce8581b7d0345d363acddcd8b0aef1699be50f4fce1cf4b7819"
+  },
+  {
+   "name": "pen",
+   "emoji_name": "pen",
+   "group": "Objects",
+   "subgroup": "writing",
+   "upstream_path": "2D/svg/emoji_u1f58a.svg",
+   "sha": "55a54e81aeb0f7b85b632f85f45ce9c05e936dd0",
+   "sha256": "cd9dc959ae90da30a343818e5f7e923ac1ee55d402d648e076671e9dcc9b9056"
+  },
+  {
+   "name": "paintbrush",
+   "emoji_name": "paintbrush",
+   "group": "Objects",
+   "subgroup": "writing",
+   "upstream_path": "2D/svg/emoji_u1f58c.svg",
+   "sha": "c4ea65f98cd683d849dc578dd8cf6cac3f56ffc0",
+   "sha256": "a81803dc60c0905eac63bcc6a153d755e8262ef87065fa6ec12d3e12d80a3817"
+  },
+  {
+   "name": "crayon",
+   "emoji_name": "crayon",
+   "group": "Objects",
+   "subgroup": "writing",
+   "upstream_path": "2D/svg/emoji_u1f58d.svg",
+   "sha": "62c120228636b01ca99975325294b6322bda1f60",
+   "sha256": "27cc212ec5a2f41ee00ad9f806f634efdf4c90664a5eeb0618f4361000d87183"
+  },
+  {
+   "name": "memo",
+   "emoji_name": "memo",
+   "group": "Objects",
+   "subgroup": "writing",
+   "upstream_path": "2D/svg/emoji_u1f4dd.svg",
+   "sha": "36ab8940150f09be9f40e4e4fbea399628ac2355",
+   "sha256": "bbda2c6ac4014aa37650aafc287da41233b44a674d6c7bece6ca372fda5ea19a"
+  },
+  {
+   "name": "eraser",
+   "emoji_name": "eraser",
+   "group": "Objects",
+   "subgroup": "writing",
+   "upstream_path": "2D/svg/emoji_u1fa8c.svg",
+   "sha": "48620280ed306ae900a25f7035385bc38dcf4136",
+   "sha256": "11990749f4f96a48494b6434844425ebf808fdee81695e23486a695a86c9350a"
+  },
+  {
+   "name": "briefcase",
+   "emoji_name": "briefcase",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4bc.svg",
+   "sha": "53001cb98bd0da9e915233b7251c6ab3dfe3fdf4",
+   "sha256": "1edb4786b45ff4f741e8b9e2256213c7d0b57c2f074d190eefdd3837320a44e1"
+  },
+  {
+   "name": "file-folder",
+   "emoji_name": "file folder",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4c1.svg",
+   "sha": "c96199152cd2ceb29b3d0491d58574cccfa124b4",
+   "sha256": "cd95e11f2635d462b95930f5317c8718e3e181b40c952d2ae397c09b946b5e9c"
+  },
+  {
+   "name": "open-file-folder",
+   "emoji_name": "open file folder",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4c2.svg",
+   "sha": "38ace99fe6bb20d49b01324ebbdcae659500eb6f",
+   "sha256": "c3125d117a908f2bc492755040c8ea228e5ceb44e3b2e84a883254ecc5965c25"
+  },
+  {
+   "name": "card-index-dividers",
+   "emoji_name": "card index dividers",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f5c2.svg",
+   "sha": "2320d3171bc9b6a165a743f948de5107e6ff1138",
+   "sha256": "46c4b995a10d4b377411a256bb809c40ea60edb62f74e606ef8aa66dbfbb5082"
+  },
+  {
+   "name": "calendar",
+   "emoji_name": "calendar",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4c5.svg",
+   "sha": "ca6fceaa9f3f6c6ba83dab1a5aeb621af9f28d6d",
+   "sha256": "f448e4e47ec19ebe3ddeeb5f78db58d831c9db5e16f6a95072dfea3c0e5012e0"
+  },
+  {
+   "name": "tear-off-calendar",
+   "emoji_name": "tear-off calendar",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4c6.svg",
+   "sha": "d41265068a7bee3ba1e771a3a0ba488d28c9a698",
+   "sha256": "9a4f270156eba4964009e9451281141898522366a736e9a0396498cd9dd55296"
+  },
+  {
+   "name": "spiral-notepad",
+   "emoji_name": "spiral notepad",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f5d2.svg",
+   "sha": "26f27fe2985357eb3328cebf7c4b88ee3be380ab",
+   "sha256": "ee10e294c730eb33a3a108a681dd638009299987303192713a144e9a005cb8cb"
+  },
+  {
+   "name": "spiral-calendar",
+   "emoji_name": "spiral calendar",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f5d3.svg",
+   "sha": "af3071c9fb4e52c577043c8c8d6e91a84c2b5cf0",
+   "sha256": "2e041e00604b2b46920614043d246b6a3aebb001af75f3af5b7cbad99143f521"
+  },
+  {
+   "name": "card-index",
+   "emoji_name": "card index",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4c7.svg",
+   "sha": "628190100e8c3753745a2f05e893ffa59a982228",
+   "sha256": "270345c2fe5932194a4c3767e4ec916bc8fe8f0c18906a7af317afba4c172983"
+  },
+  {
+   "name": "chart-increasing",
+   "emoji_name": "chart increasing",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4c8.svg",
+   "sha": "80deb0a1b4e88a8f8433c28b093cf1b165fa0377",
+   "sha256": "da5fd3a5294c91cb57ccf46d920929d4a02d79f0f388920b4a2355430b7c0f0d"
+  },
+  {
+   "name": "chart-decreasing",
+   "emoji_name": "chart decreasing",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4c9.svg",
+   "sha": "2f555bcec9d0c5b14b5a3c587b250ab15b3d57ac",
+   "sha256": "b43e37a5e167ad07c6c7f1fb53535d34ad8fd65978adebefc43f78ba5744ec4c"
+  },
+  {
+   "name": "bar-chart",
+   "emoji_name": "bar chart",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4ca.svg",
+   "sha": "e744e6b76ff421e4b27b6dcceb37e98427d29465",
+   "sha256": "555e626386152f36c30fc5acc19476f3b773836b87394a8233ad4dc5d45f1f76"
+  },
+  {
+   "name": "clipboard",
+   "emoji_name": "clipboard",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4cb.svg",
+   "sha": "47985c94cc387af70184f52027140d8cdd4b1ed4",
+   "sha256": "f6d48109b3fe50d73a7d4bfb3cff32c18228ca60e4a709262288875bb0a2537b"
+  },
+  {
+   "name": "pushpin",
+   "emoji_name": "pushpin",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4cc.svg",
+   "sha": "9eee2189b8bd6eda77b98126774008a33145e9d2",
+   "sha256": "3cb7367002743665ed3d57fd453263a7c30c3ad63600ddb578ebcb9d177b2762"
+  },
+  {
+   "name": "round-pushpin",
+   "emoji_name": "round pushpin",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4cd.svg",
+   "sha": "3c1226b2c643e361556b654f342f7b1772198ff0",
+   "sha256": "f45b2b09b8f736b5ff4e4e5ae0da488ef4854050f47d3e13503187939eeaf033"
+  },
+  {
+   "name": "paperclip",
+   "emoji_name": "paperclip",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4ce.svg",
+   "sha": "21f9f8cae520f485839ac02c4c684a44e078da11",
+   "sha256": "06dec36eb5f6662a26630943c365bd33ec4471bf03db62f36bc38e494e5eeef8"
+  },
+  {
+   "name": "linked-paperclips",
+   "emoji_name": "linked paperclips",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f587.svg",
+   "sha": "efbf2c4a8df61248e3255d6467f88d9fff8fcb7d",
+   "sha256": "c520e5562c200cf173d8f653c00475102b80cbb185d28ca859f7fdc50c8aa43c"
+  },
+  {
+   "name": "straight-ruler",
+   "emoji_name": "straight ruler",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4cf.svg",
+   "sha": "b8546083c342a99c44a3ad5624115c56a1b132f4",
+   "sha256": "5b3e4f6d6f2ba0303c51bc3b20c3a3de1463240e9923c177bdc92876f1964810"
+  },
+  {
+   "name": "triangular-ruler",
+   "emoji_name": "triangular ruler",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f4d0.svg",
+   "sha": "76e3c6260b7d8e58eda3b1f2f0922e5c5dc81d02",
+   "sha256": "4c337e8f742270e86f44ca6bf771fcf5071f43f4f333407b57f302c7dab96ef0"
+  },
+  {
+   "name": "scissors",
+   "emoji_name": "scissors",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u2702.svg",
+   "sha": "c9a493c61621a1e8eaa2873cd801ce57f2b4ef9a",
+   "sha256": "878a4ca95387da9415df4892ffca4b1bcec8fa1c1e260ea203762ccb7a9b0b16"
+  },
+  {
+   "name": "card-file-box",
+   "emoji_name": "card file box",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f5c3.svg",
+   "sha": "b4595d2f25bd0e73a993f0015d62d1de1b2f3969",
+   "sha256": "3717ad3f218c54b9e832a5ec4d11dec71a91cf77b2cfd0031a5ee453ec6b3ee0"
+  },
+  {
+   "name": "file-cabinet",
+   "emoji_name": "file cabinet",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f5c4.svg",
+   "sha": "12b9f03f0d72cd49938fde3e5264d23039fb487d",
+   "sha256": "3c3a3b2b77c28c4f28dfab0dfb9d99866383ecac51f62ca517e50fe52d6b4079"
+  },
+  {
+   "name": "wastebasket",
+   "emoji_name": "wastebasket",
+   "group": "Objects",
+   "subgroup": "office",
+   "upstream_path": "2D/svg/emoji_u1f5d1.svg",
+   "sha": "74cd167ee5fd785e73811ff78ccc33ee7b088e45",
+   "sha256": "5504609020c6176d5d24032396dfa2bebc1057dced7e8c0fe7913af68f5124a2"
+  },
+  {
+   "name": "locked",
+   "emoji_name": "locked",
+   "group": "Objects",
+   "subgroup": "lock",
+   "upstream_path": "2D/svg/emoji_u1f512.svg",
+   "sha": "6e6bf7df57c1edb7e4ef1abc25d1067a591f5c48",
+   "sha256": "6f01a71b4ded3faee647c75421e96447b137dfb685a74fbc031003d4b6674f67"
+  },
+  {
+   "name": "unlocked",
+   "emoji_name": "unlocked",
+   "group": "Objects",
+   "subgroup": "lock",
+   "upstream_path": "2D/svg/emoji_u1f513.svg",
+   "sha": "7787e24f402f8f142feb7858a80a24621946283a",
+   "sha256": "6e165ca6c6de2c123742ef63614a4f1b2683aae9c5962c1c4a57dea930832763"
+  },
+  {
+   "name": "locked-with-pen",
+   "emoji_name": "locked with pen",
+   "group": "Objects",
+   "subgroup": "lock",
+   "upstream_path": "2D/svg/emoji_u1f50f.svg",
+   "sha": "2987320e39531a23d23461ef01f262aa6790c8f8",
+   "sha256": "2a66034e6a4517bcdcd86f376bb08e70e21a7e91e5ef9240ac0f6b8ee80e80a4"
+  },
+  {
+   "name": "locked-with-key",
+   "emoji_name": "locked with key",
+   "group": "Objects",
+   "subgroup": "lock",
+   "upstream_path": "2D/svg/emoji_u1f510.svg",
+   "sha": "c56cb19b33f62467e55884f74ae34314222fabc0",
+   "sha256": "d5f665d6a9d051cb30a95dec2b84c52f7d77eafc2fc03cf6ea285c9dc3bde22c"
+  },
+  {
+   "name": "key",
+   "emoji_name": "key",
+   "group": "Objects",
+   "subgroup": "lock",
+   "upstream_path": "2D/svg/emoji_u1f511.svg",
+   "sha": "c24fe44cd32546835b1ae9776844b1bbea04d95a",
+   "sha256": "a085cbde397a0b153ba9550e7119136b9a57a918cae1f59762ac3d96302b8706"
+  },
+  {
+   "name": "old-key",
+   "emoji_name": "old key",
+   "group": "Objects",
+   "subgroup": "lock",
+   "upstream_path": "2D/svg/emoji_u1f5dd.svg",
+   "sha": "79e409f9956f2f17cd1cfd2aa4d33c6ef3d5f5b6",
+   "sha256": "bfbcba4379772ea2f1aefd3e25db281fcdb036d913c268d2f859a58112109870"
+  },
+  {
+   "name": "net-with-handle",
+   "emoji_name": "net with handle",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1fa8d.svg",
+   "sha": "2c3f686f1560981134a500cf8d9518e0c6a4e9f1",
+   "sha256": "dc44524e1adfa797410fec79b9c909ec02067404f974b6cb18dcf0f7bccc4ef3"
+  },
+  {
+   "name": "hammer",
+   "emoji_name": "hammer",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f528.svg",
+   "sha": "46f2c2700cb38892daaf350543ad547563ac0fd1",
+   "sha256": "4df281b5ae18a214f834fc9537212d2d87a1cc32191752b6d0b3214fa345688f"
+  },
+  {
+   "name": "axe",
+   "emoji_name": "axe",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1fa93.svg",
+   "sha": "c66a0e28785970f7d0c6fe2b0def4390118bc9ea",
+   "sha256": "649bee104f6d50bc6e65545167c9d58d52d570571ef7b6db272a725d29ebd5d9"
+  },
+  {
+   "name": "pick",
+   "emoji_name": "pick",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u26cf.svg",
+   "sha": "e7a8447eb25bce88bbb352b092c31de44765eacd",
+   "sha256": "f3ca314b17aec716f31dd1d6b0558e588c6a14cc8f95ea4619ace5bb0ac7a1ac"
+  },
+  {
+   "name": "hammer-and-pick",
+   "emoji_name": "hammer and pick",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u2692.svg",
+   "sha": "8ae57fca074fe2967e8b41cbb3c1df4dc3c963c9",
+   "sha256": "0809305b2187322c1c06557f0d6756f1638328e50b2fda193f188b6b8ef17b91"
+  },
+  {
+   "name": "hammer-and-wrench",
+   "emoji_name": "hammer and wrench",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f6e0.svg",
+   "sha": "96ef97a43ae71ddcdbd3b5c870e06058d92f4c31",
+   "sha256": "602227183868e15abdb2bf25d0c4465988a0608cd330d980f203f8f8d472695b"
+  },
+  {
+   "name": "dagger",
+   "emoji_name": "dagger",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f5e1.svg",
+   "sha": "fb0090e702bc46deb8a2ca791f4542e65560f5a2",
+   "sha256": "71b497b6eb2a0a082e43f6adeebdf39cc11c0c3332a2854143263cf773f0a2b7"
+  },
+  {
+   "name": "crossed-swords",
+   "emoji_name": "crossed swords",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u2694.svg",
+   "sha": "4d8ea7ebec3a44f14f01df5034db779ac8f89999",
+   "sha256": "a53c126986cf6c79b9a3f704f818eb7ff8b3429032eec8f1d5afb4cfeae0db5b"
+  },
+  {
+   "name": "bomb",
+   "emoji_name": "bomb",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f4a3.svg",
+   "sha": "93a3a63cc5dedd9639cece11490a5cc703b61e25",
+   "sha256": "21748560b4bea369e73f9c3dc9491d7831b5a94079e0b873817c4fbb0f3651a4"
+  },
+  {
+   "name": "boomerang",
+   "emoji_name": "boomerang",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1fa83.svg",
+   "sha": "79792fb1ffb51258cb8de741d58f4eca32d0c461",
+   "sha256": "e10d2ba95b2338f4c99adcba571b3626dcafa7f7a4074f7499d95f7414762623"
+  },
+  {
+   "name": "bow-and-arrow",
+   "emoji_name": "bow and arrow",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f3f9.svg",
+   "sha": "3b2b9a222cd5915d5089bcac4c12663a4b88e034",
+   "sha256": "e29df3a42d3a9df0bf80feeb3767b7e10a6a385b1ac01caaf4ce1107a6352d6b"
+  },
+  {
+   "name": "shield",
+   "emoji_name": "shield",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f6e1.svg",
+   "sha": "fcf09703ef4289aa3ec80442d42ae2546a208d2c",
+   "sha256": "4e30c435c71faba4ebd28d0d95998231c1eb257987de5a6d2c2c14b78bbfb691"
+  },
+  {
+   "name": "carpentry-saw",
+   "emoji_name": "carpentry saw",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1fa9a.svg",
+   "sha": "7c1f52cce957c3134c757db0163bc36d3dc2bdb0",
+   "sha256": "3dc4f236a7c2e6bb17b1bbc607ec92164e4d42d970110d22432be805a2a8c18c"
+  },
+  {
+   "name": "wrench",
+   "emoji_name": "wrench",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f527.svg",
+   "sha": "effc5280cb8701aa4d8a85b212605ac7da5af907",
+   "sha256": "616ba1cced9c7c32875d44a0f6c589cf999eba3233e8757348915a9dfbee823d"
+  },
+  {
+   "name": "screwdriver",
+   "emoji_name": "screwdriver",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1fa9b.svg",
+   "sha": "910213f55bd42f8ff223127e4dc038aa5f6e53cf",
+   "sha256": "21e78eb9a35414b385df45825289e57dff40fe3b1448fe40eaf97f4b79caf734"
+  },
+  {
+   "name": "nut-and-bolt",
+   "emoji_name": "nut and bolt",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f529.svg",
+   "sha": "aba68163c474ace8784e588435698f43e8e9c90b",
+   "sha256": "67e27e3d57896775da76be1e73ad47c765bc4c8d60cfc5ef25e260f7197fa288"
+  },
+  {
+   "name": "gear",
+   "emoji_name": "gear",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u2699.svg",
+   "sha": "159f7800e68e67752ffc3541afb1214051efc9d2",
+   "sha256": "764925d804c414e66a61b112c8f749ad524751b8894e1c97fb65514e1486136a"
+  },
+  {
+   "name": "clamp",
+   "emoji_name": "clamp",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f5dc.svg",
+   "sha": "e578f9a72436c7ca6096cb277a07959b9772ddca",
+   "sha256": "d1335a7ba37308682c26b72952a486e2bf1873ef6f193de082339f12dedfee8c"
+  },
+  {
+   "name": "balance-scale",
+   "emoji_name": "balance scale",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u2696.svg",
+   "sha": "70308e79b9335d551143ee1f6cb86747eb3f1c9b",
+   "sha256": "b37ac37594b568ff53fc810495695519c931aa8f1a44de277ace45cf53d87fbf"
+  },
+  {
+   "name": "white-cane",
+   "emoji_name": "white cane",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f9af.svg",
+   "sha": "6e4ee5d299dd19765acf8ae91d22e788b6b9d924",
+   "sha256": "6e9b583d4c77ead5870ea125e02c2d9a3aeeeb3f9c693ef85ff66d1ff11faea9"
+  },
+  {
+   "name": "link",
+   "emoji_name": "link",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f517.svg",
+   "sha": "e231fdd9a38149dbb9f1ef2fb3f4b88c4ed3013f",
+   "sha256": "410499beec6b339928514420bee1241f574ee35eeb66358db2e2286a29fd9faf"
+  },
+  {
+   "name": "broken-chain",
+   "emoji_name": "broken chain",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u26d3_200d_1f4a5.svg",
+   "sha": "ac6c9a64308cf75b1c36d0929a85ed02fafa3374",
+   "sha256": "0bbe5fd0655b8c137aca2b1deab3b71910231eaa91deef1efdc119cf0f1069d0"
+  },
+  {
+   "name": "chains",
+   "emoji_name": "chains",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u26d3.svg",
+   "sha": "3f461941741e6efbd9ec42cbba1ac390ec0cb756",
+   "sha256": "603da43e313ddc29c6ce62196846667c4f93b822eea24aafec915cca51d77aae"
+  },
+  {
+   "name": "hook",
+   "emoji_name": "hook",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1fa9d.svg",
+   "sha": "0cb00564ab485b787d2385b4245e9b4d21c6a887",
+   "sha256": "ebdc87ce2ebe773411429cf28044b8bf48af28b2ac6f3cb70660ec73b0a0665a"
+  },
+  {
+   "name": "toolbox",
+   "emoji_name": "toolbox",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f9f0.svg",
+   "sha": "bf4e148677efcd0485f3086ac25ca43811b29127",
+   "sha256": "0c0a35b6a719654067fd76379a81df17da4ed2291f3cdbd7da5689f189006cd3"
+  },
+  {
+   "name": "magnet",
+   "emoji_name": "magnet",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1f9f2.svg",
+   "sha": "e808bdebc8d1a242afc60122736e09eb1aceeba3",
+   "sha256": "1d6ae3eced0afe3ac9aeef004d675ba61e423f4ef0ccebebde6d27475c902288"
+  },
+  {
+   "name": "ladder",
+   "emoji_name": "ladder",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1fa9c.svg",
+   "sha": "d7db3acc2ba31da9179630c5c5eacdfa4c4a1e24",
+   "sha256": "9c2c7b169f5f57247b8f658764efbcd8f0918454c2050a3bdc9669910c9a3d02"
+  },
+  {
+   "name": "shovel",
+   "emoji_name": "shovel",
+   "group": "Objects",
+   "subgroup": "tool",
+   "upstream_path": "2D/svg/emoji_u1fa8f.svg",
+   "sha": "869114ec7889796d39f54ae23821051043ba1661",
+   "sha256": "46343a4842cac2df3bc2ff1440e8d3e57f41a1d6cfb1d82f10864298004252d7"
+  },
+  {
+   "name": "alembic",
+   "emoji_name": "alembic",
+   "group": "Objects",
+   "subgroup": "science",
+   "upstream_path": "2D/svg/emoji_u2697.svg",
+   "sha": "e2cba9d3bc52e8940b098b3468500c65c8dee114",
+   "sha256": "1902670bb671b4d4d8b5483b235a1b4b90b164cd8f8ec884645e62006cc89ee6"
+  },
+  {
+   "name": "test-tube",
+   "emoji_name": "test tube",
+   "group": "Objects",
+   "subgroup": "science",
+   "upstream_path": "2D/svg/emoji_u1f9ea.svg",
+   "sha": "b384da4a276823618307d706e456524ac1af927d",
+   "sha256": "89397fdaf271eebdb6850131e892c32656822349b368b05a2701e3206ee56fd9"
+  },
+  {
+   "name": "petri-dish",
+   "emoji_name": "petri dish",
+   "group": "Objects",
+   "subgroup": "science",
+   "upstream_path": "2D/svg/emoji_u1f9eb.svg",
+   "sha": "784260e717767b9084cf0cb64c12861f2650715d",
+   "sha256": "79d37ce0f59b42a8ade066b747c5e665e069cc0ee46ad73b6be0d4b97048a2a5"
+  },
+  {
+   "name": "dna",
+   "emoji_name": "dna",
+   "group": "Objects",
+   "subgroup": "science",
+   "upstream_path": "2D/svg/emoji_u1f9ec.svg",
+   "sha": "fc83a366157e288ef7cbe114b367cfb459321800",
+   "sha256": "9aa64210be364b412703039b5c6eef1ec953aeac0fc8eb40c32865df1998e0fa"
+  },
+  {
+   "name": "microscope",
+   "emoji_name": "microscope",
+   "group": "Objects",
+   "subgroup": "science",
+   "upstream_path": "2D/svg/emoji_u1f52c.svg",
+   "sha": "508bdb9ee2159a2b5f60c7d1fcb43fc687ab4b95",
+   "sha256": "fcd44199e6b5d91ae9bb76709b4c77bc917a72fe3af2a225171b180e3a95d2be"
+  },
+  {
+   "name": "telescope",
+   "emoji_name": "telescope",
+   "group": "Objects",
+   "subgroup": "science",
+   "upstream_path": "2D/svg/emoji_u1f52d.svg",
+   "sha": "1eff5c86f90ae31c05d037fac5a80f9481213db7",
+   "sha256": "0d57fe463515ae834f5e62ab1ee2904d3eeaa08bd1d595df6c7c1bca5369c256"
+  },
+  {
+   "name": "satellite-antenna",
+   "emoji_name": "satellite antenna",
+   "group": "Objects",
+   "subgroup": "science",
+   "upstream_path": "2D/svg/emoji_u1f4e1.svg",
+   "sha": "0598a267b26181632498906044eee56c47a3ca35",
+   "sha256": "530145fc5abd3cfe01bd1f7164bb4a84057ccf25b414d6e674cfad87bab017ff"
+  },
+  {
+   "name": "syringe",
+   "emoji_name": "syringe",
+   "group": "Objects",
+   "subgroup": "medical",
+   "upstream_path": "2D/svg/emoji_u1f489.svg",
+   "sha": "106696bd3c5626ba8cb57805dbdeeb9e640996e5",
+   "sha256": "f4d99242758b67a7dc10db2d548a888fce0d9c9f1105321a10800f635b34e478"
+  },
+  {
+   "name": "drop-of-blood",
+   "emoji_name": "drop of blood",
+   "group": "Objects",
+   "subgroup": "medical",
+   "upstream_path": "2D/svg/emoji_u1fa78.svg",
+   "sha": "12b3c8e5c058521c8d0452fe3b00d9a456172a27",
+   "sha256": "e15ac19d410a4166cda7d77bf4390a0601331a1209d98fe75261fb15eb64350d"
+  },
+  {
+   "name": "pill",
+   "emoji_name": "pill",
+   "group": "Objects",
+   "subgroup": "medical",
+   "upstream_path": "2D/svg/emoji_u1f48a.svg",
+   "sha": "a5be7ba7e1e7c4ea55a3a8e5893160e51a39949d",
+   "sha256": "246dec2a4290beb147abc36d625ebd658af2a99628c08c13c2e09c8cf1266eb7"
+  },
+  {
+   "name": "adhesive-bandage",
+   "emoji_name": "adhesive bandage",
+   "group": "Objects",
+   "subgroup": "medical",
+   "upstream_path": "2D/svg/emoji_u1fa79.svg",
+   "sha": "a17b0ebd444b82bf1c982e056d6ff9d71f32b723",
+   "sha256": "ba822c7199b68f1ddcf543be005b0920820e019771a2d1d749bfc3aa23df5a91"
+  },
+  {
+   "name": "crutch",
+   "emoji_name": "crutch",
+   "group": "Objects",
+   "subgroup": "medical",
+   "upstream_path": "2D/svg/emoji_u1fa7c.svg",
+   "sha": "7379934f7f2be35ab89095611ca8a4ce6c35448d",
+   "sha256": "c4b0c5585edd56d19bae74e6e27b959b8f5e35b5ec87c299b472b9622b72ac25"
+  },
+  {
+   "name": "stethoscope",
+   "emoji_name": "stethoscope",
+   "group": "Objects",
+   "subgroup": "medical",
+   "upstream_path": "2D/svg/emoji_u1fa7a.svg",
+   "sha": "f094b4e83087db43365a2122022485f252270e9c",
+   "sha256": "78d658118a497ea5166afb5f3ab451cad27ab110c9e8c82b4758346aa2fc8c6b"
+  },
+  {
+   "name": "x-ray",
+   "emoji_name": "x-ray",
+   "group": "Objects",
+   "subgroup": "medical",
+   "upstream_path": "2D/svg/emoji_u1fa7b.svg",
+   "sha": "207104bfada0af9d201e235226f634991cb81210",
+   "sha256": "15bb84d652caaf39f499de4b34fb897e8c532ba6e3c14c54ac978d05cc017ecf"
+  },
+  {
+   "name": "door",
+   "emoji_name": "door",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f6aa.svg",
+   "sha": "a45e0d054e009e479cc54da37cbb070b595a625d",
+   "sha256": "f50cc307c9c8e9d66915c8ed66c4749e10400c48295ef3f93a76df1ab0122fdb"
+  },
+  {
+   "name": "elevator",
+   "emoji_name": "elevator",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f6d7.svg",
+   "sha": "c7f71e8b2cb1905f48e6ab11dd46f6ea468e834c",
+   "sha256": "fa8a3d7aead130f0f7cdc6ca66390de64d36afcc980ecc41d5a8299fcb10550f"
+  },
+  {
+   "name": "mirror",
+   "emoji_name": "mirror",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1fa9e.svg",
+   "sha": "ce6252449ed7434b944ff8c42835cc6284b8a04f",
+   "sha256": "0bec114cefd554abf7411533c510a17b3f469455e0dd5834b7a6493c610c0af1"
+  },
+  {
+   "name": "window",
+   "emoji_name": "window",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1fa9f.svg",
+   "sha": "3a1adc49c4d897f9cb296946c22703ffaae81e7f",
+   "sha256": "2ed5b286f8410271df20a032dd3742f777ad32195054af820f4648992699eae6"
+  },
+  {
+   "name": "bed",
+   "emoji_name": "bed",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f6cf.svg",
+   "sha": "729ed5f45d68b628bab0edd72ad6900aaa9c17ba",
+   "sha256": "8d232f3f51ed8cfa9bea945397a7a4a2bf51ba0c8b06993f60b7ed10d9076de0"
+  },
+  {
+   "name": "couch-and-lamp",
+   "emoji_name": "couch and lamp",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f6cb.svg",
+   "sha": "95039869171603ef83219c267d1c2f513697c7fd",
+   "sha256": "ac5e0780760ff0cd923ad2371248254f7b3da4bf0c4ab59692430475b72b8614"
+  },
+  {
+   "name": "chair",
+   "emoji_name": "chair",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1fa91.svg",
+   "sha": "f384c378e2fb06cec870e9da7cfc12905981fc47",
+   "sha256": "d50ab32b9970ebb172578aa5bcaa2dedf727cb0fdc97a47f4038f4ab21ae4451"
+  },
+  {
+   "name": "toilet",
+   "emoji_name": "toilet",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f6bd.svg",
+   "sha": "7f6fdcfe8f57c8fb49ee0c73ea89a8a54e0081a0",
+   "sha256": "77b643195d8d9c706c3f779f742451c252715691c29269eb44c5271c19fa1134"
+  },
+  {
+   "name": "plunger",
+   "emoji_name": "plunger",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1faa0.svg",
+   "sha": "e668e8587abe0ad03555179435d089a7da14ab6a",
+   "sha256": "ac85f59e160275e1e0cc3d3b59050d08a05881710b7f78c03ad2e333b96bb52e"
+  },
+  {
+   "name": "shower",
+   "emoji_name": "shower",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f6bf.svg",
+   "sha": "e410735d005fd7b698464b6cea269f9bbb582e31",
+   "sha256": "243d96dd9718f93e3cebd6b031e7e00271a3ca569cfb7e62029e7d94526aaaaa"
+  },
+  {
+   "name": "bathtub",
+   "emoji_name": "bathtub",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f6c1.svg",
+   "sha": "04ee852d5943621791e7a5f3dd75d83563645097",
+   "sha256": "ae12713f23fd195ecd8607f9aa1f9edb484d68a2c0e55e0c0d3407be9a2454ad"
+  },
+  {
+   "name": "mouse-trap",
+   "emoji_name": "mouse trap",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1faa4.svg",
+   "sha": "585d729278016b231b0f7d861c292e72c3feb8f6",
+   "sha256": "1c391915b0299414b9b9eaced6f2e72b9ea95c37d0253c508e5a8c741c82ab38"
+  },
+  {
+   "name": "razor",
+   "emoji_name": "razor",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1fa92.svg",
+   "sha": "bccc204c6466a8c07a65b63445a738887aa38413",
+   "sha256": "672c317ca455111599151901bd5d73aab7ac75b878721e63f819caed9943caa6"
+  },
+  {
+   "name": "lotion-bottle",
+   "emoji_name": "lotion bottle",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f9f4.svg",
+   "sha": "e75c6a088f2f370f471fd9b65e044683bd951114",
+   "sha256": "190ca89097bda6548d94f9fdcd7e7b03d70b7753327397b4038aa140558d2d28"
+  },
+  {
+   "name": "safety-pin",
+   "emoji_name": "safety pin",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f9f7.svg",
+   "sha": "4b82a8434faa3623e3b856499101ab56bd938d2d",
+   "sha256": "ecaacffee88440746c1efd637ce0014d25bb1ae293b0985a2113f26e7912e210"
+  },
+  {
+   "name": "broom",
+   "emoji_name": "broom",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f9f9.svg",
+   "sha": "fd7936a3d1a7fde8800a51953f17facbb449ebd4",
+   "sha256": "81875e84a44e7481e4661dfb6ae4623a58c00572d0a32bd184e016d1b23b0bd8"
+  },
+  {
+   "name": "basket",
+   "emoji_name": "basket",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f9fa.svg",
+   "sha": "bcda949e43a1919e5d11988202f6f83e169642b6",
+   "sha256": "f0ddb7afe906133488b072ff9c663f9ace19da110f5dc1a2f08740b710112f9b"
+  },
+  {
+   "name": "roll-of-paper",
+   "emoji_name": "roll of paper",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f9fb.svg",
+   "sha": "147352008f91ead6c296d6d72e72551ae1eaf5fd",
+   "sha256": "71827a10e759f0c26b8c04c56ee8ba5a46fcfe074c78eeae0556df621d043d65"
+  },
+  {
+   "name": "bucket",
+   "emoji_name": "bucket",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1faa3.svg",
+   "sha": "79d9ca5ce20cbdfe443c6a5e280e0d75f9a487b7",
+   "sha256": "052f9c10403eb3269ae81fafb3ba762ab1b238d03b008478d7a4523ce22784b2"
+  },
+  {
+   "name": "soap",
+   "emoji_name": "soap",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f9fc.svg",
+   "sha": "202bf24fd6cc04ed322198a206c585e52b43b6ff",
+   "sha256": "95e97b8d9f1cd64ca3908e77300089b64d7ec692d4ed6e37229f911d97cdec85"
+  },
+  {
+   "name": "bubbles",
+   "emoji_name": "bubbles",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1fae7.svg",
+   "sha": "2b00528de274ed49c68c85ae4bc56018224f066c",
+   "sha256": "de081168cf3370506f893c8c5a6cffe930e7b8fb6947e3bb72d3efa298f9a4cb"
+  },
+  {
+   "name": "toothbrush",
+   "emoji_name": "toothbrush",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1faa5.svg",
+   "sha": "f601955f920f2e82e2f888e97062545e4b1741e5",
+   "sha256": "2e3b3413c79e36d785da267ffb4030d71b6051eb967709ca5d2306b636461980"
+  },
+  {
+   "name": "sponge",
+   "emoji_name": "sponge",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f9fd.svg",
+   "sha": "a705965f252b38fd9495e8b03991767bb374e127",
+   "sha256": "d46668875b488bebe1b28eee93334900341e93ced0ca4f57d86826f35aa2e33b"
+  },
+  {
+   "name": "fire-extinguisher",
+   "emoji_name": "fire extinguisher",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f9ef.svg",
+   "sha": "528ee088965059828c61e016de8b0b63b369945f",
+   "sha256": "d9db495a3bf21c90f817882627ddb52c927a6cd498e3c789e8b665eee06df7d5"
+  },
+  {
+   "name": "shopping-cart",
+   "emoji_name": "shopping cart",
+   "group": "Objects",
+   "subgroup": "household",
+   "upstream_path": "2D/svg/emoji_u1f6d2.svg",
+   "sha": "2e53cf1c00ce334611deb09c5dc8cf898bb1d5ca",
+   "sha256": "b829a5b950cf76eea2ca4c8130008fbcb35fa3413f3fdfbae0773d6e07c352bc"
+  },
+  {
+   "name": "cigarette",
+   "emoji_name": "cigarette",
+   "group": "Objects",
+   "subgroup": "other-object",
+   "upstream_path": "2D/svg/emoji_u1f6ac.svg",
+   "sha": "85ef41e5013878eaa43e8dbe3f61281972322d3b",
+   "sha256": "33f7c1654c242087e407cc14e60a51f2bbb77518dea7280f9b8c2cd6c7cd63a3"
+  },
+  {
+   "name": "coffin",
+   "emoji_name": "coffin",
+   "group": "Objects",
+   "subgroup": "other-object",
+   "upstream_path": "2D/svg/emoji_u26b0.svg",
+   "sha": "a5be0d0810e0d078c51883835bf4de2ce86778a8",
+   "sha256": "911628efbe7d7b4393fb92b8ae20ee0da30d74ce565b59dcea5edea5e77e1624"
+  },
+  {
+   "name": "headstone",
+   "emoji_name": "headstone",
+   "group": "Objects",
+   "subgroup": "other-object",
+   "upstream_path": "2D/svg/emoji_u1faa6.svg",
+   "sha": "5a097b223d5156294b75d372ff9c3645426c50e6",
+   "sha256": "31c03fc37ee372f7df019b6e7d44e9e34521a107b2a36e530e5249f646893d70"
+  },
+  {
+   "name": "funeral-urn",
+   "emoji_name": "funeral urn",
+   "group": "Objects",
+   "subgroup": "other-object",
+   "upstream_path": "2D/svg/emoji_u26b1.svg",
+   "sha": "b7c015f66ecde4def1716fb34a2477e935060c60",
+   "sha256": "abcd94f28257716ebab365dfa172d1b25c06e7707aefdde78a83eb9a664e8b69"
+  },
+  {
+   "name": "nazar-amulet",
+   "emoji_name": "nazar amulet",
+   "group": "Objects",
+   "subgroup": "other-object",
+   "upstream_path": "2D/svg/emoji_u1f9ff.svg",
+   "sha": "54f3d578dfadebffe716aba385ab76bae8b4fb3f",
+   "sha256": "39e473a3f4fbe065743fc31308dfb2bb44e36636545c14ffcd73256803f7f830"
+  },
+  {
+   "name": "hamsa",
+   "emoji_name": "hamsa",
+   "group": "Objects",
+   "subgroup": "other-object",
+   "upstream_path": "2D/svg/emoji_u1faac.svg",
+   "sha": "1f63cbd60c63fdc1fc6bd198b56e7bfa4a75eac1",
+   "sha256": "20b5552938066a9f8e5d53d1d40762d731e8ef6958cf8c3a8f8b3c7f672a9307"
+  },
+  {
+   "name": "moai",
+   "emoji_name": "moai",
+   "group": "Objects",
+   "subgroup": "other-object",
+   "upstream_path": "2D/svg/emoji_u1f5ff.svg",
+   "sha": "c07acef27b296a16136e455528f169db5abc3c6d",
+   "sha256": "e50cf6eac2f8963472a6f50e57b17ce914848883f08670617374261b3baa518b"
+  },
+  {
+   "name": "placard",
+   "emoji_name": "placard",
+   "group": "Objects",
+   "subgroup": "other-object",
+   "upstream_path": "2D/svg/emoji_u1faa7.svg",
+   "sha": "c48ffad1fda97bfcfa1905049b610938e298110f",
+   "sha256": "d4bf74af1fe2223c54b6d0927bf6603ca8780f2069e43ebf797a0f9e4e462ef7"
+  },
+  {
+   "name": "identification-card",
+   "emoji_name": "identification card",
+   "group": "Objects",
+   "subgroup": "other-object",
+   "upstream_path": "2D/svg/emoji_u1faaa.svg",
+   "sha": "5f105d691da01f67486b80417e878929e850c2eb",
+   "sha256": "60f41ac6fa1e2a40fd94e36c564a6586f105b13c4ad2b4e392cbd897c6a677d7"
+  }
+ ]
+}

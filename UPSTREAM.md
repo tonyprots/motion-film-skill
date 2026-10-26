@@ -42,6 +42,10 @@ and text wipes were rejected. Local icons: 40 each from Lucide (ISC plus MIT Fea
 duotone (MIT); keep full LICENSE files beside packs. Source pins and SHA-256: `library/assets/icons/manifest.json`.
 `graphics.js` and the offline catalog are our code. External indexes contain metadata/links only, with no automatic
 bundling of external code or assets. Full credits are also listed in `NOTICE.md`.
+Extras: 563 SVGs from googlefonts/noto-emoji `2D/svg/` (commit `e20cbc2b`, Apache-2.0, Copyright 2013 Google, Inc.),
+LICENSE beside them in `library/assets/extras/noto/`. Modified: Illustrator metadata, comments and unused ids removed, remaining ids shortened,
+coordinates rounded to 0.01 units (shapes and colours unchanged). Pins and SHA-256: `manifest.json` there. The
+repainting into film skins (`ILLUSTRATIONS.extra`) is our code.
 
 ## 3. Our own (workspace)
 `engine/lib/morph.js` is a separate adaptation of `alexgreensh/anidoodle` `canvas-core/morph.ts`, Copyright 2026

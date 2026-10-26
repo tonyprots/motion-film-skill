@@ -11,7 +11,7 @@
   const hex = /^#[0-9a-fA-F]{6}$/;
   const mix = (a, b, p) => '#' + [1, 3, 5].map((i) => Math.round(parseInt(a.slice(i, i + 2), 16) * (1 - p) + parseInt(b.slice(i, i + 2), 16) * p)
     .toString(16).padStart(2, '0')).join('');
-  let defaults = { skin:'line', palette:{} };
+  let defaults = { skin:'line', palette:{}, extras:true };
   function colours(skin, custom) {
     for (const [k, v] of Object.entries(custom)) {
       if (!(k in LINE)) throw new Error(`unknown illustration palette colour ${k}`);
@@ -211,12 +211,94 @@
       circle(256, 106, 9, c.paper) + label('CAMERA'),
       draw:(q, s) => { const pan = clamp(s.pan ?? 0, -1, 1), view = clamp(s.view ?? 0);
         q.part.body.setAttribute('transform', `rotate(${(14 + 18 * pan).toFixed(2)} 256 106)`); q.part.view.setAttribute('opacity', (.2 * view).toFixed(3));
-        visible(q.part.view, view > 0); visible(q.part.rec, (s.rec ?? 1) >= .5); } }
+        visible(q.part.view, view > 0); visible(q.part.rec, (s.rec ?? 1) >= .5); } },
+    // AI agent: a faceless tile with a spark. work is a phase (any value) that spins the ring and pulses the spark;
+    // sleep 0–1 dims the spark and lifts the Zz; done 0–1 pops the check badge; status fills the pill (empty hides it).
+    agent:{ svg:({ path, rect, circle, text, label, shadow, c }) => shadow() +
+      `<g data-part="ring"><circle cx="200" cy="132" r="104" fill="none" stroke="${c.accent}" stroke-width="5" stroke-linecap="round" stroke-dasharray="52 26"/></g>` +
+      path('M200 56V38', 'none', c.ink, 5) + circle(200, 32, 9, c.accent, c.ink, 3) +
+      rect(108, 110, 18, 46, 7, c.metal, c.ink, 3) + rect(274, 110, 18, 46, 7, c.metal, c.ink, 3) +
+      rect(124, 56, 152, 152, 40, c.paper, c.ink, 4) + rect(142, 74, 116, 116, 28, c.dark, c.ink, 3) +
+      `<g data-part="spark">${path('M200 98C203 122 210 129 234 132C210 135 203 142 200 166C197 142 190 135 166 132C190 129 197 122 200 98Z', c.paper, c.paper, 2) +
+        path('M236 90C237 98 239 100 247 101C239 102 237 104 236 112C235 104 233 102 225 101C233 100 235 98 236 90Z', c.accent, c.accent, 1)}</g>` +
+      `<g data-part="zz">${text(270, 64, 'z', 30, c.ink, 'font-weight="700"') + text(292, 40, 'z', 22, c.ink, 'font-weight="700"')}</g>` +
+      `<g data-part="done">${circle(262, 188, 26, c.second, c.ink, 3) + path('M249 188l9 9 17-18', 'none', c.paper, 6)}</g>` +
+      `<g data-part="pill">${rect(126, 226, 148, 32, 16, c.ink, c.ink, 0) + text(200, 248, '', 15, c.paper, 'data-field="status" text-anchor="middle" font-weight="700" letter-spacing="2"')}</g>` +
+      label('AGENT'),
+      draw:(q, s) => { const work = s.work ?? 0, sleep = clamp(s.sleep ?? 0), done = clamp(s.done ?? 0), on = work > 0 && sleep < 1;
+        visible(q.part.ring, on); q.part.ring.setAttribute('transform', `rotate(${(360 * work).toFixed(2)} 200 132)`);
+        const pulse = on ? 1 + .08 * Math.sin(4 * Math.PI * work) : 1;
+        q.part.spark.setAttribute('transform', `translate(200 132) scale(${pulse.toFixed(3)}) translate(-200 -132)`); q.part.spark.setAttribute('opacity', (1 - .65 * sleep).toFixed(3));
+        visible(q.part.zz, sleep > 0); q.part.zz.setAttribute('opacity', sleep.toFixed(3)); q.part.zz.setAttribute('transform', `translate(0 ${(14 * (1 - sleep)).toFixed(2)})`);
+        visible(q.part.done, done > 0); q.part.done.setAttribute('transform', `translate(262 188) scale(${(done * (1 + .25 * Math.sin(Math.PI * done))).toFixed(3)}) translate(-262 -188)`);
+        visible(q.part.pill, q.field.status.textContent !== ''); } },
+    // Token balance: level 0–1.5 fills the tank (1 = the plan's base; above it is overage in accent); chips 0–3 tokens; amount text.
+    tokens:{ svg:({ path, rect, text, label, shadow, c }) => shadow() +
+      [0, 1, 2].map((i) => { const x = 112, y = 212 - i * 30;
+        return `<g data-coin="${i}">${path(`M${x - 52} ${y}v12l26 18h52l26-18v-12`, c.edge, c.ink, 3) + path(`M${x - 52} ${y}l26-18h52l26 18-26 18h-52z`, c.paper, c.ink, 3) +
+          path(`M${x} ${y - 11}C${x + 1} ${y - 3} ${x + 4} ${y - 1} ${x + 14} ${y}C${x + 4} ${y + 1} ${x + 1} ${y + 3} ${x} ${y + 11}C${x - 1} ${y + 3} ${x - 4} ${y + 1} ${x - 14} ${y}C${x - 4} ${y - 1} ${x - 1} ${y - 3} ${x} ${y - 11}Z`, c.accent, c.accent, 1)}</g>`; }).join('') +
+      text(112, 110, '—', 30, c.ink, 'data-field="amount" text-anchor="middle" font-weight="700"') +
+      rect(214, 34, 96, 200, 14, c.paper, c.ink, 4) +
+      `<rect data-part="base" x="221" y="228" width="82" height="0" rx="7" fill="${c.metal}"/><rect data-part="over" x="221" y="228" width="82" height="0" rx="7" fill="${c.accent}"/>` +
+      path('M204 103h116', 'none', c.ink, 3, 'stroke-dasharray="8 7"') + text(326, 109, 'BASE', 14, c.ink, 'data-field="base" font-weight="700" letter-spacing="1"') + label('TOKENS'),
+      draw:(q, s) => { const l = clamp(s.level ?? 0, 0, 1.5), base = 188 * Math.min(l, 1) / 1.5, over = 188 * Math.max(0, l - 1) / 1.5;
+        q.part.base.setAttribute('y', (228 - base).toFixed(2)); q.part.base.setAttribute('height', base.toFixed(2)); visible(q.part.base, base > 0);
+        q.part.over.setAttribute('y', (228 - base - over).toFixed(2)); q.part.over.setAttribute('height', over.toFixed(2)); visible(q.part.over, over > 0);
+        q.coins.forEach((n, i) => visible(n, i < (s.chips ?? 3))); } },
+    // Price ladder: three steps; active −1…2 lights one step and moves the marker (fractions slide it); l0–l2 label the steps.
+    steps:{ svg:({ rect, circle, text, label, shadow, c }) => shadow(50, 247, 300) +
+      [0, 1, 2].map((i) => { const x = 60 + i * 96, h = 56 + i * 56, y = 236 - h;
+        return rect(x, y, 92, h, 8, c.tint, c.ink, 3) + `<g data-flag="${i}">${rect(x, y, 92, h, 8, c.accent, c.ink, 3)}</g>` +
+          text(x + 46, y + 32, '', 18, c.ink, `data-field="l${i}" text-anchor="middle" font-weight="700"`); }).join('') +
+      `<g data-part="marker">${circle(0, 0, 14, c.paper, c.ink, 4) + circle(0, 0, 5, c.accent, c.accent, 0)}</g>` + label('PLANS'),
+      draw:(q, s, c) => { const a = clamp(s.active ?? -1, -1, 2), lit = a >= 0 ? Math.round(a) : -1;
+        q.flags.forEach((f, i) => visible(f, i === lit)); [0, 1, 2].forEach((i) => q.field['l' + i].setAttribute('fill', i === lit ? c.paper : c.ink));
+        const m = Math.max(0, a); visible(q.part.marker, a >= 0); q.part.marker.setAttribute('transform', `translate(${(106 + 96 * m).toFixed(2)} ${(158 - 56 * m).toFixed(2)})`); } },
+    // Slide deck: count 0–3 slides (front first); cursors 0–3 co-editing pointers on the front slide; title text.
+    slides:{ svg:({ path, rect, text, label, shadow, c }) => shadow() +
+      [2, 1, 0].map((i) => { const x = 114 - i * 22, y = 100 - i * 30;
+        return `<g data-box="${i}">${rect(x, y, 220, 124, 10, c.paper, c.ink, 3) + path(`M${x + 18} ${y + 22}h${i ? 110 : 0}`, 'none', c.edge, 7) +
+          [0, 1, 2].map((j) => rect(x + 120 + j * 26, y + 104 - [30, 52, 40][j], 18, [30, 52, 40][j], 3, j === 1 ? c.accent : c.muted, c.ink, 2)).join('') +
+          path(`M${x + 18} ${y + 58}h80M${x + 18} ${y + 76}h64M${x + 18} ${y + 94}h72`, 'none', c.edge, 6) +
+          (i ? '' : text(x + 18, y + 30, 'SLIDES', 16, c.ink, 'data-field="title" font-weight="700" letter-spacing="2"'))}</g>`; }).join('') +
+      [[176, 150, c.accent], [268, 132, c.second], [222, 196, c.ink]].map(([x, y, fill], i) =>
+        `<g data-tile="${i}" transform="translate(${x} ${y})">${path('M0 0v28l8-7 7 14 7-3-7-14h11z', fill, c.paper, 2)}</g>`).join('') + label('SLIDES'),
+      draw:(q, s) => { q.boxes.forEach((b) => visible(b, +b.dataset.box < (s.count ?? 3))); q.tiles.forEach((t, i) => visible(t, i < (s.cursors ?? 0) && (s.count ?? 3) > 0)); } },
+    // Funnel: flow is a phase (any value) that drops many dots in and lets few out; top/bottom label the counts.
+    funnel:{ svg:({ path, ellipse, circle, text, label, shadow, c }) => shadow(130, 247, 140) +
+      Array.from({ length:12 }, (_, i) => circle(0, 0, 6, c.ink, c.ink, 0).replace('<circle ', `<circle data-dot="${i}" `)).join('') +
+      path('M80 72L182 186V228H218V186L320 72', c.tint, c.ink, 4) + ellipse(200, 72, 120, 22, c.edge, c.ink, 4) +
+      Array.from({ length:3 }, (_, i) => circle(200, 236, 8, c.accent, c.ink, 2).replace('<circle ', `<circle data-dot="${12 + i}" `)).join('') +
+      text(326, 62, '', 20, c.ink, 'data-field="top" font-weight="700"') + text(232, 222, '', 22, c.accent, 'data-field="bottom" font-weight="700"') + label('FUNNEL'),
+      draw:(q, s) => { const f = s.flow ?? 0;
+        q.dots.forEach((d, i) => { if (i < 12) { const p = ((f + i / 12) % 1 + 1) % 1, x = 200 + (((i * 37) % 11) - 5) * 19 * (1 - .5 * p), y = 8 + 70 * p;
+            d.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)})`); d.setAttribute('opacity', (p < .8 ? 1 : (1 - p) * 5).toFixed(3)); }
+          else { const p = ((f + (i - 12) / 3) % 1 + 1) % 1; d.setAttribute('transform', `translate(0 ${(22 * p).toFixed(2)})`); d.setAttribute('opacity', (1 - p).toFixed(3)); } }); } },
+    // Team: count 0–5 people (front row first); lead −1…4 marks one person in accent; helmet 0/1 puts a hard hat on the lead.
+    team:{ svg:({ path, circle, label, shadow, c }) => shadow() +
+      [[3, 165, 96], [4, 235, 96], [1, 128, 138], [2, 272, 138], [0, 200, 146]].map(([i, x, y]) => {
+        const body = (fill) => path(`M${x - 46} ${y + 92}v-20c0-24 20-40 46-40s46 16 46 40v20z`, fill, c.ink, 3);
+        return `<g data-tile="${i}">${body(i > 2 ? c.muted : c.metal)}<g data-flag="${i}">${body(c.accent)}</g>${circle(x, y, 25, c.tint, c.ink, 3)}` +
+          `<g data-mark="${i}">${path(`M${x - 25} ${y - 9}a25 23 0 0 1 50 0z`, c.second, c.ink, 3) + path(`M${x - 32} ${y - 9}h64`, 'none', c.ink, 6)}</g></g>`; }).join('') + label('TEAM'),
+      draw:(q, s) => { const n = s.count ?? 5, lead = s.lead ?? -1, hat = (s.helmet ?? 0) >= .5;
+        q.tiles.forEach((t) => visible(t, +t.dataset.tile < n)); q.flags.forEach((f) => visible(f, +f.dataset.flag === Math.round(lead)));
+        q.marks.forEach((m) => visible(m, hat && +m.dataset.mark === Math.round(lead))); } },
+    // Model chip with a switch: pick 0–2 slides the knob (fractions animate); model is the chip text; m0–m2 label the options.
+    chip:{ svg:({ path, rect, text, label, shadow, c }) => shadow() +
+      [0, 1, 2, 3].map((i) => path(`M${158 + i * 28} 30v-14M${158 + i * 28} 150v14M140 ${48 + i * 28}h-14M260 ${48 + i * 28}h14`, 'none', c.ink, 5)).join('') +
+      rect(140, 30, 120, 120, 14, c.dark, c.ink, 4) + rect(160, 50, 80, 80, 8, 'none', c.darkEdge, 3) +
+      text(200, 101, 'AI', 30, c.paper, 'data-field="model" text-anchor="middle" font-weight="700"') + path('M200 168v14', 'none', c.ink, 4) +
+      rect(70, 182, 260, 44, 22, c.tint, c.ink, 3) + `<g data-part="knob">${rect(-42, -18, 84, 36, 18, c.accent, c.ink, 3)}</g>` +
+      ['A', 'B', 'C'].map((m, i) => text(113 + i * 87, 210, m, 16, c.ink, `data-field="m${i}" text-anchor="middle" font-weight="700"`)).join('') + label('MODEL'),
+      draw:(q, s, c) => { const p = clamp(s.pick ?? 0, 0, 2), on = Math.round(p);
+        q.part.knob.setAttribute('transform', `translate(${(113 + 87 * p).toFixed(2)} 204)`);
+        [0, 1, 2].forEach((i) => q.field['m' + i].setAttribute('fill', i === on ? c.paper : c.ink)); } }
   };
   // Numeric state per kind; anything else in draw() is a text field.
   const STATES = { keyboard:['key'], envelope:['open'], document:['checked'], phone:['cut', 'ring'], calendar:['day', 'marks'], card:['chip', 'declined'],
     coins:['count'], chat:['shown', 'typing', 'caret'], form:['filled', 'missing', 'sent'], stamp:['press'], decision:['signed', 'sealed'], lock:['open'],
-    scales:['tilt'], recordings:['count', 'rec'], camera:['pan', 'rec', 'view'] };
+    scales:['tilt'], recordings:['count', 'rec'], camera:['pan', 'rec', 'view'],
+    agent:['work', 'sleep', 'done'], tokens:['level', 'chips'], steps:['active'], slides:['count', 'cursors'], funnel:['flow'], team:['count', 'lead', 'helmet'], chip:['pick'] };
   const NUMERIC = new Set(Object.values(STATES).flat());
   let serial = 0;
   function object(parent, kind, o = {}) {
@@ -246,12 +328,82 @@
     }
     draw(); return { root, draw, skin, palette:c };
   }
+  // Extras (secondary objects): licensed SVGs from assets/extras (window.EXTRA_ASSETS, bundled by sync.mjs), repainted in the
+  // film's skin. Greys follow lightness, clear reds become the accent, the silhouette gets the ink outline.
+  const NAMED = { black:'#000000', white:'#ffffff', none:null, transparent:null };
+  const toHex = (v) => {
+    if (!v) return null; v = v.trim().toLowerCase();
+    if (v in NAMED) return NAMED[v];
+    let m = v.match(/^#([0-9a-f]{3})$/); if (m) return '#' + [...m[1]].map((x) => x + x).join('');
+    if (/^#[0-9a-f]{6}$/.test(v)) return v;
+    m = v.match(/^rgba?\(([^)]+)\)/); if (m) return '#' + m[1].split(/[ ,]+/).slice(0, 3).map((x) => Math.round(parseFloat(x)).toString(16).padStart(2, '0')).join('');
+    return undefined;   // url(#…), currentColor, inherit: handled by the caller or left alone
+  };
+  function tone(hex, skin, c) {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255), mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+    const y = .2126 * r + .7152 * g + .0722 * b, ch = mx - mn;
+    let h = 0; if (ch) h = (mx === r ? ((g - b) / ch) % 6 : mx === g ? (b - r) / ch + 2 : (r - g) / ch + 4) * 60; h = (h + 360) % 360;
+    if (ch > .55 && y > .1 && y < .7 && (h < 22 || h > 335)) return c.accent;   // clear red only: browns, oranges, blues stay grey
+    if (skin === 'mono') return y > .5 ? c.paper : c.ink;
+    return y > .86 ? c.paper : y > .7 ? c.tint : y > .52 ? c.edge : y > .36 ? c.muted : y > .2 ? c.metal : y > .1 ? c.dark : c.ink;
+  }
+  const SHAPES = 'path,rect,circle,ellipse,polygon,polyline,line,use';
+  function extra(parent, id, o = {}) {
+    const source = (window.EXTRA_ASSETS || {})[id];
+    if (!source) throw new Error(`unknown extra ${id}: write the id literally in film code (e.g. 'noto:mobile-phone') and run sync.mjs`);
+    const w = o.w ?? 160;
+    if (![o.x ?? 0, o.y ?? 0, w].every(Number.isFinite) || w <= 0) throw new Error('extra needs finite position and positive width');
+    const skin = o.skin ?? defaults.skin;
+    if (!SKINS.includes(skin)) throw new Error(`unknown illustration skin ${skin}`);
+    const c = colours(skin, { ...defaults.palette, ...(o.palette || {}) }), uid = `mf-extra-${++serial}`;
+    // style({extras:false}) switches the layer off film-wide: an empty node keeps film code and put()/hide working.
+    if (!defaults.extras) return { root:C.reg(C.el('div', { class:'abs', 'data-extra':id, 'data-off':'' }, parent), { x:o.x ?? 0, y:o.y ?? 0 }), draw:() => {}, skin, palette:c, off:true };
+    const doc = new DOMParser().parseFromString(source, 'image/svg+xml'), src = doc.documentElement;
+    if (src.localName !== 'svg' || doc.querySelector('parsererror,script,style,foreignObject,iframe,image')) throw new Error(`invalid or active extra SVG: ${id}`);
+    for (const n of [src, ...src.querySelectorAll('*')]) for (const a of n.attributes) {
+      if (/^on/i.test(a.name) || a.localName === 'src' || (a.localName === 'href' && a.value[0] !== '#') || /url\(\s*['"]?(?!#)|@import/i.test(a.value)) throw new Error(`external or active extra reference: ${id}`);
+    }
+    const vb = (src.getAttribute('viewBox') || '0 0 128 128').split(/[ ,]+/).map(Number), size = Math.max(vb[2], vb[3]);
+    const g = doc.createElementNS('http://www.w3.org/2000/svg', 'g'); while (src.firstChild) g.appendChild(src.firstChild);
+    const ids = {}; g.querySelectorAll('[id]').forEach((n) => { ids[n.id] = `${uid}-${n.id}`; n.id = ids[n.id]; });
+    for (const n of g.querySelectorAll('*')) for (const a of [...n.attributes]) {
+      let v = a.value.replace(/url\(\s*['"]?#([^)'"]+)['"]?\s*\)/g, (m, k) => ids[k] ? `url(#${ids[k]})` : m);
+      if (a.localName === 'href' && ids[v.slice(1)]) v = '#' + ids[v.slice(1)];
+      if (v !== a.value) n.setAttributeNS(a.namespaceURI, a.name, v);
+    }
+    for (const n of g.querySelectorAll('*')) for (const p of ['fill', 'stroke', 'stop-color']) {
+      const v = n.style?.getPropertyValue(p) || n.getAttribute(p), hx = toHex(v);
+      if (hx === undefined) { if (/currentcolor/i.test(v || '')) n.setAttribute(p, c.ink); continue; }
+      n.style?.removeProperty(p); n.setAttribute(p, hx ? tone(hx, skin, c) : 'none');
+    }
+    g.setAttribute('fill', c.ink);
+    const ser = new XMLSerializer();
+    let body = ser.serializeToString(g);
+    if (skin !== 'flat') {   // outline: an ink copy of the silhouette behind the drawing
+      const back = g.cloneNode(true);
+      back.querySelectorAll('defs,linearGradient,radialGradient,clipPath,mask').forEach((n) => n.remove());
+      back.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+      for (const n of back.querySelectorAll(SHAPES)) {
+        for (const k of ['opacity', 'fill-opacity', 'stroke-opacity']) { n.removeAttribute(k); n.style?.removeProperty(k); }
+        n.setAttribute('fill', c.ink); n.setAttribute('stroke', c.ink); n.setAttribute('stroke-width', (size * .05).toFixed(2)); n.setAttribute('stroke-linejoin', 'round');
+      }
+      body = ser.serializeToString(back) + body;
+    }
+    let seed = 7; for (const ch of id) seed = (seed * 31 + ch.charCodeAt(0)) % 997;
+    const fx = skin === 'sketch' ? `<defs><filter id="${uid}-fx" filterUnits="userSpaceOnUse" x="${vb[0] - size * .2}" y="${vb[1] - size * .2}" width="${size * 1.4}" height="${size * 1.4}"><feTurbulence type="fractalNoise" baseFrequency="${(12 / size).toFixed(4)}" numOctaves="2" seed="${seed}"/><feDisplacementMap in="SourceGraphic" scale="${(size * .015).toFixed(2)}" xChannelSelector="R" yChannelSelector="G"/></filter></defs>` : '';
+    const pad = size * .06;
+    const root = C.reg(C.el('div', { class:'abs', 'data-extra':id, style:`width:${w}px;height:${w}px` }, parent), { x:o.x ?? 0, y:o.y ?? 0 });
+    root.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="${vb[0] - pad} ${vb[1] - pad} ${vb[2] + 2 * pad} ${vb[3] + 2 * pad}">${fx}<g${fx ? ` filter="url(#${uid}-fx)"` : ''}>${body}</g></svg>`;
+    if (skin !== 'line') root.dataset.skin = skin;
+    return { root, draw:() => {}, skin, palette:c };
+  }
   // Film-wide look: call once before C.start(); objects may still override skin/palette per call.
   function style(o = {}) {
     if (o.skin != null && !SKINS.includes(o.skin)) throw new Error(`unknown illustration skin ${o.skin}`);
+    if (o.extras != null && typeof o.extras !== 'boolean') throw new Error('style extras must be true or false');
     colours(o.skin ?? 'line', o.palette || {});
-    defaults = { skin:o.skin ?? defaults.skin, palette:{ ...(o.palette || defaults.palette) } };
+    defaults = { skin:o.skin ?? defaults.skin, palette:{ ...(o.palette || defaults.palette) }, extras:o.extras ?? defaults.extras };
     return { ...defaults };
   }
-  window.ILLUSTRATIONS = { object, style, kinds:Object.keys(kinds), skins:SKINS, states:STATES };
+  window.ILLUSTRATIONS = { object, extra, extras:() => Object.keys(window.EXTRA_ASSETS || {}).sort(), style, kinds:Object.keys(kinds), skins:SKINS, states:STATES };
 })();

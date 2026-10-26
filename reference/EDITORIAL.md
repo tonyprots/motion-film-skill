@@ -139,10 +139,14 @@ S.letter.draw({open:0.8, title:'Opened message'});
 C.put(S.letter.root, {x:220, r:-3});
 ```
 
-Kinds (`ILLUSTRATIONS.kinds`), 23 objects:
+Kinds (`ILLUSTRATIONS.kinds`), 30 objects:
 
 - `server`, `visitor`, `keyboard`, `envelope`, `bill`, `gift`, `shield`, `gavel`, `globe`, `image`, `document`;
-- `phone`, `calendar`, `card`, `coins`, `chat`, `form`, `stamp`, `decision`, `lock`, `scales`, `recordings`, `camera`.
+- `phone`, `calendar`, `card`, `coins`, `chat`, `form`, `stamp`, `decision`, `lock`, `scales`, `recordings`, `camera`;
+- for films about AI and the software market: `agent`, `tokens`, `steps`, `slides`, `funnel`, `team`, `chip`.
+
+The agent is a faceless tile with an "AI spark", not a person. An agent account or an agent in a group chat is put
+together from existing objects: `agent` next to a `card`, or a small `agent` over `chat` in place of a member's avatar.
 
 These are objects and illustrative diagrams, not real product UI. Capture a named existing UI from its source. Template
 text is neutral, not a factual source; localize meaningful labels and inspect phone-size readability.
@@ -168,6 +172,13 @@ values in `draw(state)`. `draw(state)` restores fields from state and base optio
 | `scales` | `left`, `right` | `tilt` -1…1: positive drops the right pan |
 | `recordings` | `title` | `count` 0–12 recordings in the grid; `rec` 0/1 |
 | `camera` | — | `pan` -1…1: swing; `rec` 0/1; `view` 0–1: field of view |
+| `agent` | `status`: pill under the agent, empty hides it | `work`: a phase (any number, period 1) — the ring spins, the spark pulses; `sleep` 0–1: dims, Zz rises; `done` 0–1: check badge |
+| `tokens` | `amount`, `base` (label of the base line) | `level` 0–1.5: tank fill, 1 is the plan's base, above it is overage in accent; `chips` 0–3 tokens in the stack |
+| `steps` | `l0`–`l2`: step labels | `active` -1…2: the step in accent (a fraction lights the nearest) and a marker that moves smoothly |
+| `slides` | `title` (front slide) | `count` 0–3 slides (front first); `cursors` 0–3 co-editing pointers |
+| `funnel` | `top`, `bottom`: counts in and out | `flow`: a phase (period 1) — many dots drop in, few come out |
+| `team` | — | `count` 0–5 people (front row first); `lead` -1…4: the person in accent; `helmet` 0/1: a hard hat on them (deployment engineer) |
+| `chip` | `model` (chip text), `m0`–`m2` (options) | `pick` 0–2: the model switch knob, a fraction is in transit |
 | Any | `label` | — |
 
 ### Skin
@@ -204,6 +215,44 @@ Only reusable objects live here. Draw an object needed by one film (a form with 
 lacking a specific detail) in that film's project using the same contract: 400×300 SVG, `data-field` for text,
 `draw(state)` resetting the whole frame state. When an omission matters, show it on the object itself rather than a
 checklist, and label the annotation with an explicit "no" at the word that explains it.
+
+### Extras: `ILLUSTRATIONS.extra`
+
+Secondary objects are things that appear for one phrase and do not change state: a laptop on a desk, a trophy, a
+pill, a parcel, a bus. The set is 563 Noto Emoji drawings (Apache-2.0) from objects, travel and places, time and
+weather, events and awards, drinks and dishware, and plants. There are no faces, people or flags. Each drawing is
+repainted in the film's `skin` and `palette`. Greys follow lightness, clear red becomes `accent`, browns, oranges and
+blues turn grey. In `line`, `mono` and `sketch` the silhouette gets an `ink` outline; `flat` has none.
+
+```js
+S.cup = ILLUSTRATIONS.extra(root, 'noto:trophy', {x:640, y:420, w:220});   // skin/palette from style(), may be overridden
+ILLUSTRATIONS.extras();                                                     // ids bundled into this film
+```
+
+Find ids with `node scripts/scenes.mjs search "trophy" --category extras`. Write the id literally in film code
+(`'noto:trophy'`). `sync.mjs` bundles only the named extras into `film/data.js` and warns about an unknown id. An id
+built at run time (`'noto:' + name`) is not bundled. SVGs with external references or scripts are refused.
+
+The chapter's main object stays a stateful `object`; extras do not replace it. They are for backgrounds and lists:
+three or four objects side by side, a run of things, an object next to a word. In `mono` some drawings lose detail
+(an empty envelope, a coin as a plain circle), so check them in frame. Extras default to `line`.
+
+Extras are seasoning, not a required layer. Their place is a list: each named item gets its own small icon by its row
+(per visitor, per session, per email; checklist items; "no link, no address"). A decorative object next to the main
+object hurts. In a blind comparison (benchmark r8) all three critics called a teddy bear and a balloon by the form
+"decoration that explains nothing", two of three said the same of a camera with a cassette and of a briefcase, and the
+object score fell from 7 to 6.7. Nobody flagged the list icons. If the frame means the same without the object, drop it.
+Rules that keep extras in the background:
+- no more than two extras in frame outside a list;
+- an extra is clearly smaller than the main object: no wider than a third of it and no more than 200 px on a 1080 px frame;
+- it appears on the word that names it and leaves with the chapter; idle float stays within 8 px;
+- it never covers the presenter, captions or figures and never crosses the frame edge. A scene that slowly scales up
+  pushes an edge object out by the end of the chapter, so check the chapter's last frame;
+- no extras in every chapter in a row: a film where every scene is dressed reads as a sticker sheet.
+
+One line switches extras off for the whole film without touching scene code: `ILLUSTRATIONS.style({extras:false})`.
+`extra()` then returns an empty node (`off:true`), and `put()` and `hide` keep working. Use it to compare versions with
+and without extras or to ship the restrained cut.
 
 **One object per phrase.** Each chapter gets its own object metaphor, and the object changes state with the phrase:
 the cord parts on "wiretapping", the recordings grid grows on "every session", the amount pill slides out on "refund".
