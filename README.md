@@ -101,7 +101,7 @@ Requirements: **macOS or Linux**, **Node 22+**, **Python 3.11–3.13**, **ffmpeg
 ### Claude Code
 
 ```bash
-git clone --branch v1.7.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
+git clone --branch v1.7.1 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
 ```
 
 Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our leadership channel."*
@@ -109,7 +109,7 @@ Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our l
 ### Codex
 
 ```bash
-git clone --branch v1.7.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
+git clone --branch v1.7.1 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
 ```
 
 ### Any other agent
@@ -188,9 +188,9 @@ On top of that, the skill's own scripts make these calls:
 | update check, at most once a week | `api.github.com` | a request for the latest release tag of this repo, nothing about your films |
 
 The scripts send nothing else: no telemetry, no server of ours. Rendering, captions, the synthesised score, the mix,
-the frame checks and the contact sheets are computed on your machine. During a render the skill serves the film to
-headless Chromium from `127.0.0.1` on a random port; that server answers only a localhost `Host`, only with the film's
-own resources inside the project, and never with hidden files such as `.env` or `.git`.
+the frame checks and the contact sheets are computed on your machine. The render (for headless Chromium) and the
+review player serve the film from `127.0.0.1`. Both answer only a localhost `Host`, only with the film's own resources
+inside the project, and never with hidden files such as `.env` or `.git`, even through a symlink.
 
 For material that must not leave your company, every route has to stay inside it: an agent and model your company
 allows, a voice provider module that points at your company's gateway (or your own recordings), and a take check

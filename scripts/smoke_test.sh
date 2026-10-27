@@ -16,6 +16,11 @@ node "$SKILL/tests/test_editorial.mjs"
 node "$SKILL/tests/test_frame_clock.mjs"
 node "$SKILL/tests/test_morph.cjs"
 node "$SKILL/tests/test_render_server.mjs"
+# the project gets every script the docs run from it (skill-only tooling: lock_deps.py, update_check.py)
+for p in "$SKILL"/scripts/*.py "$SKILL"/scripts/*.mjs; do
+  n=$(basename "$p"); case "$n" in lock_deps.py|update_check.py) continue;; esac
+  [ -f "$WORK/scripts/$n" ] || { echo "FAIL: init.sh did not copy scripts/$n into the project"; exit 1; }
+done
 cd "$WORK"
 .venv/bin/python scripts/music_source.py
 node scripts/sync.mjs >/dev/null
@@ -32,6 +37,8 @@ done
 node scripts/render.mjs --lint --all
 .venv/bin/python scripts/plan_check.py
 .venv/bin/python scripts/review.py smoke --draft
+.venv/bin/python scripts/stillness.py renders/draft_9x16.mp4 >/dev/null || [ $? -eq 1 ]   # runs from the project; 1 = still stretches found
+node scripts/player.mjs --selftest --shot review/player.png
 # negative runs: a check that cannot fail proves nothing — each one must go red on a known-bad input
 mkdir -p neg && cp renders/draft_16x9.mp4 neg/full.mp4
 ffmpeg -v error -y -i neg/full.mp4 -t 3 -c copy renders/draft_16x9.mp4

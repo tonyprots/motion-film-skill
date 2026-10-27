@@ -39,6 +39,7 @@ import os from 'node:os';
 import { spawn, spawnSync, fork } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { decodePNG } from './png.mjs';
+import { filmFile, hostOk, mimeOf } from './static_files.mjs';
 import { reviewStory } from './story_check.mjs';
 import { createRequire } from 'node:module';
 
@@ -89,29 +90,11 @@ if (has('mux')) {
 }
 
 // ------------------------------------------------------------------ static server (film fetches nothing; data.js is generated)
-// Serves only film resources: a known extension, no hidden path segment (.env, .git, .venv), the real path inside the
-// project or the shared node_modules it links to (/node_modules/… only), and only to a localhost Host (DNS rebinding).
-const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.avif': 'image/avif', '.gif': 'image/gif', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.otf': 'font/otf', '.wav': 'audio/wav', '.mp3': 'audio/mpeg', '.mp4': 'video/mp4', '.webm': 'video/webm', '.glb': 'model/gltf-binary', '.gltf': 'model/gltf+json', '.bin': 'application/octet-stream', '.hdr': 'application/octet-stream', '.ktx2': 'image/ktx2', '.wasm': 'application/wasm' };
-const realOrNull = (p) => { try { return fs.realpathSync(p); } catch { return null; } };
-const within = (f, dir) => !!dir && (f === dir || f.startsWith(dir + path.sep));
-const ROOT_REAL = realOrNull(ROOT), MODULES_REAL = realOrNull(path.join(ROOT, 'node_modules'));
-function servedFile(req) {
-  const host = req.headers.host, port = server.address().port;
-  if (host !== `127.0.0.1:${port}` && host !== `localhost:${port}`) return null;
-  if (req.method !== 'GET' && req.method !== 'HEAD') return null;
-  let url;
-  try { url = decodeURIComponent(req.url.split('?')[0]); } catch { return null; }
-  const parts = url.split(/[\\/]+/).filter(Boolean);
-  if (!parts.length || parts.some((s) => s.startsWith('.') || s.includes('\0'))) return null;   // also rules out '..'
-  if (!MIME[path.extname(url).toLowerCase()]) return null;
-  const f = realOrNull(path.join(ROOT, ...parts));
-  if (!f || !(within(f, ROOT_REAL) || (parts[0] === 'node_modules' && within(f, MODULES_REAL)))) return null;
-  return fs.statSync(f).isFile() ? f : null;
-}
+// Serves only film resources, by the policy in static_files.mjs (shared with player.mjs).
 const server = http.createServer((req, res) => {
-  const f = servedFile(req);
+  const f = hostOk(req, server.address().port) && (req.method === 'GET' || req.method === 'HEAD') ? filmFile(ROOT, req.url) : null;
   if (!f) { res.writeHead(404); return res.end(); }
-  res.writeHead(200, { 'Content-Type': MIME[path.extname(f).toLowerCase()] });
+  res.writeHead(200, { 'Content-Type': mimeOf(f) });
   if (req.method === 'HEAD') return res.end();
   fs.createReadStream(f).pipe(res);
 });

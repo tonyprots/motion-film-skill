@@ -16,6 +16,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { filmFile, hostOk, mimeOf } from './static_files.mjs';
 
 const ROOT = process.cwd();
 const argv = process.argv.slice(2);
@@ -39,7 +40,7 @@ const ptr = path.join(ROOT, 'scripts/providers/.skill');
 if (fs.existsSync(ptr)) skillDirs.push(path.join(fs.readFileSync(ptr, 'utf8').trim(), 'engine'));
 const PLAYER_FILES = { '/film/player.html': 'player.html', '/film/lib/player.js': 'lib/player.js' };
 function playerFile(url) {
-  const own = path.join(ROOT, url);
+  const own = path.join(ROOT, 'film', PLAYER_FILES[url]);
   if (fs.existsSync(own)) return own;
   for (const d of skillDirs) { const f = path.join(d, PLAYER_FILES[url]); if (fs.existsSync(f)) return f; }
   return null;
@@ -69,13 +70,12 @@ function addNote(o) {
 }
 
 // ------------------------------------------------------------------ server
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.otf': 'font/otf', '.wav': 'audio/wav', '.mp3': 'audio/mpeg', '.mp4': 'video/mp4', '.webm': 'video/webm' };
 const AUDIO = ['audio/mix.wav', 'audio/vo.wav'].find((f) => fs.existsSync(path.join(ROOT, f))) || null;
 let PORT = Number(opt('port', has('selftest') ? 0 : 4173));
 const json = (res, code, body) => { res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(body)); };
 
 function sendFile(req, res, f) {
-  const size = fs.statSync(f).size, type = MIME[path.extname(f).toLowerCase()] || 'application/octet-stream';
+  const size = fs.statSync(f).size, type = mimeOf(f) || 'application/octet-stream';
   const m = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
   // Range requests: <audio> can only seek (currentTime) in a file served with byte ranges
   if (m) {
@@ -91,8 +91,9 @@ function sendFile(req, res, f) {
 const server = http.createServer((req, res) => {
   const port = server.address().port;
   const okHost = [`127.0.0.1:${port}`, `localhost:${port}`];
-  if (!okHost.includes(req.headers.host)) { res.writeHead(403); return res.end('localhost only'); }   // DNS rebinding
-  const url = decodeURIComponent(req.url.split('?')[0]);
+  if (!hostOk(req, port)) { res.writeHead(403); return res.end('localhost only'); }   // DNS rebinding
+  let url;
+  try { url = decodeURIComponent(req.url.split('?')[0]); } catch { res.writeHead(400); return res.end(); }
   if (url === '/' || url === '/player') { res.writeHead(302, { Location: `/film/player.html${opt('fmt') ? '?fmt=' + opt('fmt') : ''}` }); return res.end(); }
   if (url === '/api/info') return json(res, 200, { title: TL.title || '', formats: TL.formats || [], audio: AUDIO ? '/' + AUDIO : null, project: path.basename(ROOT) });
   if (url === '/api/notes' && req.method === 'GET') return json(res, 200, readNotes());
@@ -106,8 +107,8 @@ const server = http.createServer((req, res) => {
     return;
   }
   if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405); return res.end(); }
-  const f = PLAYER_FILES[url] ? playerFile(url) : path.join(ROOT, url);
-  if (!f || (!PLAYER_FILES[url] && !f.startsWith(ROOT + path.sep)) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) {
+  const f = PLAYER_FILES[url] ? playerFile(url) : filmFile(ROOT, req.url);   // project files: static_files.mjs policy
+  if (!f || !fs.existsSync(f) || fs.statSync(f).isDirectory()) {
     res.writeHead(404); return res.end();
   }
   sendFile(req, res, f);
