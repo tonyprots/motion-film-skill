@@ -66,6 +66,28 @@ at most two seconds total; let the result settle before the next event. `region`
 `action`: `accumulate`, `fill`, `compare`, `connect`, `reveal`, `assemble`, `change`; `meaning` explains its connection to
 the phrase. A phrase counts once even with several actions. All phrases in `audio/vo_placed.json` are the denominator.
 
+## The object must look right, not only change
+
+Defects a viewer sees at once and `--story` coverage does not catch (presenter promo post-mortem, 2026-10-27):
+
+- **A familiar interface by its anatomy.** When a scene shows a product the viewer knows by sight (Reels, Shorts,
+  TikTok, Telegram, YouTube, App Store), list in the shot list the 4–6 details that make it recognisable and build each
+  one. Reels and Shorts: the video fills the screen height; a like · comment · share column at the bottom right; author
+  with avatar and caption at the bottom left; a thin progress bar; the next video arrives by a full vertical swipe.
+  Telegram: bubbles with tails and timestamps, a header with avatar and status, the input field at the bottom. Without
+  them it is "a generic card" and nobody reads it as a feed. A real screenshot or `capture.mjs` beats a drawing when available.
+- **A label lives by its object.** Chips, badges, captions and stamps are placed with `C.anchor(el, object, …)`: centred
+  under the object, on its corner, or beside it. Not by box coordinates like `left:0`: that glues labels to the left edge
+  and drops stamps mid-word. A label with no object is centred on the frame; a row of labels is centred as one unit.
+- **Nothing lies on text or on an icon.** A sticker does not cover the play button, a title does not run into another
+  header, a stamp lands on the card's corner, not its name. `render.mjs --lint` reports it as PROBLEM `overlap`.
+- **A state holds; an empty one does not.** An empty container (a sheet, window or card with no content) lasts no more
+  than 0.5 s. Every state of an object holds ≥ 0.8 s. When the words come faster, states accumulate (sheets stack, items
+  add up) instead of replacing each other.
+- **Devices with a thin frame or none.** A phone or laptop around a frame gets a light or dark grey 2–4 px bezel with real
+  proportions and radius, a camera notch optional. A solid black 10+ px outline reads as a funeral-notice border; an uneven or
+  crooked one reads as a bug.
+
 ## Check and critique
 
 After `vo.py` and `sync.mjs`: `node scripts/render.mjs --story --all`.

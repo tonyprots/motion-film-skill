@@ -16,7 +16,9 @@
 //                                                                 phrase coverage → review/story_<fmt>.json; meaning stays with the critic
 //   node scripts/render.mjs --lint [--all] [--phase 0.6]          text in frame, once per beat: size, contrast, 9:16 zones, one phrase twice,
 //                                                                 words cut by the frame edge or a mask (caption cut, side cut = PROBLEM),
-//                                                                 screens cut at the side by their window, an «Illustration» plate
+//                                                                 screens cut at the side by their window, an «Illustration» plate,
+//                                                                 text on text or on an icon/stamp/button (overlap = PROBLEM),
+//                                                                 a free-standing label off its object's and the frame's axis (align)
 //                                                                 → review/lint_<fmt>.json + text_<fmt>.json; exit 1 on a PROBLEM
 //   node scripts/render.mjs --seams [--all]                       every hard cut: shared text/images keep place and size (12 px, 5 %),
 //                                                                 no still-to-still cut, no empty first frame → review/seams_<fmt>.json
@@ -420,11 +422,81 @@ const PAGE_TEXT = () => {
     if (!hit) continue;   // another layer is on top of it here
     const scale = el.offsetWidth ? er.width / el.offsetWidth : 1;
     const g = groupOf(el);
-    out.push({ text: own, group: g === el ? own : g.innerText.replace(/\s+/g, ' ').trim(), gid: [...document.querySelectorAll('*')].indexOf(g),
+    const all = [...document.querySelectorAll('*')];
+    out.push({ text: own, group: g === el ? own : g.innerText.replace(/\s+/g, ' ').trim(), gid: all.indexOf(g), idx: all.indexOf(el),
       cap: !!el.closest('.cap'), px: parseFloat(cs.fontSize) * scale, color: cs.color, op, box: vis, glyph: { l: r.left, t: r.top, r: r.right, b: r.bottom },
       inkBox: inkVis, ink: { l: ink.left, t: ink.top, r: ink.right, b: ink.bottom }, crop: !!el.closest('[data-crop]') });
   }
   for (const [el, v] of saved) el.style.pointerEvents = v;
+  return out;
+};
+// --lint overlap: what a viewer reads as a bug — a word lying on another word, or on a graphic mark (play button, stamp,
+// icon, avatar: an SVG or IMG up to 40 % of the short side, or anything marked data-mark). The text items come from PAGE_TEXT
+// (only words that are on top at their hit points). Pairs where one element contains the other are one object (a button
+// and its label) and are skipped. A pair counts when the intersection is > 15 % of the smaller box.
+const PAGE_OVERLAP = (items) => {
+  const all = [...document.querySelectorAll('*')], vis = (e) => e.checkVisibility({ opacityProperty: true, visibilityProperty: true });
+  const opOf = (e) => { let o = 1; for (let a = e; a && a !== document.body; a = a.parentElement) o *= parseFloat(getComputedStyle(a).opacity); return o; };
+  const lim = 0.4 * Math.min(innerWidth, innerHeight), box = (q) => ({ l: q.left, t: q.top, r: q.right, b: q.bottom });
+  const marks = [...document.querySelectorAll('svg, img, [data-mark]')].filter((e) => !(e.parentElement && e.parentElement.closest('svg')) && vis(e) && opOf(e) >= 0.5)
+    .map((e) => ({ e, b: box(e.getBoundingClientRect()), name: e.getAttribute('data-mark') || e.getAttribute('src') || e.tagName.toLowerCase() }))
+    .filter((m) => m.b.r - m.b.l >= 16 && m.b.b - m.b.t >= 16 && (m.e.hasAttribute('data-mark') || Math.max(m.b.r - m.b.l, m.b.b - m.b.t) <= lim));
+  const inter = (a, b) => Math.max(0, Math.min(a.r, b.r) - Math.max(a.l, b.l)) * Math.max(0, Math.min(a.b, b.b) - Math.max(a.t, b.t));
+  const area = (a) => Math.max(1, (a.r - a.l) * (a.b - a.t)), out = [];
+  // one object: a button and its label, inline siblings of one text block (a prompt's «›» and its line, a word's letters)
+  const related = (x, y) => x.contains(y) || y.contains(x) || (x.parentElement && x.parentElement === y.parentElement);
+  for (let i = 0; i < items.length; i++) {
+    const A = items[i], ea = all[A.idx]; if (!ea) continue;
+    for (let j = i + 1; j < items.length; j++) {
+      const Bq = items[j], eb = all[Bq.idx]; if (!eb || A.gid === Bq.gid || related(ea, eb)) continue;
+      const k = inter(A.inkBox, Bq.inkBox) / Math.min(area(A.inkBox), area(Bq.inkBox));
+      if (k > 0.15) out.push({ a: A.group, b: Bq.group, what: 'text', k, ia: A.idx, ib: Bq.idx });
+    }
+    for (const m of marks) {
+      if (ea.closest('svg') || related(ea, m.e) || (ea.closest('[data-mark]') && ea.closest('[data-mark]').contains(m.e))) continue;
+      const k = inter(A.inkBox, m.b) / Math.min(area(A.inkBox), area(m.b));
+      if (k > 0.15) out.push({ a: A.group, b: m.name, what: 'mark', k, ia: A.idx });
+    }
+  }
+  return out;
+};
+// --lint align: a free-standing label (a filled pill or plate with text, not inside a card) sits on nobody's axis. It is
+// fine centred on the object right above or below it (gap ≤ 140 px, overlapping in x), flush with that object's left or right
+// edge when the label is wider than a third of it, or centred on the frame. Anything else reads as «stuck to the left».
+const PAGE_ALIGN = () => {
+  const W = innerWidth, H = innerHeight, out = [], filled = (s) => s.backgroundColor && !/rgba\(.*,\s*0\)$|transparent/.test(s.backgroundColor);
+  const vis = (e) => e.checkVisibility({ opacityProperty: true, visibilityProperty: true });
+  const big = (q) => q.width * q.height >= 0.6 * W * H;
+  const els = [...document.querySelectorAll('body *')].filter((e) => !e.closest('.cap, svg') && vis(e));
+  const boxes = els.map((e) => ({ e, q: e.getBoundingClientRect(), s: getComputedStyle(e) })).filter((x) => x.q.width > 4 && x.q.height > 4);
+  const freeStanding = (e) => { for (let a = e.parentElement; a && a !== document.body; a = a.parentElement) { const q = a.getBoundingClientRect(); if (!big(q) && filled(getComputedStyle(a))) return false; } return true; };
+  const cand = boxes.filter(({ e, q, s }) => filled(s) && q.height <= 0.075 * Math.max(W, H) && q.width <= 0.7 * W && e.innerText.trim()
+    && parseFloat(s.opacity) >= 0.5 && freeStanding(e));
+  // labels standing in one row (same band, ≤ 40 px apart) are one unit: the row is centred, not each chip
+  const rows = [];
+  for (const c of cand.sort((a, b) => a.q.left - b.q.left)) {
+    const r = rows.find((r) => Math.abs(r.q.top - c.q.top) <= 12 && c.q.left - r.q.right <= 40);
+    if (r) { r.q = { left: r.q.left, top: Math.min(r.q.top, c.q.top), right: Math.max(r.q.right, c.q.right), bottom: Math.max(r.q.bottom, c.q.bottom) }; r.text += ' · ' + c.e.innerText.trim(); r.members.push(c.e); }
+    else rows.push({ e: c.e, q: { left: c.q.left, top: c.q.top, right: c.q.right, bottom: c.q.bottom }, text: c.e.innerText.trim(), members: [c.e] });
+  }
+  for (const R of rows) {
+    const e = R.e, q = { ...R.q, width: R.q.right - R.q.left, height: R.q.bottom - R.q.top };
+    const cx = (q.left + q.right) / 2, tol = 0.025 * Math.min(W, H);
+    if (Math.abs(cx - W / 2) <= tol) continue;
+    let obj = null, gap = 1e9;
+    for (const O of boxes) {
+      if (R.members.some((m) => O.e === m || O.e.contains(m) || m.contains(O.e)) || big(O.q) || O.q.width * O.q.height < 3 * q.width * q.height) continue;
+      if (!filled(O.s) && !/^(IMG|svg|VIDEO|CANVAS)$/i.test(O.e.tagName)) continue;
+      if (Math.min(O.q.right, q.right) - Math.max(O.q.left, q.left) <= 0) continue;
+      const g = q.top >= O.q.bottom ? q.top - O.q.bottom : O.q.top >= q.bottom ? O.q.top - q.bottom : 1e9;
+      if (g <= 140 && g < gap) { gap = g; obj = O.q; }
+    }
+    if (obj) {
+      const oc = (obj.left + obj.right) / 2, wide = q.width > obj.width / 3;
+      if (Math.abs(cx - oc) <= tol || (wide && (Math.abs(q.left - obj.left) <= tol || Math.abs(q.right - obj.right) <= tol))) continue;
+      out.push({ text: R.text.slice(0, 60), off: Math.round(cx - oc), axis: 'its object', box: { l: q.left, t: q.top, r: q.right, b: q.bottom } });
+    } else out.push({ text: R.text.slice(0, 60), off: Math.round(cx - W / 2), axis: 'the frame', box: { l: q.left, t: q.top, r: q.right, b: q.bottom } });
+  }
   return out;
 };
 // --lint: real screens (img ≥ 200 px wide) cut at the LEFT or RIGHT by a clipping ancestor or the frame. A push must hold the
@@ -558,6 +630,19 @@ for (const fmt of FORMATS) {
         const o = (await F.page.evaluate(PAGE_SIDECUT)).find((x) => x.src === c.src);
         await F.png(t);
         if (o && Math.abs(o.l - c.l) <= 1) note('PROBLEM', `sidecut|${c.src}`, t, `screen «${c.src}» cut at the ${c.cutL > 2 && c.cutR > 2 ? 'left and right' : c.cutL > 2 ? 'left' : 'right'} by its window or the frame (${c.pct} % of its width): keep it whole across or cut on a panel edge (CAM.rig keep, data-crop="edge")`);
+      }
+      await F.png(t);   // moving() may have left the page at t + 0.12
+      const overlaps = await F.page.evaluate(PAGE_OVERLAP, items), labels = await F.page.evaluate(PAGE_ALIGN);
+      for (const o of overlaps) {   // a word on a word or on a mark — unless one of them is mid-move
+        const it = items.find((x) => x.idx === o.ia);
+        if (it && (await moving(it))) continue;
+        note('PROBLEM', `overlap|${o.a}|${o.b}`, t, `«${o.a.slice(0, 50)}» lies on ${o.what === 'text' ? `«${o.b.slice(0, 50)}»` : `the mark «${o.b}»`} (${Math.round(o.k * 100)} % of the smaller box): move it clear, or anchor it to a corner (C.anchor)`);
+      }
+      for (const a of labels) {
+        await F.png(t + 0.12);
+        const still = (await F.page.evaluate(PAGE_ALIGN)).some((x) => x.text === a.text && Math.abs(x.box.l - a.box.l) <= 1 && Math.abs(x.box.t - a.box.t) <= 1);
+        await F.png(t);
+        if (still) note('WARN', `align|${a.text}`, t, `label «${a.text}» is ${Math.abs(a.off)} px off the axis of ${a.axis}: centre it on the object it labels (C.anchor) or on the frame`);
       }
       const groups = new Map();   // one phrase in two places at once (headline + caption, frame in frame)
       for (const it of items) groups.set(it.gid, it.group);

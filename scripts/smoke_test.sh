@@ -1,7 +1,7 @@
 #!/bin/sh
 # End-to-end smoke test, no API keys: scaffold → synth score → mix → draft render 16:9 + 9:16 → check the MP4s →
 # text lint + review gates + seams, then negative runs (a truncated video, a slide deck with a blank second, a shot list
-# with three push-ins and a foreign number, invisible text, an «Illustration» plate, a screen cut at the side, a whoosh
+# with three push-ins and a foreign number, invisible text, an «Illustration» plate, a screen cut at the side, text on text, a whoosh
 # cue, a jump on a cut must fail).
 # Proves the locked toolchain installs, Chromium renders, ffmpeg encodes, and the parallel render joins chunks.
 #   sh scripts/smoke_test.sh [work-dir]      (CI runs it on Linux and macOS; MOTION_FILM_HOME picks the toolchain dir)
@@ -93,6 +93,13 @@ JS
 if node scripts/render.mjs --lint --fmt 16x9 >/dev/null 2>&1; then cp neg/film.cut film/film.js; echo "FAIL: --lint passed a screen cut at the side"; exit 1; fi
 cp neg/film.cut film/film.js
 echo "negative: screen cut at the side → --lint PROBLEM (expected)"
+cat >> film/film.js <<'JS'
+(() => { C.el('div', { class: 'abs', style: 'top:420px;left:520px;font:700 64px UI;color:#111;background:#f5f4ef' }, document.body, 'Quarterly revenue');
+  C.el('div', { class: 'abs', style: 'top:450px;left:600px;font:700 64px UI;color:#c22;background:#fff' }, document.body, 'Approved'); })();
+JS
+if node scripts/render.mjs --lint --fmt 16x9 2>&1 | grep -q ' lies on '; then :; else cp neg/film.cut film/film.js; echo "FAIL: --lint passed text lying on text"; exit 1; fi
+cp neg/film.cut film/film.js
+echo "negative: text on text → --lint PROBLEM overlap (expected)"
 cp cues.json neg/cues.ok
 node -e "const f='cues.json',c=JSON.parse(require('fs').readFileSync(f));c.cues.push({t:1,type:'whoosh',gain:0.5,what:'neg'});require('fs').writeFileSync(f,JSON.stringify(c))"
 if node scripts/sfx.mjs >/dev/null 2>&1; then cp neg/cues.ok cues.json; echo "FAIL: sfx.mjs played a whoosh"; exit 1; fi

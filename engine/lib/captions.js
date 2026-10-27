@@ -14,7 +14,7 @@
 //   ["s2a", "until someone hits it with a DDoS attack", {"key": ["DDoS"]}]   (several words: "DDoS attack")
 // exit: 'cut' drops the phrase on its last frame instead of the 4-frame blur-out, and starts its next page on the mark.
 // Page selection uses C.frameTime so shutter samples do not average two phrases; word motion still follows t.
-// or film-wide: karaoke({ keys: ['Mostik'] }). Lines without word marks are timed by letter count (a console warning).
+// or film-wide: karaoke({ keys: ['Acme'] }). Lines without word marks are timed by letter count (a console warning).
 (() => {
   const { scene, reg, put, el, sp, spHit, beatOf, bt, clamp, ease, lerp, pick, W, H, FPS, stage } = C;
   const take = (k) => k.split('.')[0];
@@ -141,7 +141,8 @@
               if (e <= 0) return;
               const k = ease.out(e), nx = pg.words[i + 1];
               const said = nx ? ease.out(clamp((t - (nx.t - f)) / (F * f))) : 0;
-              const o_ = k * (w.key ? 1 : lerp(1, S.dim, said)) * (1 - out), bl = blur * (1 - k) + 4 * out;
+              const ko = k > 0 ? Math.max(k, o.enterMin ?? 0) : 0;   // enterMin: floor for an entering word's opacity (contrast on a coloured plate)
+              const o_ = ko * (w.key ? 1 : lerp(1, S.dim, said)) * (1 - out), bl = blur * (1 - k) + 4 * out;
               put(pg.spans[i], { hide: o_ <= 0.001, o: o_, y: rise * (1 - k) - 6 * ease.out(out), ...(bl > 0.05 ? { filter: `blur(${bl.toFixed(2)}px)` } : {}) });
             });
           }

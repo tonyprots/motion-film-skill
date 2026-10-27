@@ -118,6 +118,26 @@ S.host.draw(t, {pose:'point', previous:'explain', at:C.bt('s1b.w1'), expression:
   can also go to `draw`, for chapters that change the background.
 - **Limits:** `look`, `target` and `sweat` are not drawn; the puppet points with the gesture in its picture. Pictures
   are raster, 1024 px: sharp at 1080p and in 9:16, soft in a 4K close-up.
+- **Rim and determinism.** `outline:'auto'` depends on whatever else is in the DOM and can differ when frames are sought
+  in a different order (`render.mjs --verify` in 16:9 showed 6/12 mismatches, 2026-10-27). When the background changes by
+  chapter, pass `outline` to `draw` explicitly by time: `true` on dark chapters, `false` on light ones.
+
+### Frame layout with a presenter
+
+The presenter takes room from the object, and the object carries the meaning. Without an explicit layout objects shrink
+into the box, labels stick to its edge and elements run into each other (promo 2026-10-27: nine such defects through four
+critique rounds). Set the zones before building scenes and record them in the style guide:
+
+| Format | Captions | Object | Presenter |
+|---|---|---|---|
+| 9:16 | right under the platform's top zone (14 %), to ~22 % | from ~22 % to ~69 % of the height (≥ 45 %), ≥ 880 px wide, centred | ≤ 35 % of the height at the bottom, overlapping the object zone by ≤ 5 % |
+| 16:9 | top, above the object | left ~60 % of the width, ≥ 1000 px | right ~35 %, waist up |
+
+- The scene box is built from the object zone, not a generic size: `stage()` for a presenter format is the object zone.
+- When the object needs all the room (a contact sheet, a large interface), the presenter leaves: to a corner as a circle,
+  out of frame, or into a pause. The change happens on a cut or with a gesture, not a dissolve.
+- Labels inside the object zone use `C.anchor` from their object; a row of labels sits on the zone's axis.
+- The presenter's hand does not reach the object's text: gap ≥ 16 px; a pointing gesture aims at the object, not into its text.
 - **Checks:** `host.root.dataset` shows the current `pose`, `face`, `mouth` and `rim` (`on`/`off`).
 
 **A pack** is a folder `assets/puppets/<name>/` with `puppet.json` and PNGs; `sync.mjs` checks the file names and puts

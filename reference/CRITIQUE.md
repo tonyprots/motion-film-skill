@@ -62,10 +62,10 @@ and critique"). Below 80 % blocks, max 6 on Variety / pacing.
 | **Readability at phone size** | Every must-read line reads in `phone_*.jpg` at 360 px, and the CTA is the most legible thing in the film. Captions read without sound. | CTA illegible at 360 px → max 6. A PROBLEM in `lint_<fmt>.json` → max 6. Key text in 9:16 UI zones → max 7. A scene headline still incomplete 1.5 s into its scene → max 7 |
 | **Motion quality** | Springs with weight. Overlap and follow-through. Nothing snaps or pops in. Nothing fades as an enter or exit. Motion blur on fast moves. Strips show clean arcs. | A fade-in/out used as a transition → max 6. A visible pop or jump in a strip → max 7 |
 | **Variety / pacing** | Something new every 2–4 s (`max_gap_between_visual_events`). Shot sizes and transition types vary. The build accelerates into the logo. | Any gap > 4 s, or a static run > 2 s outside the end card → max 7. No hero moment, or the energy is a plateau (no. 21–23) → max 7 |
-| **Brand accuracy** | Real UI and logo. Colours and fonts fit the direction and brand. The voice matches the site. None of the reference's content copied. | Invented UI where real UI exists or an inappropriate foreign font → max 6. Several purposeful accents are valid |
+| **Brand accuracy** | Real UI and logo. Colours and fonts fit the direction and brand. The voice matches the site. None of the reference's content copied. | Invented UI where real UI exists or an inappropriate foreign font → max 6. A familiar third-party interface (Reels, Telegram, YouTube) not recognised within 1 s → max 6. Several purposeful accents are valid |
 | **Sound sync** | Every hit lands with its picture (±45 ms in `metrics.sync`). No noise sweeps (whoosh, riser) and no cymbal hit at the climax or the end. Loudness -14 ±0.5 LUFS, true peak ≤ -1 dBTP. The VO matches the on-screen words. | Hits off by > 80 ms, or loudness off target → max 6. A phrase with voice headroom < 6 dB (`mix.py`) or lost in `voice.py check-mix` → max 6. More than half the hits on speech → max 7 |
 | **Composition (every format)** | Each format is re-blocked, not cropped. No dead zones. Type never centred on an empty field. Depth from perspective and shadow. | 9:16 with a third of the frame empty for > 1 s → max 7 |
-| **Polish** | No blank frames (`near_blank_frames`), no double exposures at swaps, no stray carets, no glyph slivers at masks, no orphaned captions. Clean loop seam. | Any blank frame mid-film, or a double-exposed caption → max 7. A FAIL in `gates` (flashes, file spec, mux) → max 5. A PROBLEM in `seams_<fmt>.json` → max 6 |
+| **Polish** | No blank frames (`near_blank_frames`), no double exposures at swaps, no stray carets, no glyph slivers at masks, no orphaned captions. Clean loop seam. | Any blank frame mid-film, or a double-exposed caption → max 7. A FAIL in `gates` (flashes, file spec, mux) → max 5. A PROBLEM in `seams_<fmt>.json` → max 6. Any object in the object pass that "looks like a bug" (an overlap, a label off axis, a sliver, an empty container) → max 6 |
 
 ## Known failure modes: check each one explicitly
 Failures already set as caps in the table (an empty frame 0, the CTA at 360 px, fade transitions, a headline fragment, a
@@ -121,6 +121,25 @@ PROBLEM in `lint` and `seams`) are not repeated here. The numbers below are for 
 29. Numbers on screen do not agree: a sum, a duration, "N times". Recompute every number that can be recomputed.
 30. A number or promise that is not in the sources (carried over from a reference or made up). A character changes style
     from scene to scene or gestures out of step with the line. A character by itself is not a failure.
+31. Text or a sticker lies on other text, on a play button, on an icon or under a stamp; a stamp lands mid-word.
+32. A label, chip or badge sits on neither its object's axis nor the frame's: glued to the box edge, floating away from its price tag.
+33. An empty container (a sheet, window, card) for more than 0.5 s; an object state that holds less than 0.8 s.
+34. A familiar interface drawn generically: a feed with no full-screen video and no action column, a chat with no bubbles.
+35. A device bezel that is a solid dark outline thicker than 6 px or uneven between sides.
+
+## Object pass (mandatory, before scoring)
+The score table looks at the whole frame; the viewer looks at the object. So walk the objects first. For each event in
+`visual-events.json` (or each scene in other formats) open the frame 0.5 s after the change: `render.mjs --at` over the
+list of moments, or the `review/story/` stills. Answer one line each:
+
+- what the object is and whether it reads at once (a familiar interface by its anatomy from PROPS.md);
+- what runs into what: text on text, a sticker on a button, a stamp on a word, the presenter's hand on text;
+- what each label is aligned to: its object or the frame's axis; a floating one is failure no. 32;
+- whether it looks like a real thing rather than a placeholder; no heavy black borders, slivers or gaps.
+
+Put the pass table in the round report before the score table: `| Time | Object | Overlaps | Label axis | Looks real |`.
+Every row with a defect is an issue in the list, not an observation. The author's "accepted exceptions" do not clear a
+defect; only a user decision recorded in `docs/review_log.md` does.
 
 ## Output (append to docs/review_log.md exactly like this)
 ```

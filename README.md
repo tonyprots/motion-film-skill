@@ -62,14 +62,16 @@ word costs one re-render, not a new roll of the dice.
   for social cuts. At the bottom of the frame, above the platform's UI in 9:16.
 - 🎼 **Sound on the same grid.** An original synthesised score (or your track, or generated music), UI hits on the
   landing beats, and a mix at −14 LUFS. No whooshes, no risers, no cymbal crash on the end card.
-- 🧐 **A critic that isn't the author.** A fresh agent scores 8 criteria with evidence from contact sheets, phone-size
-  frames and the safe zones of 9:16 platforms. The film ships only when every score is ≥ 8.
+- 🧐 **A critic that isn't the author.** A fresh agent first walks every object on screen (does it read, does anything
+  run into it, is its label aligned), then scores 8 criteria with evidence from contact sheets, phone-size frames and
+  the safe zones of 9:16 platforms. The film ships only when every score is ≥ 8.
 - ⚡ **4.3× faster render, same pixels.** Parallel chunks across Chromium workers. One worker reproduces the
   sequential render byte for byte.
 - 📱 **16:9 and 9:16 from one source**, each with its own layout. Nothing is just re-cropped.
-- 🔍 **Checks a reviewer would make.** Text lint (contrast, safe zones, text or screens cut by the frame edge),
-  seams across cuts, a stillness check that finds stretches where the frame stops changing, a shot-list check against
-  slideshow habits, and a local player for notes by timecode.
+- 🔍 **Checks a reviewer would make.** Text lint (contrast, safe zones, text or screens cut by the frame edge, text
+  lying on text or on an icon, labels off their object's axis), seams across cuts, a stillness check that finds
+  stretches where the frame stops changing, a shot-list check against slideshow habits, and a local player for notes
+  by timecode.
 - 🎤 **Over your own recording.** A talk or an interview becomes the bottom layer, the graphics go on top.
 - 🔁 **Silent loops and GIFs.** A 4–14 second loop for a feed, Telegram or X with a checked seam, and a GIF with an
   exact frame count for a chat or a README.
@@ -99,7 +101,7 @@ Requirements: **macOS or Linux**, **Node 22+**, **Python 3.11–3.13**, **ffmpeg
 ### Claude Code
 
 ```bash
-git clone --branch v1.6.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
+git clone --branch v1.7.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
 ```
 
 Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our leadership channel."*
@@ -107,7 +109,7 @@ Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our l
 ### Codex
 
 ```bash
-git clone --branch v1.6.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
+git clone --branch v1.7.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
 ```
 
 ### Any other agent

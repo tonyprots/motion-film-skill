@@ -108,6 +108,26 @@
     if (parent) parent.appendChild(e);
     return e;
   }
+  // anchor(el, target, where, {gap, inset}): place a label, chip, badge or stamp by its OBJECT, not by box coordinates — the
+  // reason labels ended up glued to the left edge and stamps landed mid-word. Both must share the offset parent (build()
+  // time, layout coordinates). where: 'below' | 'above' (centred on the target, gap px away), 'left' | 'right' (vertically
+  // centred), 'tl' | 'tr' | 'bl' | 'br' (the label's centre sits on that corner, moved `inset` px inwards), 'center'.
+  // A zero-size holder at the anchor point centres the element whatever its final width (fonts may still be loading), so
+  // put() keeps animating the element itself.
+  function anchor(e, target, where = 'below', o = {}) {
+    const gap = o.gap ?? 16, ins = o.inset ?? 0, L = target.offsetLeft, T = target.offsetTop, Wd = target.offsetWidth, Hd = target.offsetHeight;
+    const pt = { below: [L + Wd / 2, T + Hd + gap, 'center', 'flex-start'], above: [L + Wd / 2, T - gap, 'center', 'flex-end'],
+      left: [L - gap, T + Hd / 2, 'flex-end', 'center'], right: [L + Wd + gap, T + Hd / 2, 'flex-start', 'center'],
+      tl: [L + ins, T + ins, 'center', 'center'], tr: [L + Wd - ins, T + ins, 'center', 'center'],
+      bl: [L + ins, T + Hd - ins, 'center', 'center'], br: [L + Wd - ins, T + Hd - ins, 'center', 'center'], center: [L + Wd / 2, T + Hd / 2, 'center', 'center'] }[where];
+    if (!pt) throw new Error(`C.anchor: unknown position "${where}"`);
+    const [x, y, jx, jy] = pt;
+    const h = el('div', { style: `position:absolute;left:${x}px;top:${y}px;width:0;height:0;display:flex;justify-content:${jx};align-items:${jy};overflow:visible` });
+    target.parentElement.insertBefore(h, e.parentElement === target.parentElement ? e : null);
+    h.appendChild(e);
+    Object.assign(e.style, { position: 'relative', left: 'auto', top: 'auto', flex: 'none' });
+    return e;
+  }
   const frag = (html) => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; };
 
   // Live component (capture.mjs --components → assets/ui/, bundled into data.js by sync.mjs): the product's real
@@ -230,7 +250,7 @@
   window.C = {
     TL, BEATS, FMT, VARIANT, W, H, FPS, DUR, LEAD, leadFor, stage, pick,
     bt, beatAt, beatOf, clamp, lerp, seg, ease, sp, spHit, stagger, trk, trkObj, win, mulberry32, noise1,
-    el, frag, ui, reg, put, commit, inset, rectOf, scene, canvas, hooks, SCENES,
+    el, anchor, frag, ui, reg, put, commit, inset, rectOf, scene, canvas, hooks, SCENES,
     pending: [],
     gates: [],              // promises frame 0 waits for (pushed in build(): a Lottie file loading, a decoded asset)
     fonts: [],              // film.js: e.g. C.fonts = ['500 100px Display', '400 40px UI'] — awaited before frame 0

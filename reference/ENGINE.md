@@ -56,6 +56,7 @@ Change it, then run `node scripts/sync.mjs`. The film and the SFX both read it, 
 | `Motion.swapAlpha(t, tIn, tOut)` | text inside a morphing box. Invisible while the box changes shape |
 | `C.el(tag, attrs, parent, html)` `C.frag(html)` | build DOM (in `build()` only) |
 | `C.reg(el, base)` | register an animated element. Hidden things: `{o: 0}` |
+| `C.anchor(el, target, where, {gap, inset})` | place a label, chip, badge or stamp **by its object**, not by box coordinates (`build()` only, shared parent): `'below'`/`'above'` centred on the object, `'left'`/`'right'`, corners `'tl' 'tr' 'bl' 'br'` (element centre on the corner, `inset` inwards), `'center'`. Centring holds whatever the element's final width. `put()` still animates the element itself |
 | `C.put(el, {x, y, s, sx, sy, r, o, hide, clip, filter, css, text, html})` | this frame's props; unset props return to base |
 | `C.inset(t, r, b, l, radius)` | clip-path for wipes/reveals |
 | `C.rectOf(el)` | live stage rect. Only in `after()` |
@@ -99,8 +100,9 @@ Call one of the two in `film.js` before `C.start()`:
 
 ```js
 CAPTIONS.scene({ x, y, w, size });   // plain caption: the whole line rises into its slot on the speech chunk <id>.<k>
-CAPTIONS.karaoke({ x, w, size, bottom, y, align, dim, key, keys, accent, color, bg, font, weight, keyCss, frames, rise, blur, exit });
+CAPTIONS.karaoke({ x, w, size, bottom, y, align, dim, key, keys, accent, color, bg, font, weight, keyCss, frames, rise, blur, enterMin, exit });
 ```
+`enterMin` (0–1) — a floor on an entering word's opacity: on a coloured plate the word has contrast from its first frame, and lint does not flag half-transparent text.
 
 **Karaoke** (the "image per phrase" format, FORMATS.md) shows the phrase word by word, exactly with the voice:
 - a word enters on its own mark `<id>.w<k>` (AUDIO.md): over `frames` frames (4) it rises `rise` px (8) and sharpens from

@@ -157,7 +157,9 @@ node scripts/render.mjs --range 30,36          # motion check, blurred
 ```
 Once per project: `node scripts/render.mjs --verify --all` (all probes identical).
 On-screen text and cuts are checked by machine before the critic sees them: `render.mjs --lint --all` and
-`render.mjs --seams --all`. Fix every PROBLEM; fix a WARN or log why not. Stillness on the draft:
+`render.mjs --seams --all`. Lint also catches overlaps (text on text, on an icon, under a stamp — PROBLEM
+`overlap`) and labels off their object's or the frame's axis (WARN `align`); place labels with `C.anchor` from their object.
+With a presenter, lay the frame out by the zones in EDITORIAL.md "Frame layout with a presenter". Fix every PROBLEM; fix a WARN or log why not. Stillness on the draft:
 `.venv/bin/python scripts/stillness.py renders/draft_9x16.mp4 --mask <caption band>`; give every STILL an event or log
 that the hold is deliberate.
 
@@ -174,7 +176,7 @@ Each round:
    `review.py` prints gates: fix a FAIL before the critic, name a NOT CHECKED in the report; a check that checked nothing
    does not count as clean.
 2. **Critic:** a fresh subagent with `reference/CRITIQUE.md`, the project path and N, on the session's model. It looks
-   at every sheet and strip, scores 8 criteria with evidence, appends to `docs/review_log.md`. An agent without
+   at every sheet and strip, does the object pass first (CRITIQUE.md), then scores 8 criteria with evidence, appends to `docs/review_log.md`. An agent without
    subagents runs the critic as a fresh session with the same brief (e.g. `codex exec` or `claude -p`): never the
    context that built the film.
 3. **Blind read** (`reference/BLIND.md`): `python3 scripts/blindpack.py <N> --draft`, then a fresh subagent reads only
@@ -187,7 +189,8 @@ User notes go through the player `scripts/player.mjs` and the notes `scripts/not
 blocks delivery.
 
 Stop when every score is ≥ 8 (at least 2 rounds) and the blind read matched. If two rounds in a row did not raise the lowest
-score, stop and name what blocks: another round of the same will not fix it. After round 3, if only one or two scores sit at 7 and their problems
+score, stop and name what blocks: another round of the same will not fix it; before showing, the author
+does the object pass from CRITIQUE.md themselves — that is where user notes usually land. After round 3, if only one or two scores sit at 7 and their problems
 are small and listed, stop and show the film with that list: a round costs ~150k critic tokens plus a draft render.
 
 ## 10. Final render and delivery

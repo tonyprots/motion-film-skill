@@ -40,8 +40,10 @@ const PACK = { format: 'motion-film-puppet/1', size: [200, 240], foot: [100, 240
   blink: layer('eyes-closed', 50, 12, [30, 30, 30, 255], [75, 45]) };
 fs.writeFileSync(path.join(packDir, 'puppet.json'), JSON.stringify(PACK));
 const PUPPETS = { fixture: { ...PACK, base: '../assets/puppets/fixture/' } };
-const privatePack = fs.existsSync(path.join(fixture, 'assets/puppets/host-toon/puppet.json'));   // only where private/ exists
-if (privatePack) PUPPETS['host-toon'] = { ...JSON.parse(fs.readFileSync(path.join(fixture, 'assets/puppets/host-toon/puppet.json'), 'utf8')), base: '../assets/puppets/host-toon/' };
+// Full packs installed beside the fixture (none in the public copy) get the full-pack test below.
+const packsDir = path.join(fixture, 'assets/puppets');
+const fullPacks = fs.readdirSync(packsDir).filter((n) => n !== 'fixture' && fs.existsSync(path.join(packsDir, n, 'puppet.json')));
+for (const n of fullPacks) PUPPETS[n] = { ...JSON.parse(fs.readFileSync(path.join(packsDir, n, 'puppet.json'), 'utf8')), base: `../assets/puppets/${n}/` };
 const VOW = [[0.4, 0.9, 'мама'], [1.0, 1.6, 'объясняю'], [2.2, 2.7, 'да'], [3.1, 3.9, 'посмотрите']];
 // sync.mjs bundles only the extras film code names literally, and warns about an unknown id.
 fs.writeFileSync(path.join(fixture, 'film/extras-probe.js'), `const a = 'noto:pill', b = "noto:money-bag", c = 'noto:no-such-thing', d = 'lucide:check';\n`);
@@ -386,13 +388,13 @@ try {
       await det(page, 'puppet-rim', [0.5, 1.03, 1.2, 2.4]);
     } finally { await page.close(); }
   });
-  if (privatePack) await test('private pack host-toon: every pose has its own picture, every expression and mouth shape exists', async () => {
-    setFilm(`S.p=PUPPET.mount(root,{id:'host',pack:'host-toon',x:300,y:200,w:700});`,
+  for (const pack of fullPacks) await test(`pack ${pack}: every pose has its own picture, every expression and mouth shape exists`, async () => {
+    setFilm(`S.p=PUPPET.mount(root,{id:'host',pack:${JSON.stringify(pack)},x:300,y:200,w:700});`,
       `const poses=PUPPET.poses,i=Math.min(poses.length-1,Math.floor(t/.4));S.p.draw(t,{pose:poses[i],previous:poses[(i+poses.length-1)%poses.length],at:i*.4,duration:.3,viseme:LIPSYNC.at(t).shape,expression:PUPPET.expressions[i%PUPPET.expressions.length]});`);
     const page = await open('16x9');
     try {
-      const r = await page.evaluate(() => { const P = PUPPETS['host-toon'], S = C.SCENES.find((s) => s.name === 'active');
-        return { fallback: S.p.fallback, faces: Object.keys(P.faces), mouths: Object.keys(P.mouths), blink: !!P.blink, broken: [...document.images].filter((i) => !i.naturalWidth).length }; });
+      const r = await page.evaluate((pk) => { const P = PUPPETS[pk], S = C.SCENES.find((s) => s.name === 'active');
+        return { fallback: S.p.fallback, faces: Object.keys(P.faces), mouths: Object.keys(P.mouths), blink: !!P.blink, broken: [...document.images].filter((i) => !i.naturalWidth).length }; }, pack);
       assert.deepEqual(r.fallback, []); assert.equal(r.broken, 0); assert.ok(r.blink);
       for (const e of ['neutral', 'happy', 'worried', 'surprised', 'shocked', 'grimace', 'wink', 'sad']) assert.ok(r.faces.includes(e), e);
       assert.deepEqual(r.mouths.sort(), ['b', 'c', 'd', 'e', 'f', 'x']);
