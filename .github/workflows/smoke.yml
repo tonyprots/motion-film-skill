@@ -32,15 +32,27 @@ jobs:
         with:
           node-version: "22"
       - name: ffmpeg
-        timeout-minutes: 12
+        timeout-minutes: 10
+        env:
+          # Linux: a pinned static build from GitHub instead of apt. apt pulls ~100 packages from the runner's mirror and
+          # ran past 12 minutes three times on 2026-10-27. Month-end BtbN builds are kept for about two years; the weekly
+          # run catches a vanished pin. libsndfile ships inside the soundfile wheel, so no apt is needed here.
+          FFMPEG_TAG: autobuild-2026-09-30-13-08
+          FFMPEG_FILE: ffmpeg-n8.1.3-9-g29e619e767-linux64-gpl-8.1.tar.xz
+          FFMPEG_SHA256: 97ce978979194b5cf7e06a5e68020dbdaa7a4f3294c5452b6a1bc347100dbb79
         run: |
           if [ "$RUNNER_OS" = "Linux" ]; then
-            # the runner's Azure mirror sometimes stalls: fail fast and retry instead of hanging until the job timeout
-            APT="-o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o Acquire::Retries=5"
-            sudo apt-get $APT update -q && sudo apt-get $APT install -yq ffmpeg libsndfile1
+            cd "$RUNNER_TEMP"
+            curl -fsSL --retry 5 --retry-all-errors --connect-timeout 20 --max-time 300 -o "$FFMPEG_FILE" \
+              "https://github.com/BtbN/FFmpeg-Builds/releases/download/$FFMPEG_TAG/$FFMPEG_FILE"
+            echo "$FFMPEG_SHA256  $FFMPEG_FILE" | sha256sum -c -
+            mkdir ffmpeg && tar -xJf "$FFMPEG_FILE" -C ffmpeg --strip-components=1
+            echo "$RUNNER_TEMP/ffmpeg/bin" >> "$GITHUB_PATH"
           else
             brew install ffmpeg
           fi
+      - name: ffmpeg version
+        run: ffmpeg -hide_banner -version | head -1 && ffprobe -hide_banner -version | head -1
       - name: Chromium system libraries (Linux)
         if: runner.os == 'Linux'
         run: npx -y playwright@1.63.0 install-deps chromium-headless-shell
