@@ -1,7 +1,7 @@
 {
   "note": "Single source of truth for picture + sound. Everything is in BEATS on the measured grid (beats.json). film.js reads marks via data.js; sync.mjs turns sfx events into cues.json; music.py reads music.sections.",
-  "title": "motion-film — film",
-  "duration": 33,
+  "title": "motion-film — README demo v2",
+  "duration": 35.216667,
   "fps": 60,
   "bpm": 120.0,
   "formats": [
@@ -23,26 +23,26 @@
       },
       {
         "at": "sc2",
-        "kind": "dark"
-      },
-      {
-        "at": "sc3",
         "kind": "full"
       },
       {
-        "at": 36,
+        "at": "sc5",
+        "kind": "dark"
+      },
+      {
+        "at": "sc6",
         "kind": "build"
       },
       {
-        "at": 39.5,
+        "at": 56.9,
         "kind": "gap"
       },
       {
-        "at": "sc4",
+        "at": "s6a.end",
         "kind": "drop"
       },
       {
-        "at": "sc5",
+        "at": "sc7",
         "kind": "outro"
       }
     ],
@@ -55,147 +55,134 @@
     "style": "calm, confident, warm; natural pauses",
     "voice": "uju3wxzG5OhpWcoi3SMy"
   },
+  "styleframes": [],
+  "motion": {
+    "roles": {},
+    "stagger": 0.05
+  },
   "marks": {
-    "sc1": 0,
-    "s1a": 2.0,
-    "s1a.1": 2.0,
-    "s1a.end": 5.38,
-    "sc2": 8,
-    "s2a": 10.0,
-    "s2a.1": 10.0,
-    "s2a.2": 10.88,
-    "s2a.3": 13.48,
-    "s2a.4": 15.89,
-    "s2a.end": 17.7,
-    "sc3": 20,
-    "s3a": 22.0,
-    "s3a.1": 22.0,
-    "s3a.2": 24.73,
-    "s3a.end": 28.34,
-    "s3b": 29.5,
-    "s3b.1": 29.5,
-    "s3b.2": 33.72,
-    "s3b.end": 34.06,
-    "sc4": 40,
-    "s4a": 42.0,
-    "s4a.1": 42.0,
-    "s4a.2": 44.09,
-    "s4a.3": 45.49,
-    "s4a.4": 46.4,
-    "s4a.5": 48.69,
-    "s4a.end": 51.52,
-    "sc5": 56,
-    "s5a": 58.0,
-    "s5a.1": 58.0,
-    "s5a.end": 61.63,
-    "done": 66
+    "sc1": 0.0,
+    "s1a": 1.0,
+    "s1a.1": 1.0,
+    "s1a.end": 5.87,
+    "s1a.w1": 1.19,
+    "s1a.w2": 2.15,
+    "s1a.w3": 2.91,
+    "s1a.w4": 3.19,
+    "s1a.w5": 4.248,
+    "s1a.w6": 4.75,
+    "sc2": 6.2700000000000005,
+    "s2a": 7.27,
+    "s2a.1": 7.27,
+    "s2a.2": 11.94,
+    "s2a.end": 14.3,
+    "s2a.w1": 7.48,
+    "s2a.w2": 8.2,
+    "s2a.w3": 8.68,
+    "s2a.w4": 9.36,
+    "s2a.w5": 9.88,
+    "s2a.w6": 10.08,
+    "s2a.w7": 10.56,
+    "s2a.w8": 10.88,
+    "s2a.w9": 12.4,
+    "s2a.w10": 12.96,
+    "s2a.w11": 13.4,
+    "sc3": 14.700000000000001,
+    "s3a": 15.7,
+    "s3a.1": 15.7,
+    "s3a.2": 19.48,
+    "s3a.end": 24.18,
+    "s3a.w1": 15.9,
+    "s3a.w2": 16.18,
+    "s3a.w3": 17.3,
+    "s3a.w4": 17.62,
+    "s3a.w5": 17.86,
+    "s3a.w6": 20.14,
+    "s3a.w7": 20.86,
+    "s3a.w8": 21.98,
+    "s3a.w9": 22.7,
+    "s3a.w10": 22.9,
+    "s3a.w11": 23.38,
+    "sc4": 24.58,
+    "s4a": 25.58,
+    "s4a.1": 25.58,
+    "s4a.end": 31.19,
+    "s4a.w1": 26.1,
+    "s4a.w2": 26.58,
+    "s4a.w3": 27.98,
+    "s4a.w4": 28.58,
+    "s4a.w5": 29.22,
+    "s4a.w6": 30.14,
+    "s4b": 32.09,
+    "s4b.1": 32.09,
+    "s4b.end": 40.39,
+    "s4b.w1": 32.22,
+    "s4b.w2": 33.38,
+    "s4b.w3": 33.686,
+    "s4b.w4": 34.34,
+    "s4b.w5": 36.06,
+    "s4b.w6": 37.62,
+    "s4b.w7": 38.66,
+    "s4b.w8": 39.06,
+    "sc5": 40.78999999999999,
+    "s5a": 41.79,
+    "s5a.1": 41.79,
+    "s5a.2": 44.14,
+    "s5a.3": 45.46,
+    "s5a.4": 47.15,
+    "s5a.end": 49.01,
+    "s5a.w1": 41.87,
+    "s5a.w2": 42.15,
+    "s5a.w3": 42.31,
+    "s5a.w4": 44.27,
+    "s5a.w5": 44.51,
+    "s5a.w6": 44.79,
+    "s5a.w7": 45.63,
+    "s5a.w8": 46.51,
+    "s5a.w9": 47.35,
+    "s5a.w10": 48.19,
+    "sc6": 49.40999999999999,
+    "s6a": 50.41,
+    "s6a.1": 50.41,
+    "s6a.2": 55.56,
+    "s6a.3": 57.26,
+    "s6a.end": 57.6,
+    "s6a.w1": 50.51,
+    "s6a.w2": 50.79,
+    "s6a.w3": 51.43,
+    "s6a.w4": 52.07,
+    "s6a.w5": 52.67,
+    "s6a.w6": 53.07,
+    "s6a.w7": 53.83,
+    "s6a.w8": 54.63,
+    "s6a.w9": 55.75,
+    "s6a.w10": 55.99,
+    "s6a.w11": 56.51,
+    "s6a.w12": 56.91,
+    "sc7": 59.59999999999999,
+    "s7a": 61.2,
+    "s7a.1": 61.2,
+    "s7a.end": 65.03,
+    "s7a.w1": 61.35,
+    "s7a.w2": 61.67,
+    "s7a.w3": 62.27,
+    "s7a.w4": 63.59,
+    "s7a.w5": 63.87,
+    "s7a.w6": 64.19,
+    "done": 70.433333
   },
   "sfx": [
     {
-      "at": 2.0,
-      "type": "pop",
-      "gain": 0.5,
-      "what": "\"0 views\" pill lands"
-    },
-    {
-      "at": 8.9,
-      "to": 9.8,
-      "every": 0.25,
-      "type": "tick",
-      "gain": 0.28,
-      "what": "typing \"make it a film\""
-    },
-    {
-      "at": 10.2,
-      "type": "click",
-      "gain": 0.5,
-      "what": "send"
-    },
-    {
-      "at": 15.89,
-      "type": "pop",
-      "gain": 0.4,
-      "what": "agent chip"
-    },
-    {
-      "at": 29.9,
-      "type": "pop",
-      "gain": 0.4,
-      "what": "element 1 drops onto its mark"
-    },
-    {
-      "at": 30.65,
-      "type": "pop",
-      "gain": 0.4,
-      "what": "element 2 drops onto its mark"
-    },
-    {
-      "at": 31.4,
-      "type": "pop",
-      "gain": 0.4,
-      "what": "element 3 drops onto its mark"
-    },
-    {
-      "at": 32.15,
-      "type": "pop",
-      "gain": 0.4,
-      "what": "element 4 drops onto its mark"
-    },
-    {
-      "at": 32.9,
-      "type": "pop",
-      "gain": 0.4,
-      "what": "element 5 drops onto its mark"
-    },
-    {
-      "at": 44.19,
+      "at": 57.6,
       "type": "thump",
-      "gain": 0.55,
-      "what": "SHIP stamp"
+      "gain": 0.95,
+      "what": "SHIP stamp (hero)"
     },
     {
-      "at": 45.5,
-      "to": 46.0,
-      "every": 0.25,
-      "type": "tick",
-      "gain": 0.22,
-      "what": "typing the render command"
-    },
-    {
-      "at": 49.29,
+      "at": 59.5,
       "type": "pop",
-      "gain": 0.5,
-      "what": "4.3x lands"
-    },
-    {
-      "at": 52.42,
-      "type": "pop",
-      "gain": 0.35,
-      "what": "same pixels chip"
-    },
-    {
-      "at": 55.2,
-      "type": "thump",
-      "gain": 0.5,
+      "gain": 0.3,
       "what": "motion-film lockup"
-    },
-    {
-      "at": 56.2,
-      "type": "pop",
-      "gain": 0.4,
-      "what": "agent chip 1"
-    },
-    {
-      "at": 56.5,
-      "type": "pop",
-      "gain": 0.4,
-      "what": "agent chip 2"
-    },
-    {
-      "at": 56.8,
-      "type": "pop",
-      "gain": 0.4,
-      "what": "agent chip 3"
     }
   ],
   "brand": {
@@ -210,5 +197,17 @@
   },
   "transcribe": {
     "provider": "elevenlabs"
+  },
+  "vo_layout": {
+    "timing": "speech",
+    "pre": 0.5,
+    "after": 0.2,
+    "tail": 2.5
+  },
+  "mix": {
+    "music": -6,
+    "sfx": -3,
+    "vo": 0,
+    "duck": true
   }
 }

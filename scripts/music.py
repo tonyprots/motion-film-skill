@@ -159,7 +159,7 @@ for b in range(NB):
         add(drums, hat(g), T(b + s), pan=0.25 if s == 0.5 else -0.2)
     if pos == 3 and groove == 'full': add(drums, hat(0.3, True), T(b + 0.5), pan=0.3)
     # bass
-    if pos == 0: add(bassb, bass(root, 0.45, 0.7), T(b))
+    if pos == 0 and groove != 'outro': add(bassb, bass(root, 0.45, 0.7), T(b))
     if groove in ('full', 'build'): add(bassb, bass(root + (12 if pos == 2 else 0), 0.18, 0.55), T(b + 0.5))
     if groove == 'dark': add(bassb, bass(root - 12, 0.42, 0.6), T(b + 0.5))
     # mallet motif (bar level) for intro / full

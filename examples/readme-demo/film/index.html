@@ -2,9 +2,9 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>motion-film — demo</title>
+<title>motion film</title>
 <!-- favicon: replace with the film's own mark (inline SVG data URI) -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='14' width='52' height='36' rx='8' fill='%233550ff'/%3E%3Cpath d='M27 24l12 8-12 8z' fill='%23ffffff'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='14' width='52' height='36' rx='8' fill='%23141414'/%3E%3Cpath d='M27 24l12 8-12 8z' fill='%23ffffff'/%3E%3C/svg%3E">
 <style>
   @font-face { font-family: 'Display'; src: url(../assets/fonts/display.woff2) format('woff2'); font-weight: 650; }
   @font-face { font-family: 'UI'; src: url(../assets/fonts/ui.woff2) format('woff2'); font-weight: 100 900; }
@@ -28,9 +28,8 @@
           box-shadow: 0 2px 6px rgba(0,0,0,.05), 0 30px 80px -20px rgba(0,0,0,.22); }
   body.play { display: block; }
   .cap { position: absolute; overflow: hidden; }
-  .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 0; }
-  .eyebrow { font: 600 26px/1 UI; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
-  .chip { position: absolute; padding: 18px 28px; border-radius: 999px; background: var(--card); font: 600 34px/1 UI;
+  #stage.nocap .cap{visibility:hidden}
+    .chip { position: absolute; padding: 18px 28px; border-radius: 999px; background: var(--card); font: 600 34px/1 UI;
           white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 12px 30px -12px rgba(0,0,0,.2); }
 </style>
 </head>
@@ -38,10 +37,22 @@
 <div id="stage"></div>
 <script src="lib/motion.js"></script>
 <script src="data.js"></script>
-<script src="peaks.js"></script>
 <script src="core.js"></script>
+<script src="lib/camera.js"></script>
+<script src="lib/footage.js"></script>
 <script src="type.js"></script>
 <script src="lib/captions.js"></script>
+<script src="lib/props.js"></script>
+<script src="lib/blocks.js"></script>
+<script src="lib/graphics.js"></script>
+<script src="lib/illustrations.js"></script>
+<script src="lib/actor-hands.js"></script>
+<script src="lib/actor.js"></script>
+<script src="lib/lipsync.js"></script>
+<script src="lib/puppet.js"></script>
+<script src="lib/causal.js"></script>
+<script src="lib/morph.js"></script>
+<script src="peaks.js"></script>
 <script src="film.js"></script>
 </body>
 </html>

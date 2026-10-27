@@ -14,9 +14,9 @@ independent critic rounds, 60 fps in 16:9 and 9:16.
 [![Smoke test](https://github.com/tonyprots/motion-film-skill/actions/workflows/smoke.yml/badge.svg)](https://github.com/tonyprots/motion-film-skill/actions/workflows/smoke.yml)
 [![MIT](https://img.shields.io/badge/licence-MIT-121316)](LICENSE)
 
-<img src="docs/media/hero.gif" width="880" alt="motion-film demo: a report nobody reads becomes a film, written in code by an agent, scored by a critic and rendered 4.3× faster">
+<img src="docs/media/hero.gif" width="880" alt="motion-film demo: a cartoon presenter beside a report with 0 views; the report folds into a film frame written in code, then a voice waveform drops objects onto their words">
 
-<sub>The first seconds of the demo. The whole 33-second film, sound on: <a href="docs/media/demo.mp4">16:9 MP4</a> · <a href="docs/media/demo-9x16.mp4">9:16 MP4</a>.
+<sub>The first 12 seconds of the demo. The whole 35-second film, with a presenter, the object library, a chart and the critic gate, sound on: <a href="docs/media/demo.mp4">16:9 MP4</a> · <a href="docs/media/demo-9x16.mp4">9:16 MP4</a>.
 It was made with this skill, from <a href="examples/readme-demo/SCRIPT.md">this script</a>.</sub>
 
 </div>
@@ -163,8 +163,8 @@ Adding your own provider is one Python file with `tts()`, `transcribe()` or `mus
 
 The film is cut into 4-second chunks rendered in parallel by headless Chromium workers. Each worker encodes its
 own x264 segment, and the segments are joined without re-encoding. A faster PNG decoder removes the main CPU
-bottleneck. Drafts for critic rounds take seconds. This README's 33-second demo renders as a draft in under
-half a minute per format.
+bottleneck. Drafts for critic rounds take seconds. This README's 35-second demo, with its puppet presenter, renders as a draft
+in about half a minute per format.
 
 ## What leaves your machine
 

@@ -1,439 +1,332 @@
-// motion-film — demo film about the skill itself, made with the skill (../SCRIPT.md).
-// Voice: ElevenLabs takes laid out on the grid by scripts/layout_vo.py: mark <take> = phrase start, <take>.<k> = speech
-// chunk k, <take>.end = phrase end. Everything below is timed from those marks.
+// motion-film — README demo v2, made with the skill itself (../SCRIPT.md).
+// A presenter walks through the film; every object enters on the word that names it (marks <id>.w<k>).
+// The presenter is a puppet pack from assets/puppets/ (the first one found); without a pack, the drawn ACTOR stands in.
 // Pure function of time: no timers, no Math.random, nothing mutated in run().
 (() => {
-  const { W, H, pick, put, reg, el, scene, sp, spHit, seg, clamp, lerp, ease, bt, beatOf, mulberry32 } = C;
-  const { line, rise, type } = TYPE;
+  const { W, H, pick, put, reg, el, scene, sp, spHit, clamp, lerp, ease, bt, beatOf, beatAt } = C;
+  const { line, rise } = TYPE;
   C.fonts = ['650 100px Display', '400 40px UI', '500 40px UI', '600 40px UI'];
+  ILLUSTRATIONS.style({ skin: 'line', palette: { ink: '#121316', paper: '#ffffff', accent: '#3550ff' } });
 
-  const m = (k, d = 0) => beatOf(k) + d;
-  const B = (t) => C.beatAt(t);
+  const B = (mark, ds = 0) => beatAt(bt(mark) + ds);                // a mark shifted by seconds, in beats
   const show = (p) => (p > 0.001 ? 1 : 0);
-  const PAD = pick(140, 90, 90);
-  const SW = 820, SH = 660;                                   // the stage: right column (16:9) or under the headline (9:16)
-  // 9:16 keeps everything inside the Reels/TikTok safe band: x 64–950, y 269–1536
-  const STAGE = { x: pick(790, 130, 64), y: pick(110, 700, 680), s: pick(1.3, 1, 1.08) };
-  const HEAD = { y: pick(320, 250, 430), y3: pick(320, 250, 300), size: pick(96, 104, 92), lh: pick(116, 116, 100) };
   const abs = (parent, css, html = '', cls = 'abs') => el('div', { class: cls, style: css }, parent, html);
-  const stage = (root) => reg(abs(root, `left:${STAGE.x}px;top:${STAGE.y}px;width:${SW}px;height:${SH}px;transform-origin:0 0`), { s: STAGE.s });
-  // the product mark: a frame with a voice inside (bars) — used by the lockup at the start and the end
+  const WIDE = W > H;
+  // zones (EDITORIAL "frame with a presenter"): the presenter stands left and gestures right, into the object zone
+  const Z = WIDE ? { x: 780, y: 250, w: 1020, h: 640 } : { x: 90, y: 470, w: 860, h: 760 };
+  const TITLE = { x: Z.x, y: pick(96, 96, 286), size: pick(76, 76, 72), lh: pick(88, 88, 84) };
+
+  function appear(t, e, b, o = {}) {                               // grows and rises, reads ON the beat
+    const p = spHit(t, b, o.preset || 'snappy'), s0 = o.s0 ?? 0.8;
+    put(e, { o: show(p), s: s0 + (1 - s0) * p, y: (o.dy ?? 30) * (1 - p) + (o.y ?? 0), x: (o.dx ?? 0) * (1 - p) + (o.x ?? 0) });
+    return p;
+  }
+  // scene title: whole on screen within ~1 s of the scene start; rows of words rise through their masks
+  function title(root, rows, accent = {}) {
+    return rows.map((r, i) => line(root, r, { x: TITLE.x, y: TITLE.y + i * TITLE.lh, size: TITLE.size, accent: accent[i] || [] }));
+  }
+  const titleIn = (t, Ls, at) => Ls.forEach((L, i) => rise(t, L, beatOf(at) + i * 0.12, null, { stagger: 0.05 }));
+  // a positioned holder: library roots carry their own base x/y, and put({y}) would replace it, so they sit at 0,0 inside
+  const at0 = (root, x, y) => reg(abs(root, `left:${x}px;top:${y}px`));
+  const bg = (root, color = 'var(--bg)') => abs(root, `left:0;top:0;width:${W}px;height:${H}px;background:${color}`);
+
+  // ------------------------------------------------------------------ 1. Hook: the report nobody reads
+  const DOC = WIDE ? { x: 930, y: 300, w: 760 } : { x: 120, y: 560, w: 820 };
+  function report(root) {                                          // a thick report: two sheets under the document
+    const g = reg(abs(root, `left:${DOC.x}px;top:${DOC.y}px;width:${DOC.w}px;height:${DOC.w * 0.75}px`));
+    for (const k of [2, 1]) abs(g, `left:${DOC.w * 0.17 + k * 14}px;top:${DOC.w * 0.75 * 0.11 + k * 12}px;width:${DOC.w * 0.66}px;height:${DOC.w * 0.75 * 0.8}px;` +
+      'background:#fff;border:3px solid #121316;border-radius:10px');
+    const d = ILLUSTRATIONS.object(g, 'document', { x: 0, y: 0, w: DOC.w, title: '', label: '' });
+    return { g, d };
+  }
+  scene({
+    name: 'hook', from: 0, to: 'sc2',
+    build(root, S) {
+      bg(root);
+      S.T = title(root, WIDE ? ['Nobody reads the', '48-page report.'] : ['Nobody reads the', '48-page report.'], { 1: [1] });
+      S.R = report(root);
+      S.chip = reg(el('div', { class: 'chip', style: 'color:var(--ink);font:650 48px/1 UI;padding:20px 32px' }, root, '0 views'));
+      C.anchor(S.chip, S.R.g, WIDE ? 'tr' : 'tl', { inset: 40 });
+    },
+    run(t, b, S) {
+      titleIn(t, S.T, -0.6);                                       // frame 0 already reads
+      put(S.R.g, { y: 8 * Math.sin(t * 1.3) });
+      put(S.chip, { o: show(appear(t, S.chip, 's1a.w2')) * (1 - clamp((t - (bt('sc2') - 0.25)) / 0.15)) });   // leaves before the cut
+    },
+  });
+
+  // ------------------------------------------------------------------ 2. Turn: the report becomes a film frame
+  const FR = WIDE ? { x: 800, y: 300, w: 880, h: 495 } : { x: 110, y: 560, w: 860, h: 484 };
+  const CODE = ["scene({ from: 's2a',", "  run(t) { /* … */ } })"];
+  scene({
+    name: 'turn', from: 'sc2', to: 'sc3',
+    build(root, S) {
+      bg(root);
+      S.T = title(root, ['Make it a film.'], { 0: [3] });
+      S.R = report(root);
+      const k = DOC.w / 400;                                         // the document's paper inside its 400×300 view box
+      S.move = MORPH.handoff({ from: MORPH.rect(DOC.x + 70 * k, DOC.y + 35 * k, 260 * k, 230 * k, 10), to: MORPH.rect(FR.x, FR.y, FR.w, FR.h, 22),
+        at: bt('s2a.w4'), duration: 0.75, arc: 60 });
+      S.paper = MORPH.mount(root, S.move, { fill: '#ffffff', stroke: '#121316', width: 3 });
+      S.frame = reg(abs(root, `left:${FR.x}px;top:${FR.y}px;width:${FR.w}px;height:${FR.h}px;border-radius:22px;overflow:hidden;background:#121316`));
+      const strip = abs(S.frame, `left:40px;top:${FR.h - 92}px;width:${FR.w - 80}px;height:44px`);
+      S.blocks = [0.18, 0.12, 0.26, 0.2, 0.24].map((w, i, a) => reg(abs(strip, `left:${a.slice(0, i).reduce((s, x) => s + x, 0) * (FR.w - 80)}px;top:0;` +
+        `width:${w * (FR.w - 80) - 8}px;height:44px;border-radius:10px;background:${i === 2 ? 'var(--accent)' : '#3a3d44'}`)));
+      S.head = reg(abs(strip, 'left:0;top:-14px;width:4px;height:72px;border-radius:2px;background:#fff'));
+      S.code = CODE.map((s, i) => abs(S.frame, `left:48px;top:${56 + i * 64}px;font:500 ${pick(40, 40, 38)}px/1.2 ui-monospace,Menlo,monospace;color:#f5f5f2;white-space:pre`));
+      S.agentBox = at0(root, WIDE ? FR.x + FR.w - 170 : FR.x + FR.w - 300, FR.y + FR.h - 120);
+      S.agent = ILLUSTRATIONS.object(S.agentBox, 'agent', { x: 0, y: 0, w: pick(300, 300, 320), status: '', label: '' });
+    },
+    run(t, b, S) {
+      titleIn(t, S.T, 'sc2');
+      const m0 = bt('s2a.w4'), m1 = m0 + 0.75;
+      put(S.R.g, { o: 1 - clamp((t - m0) / 0.15), y: 8 * Math.sin(t * 1.3) });   // the report's lines fade as its paper starts to move
+      S.paper.draw(t);
+      put(S.paper.root, { o: t >= m0 - 0.02 && t < m1 + 0.1 ? 1 : 0 });
+      const f = clamp((t - (m1 - 0.25)) / 0.3);                     // the paper darkens into the frame as it lands
+      put(S.frame, { o: ease.inOut(f) });
+      const c0 = m1 + 0.2, n = CODE.join('').length, k = Math.floor(clamp((t - c0) / (bt('s2a.end') - c0)) * n + 1e-6);
+      let left = k; S.code.forEach((c, i) => { put(c, { text: CODE[i].slice(0, Math.max(0, left)) }); left -= CODE[i].length; });
+      const play = clamp((t - m1) / 2.6);
+      put(S.head, { x: play * (FR.w - 84) });
+      S.blocks.forEach((e, i) => put(e, { sy: spHit(t, B('s2a.w8', 0.08 * i), 'snappy') }));
+      const a = appear(t, S.agentBox, 's2a.w3', { s0: 0.6 });
+      S.agent.draw({ work: t * 0.9, done: clamp((t - bt('s2a.end')) / 0.3), status: '' });
+    },
+  });
+
+  // ------------------------------------------------------------------ 3. The voice is the timeline
+  const KAR = WIDE ? { x: Z.x, y: 120, w: 1060, size: 72 } : { x: 90, y: 300, w: 900, size: 68 };
+  const TRK = WIDE ? { x: 800, y: 760, w: 980 } : { x: 110, y: 1110, w: 840 };
+  const DROPS = [['s3a.w2', 'noto:studio-microphone'], ['s3a.w5', 'noto:stopwatch'], ['s3a.w7', 'noto:package'], ['s3a.w11', 'noto:memo']];
+  scene({
+    name: 'voice', from: 'sc3', to: 'sc4',
+    build(root, S) {
+      bg(root);
+      const box = abs(root, `left:${KAR.x}px;top:${KAR.y}px;width:${KAR.w}px;font:650 ${KAR.size}px/1.12 Display;letter-spacing:-0.035em;color:var(--ink)`);
+      const words = (window.VO || []).find((v) => v.id === 's3a')?.text.split(' ') || [];
+      S.words = words.map((w, i) => {
+        const s = el('span', { style: `display:inline-block;margin-right:0.26em;${[1, 4, 6, 10].includes(i) ? 'color:var(--accent)' : ''}` }, box, w);
+        if (i === 4) el('br', {}, box);
+        return reg(s, { o: 0 });
+      });
+      const px = (s) => TRK.x + (s - PEAKS.t0) / (PEAKS.v.length * PEAKS.dt) * TRK.w;
+      S.px = px;
+      S.bars = PEAKS.v.map((v, i) => reg(abs(root, `left:${TRK.x + i * TRK.w / PEAKS.v.length}px;top:${TRK.y - 4 - v * 70}px;width:${Math.max(3, TRK.w / PEAKS.v.length - 3)}px;` +
+        `height:${8 + v * 140}px;border-radius:3px;background:#c9ccd3`)));
+      S.ticks = (window.VOW || []).filter((w) => w[0] >= PEAKS.t0 && w[0] < PEAKS.t0 + PEAKS.v.length * PEAKS.dt)
+        .map((w) => reg(abs(root, `left:${px(w[0]) - 2}px;top:${TRK.y + 86}px;width:4px;height:22px;border-radius:2px;background:var(--ink)`), { o: 0 }));
+      S.head = reg(abs(root, `left:0;top:${TRK.y - 120}px;width:4px;height:240px;border-radius:2px;background:var(--accent)`));
+      S.drops = DROPS.map(([m, id]) => {
+        const size = pick(150, 150, 150);
+        const g = at0(root, px(bt(m)) - size / 2, TRK.y - 120 - size - 12);
+        ILLUSTRATIONS.extra(g, id, { x: 0, y: 0, w: size });
+        return { m, e: { root: g } };
+      });
+    },
+    run(t, b, S) {
+      S.words.forEach((w, i) => {
+        const k = clamp((t - (bt(`s3a.w${i + 1}`) - 1 / 60)) / (4 / 60));   // karaoke: a word enters one frame before its mark
+        put(w, { o: show(k) * ease.out(k), y: 10 * (1 - ease.out(k)) });
+      });
+      const head = clamp(t, PEAKS.t0, PEAKS.t0 + PEAKS.v.length * PEAKS.dt);
+      put(S.head, { x: S.px(head) - 2, o: show(sp(t, 'sc3', 'snappy')) });
+      S.bars.forEach((e, i) => put(e, { css: { background: PEAKS.t0 + i * PEAKS.dt <= head ? '#121316' : '#c9ccd3' }, sy: sp(t, B('sc3', 0.004 * i), 'snappy') }));
+      const VW = (window.VOW || []).filter((w) => w[0] >= PEAKS.t0 && w[0] < PEAKS.t0 + PEAKS.v.length * PEAKS.dt);
+      S.ticks.forEach((e, i) => put(e, { o: t >= VW[i][0] ? 1 : 0 }));
+      S.drops.forEach(({ m, e }) => {                                 // each object falls onto its word and lands on the mark
+        const p = spHit(t, m, 'default');
+        put(e.root, { o: show(p), y: -260 * (1 - p), r: -8 * (1 - p) });
+      });
+    },
+  });
+
+  // ------------------------------------------------------------------ 4. The library
+  const KINDS = [['agent', {}], ['funnel', { top: '', bottom: '' }], ['tokens', { amount: '', base: '' }], ['phone', { tag: '' }], ['lock', {}], ['scales', { left: '', right: '' }]];
+  const SKINS = ['line', 'flat', 'mono', 'sketch'], SKIN_AT = [null, 's4a.w4', 's4a.w5', 's4a.w6'];
+  const GRID = WIDE ? { cols: 3, w: 300, dx: 340, dy: 250, x: Z.x + 10, y: Z.y + 10 } : { cols: 3, w: 270, dx: 290, dy: 230, x: Z.x, y: Z.y + 20 };
+  const EXTRAS = ['noto:rocket', 'noto:trophy', 'noto:light-bulb', 'noto:books', 'noto:artist-palette', 'noto:camera', 'noto:laptop', 'noto:headphone',
+    'noto:gear', 'noto:alarm-clock', 'noto:clapper-board', 'noto:film-frames', 'noto:bell', 'noto:scissors', 'noto:magnifying-glass-tilted-left', 'noto:pencil',
+    'noto:calendar', 'noto:bar-chart', 'noto:label', 'noto:scroll', 'noto:ticket', 'noto:bookmark', 'noto:musical-keyboard', 'noto:candle'];
+  const ICONS = ['lucide:workflow', 'tabler:sitemap', 'phosphor:flow-arrow', 'lucide:chart-line', 'tabler:server', 'phosphor:globe', 'lucide:monitor', 'tabler:git-branch'];
+  const EG = WIDE ? { cols: 8, size: 104, step: 126, x: Z.x + 4, y: Z.y + 10 } : { cols: 6, size: 112, step: 142, x: Z.x + 6, y: Z.y + 20 };
+  scene({
+    name: 'library', from: 'sc4', to: 'sc5',
+    build(root, S) {
+      bg(root);
+      S.T = title(root, WIDE ? ['A library before a blank page.'] : ['A library before', 'a blank page.'], WIDE ? { 0: [1] } : { 0: [1] });
+      S.objs = KINDS.map(([kind, o], i) => {
+        const x = GRID.x + (i % GRID.cols) * GRID.dx, y = GRID.y + Math.floor(i / GRID.cols) * GRID.dy;
+        const g = reg(abs(root, `left:${x}px;top:${y}px;width:${GRID.w}px;height:${GRID.w * 0.75}px`));
+        return { g, v: SKINS.map((skin) => ILLUSTRATIONS.object(g, kind, { x: 0, y: 0, w: GRID.w, skin, label: '', ...o })) };
+      });
+      const cy = GRID.y + 2 * GRID.dy + 10;
+      S.chips = SKINS.map((s, i) => reg(el('div', { class: 'chip', style: `left:${GRID.x + pick(120, 120, 0) + i * pick(220, 220, 212)}px;top:${cy}px;font:600 34px/1 UI` }, root, s)));
+      S.extras = EXTRAS.map((id, i) => { const g = at0(root, EG.x + (i % EG.cols) * EG.step, EG.y + Math.floor(i / EG.cols) * EG.step); ILLUSTRATIONS.extra(g, id, { x: 0, y: 0, w: EG.size }); return { i, e: { root: g } }; })
+        .slice(0, WIDE ? 24 : 24);
+      const iy = EG.y + Math.ceil(EXTRAS.length / EG.cols) * EG.step + 6;
+      S.icons = ICONS.slice(0, EG.cols).map((id, i) => { const g = at0(root, EG.x + 8 + i * EG.step, iy); GRAPHICS.icon(g, id, { x: 0, y: 0, size: EG.size - 16, color: 'var(--accent)' }); return g; });
+      const pts = S.extras.map(({ i }) => ({ x: (i % EG.cols) * EG.step, y: Math.floor(i / EG.cols) * EG.step }));
+      S.wave = CAUSAL.wave(pts, { origin: { x: 0, y: 0 }, speed: 2400, at: bt('s4b.w2') - 0.12, duration: 0.6, mode: 'radial' });
+      S.chartBox = at0(root, pick(840, 840, 110), pick(250, 250, 520));
+      S.chart = BLOCKS.mount(S.chartBox, 'data-chart', { id: 'library', label: '', x: 0, y: 0, w: pick(900, 900, 840),
+        data: [{ label: 'objects', value: 30 }, { label: 'icons', value: 120 }, { label: 'extras', value: 563 }], max: 563, duration: 1.4 });
+      S.chartBg = reg(abs(root, `left:0;top:${pick(220, 220, 450)}px;width:${W}px;height:${pick(760, 760, 900)}px;background:var(--bg)`), { o: 0 });
+      root.appendChild(S.chartBg); root.appendChild(S.chartBox);
+    },
+    run(t, b, S) {
+      titleIn(t, S.T, 'sc4');
+      const out = ease.inOut(clamp((t - (bt('s4b.w2') - 0.35)) / 0.3));   // the objects step aside for the extras: a visible path down, fading only at the end
+      const skin = SKIN_AT.reduce((k, m, i) => (m && C.frameTime >= bt(m) - 0.05 ? i : k), 0);
+      S.objs.forEach(({ g, v }, i) => {
+        const p = spHit(t, B('sc4', 0.05 + 0.08 * i), 'default');
+        put(g, { o: show(p) * (1 - clamp((out - 0.65) / 0.35)), s: (0.8 + 0.2 * p) * (1 - 0.3 * out), y: 40 * (1 - p) + 90 * out });   // they sink and shrink away from the title
+        v.forEach((o, k) => put(o.root, { o: k === skin ? 1 : 0 }));
+        const st = { work: t * 0.8, flow: t * 0.7, level: 0.55 + 0.5 * clamp((t - bt('s4a.w2')) / 1.6), ring: (t * 1.4) % 1,
+          day: 4 + Math.floor(clamp((t - bt('s4a.w2')) / 2.4) * 4) * 7, marks: 0, open: clamp((t - bt('s4a.w4')) / 0.4), tilt: 0.6 * Math.sin(t * 1.6) };
+        v[skin].draw(st);
+      });
+      S.chips.forEach((c, i) => {
+        const p = spHit(t, B('s4a.w4', C.stagger(i)), 'snappy');
+        put(c, { o: show(p) * (1 - out), y: 20 * (1 - p) + 60 * out,
+          css: { background: i === skin ? 'var(--accent)' : 'var(--card)', color: i === skin ? '#fff' : 'var(--ink)' } });
+      });
+      const ph = S.wave(t);
+      S.extras.forEach(({ e }, i) => put(e.root, { o: show(ph[i]), s: 0.4 + 0.6 * ease.out(ph[i]), y: 6 * Math.sin(t * 1.2 + i) }));
+      S.icons.forEach((e, i) => appear(t, e, B('s4b.w5', C.stagger(i)), { s0: 0.6 }));
+      const c = sp(t, B('s4b.w6', -0.25), 'default');                // the chart card covers the grid, bars grow on "charts"
+      put(S.chartBg, { o: show(c), y: pick(760, 760, 900) * (1 - c) });
+      put(S.chartBox, { o: show(c), y: pick(760, 760, 900) * (1 - c) });
+      S.chart.draw(t, [[0, 0], ['s4b.w6', 1]]);
+    },
+  });
+
+  // ------------------------------------------------------------------ 5. A presenter, mouth timed from every word
+  const TILE = WIDE ? { x: 1150, y: 330, w: 200, h: 200, dx: 224, dy: 228, cols: 3 } : { x: 90, y: 500, w: 262, h: 200, dx: 290, dy: 222, cols: 3 };
+  const MOUTH = [['x', 'M B P'], ['b', 'T K S'], ['c', 'EE'], ['d', 'AH'], ['e', 'OH'], ['f', 'OO']];
+  scene({
+    name: 'presenter', from: 'sc5', to: 'sc6', pre: 0.5,
+    build(root, S) {
+      S.bg = reg(bg(root, 'var(--accent)'));
+      S.T = (WIDE ? ['A presenter,', 'if you want one.'] : ['A presenter,', 'if you want one.']).map((r, i) =>
+        line(root, r, { x: WIDE ? TILE.x : TITLE.x, y: TITLE.y + i * TITLE.lh, size: TITLE.size, color: '#fff' }));
+      const P = PACK ? PUPPET.check(PACK) : null;
+      S.tiles = MOUTH.map(([shape, label], i) => {
+        const x = TILE.x + (i % TILE.cols) * TILE.dx, y = TILE.y + Math.floor(i / TILE.cols) * TILE.dy;
+        const card = reg(abs(root, `left:${x}px;top:${y}px;width:${TILE.w}px;height:${TILE.h}px;border-radius:24px;background:#fff;overflow:hidden`));
+        if (P?.mouths?.[shape]) el('img', { src: P.base + P.mouths[shape].src, alt: '', style: `position:absolute;left:${(TILE.w - 162) / 2}px;top:22px;width:162px;height:120px` }, card);
+        else abs(card, `left:${(TILE.w - 120) / 2}px;top:40px;font:650 80px/1 Display;color:var(--ink);text-align:center;width:120px`, shape);
+        abs(card, `left:0;top:${TILE.h - 54}px;width:${TILE.w}px;text-align:center;font:600 32px/1 UI;color:var(--ink)`, label);
+        return { card, shape };
+      });
+    },
+    run(t, b, S) {
+      const w = sp(t, B('sc5', -0.3), 'default');                    // the blue wipes in from the right, under the presenter
+      put(S.bg, { clip: C.inset(0, 0, 0, 100 * (1 - w)) });
+      S.T.forEach((L, i) => rise(t, L, B('sc5', 0.1 + 0.12 * i), null, { stagger: 0.05 }));
+      const lip = LIPSYNC.at(C.frameTime);
+      S.tiles.forEach(({ card, shape }, i) => {
+        const p = spHit(t, B('s5a.w6', -0.35 + C.stagger(i)), 'snappy');
+        const on = lip.speaking && lip.shape === shape && t >= bt('s5a.w6') - 0.35 ? 1 : 0;
+        put(card, { o: show(p), s: (0.85 + 0.15 * p) * (1 + 0.08 * on), y: 24 * (1 - p) - 10 * on,
+          css: { boxShadow: on ? '0 0 0 8px #121316' : 'none' } });
+      });
+    },
+  });
+
+  // ------------------------------------------------------------------ 6. The critic gates it
+  scene({
+    name: 'critic', from: 'sc6', to: 'sc7', pre: 0.5,
+    build(root, S) {
+      S.bg = reg(bg(root));
+      S.T = title(root, WIDE ? ['Ships when every score ≥ 8'] : ['Ships when every', 'score ≥ 8'], WIDE ? { 0: [4] } : { 1: [2] });
+      S.boardBox = at0(root, Z.x, pick(230, 230, 470));
+      S.board = BLOCKS.mount(S.boardBox, 'kanban-flow', { id: 'critic-board', label: '', x: 0, y: 0, w: pick(660, 660, 520),
+        columns: ['critic', 'shipped'], cards: [
+          { id: 'script', title: 'script', column: 0, to: 1, at: B('s6a.w12', -0.45) },
+          { id: 'voice', title: 'voice', column: 0, to: 1, at: B('s6a.w12', -0.3) },
+          { id: 'film', title: 'film', column: 0, to: 1, at: B('s6a.w12', -0.15) }], duration: 0.4 });   // all three land before the stamp
+      S.scoreBox = at0(root, pick(1500, 1500, 640), pick(250, 250, 470));
+      S.score = BLOCKS.mount(S.scoreBox, 'rolling-number', { id: 'score', label: 'lowest score', x: 0, y: 0, w: pick(300, 300, 310),
+        from: 6, to: 8, at: 's6a.w12', fontSize: pick(150, 150, 130), mode: 'drum' });
+      const SW = S.SW = pick(560, 560, 400);                                  // the stamp's art is ~0.71 of its box: ~400 / ~310 px on screen
+      S.stampBox = at0(root, pick(1280, 1280, 390) - SW / 2, pick(880, 880, 745) - SW * 0.375);   // on the shipped column's axis, clear of the card labels
+      S.stamp = ILLUSTRATIONS.object(S.stampBox, 'stamp', { x: 0, y: 0, w: SW, text: 'SHIP' });
+    },
+    run(t, b, S) {
+      const w = sp(t, B('sc6', -0.3), 'default');
+      put(S.bg, { clip: C.inset(0, 0, 0, 100 * (1 - w)) });
+      titleIn(t, S.T, B('sc6', 0.1));
+      appear(t, S.boardBox, B('s6a.w2', -0.2), { s0: 0.94, dy: 40, preset: 'default' });
+      S.board.draw(t);
+      appear(t, S.scoreBox, 's6a.w7', { s0: 0.9 });
+      S.score.draw(t, [[0, 6], ['s6a.w7', 7], [B('s6a.w12', -0.6), 8]]);
+      const p = spHit(t, 's6a.end', 'hero');                          // hero: the stamp lands right after "eight"
+      put(S.stampBox, { o: show(sp(t, B('s6a.end', -0.15), 'snappy')) });   // the stamp's own press lands it in place, centred
+      S.stamp.draw({ press: p });
+    },
+  });
+
+  // ------------------------------------------------------------------ 7. Echo
   const MARK = (px) => `<svg width="${px}" height="${px}" viewBox="0 0 64 64"><rect x="2" y="10" width="60" height="44" rx="11" fill="var(--accent)"/>` +
     [[16, 14], [24, 24], [32, 32], [40, 20], [48, 10]].map(([x, h]) => `<rect x="${x - 2.5}" y="${32 - h / 2}" width="5" height="${h}" rx="2.5" fill="#fff"/>`).join('') + '</svg>';
-  const LOCKUP = (root) => abs(root, `left:${PAD}px;top:${pick(130, 90, 286)}px;width:900px`,
-    `<div style="display:flex;align-items:center;gap:16px">${MARK(64)}<span style="font:650 58px/1 Display;letter-spacing:-0.04em;color:var(--ink)">motion-film</span></div>` +
-    `<div style="margin-top:14px;font:500 34px/1 UI;color:var(--ink)">a skill for Claude Code &amp; Codex</div>`);
-  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-
-  function appear(t, e, b, o = {}) {                           // grows and rises, reads ON the beat
-    const p = spHit(t, b, o.preset || 'snappy'), s0 = o.s0 ?? 0.86;
-    put(e, { o: show(p), s: s0 + (1 - s0) * p, y: (o.dy ?? 26) * (1 - p), x: (o.dx ?? 0) * (1 - p), r: (o.r ?? 0) * (1 - p) });
-    return p;
-  }
-  function cardRise(t, e, b, o = {}) {                         // a card slides up and settles its tilt to zero
-    const p = sp(t, (typeof b === 'string' ? beatOf(b) : b) - 0.15, o.preset || 'default');
-    put(e, { o: show(p), y: (o.from ?? 560) * (1 - p), r: (o.r ?? -4) * (1 - p), s: 0.94 + 0.06 * p });
-    return p;
-  }
-  function recede(t, e, b) {                                   // covered cards step back instead of fading
-    const p = sp(t, typeof b === 'string' ? beatOf(b) : b, 'default');
-    put(e, { s: 1 - 0.06 * p, y: -34 * p });
-  }
-  // headline of stacked lines; '*' marks the accent word(s) of a line by index
-  function head(root, rows, accent = {}) {
-    const y0 = rows.length > 2 ? HEAD.y3 : HEAD.y;
-    return rows.map((r, i) => {
-      const L = line(root, r, { x: PAD, y: y0 + i * HEAD.lh, size: HEAD.size, accent: accent[i] || [] });
-      reg(L.el);
-      return L;
-    });
-  }
-  // camera push onto a point of the stage (stage px): in at `a`, back out at `b` (null = hold)
-  function camera(t, st, pushes) {
-    let z = 1, px = 0, py = 0;
-    for (const [a, b, X, Y, Z] of pushes) {
-      const k = sp(t, a, 'default') - (b == null ? 0 : sp(t, b, 'default'));
-      // 9:16: grow leftwards from the right edge, small enough to stay out of the platform UI on the right
-      if (k > 0.0005) { z += (pick(Z, Z, 1 + Math.min(Z - 1, 0.07)) - 1) * k; px = pick(X, X, SW); py = Y; }
-    }
-    put(st, { s: STAGE.s * z, x: px * STAGE.s * (1 - z), y: py * STAGE.s * (1 - z) });
-  }
-  const rows = (t, Ls, ats, out) => Ls.forEach((L, i) => rise(t, L, ats[i], out, { stagger: 0.06 }));
-  // stepped headlines: a line turns from grey to ink when the voice reaches it
-  function stepped(t, Ls, ats) {
-    const b = B(t);
-    Ls.forEach((L, i) => put(L.el, { css: { color: 'var(--ink)' } }));
-  }
-
-  // ------------------------------------------------------------------ transitions (no blank frames)
-  const ORDER = ['hook', 'turn', 'how', 'proof', 'end'];
-  const TRANS = { turn: 'match', how: 'wipe', proof: 'up', end: 'wipe' };
-  const FROM = { hook: 'sc1', turn: 'sc2', how: 'sc3', proof: 'sc4', end: 'sc5' };
-  function frame(t, b, S, k = 0.03) {
-    const p = { s: 1 + k * ease.inOut(seg(t, S.from, S.to)) };
-    const tin = TRANS[S.name];
-    if (tin && tin !== 'match' && b < beatOf(S.from) + 1.5) {
-      const w = sp(t, beatOf(S.from) - 1, 'default');
-      if (tin === 'wipe' && w < 0.999) p.clip = C.inset(0, 0, 0, 100 * (1 - w));
-      if (tin === 'up') p.y = H * (1 - w);
-    }
-    const nxt = ORDER[ORDER.indexOf(S.name) + 1];
-    if (TRANS[nxt] === 'up') p.y = -H * 0.25 * sp(t, beatOf(S.to) - 1, 'default');
-    put(S.root, p);
-  }
-  const sceneDef = (d) => scene({ pre: TRANS[d.name] && TRANS[d.name] !== 'match' ? 1 : 0, post: d.name === 'end' ? 0 : 1, ...d,
-    build(root, S) { root.style.background = 'var(--bg)'; d.build(root, S); } });
-  // the accent edge that leads every wipe
   scene({
-    name: 'edge', from: 0, to: 'done',
-    build(root, S) { S.e = reg(abs(root, `width:14px;height:${H}px;background:var(--accent)`), { o: 0 }); },
+    name: 'end', from: 'sc7', to: 'done', pre: 0.5,
+    build(root, S) {
+      S.bg = reg(bg(root));
+      S.lock = reg(abs(root, `left:${Z.x}px;top:${pick(150, 150, 330)}px;width:900px`,
+        `<div style="display:flex;align-items:center;gap:18px">${MARK(68)}<span style="font:650 60px/1 Display;letter-spacing:-0.04em;color:var(--ink)">motion-film</span></div>`));
+      S.T = (WIDE ? ['Your next report', 'is a film.'] : ['Your next', 'report is', 'a film.']).map((r, i, a) =>
+        line(root, r, { x: Z.x, y: pick(290, 290, 470) + i * pick(116, 116, 116), size: pick(104, 104, 104), accent: i === a.length - 1 ? [a[i].split(' ').length - 1] : [] }));
+      const y = pick(560, 560, 840);
+      S.url = reg(abs(root, `left:${Z.x}px;top:${y}px;font:600 ${pick(46, 46, 54)}px/1.25 ui-monospace,Menlo,monospace;color:var(--ink);white-space:pre`, WIDE ? 'github.com/tonyprots/motion-film-skill' : 'github.com/tonyprots/\nmotion-film-skill'));
+      S.chips = ['Claude Code', 'Codex', 'any agent'].map((s, i) => reg(el('div', { class: 'chip', style: `left:${Z.x + [0, 270, 450][i] * pick(1, 1, 1.05)}px;top:${y + pick(100, 100, 170)}px` }, root, s)));
+    },
     run(t, b, S) {
-      let x = null;
-      for (const n of ORDER) if (TRANS[n] === 'wipe') {
-        const f = beatOf(FROM[n]), w = sp(t, f - 1, 'default');
-        if (b > f - 1 && w < 0.995) x = W * (1 - w) - 7;
-      }
-      put(S.e, { o: x == null ? 0 : 1, x: x ?? 0 });
+      const w = sp(t, B('sc7', -0.3), 'default');
+      put(S.bg, { clip: C.inset(0, 0, 0, 100 * (1 - w)) });
+      appear(t, S.lock, B('sc7', 0), { s0: 0.9 });
+      S.T.forEach((L, i) => rise(t, L, B('sc7', 0.05 + 0.12 * i), null, { stagger: 0.05 }));
+      appear(t, S.url, B('s7a.end', 0.1));
+      S.chips.forEach((c, i) => appear(t, c, B('s7a.end', 0.3 + C.stagger(i) * 2)));
     },
   });
 
-  // ------------------------------------------------------------------ 1. Hook: the report nobody opens
-  const VID_H = Math.round(SW * 9 / 16);
-  const ZOOM12 = (t) => 1 + 0.03 * ease.inOut(seg(t, 'sc1', 'sc3'));
-  // the film inside the frame: what the report becomes — one number and its chart, not the headline again
-  const BARS = [0.34, 0.42, 0.4, 0.55, 0.68, 0.86];
-  function miniFilm(parent) {
-    const M = {};
-    abs(parent, 'left:56px;top:64px;font:500 28px/1 UI;color:rgba(255,255,255,.6)', 'Q3 revenue');
-    M.n = reg(abs(parent, 'left:52px;top:108px;font:650 156px/1 Display;letter-spacing:-0.05em;color:#fff;font-variant-numeric:tabular-nums', ''));
-    abs(parent, 'left:56px;top:288px;font:500 28px/1 UI;color:rgba(255,255,255,.6)', 'vs Q2, all regions');
-    M.bars = BARS.map((v, i) => reg(abs(parent, `left:${470 + i * 52}px;top:${380 - 300 * v}px;width:36px;height:${300 * v}px;border-radius:8px;background:${i === BARS.length - 1 ? 'var(--accent)' : 'rgba(255,255,255,.28)'};transform-origin:50% 100%`), { sy: 0 }));
-    abs(parent, `left:40px;top:${VID_H - 40}px;width:${SW - 80}px;height:6px;border-radius:3px;background:rgba(255,255,255,.2)`);
-    M.prog = reg(abs(parent, `left:40px;top:${VID_H - 40}px;height:6px;border-radius:3px;background:var(--accent)`), { o: 0 });
-    return M;
-  }
-  function runMini(t, M) {
-    const pn = sp(t, 6.4, 'default');
-    put(M.n, { text: '+' + Math.round(24 * clamp(pn * 1.04)) + '%', o: show(pn) });
-    M.bars.forEach((e, i) => put(e, { sy: sp(t, 6.3 + i * 0.12, 'snappy') }));
-    const pr = seg(t, 6.3, 'sc3');
-    put(M.prog, { o: show(pr), css: { width: (SW - 80) * pr + 'px' } });
-  }
+  // ------------------------------------------------------------------ the presenter: one layer over every scene
+  const PACK = PUPPET.packs[0] || null;
+  const HOST = WIDE ? { x: 0, y: 230, w: 900 } : { x: 0, y: 1300, w: 650 };
+  const BIG = WIDE ? { x: 110, y: 70, s: 1.2 } : { x: 80, y: 1300, s: 1.1 };
+  const PLAN = [[0, 'worry', 'worried'], ['s1a.w6', 'shrug', 'worried'], ['s2a.w3', 'point', 'neutral'], ['s2a.w8', 'explain', 'happy'],
+    ['s3a.w2', 'explain', 'neutral'], ['s3a.w7', 'point', 'happy'], ['s4a.w1', 'welcome', 'happy'], ['s4b.w4', 'point', 'surprised'], ['s4b.w6', 'explain', 'neutral'],
+    ['s5a.w3', 'welcome', 'happy'], ['s5a.w6', 'point', 'neutral'], ['s6a.w2', 'think', 'skeptic'], ['s6a.w10', 'cheer', 'happy'],
+    ['s7a.w1', 'wave', 'happy'], ['s7a.end', 'rest', 'wink']];
   scene({
-    name: 'hook', from: 'sc1', to: 'sc2',
+    name: 'host', from: 0, to: 'done',
     build(root, S) {
-      root.style.background = 'var(--bg)';
-      LOCKUP(root);
-      S.h = head(root, ['Nobody reads', 'the report.'], { 1: [1] });
-      S.st = stage(root);
-      S.card = abs(S.st, `width:${SW}px;height:${SH}px;overflow:hidden`, '', 'card'); reg(S.card);
-      S.doc = reg(abs(S.card, `width:${SW}px;height:${SH}px`));
-      abs(S.doc, 'left:56px;top:48px;font:600 44px/1 UI;letter-spacing:-0.02em', 'Q3 Market Review');
-      abs(S.doc, 'left:56px;top:108px;font:400 26px/1 UI;color:var(--ink-2)', '48 pages · PDF · shared 21 days ago');
-      abs(S.doc, `left:56px;top:158px;width:${SW - 112}px;height:2px;background:color-mix(in srgb, var(--ink) 10%, transparent)`);
-      S.body = reg(abs(S.doc, `left:56px;top:190px;width:${SW - 112}px;height:2400px`));
-      const r = mulberry32(3);
-      let y = 0;
-      for (let blk = 0; blk < 9; blk++) {
-        if (blk % 3 === 2) {                                   // a chart block between paragraphs
-          const ch = abs(S.body, `left:0;top:${y}px;width:${SW - 112}px;height:200px;border-radius:16px;background:color-mix(in srgb, var(--ink) 4%, var(--card))`);
-          for (let i = 0; i < 12; i++) abs(ch, `left:${32 + i * 56}px;top:${170 - (40 + r() * 110)}px;width:34px;height:${40 + r() * 110}px;border-radius:6px;background:color-mix(in srgb, var(--ink) ${14 + (i % 4) * 4}%, transparent)`);
-          y += 236;
-        } else {
-          const n = 5 + Math.floor(r() * 3);
-          for (let i = 0; i < n; i++) {
-            abs(S.body, `left:0;top:${y}px;width:${i === n - 1 ? 260 + r() * 240 : SW - 112 - r() * 60}px;height:16px;border-radius:8px;background:color-mix(in srgb, var(--ink) 11%, transparent)`);
-            y += 34;
-          }
-          y += 30;
-        }
-      }
-      S.views = reg(abs(S.card, `left:auto;right:36px;top:${SH - 112}px;display:flex;align-items:center;gap:14px`,
-        `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>0 views`, 'chip'), { o: 0 });
-      S.views.style.color = 'var(--ink)';
-      S.dark = reg(abs(S.card, `width:${SW}px;height:${SH}px;background:var(--ink)`), { o: 0 });
-      S.mini = miniFilm(S.dark);
+      root.style.zIndex = 50;
+      S.p = PACK ? PUPPET.mount(root, { id: 'host', pack: PACK, x: HOST.x, y: HOST.y, w: HOST.w, outline: false })
+        : ACTOR.mount(root, { id: 'host', x: HOST.x + HOST.w * 0.2, y: HOST.y + HOST.w * 0.1, w: HOST.w * 0.6, character: 'casual' });
+      S.steps = PLAN.map(([m, pose, expression]) => ({ at: typeof m === 'number' ? m : bt(m), pose, expression }));
     },
     run(t, b, S) {
-      put(S.root, { s: ZOOM12(t) });                           // the same slow push runs through hook and turn: no jump at the cut
-      rows(t, S.h, [-1.0, -0.85]);                             // leaves inside the next scene (no blank frames at the cut)                        // frame 0 already reads
-      const pw = sp(t, -0.8, 'default');
-      put(S.st, { y: 60 * (1 - pw), r: -2 * (1 - pw), s: STAGE.s });
-      put(S.body, { y: -1100 * ease.inOut(seg(t, 0, 7)) });   // the report scrolls past, unread
-      const pv = appear(t, S.views, 's1a', { dy: 30, s0: 0.8 });
-      const pulse = Math.exp(-Math.max(0, t - bt('s1a.end')) * 6) * (B(t) > m('s1a.end') ? 1 : 0);
-      // morph: the page becomes a dark 16:9 video frame (continues as the frame of scene 2)
-      const mo = sp(t, 6.4, 'default');
-      put(S.card, { css: { height: lerp(SH, VID_H, mo) + 'px' } });
-      const ir = sp(t, 6.1, 'default');                       // a dark panel rises over the page: no opacity ramp
-      put(S.dark, { o: show(ir), css: { clipPath: `inset(${(100 * (1 - ir)).toFixed(2)}% 0 0 0)` } });
-      put(S.doc, { y: -120 * mo });
-      runMini(t, S.mini);
-      if (pv > 0.001) put(S.views, { o: mo < 0.2 ? 1 : 0, s: (0.8 + 0.2 * pv) * (1 + 0.08 * pulse), y: 30 * (1 - pv) + 60 * mo });
+      let i = 0; while (i + 1 < S.steps.length && S.steps[i + 1].at <= t) i++;
+      const cur = S.steps[i], prev = S.steps[Math.max(0, i - 1)], lip = LIPSYNC.at(t);
+      const blue = t >= bt('sc5') - 0.1 && t < bt('sc6');
+      S.p.draw(t, { pose: cur.pose, previous: prev.pose, at: cur.at, expression: cur.expression, previousExpression: prev.expression,
+        viseme: lip.shape, mouth: lip.open, ...(PACK ? { outline: blue } : {}) });
+      const k = sp(t, B('sc5', -0.2), 'default') - sp(t, B('sc6', -0.2), 'default');   // steps forward for his own chapter
+      put(S.p.root, { x: lerp(HOST.x, BIG.x, k), y: lerp(HOST.y, BIG.y, k), s: lerp(1, BIG.s, k) });
     },
   });
 
-  // ------------------------------------------------------------------ 2. Turn: make it a film, in code, by your agent
-  const CODE = [
-    `scene({ name: 'hook', from: 'sc1', to: 'sc2',`,
-    `  run(t, b, S) {`,
-    `    rows(t, S.h, [-0.4, -0.25], 7.6);`,
-    `    appear(t, S.views, 's1a');`,
-    `  },`,
-    `});`,
-  ];
-  const hl = (s) => esc(s).replace(/('[^']*')/g, '<span style="color:#8a96ff">$1</span>').replace(/\b(scene|run|rows|appear)\b/g, '<span style="color:#fff;font-weight:600">$1</span>');
-  scene({
-    name: 'turn', from: 'sc2', to: 'sc3', post: 1,
-    build(root, S) {
-      root.style.background = 'var(--bg)';
-      LOCKUP(root);
-      S.old = head(root, ['Nobody reads', 'the report.'], { 1: [1] });
-      S.h = head(root, ['Make it', 'a film.'], { 1: [1] });
-      S.st = stage(root);
-      S.vf = abs(S.st, `width:${SW}px;height:${VID_H}px;overflow:hidden;background:var(--ink)`, '', 'card');
-      S.mini = miniFilm(S.vf);
-      S.field = reg(abs(S.st, `left:0;top:${VID_H + 40}px;width:${SW}px;height:112px;border-radius:56px`, '', 'card'), { o: 0 });
-      S.text = reg(abs(S.field, 'left:48px;top:34px;font:500 42px/1 ui-monospace, Menlo, monospace;white-space:nowrap', ''));
-      S.caret = reg(abs(S.field, 'top:28px;width:4px;height:56px;background:var(--accent)'), { o: 0 });
-      S.send = reg(abs(S.field, `left:${SW - 96}px;top:16px;width:80px;height:80px;border-radius:40px;background:var(--accent);transform-origin:50% 50%`,
-        '<svg width="80" height="80" viewBox="0 0 80 80"><path d="M40 54V27M28 38l12-12 12 12" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'), { o: 0 });
-      S.code = reg(abs(S.st, `left:0;top:262px;width:${SW}px;height:398px;overflow:hidden;background:#1b1d24`, '', 'card'), { o: 0 });
-      abs(S.code, 'left:36px;top:30px;font:500 24px/1 UI;color:rgba(255,255,255,.55)', 'film/film.js');
-      S.agent = reg(abs(S.code, 'left:auto;right:28px;top:20px;padding:12px 20px;font:600 24px/1 UI;color:#fff;background:var(--accent);box-shadow:none', 'agent · writing', 'chip'), { o: 0 });
-      S.lines = CODE.map((c, i) => {
-        const clip = abs(S.code, `left:36px;top:${88 + i * 48}px;height:44px;overflow:hidden;white-space:pre;font-size:26px;line-height:44px;color:rgba(255,255,255,.82)`, hl(c), 'abs mono');
-        return { clip: reg(clip, { o: 0 }), n: c.length };
-      });
-    },
-    run(t, b, S) {
-      frame(t, b, S, 0);
-      put(S.root, { s: ZOOM12(t) });
-      rows(t, S.old, [-1.0, -0.85], 8.0);
-      rows(t, S.h, [8.1, 8.2]);
-      const pf = spHit(t, 8.3, 'snappy');
-      put(S.field, { o: show(pf), y: 30 * (1 - pf) });
-      const n = type(t, S.text, '/motion-film report.pdf', 8.6, 9.9, S.caret, 10.2);
-      put(S.caret, { x: 50 + n * 23.4 });
-      const ps = spHit(t, 10, 'snappy');
-      put(S.send, { o: show(ps), s: 0.6 + 0.4 * ps - 0.12 * Math.exp(-Math.max(0, t - bt(10.2)) * 10) * (B(t) > 10.2 ? 1 : 0) });
-      runMini(t, S.mini);   // the film keeps playing across the cut
-      // the code behind it, written by the agent
-      cardRise(t, S.code, 's2a.3', { from: 520, r: 3 });
-      S.lines.forEach((L, i) => {
-        const a = m('s2a.3', 0.2 + i * 0.36), k = clamp((B(t) - a) / 0.34);
-        put(L.clip, { o: show(k), css: { width: Math.ceil(L.n * k) * 15.7 + 'px' } });
-      });
-      appear(t, S.agent, 's2a.4', { dy: 0, s0: 0.7 });
-    },
+  CAPTIONS.scene(WIDE ? { x: Z.x, w: 1040, size: 48, color: 'var(--cap)' } : { x: 90, y: 1200, w: 840, size: 44, color: 'var(--cap)' });
+  C.hooks.before.push((t) => {                                       // captions turn white on the blue chapter
+    const blue = t >= bt('sc5') - 0.1 && t < bt('sc6') - 0.1;
+    const st = document.getElementById('stage');
+    st.style.setProperty('--cap', blue ? '#ffffff' : '#121316');
+    const wipe = ['sc5', 'sc6', 'sc7'].some((m) => t >= bt(m) - 0.4 && t < bt(m))   // a caption leaves before the wipe covers its scene
+      || (t >= bt('s6a.end') - 0.15 && t < bt('sc7'));                // and makes room for the SHIP stamp
+    st.classList.toggle('nocap', wipe);
   });
-
-  // ------------------------------------------------------------------ 3. How: script → voice → beat
-  const SCRIPT = [
-    ['## 1. Hook · 0:00–0:05', 'var(--ink)', 600],
-    ['**Title:** Nobody reads the report.', 'var(--ink-2)', 400],
-    ['**Voice:** "Nobody reads the report."', 'var(--ink)', 500],
-    ['  {pre=0.6 mood=concern pace=slow}', 'var(--accent)', 400],
-    ['', '', 400],
-    ['## 2. Turn · 0:05–0:12', 'var(--ink)', 600],
-    ['**Voice:** "So make it a film."', 'var(--ink)', 500],
-    ['  {mood=confident air=0.8}', 'var(--accent)', 400],
-  ];
-  const DROPS = [['headline', 's1a'], ['frame', 's2a'], ['script', 's3a'], ['scores', 's4a'], ['end card', 's5a']];
-  sceneDef({
-    name: 'how', from: 'sc3', to: 'sc4',
-    build(root, S) {
-      S.h = head(root, ['Script.', 'Voice.', 'Beat.'], { 2: [0] });
-      S.st = stage(root);
-      S.sc = reg(abs(S.st, `width:${SW}px;height:${SH}px;overflow:hidden`, '', 'card'), { o: 0 });
-      abs(S.sc, 'left:48px;top:44px', 'SCRIPT.md', 'abs eyebrow');
-      S.mark = reg(abs(S.sc, `left:32px;top:${100 + 2 * 58 - 8}px;width:${SW - 64}px;height:56px;border-radius:12px;background:color-mix(in srgb, var(--accent) 10%, transparent)`), { o: 0 });
-      S.srows = SCRIPT.map(([s, c, w], i) => reg(abs(S.sc, `left:48px;top:${100 + i * 58}px;font-size:28px;line-height:40px;font-weight:${w};color:${c};white-space:pre`, esc(s), 'abs mono'), { o: 0 }));
-      // the real voice of this film on the beat grid
-      S.wv = reg(abs(S.st, `width:${SW}px;height:${SH}px;overflow:hidden`, '', 'card'), { o: 0 });
-      abs(S.wv, 'left:48px;top:44px', 'audio/vo.wav · 120 BPM · 70 beats', 'abs eyebrow');
-      const GX = 48, GW = SW - 96, WY = 330, NB = 140, NBEAT = beatOf('done');
-      S.GX = GX; S.GW = GW; S.NBEAT = NBEAT;
-      const pk = window.PEAKS || [];
-      S.bars = Array.from({ length: NB }, (_, i) => {
-        let v = 0; for (let j = 0; j < 3; j++) v = Math.max(v, pk[i * 3 + j] || 0);
-        const hgt = 6 + 150 * v;
-        return reg(abs(S.wv, `left:${GX + i * GW / NB}px;top:${WY - hgt / 2}px;width:${GW / NB - 1.6}px;height:${hgt}px;border-radius:3px;background:var(--ink);transform-origin:50% 50%`), { o: 0, sy: 0 });
-      });
-      S.ticks = Array.from({ length: NBEAT + 1 }, (_, i) =>
-        reg(abs(S.wv, `left:${GX + i * GW / NBEAT}px;top:${WY + 110}px;width:2px;height:${i % 4 === 0 ? 30 : 14}px;background:color-mix(in srgb, var(--ink) ${i % 4 === 0 ? 45 : 22}%, transparent)`), { o: 0 }));
-      S.flags = ['sc1', 'sc2', 'sc3', 'sc4', 'sc5'].map((k) => {
-        const f = abs(S.wv, `left:${GX + beatOf(k) * GW / NBEAT}px;top:${WY + 150}px;font:600 22px/1 UI;color:var(--ink-2);white-space:nowrap`, `▲ ${k}`);
-        return reg(f, { o: 0 });
-      });
-      S.drops = DROPS.map(([txt, k], i) => {
-        const x = GX + beatOf(k) * GW / NBEAT, lv = (i % 2) * 64;
-        const c = abs(S.wv, `left:${x}px;top:${WY - 200 - lv}px;padding:12px 18px;border-radius:14px;background:var(--accent);color:#fff;font:600 24px/1 UI;white-space:nowrap;transform:translateX(-50%)`, txt);
-        const pin = abs(S.wv, `left:${x - 1}px;top:${WY - 152 - lv}px;width:2px;height:${152 + 110 + lv}px;background:var(--accent)`);
-        return { c: reg(c, { o: 0 }), pin: reg(pin, { o: 0, sy: 0 }), x };
-      });
-      S.head = reg(abs(S.wv, `left:${GX}px;top:${WY - 170}px;width:3px;height:310px;background:var(--ink)`), { o: 0 });
-    },
-    run(t, b, S) {
-      frame(t, b, S);
-      camera(t, S.st, [[m('s3a', 0.7), m('s3a.2', -0.7), 300, 216, 1.3], [m('s3b', 0.3), m('s3b.end', -0.6), 730, 200, 1.18]]);
-      rows(t, S.h, [18.9, 19.0, 19.1]);
-      stepped(t, S.h, [m('s3a'), m('s3a.2'), m('s3b')]);
-      // script
-      cardRise(t, S.sc, 19.0, { from: 400 });
-      S.srows.forEach((r, i) => appear(t, r, 19.2 + i * 0.16, { dy: 18, s0: 1 }));
-      const pm = sp(t, m('s3a', 0.8), 'snappy');
-      put(S.mark, { o: show(pm), css: { width: (SW - 64) * pm + 'px' } });
-      recede(t, S.sc, m('s3a.2', -0.4));
-      // voice → waveform, drawn as the voice says "rhythm"
-      cardRise(t, S.wv, m('s3a.2', -0.5), { from: 600, r: 3 });
-      const w0 = m('s3a.2', -0.35), w1 = m('s3a.end');
-      S.bars.forEach((e, i) => { const p = sp(t, lerp(w0, w1, i / S.bars.length), 'snappy'); put(e, { o: show(p), sy: p }); });
-      S.ticks.forEach((e, i) => put(e, { o: B(t) > lerp(w0, w1, i / S.ticks.length) ? 1 : 0 }));
-      S.flags.forEach((f, i) => appear(t, f, m('s3a.2', 0.3 + i * 0.45), { dy: 12, s0: 1 }));
-      // every frame lands on the beat: elements drop onto the marks they are timed from
-      S.drops.forEach((d, i) => {
-        const at = m('s3b', 0.4 + i * 0.75), p = spHit(t, at, 'snappy');
-        put(d.c, { o: show(p), y: -160 * (1 - p) });
-        const pi = sp(t, at, 'snappy');
-        put(d.pin, { o: show(pi), sy: pi });
-      });
-      // then the playhead runs the film: each element pulses as it is reached
-      const ph = seg(t, m('s3b.end', 0.2), 39.4), hx = S.GX + S.GW * ph;
-      put(S.head, { o: B(t) > m('s3b.end', 0.2) ? 1 : 0, x: S.GW * ph });
-      S.drops.forEach((d, i) => {
-        if (B(t) < m('s3b.end', 0.2)) return;
-        const d2 = (hx - d.x) / 40, k = d2 > 0 ? Math.exp(-d2 * 1.6) : 0;
-        const p = spHit(t, m('s3b', 0.4 + i * 0.75), 'snappy');
-        put(d.c, { o: show(p), y: -160 * (1 - p), s: 1 + 0.14 * k });
-      });
-    },
-  });
-
-  // ------------------------------------------------------------------ 4. Proof: critic, render, speed
-  // the real scores of this film's last critic round (docs/review_log.md)
-  const SCORES = [['Hook', 8], ['Readability', 8], ['Motion', 7], ['Variety', 8], ['Brand', 7], ['Sound sync', 8], ['Composition', 8], ['Polish', 8]];
-  const LOG = [
-    ['$ node scripts/render.mjs --all', 'cmd'],
-    ['16x9', 'bar'],
-    ['9x16', 'bar'],
-    ['wrote renders/16x9.mp4  1980 frames @ 60 fps  208 s', 'out'],
-    ['wrote renders/9x16.mp4  1980 frames @ 60 fps  141 s', 'out'],
-  ];
-  sceneDef({
-    name: 'proof', from: 'sc4', to: 'sc5',
-    build(root, S) {
-      S.h = head(root, ['Scored.', 'Rendered.', '4× faster.'], { 2: [0] });
-      S.st = stage(root);
-      S.cr = reg(abs(S.st, `width:${SW}px;height:${SH}px;overflow:hidden`, '', 'card'), { o: 0 });
-      abs(S.cr, 'left:48px;top:44px', 'critic · review_log.md', 'abs eyebrow');
-      S.rows = SCORES.map(([k, v], i) => {
-        const y = 130 + i * 62;
-        const r = reg(abs(S.cr, `left:48px;top:${y}px;width:${SW - 96}px;height:52px`), { o: 0 });
-        abs(r, 'left:0;top:10px;font:500 30px/1 UI;white-space:nowrap', k);
-        abs(r, 'left:300px;top:20px;width:340px;height:12px;border-radius:6px;background:color-mix(in srgb, var(--ink) 9%, transparent)');
-        const f = reg(abs(r, 'left:300px;top:20px;height:12px;border-radius:6px;background:var(--ink)'));
-        const n = reg(abs(r, 'left:676px;top:6px;font:650 40px/1 Display;font-variant-numeric:tabular-nums', ''));
-        return { r, f, n, v };
-      });
-      S.ship = reg(abs(S.cr, `left:${SW - 250}px;top:18px;padding:12px 24px;border:5px solid var(--accent);border-radius:14px;color:var(--accent);font:650 60px/1 Display;letter-spacing:-0.02em;transform-origin:50% 50%;background:var(--card)`, 'SHIP'), { o: 0 });
-      // the render, in a terminal
-      S.tm = reg(abs(S.st, `width:${SW}px;height:${SH}px;overflow:hidden;background:#1b1d24`, '', 'card'), { o: 0 });
-      S.log = LOG.map(([s, kind], i) => {
-        const y = 60 + i * 66;
-        const e = abs(S.tm, `left:44px;top:${y}px;font-size:${kind === 'out' ? 24 : 28}px;line-height:40px;white-space:pre;color:${kind === 'cmd' ? '#fff' : 'rgba(255,255,255,.72)'}`, kind === 'bar' ? '' : esc(s), 'abs mono');
-        if (kind === 'bar') {
-          abs(e, 'left:0;top:0', s);
-          abs(e, 'left:110px;top:14px;width:430px;height:14px;border-radius:7px;background:rgba(255,255,255,.14)');
-          e.fill = reg(abs(e, 'left:110px;top:14px;height:14px;border-radius:7px;background:var(--accent)'));
-          abs(e, 'left:568px;top:0;color:rgba(255,255,255,.5)', '4 workers');
-        }
-        return { e: reg(e, { o: 0 }), kind, s };
-      });
-      // speed: before / now
-      S.sp = reg(abs(S.st, `left:${pick(40, 24, 24)}px;top:${SH - 270}px;width:${SW - pick(40, 24, 24)}px;height:270px`, '', 'card'), { o: 0 });
-      abs(S.sp, 'left:40px;top:40px;font:500 26px/1 UI;color:var(--ink-2)', 'before');
-      abs(S.sp, 'left:40px;top:118px;font:500 26px/1 UI;color:var(--ink-2)', 'now');
-      S.b1 = reg(abs(S.sp, 'left:150px;top:36px;height:34px;border-radius:8px;background:color-mix(in srgb, var(--ink) 18%, transparent)'));
-      S.b2 = reg(abs(S.sp, 'left:150px;top:114px;height:34px;border-radius:8px;background:var(--accent)'));
-      S.t1 = reg(abs(S.sp, 'left:150px;top:80px;font:500 22px/1 UI;color:var(--ink-2);white-space:nowrap', '≈ 42 min'), { o: 0 });
-      S.t2 = reg(abs(S.sp, 'left:150px;top:158px;font:600 22px/1 UI;white-space:nowrap', '9 min 46 s'), { o: 0 });
-      S.x = reg(abs(S.sp, `left:auto;right:40px;top:40px;font:650 128px/1 Display;letter-spacing:-0.05em;color:var(--accent)`, '4.3×'), { o: 0 });
-      abs(S.sp, 'left:40px;top:208px;font:500 28px/1 UI;color:var(--ink-2);white-space:nowrap', '2:36 film · 60 fps · Apple M1');
-      S.same = reg(abs(S.sp, 'left:auto;right:40px;top:196px;padding:12px 20px;font:600 24px/1 UI;color:#fff;background:var(--accent);box-shadow:none', 'same pixels', 'chip'), { o: 0 });
-    },
-    run(t, b, S) {
-      frame(t, b, S);
-      camera(t, S.st, [[m('s4a.5', 0.6), null, 400, 470, 1.12]]);
-      rows(t, S.h, [38.9, 39.0, 39.1]);
-      stepped(t, S.h, [m('s4a'), m('s4a.3'), m('s4a.5')]);
-      cardRise(t, S.cr, 39.1, { from: 420 });
-      S.rows.forEach((R, i) => {
-        const at = m('s4a', -2.6 + i * 0.3), p = spHit(t, at, 'snappy');
-        put(R.r, { o: show(p), x: -24 * (1 - p) });
-        const f = sp(t, at + 0.1, 'default');
-        put(R.f, { css: { width: 340 * R.v / 10 * f + 'px' } });
-        put(R.n, { text: String(Math.round(R.v * clamp(f * 1.15))) });
-      });
-      const ps = spHit(t, m('s4a.2', 0.1), 'snappy');
-      put(S.ship, { o: show(ps), s: 1.5 - 0.5 * ps, r: -6 });
-      recede(t, S.cr, m('s4a.4', -0.6));
-      if (sp(t, m('s4a.4', -0.65), 'default') > 0.98) put(S.cr, { hide: true });
-      // render
-      cardRise(t, S.tm, m('s4a.4', -0.5), { from: pick(600, 600, 300), r: 3 });
-      S.log.forEach((L, i) => {
-        if (L.kind === 'cmd') {
-          const k = clamp((B(t) - m('s4a.4', -0.9)) / 0.5);
-          put(L.e, { o: show(k), css: { width: Math.ceil(L.s.length * k) * 16.9 + 'px', overflow: 'hidden' } });
-        } else if (L.kind === 'bar') {
-          const a = m('s4a.4', 0.1 + (i - 1) * 0.3);
-          put(L.e, { o: B(t) >= a - 0.2 ? 1 : 0 });
-          put(L.e.fill, { css: { width: 430 * ease.inOut(seg(t, a, m('s4a.5', -0.2 + (i - 1) * 0.2))) + 'px' } });
-        } else {
-          appear(t, L.e, m('s4a.5', -0.1 + (i - 3) * 0.3), { dy: 14, s0: 1 });
-        }
-      });
-      // speed
-      cardRise(t, S.sp, m('s4a.5', -0.3), { from: pick(360, 360, 200), r: -2 });
-      const g1 = sp(t, m('s4a.5', 0.1), 'default'), g2 = sp(t, m('s4a.5', 0.6), 'snappy'), BW = SW - pick(40, 24, 24) - 190 - 200;
-      put(S.b1, { css: { width: BW * g1 + 'px' } });
-      put(S.b2, { css: { width: BW * (9.77 / 42) * g2 + 'px' } });
-      put(S.t1, { o: show(g1) }); put(S.t2, { o: show(g2) });
-      appear(t, S.x, m('s4a.5', 0.6), { dy: 30, s0: 0.8, preset: 'snappy' });
-      appear(t, S.same, m('s4a.end', 0.9), { dy: 0, s0: 0.7 });   // one worker = the sequential render, byte for byte
-    },
-  });
-
-  // ------------------------------------------------------------------ 5. Echo: your next report is a film
-  sceneDef({
-    name: 'end', from: 'sc5', to: 'done',
-    build(root, S) {
-      S.push = reg(abs(root, `width:${W}px;height:${H}px;transform-origin:${W / 2}px ${H / 2}px`));
-      S.h = C.FMT === '9x16'                                   // 9:16: one stack inside the safe band, bigger type
-        ? ['Your next', 'report is', 'a film.'].map((r, i) => { const L = line(S.push, r, { x: PAD, y: 300 + i * 124, size: 116, accent: i === 2 ? [1] : [] }); reg(L.el); return L; })
-        : ['Your next report', 'is a film.'].map((r, i) => { const L = line(S.push, r, { x: PAD, y: pick(230, 250) + i * pick(156, 116), size: pick(138, 104), accent: i === 1 ? [2] : [] }); reg(L.el); return L; });
-      const LX = PAD, LY = pick(620, 600, 720);
-      S.logo = reg(abs(S.push, `left:${LX}px;top:${LY}px;display:flex;align-items:center;gap:26px`,
-        `${MARK(pick(104, 96, 112))}<span style="font:650 ${pick(96, 84, 100)}px/1 Display;letter-spacing:-0.045em">motion-film</span>`), { o: 0 });
-      const CY = LY + pick(18, 140, 160);
-      S.chips = ['Claude Code', 'Codex', 'any agent'].map((s, i) => reg(abs(S.push, `left:${pick(860, LX, LX) + [0, pick(270, 250, 270), pick(450, 410, 450)][i]}px;top:${CY}px`, s, 'chip'), { o: 0 }));
-      const UY = pick(820, 900, CY + 140);
-      S.url = reg(abs(S.push, `left:${PAD}px;top:${UY}px;font-size:${pick(52, 44, 60)}px;line-height:1.15;font-weight:600;color:var(--ink);white-space:nowrap`, C.FMT === '9x16' ? 'github.com/tonyprots/<br>motion-film-skill' : 'github.com/tonyprots/motion-film-skill', 'abs mono'), { o: 0 });
-      S.sweep = reg(abs(S.push, `left:${PAD}px;top:${UY + pick(76, 66, 158)}px;height:5px;border-radius:3px;background:var(--accent)`), { o: 0 });
-    },
-    run(t, b, S) {
-      frame(t, b, S, 0);
-      put(S.push, { s: 1 + 0.06 * ease.inOut(seg(t, 'sc5', 'done')) });   // never fully static
-      rows(t, S.h, [54.9, 55.0, 55.1]);
-      appear(t, S.logo, 55.2, { dy: 30, s0: 0.9, preset: 'default' });
-      S.chips.forEach((c, i) => appear(t, c, m('sc5', 0.2 + i * 0.3), { dy: 24, s0: 0.8 }));
-      appear(t, S.url, m('sc5', 1.3), { dy: 16, s0: 1 });
-      const uw = pick(1190, 1010, 760);
-      const sw = Motion.indicator(t, [[0, 0, 0], [bt(m('s5a.end', 0.2)), 0, uw], [bt(63.5), uw, uw], [bt(64.5), 0, uw]]);
-      put(S.sweep, { o: sw.size > 0.5 ? 1 : 0, x: sw.start, css: { width: sw.size + 'px' } });
-    },
-  });
-
-  if ((window.CAPS || []).length) CAPTIONS.scene({ y: pick(700, 1080, 1420), size: pick(44, 48, 42), w: pick(560, 900, 886) });
   C.start();
 })();
