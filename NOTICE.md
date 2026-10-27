@@ -5,8 +5,8 @@ wrote. Details of every change: `UPSTREAM.md`.
 
 ## Motion Reel Kit — Lukas Margerie
 *Motion Reel Kit: beat-synced launch videos, made in code with Claude Code* — [weekly10x.com](https://weekly10x.com).
-Distributed by its author without a licence file. The following files come from the kit (as is or edited) and remain
-the author's work; they are **not** covered by our MIT licence:
+Shared by its author without a separate licence statement. The files below come from the kit, as is or edited; they
+remain the author's work and are not part of our MIT grant:
 
 - `engine/core.js`, `engine/type.js`, `engine/lib/motion.js`, `engine/lib/motion.test.js`, `engine/index.html`,
   `engine/film.js` (starter)
@@ -15,7 +15,7 @@ the author's work; they are **not** covered by our MIT licence:
 - `reference/RULES.md`, `reference/CRITIQUE.md`, `reference/ENGINE.md` (sections marked as motion-film additions are ours)
 - `templates/docs/*`, `templates/timeline.json`, `presets/blank/preset.jsonc`
 
-If you are the author and want any of this changed, open an issue — we will act on it.
+If you are the author and would like anything here changed or credited differently, open an issue and we will do it.
 
 ## voice-film — ArtKruglov (MIT)
 [github.com/artkruglov/voice-film](https://github.com/artkruglov/voice-film), MIT, see `LICENSE-voice-film`:

@@ -15,6 +15,7 @@ node "$SKILL/tests/test_blocks.mjs"
 node "$SKILL/tests/test_editorial.mjs"
 node "$SKILL/tests/test_frame_clock.mjs"
 node "$SKILL/tests/test_morph.cjs"
+node "$SKILL/tests/test_render_server.mjs"
 cd "$WORK"
 .venv/bin/python scripts/music_source.py
 node scripts/sync.mjs >/dev/null

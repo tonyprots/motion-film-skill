@@ -46,6 +46,18 @@ word costs one re-render, not a new roll of the dice.
 - 🎞️ **Nine visual formats.** The agent picks a visual language by the substance of the material (product demo,
   one take, kinetic statement, data at true scale, an image per phrase and more), and the critic checks the format's
   signature first. Explainers (Vox-style, whiteboard, 3Blue1Brown-style) have their own recipes.
+- 🎚️ **A style is a set of switches, not one house look.** Type, palette, pictures, character, caption placement,
+  numbers, music, sound effects and voice are chosen for the platform and the material. The choice is written into the
+  brief, and a preset can fix it for a whole series.
+- 🧑‍🏫 **A presenter who links the chapters.** A drawn presenter with a pool of looks, poses, gestures and pointing
+  hands, or a puppet made of pictures with mouth shapes timed from the words. Optional: most films don't need one.
+- 🧩 **A library before a blank page.** 30 stateful objects (agent, tokens, funnel, team, document, server and more)
+  in four drawing skins, 563 extra objects repainted into the film's palette, 120 icons from Lucide, Tabler and
+  Phosphor, ready chart, counter and kanban blocks, and shape morphs with a checked seam. All offline, with a search
+  over the catalogue.
+- 🧊 **3D where it earns its place.** A three.js layer with physical light and depth of field, a real screenshot as a
+  screen in 3D, cut-outs and 2.5D depth for photos, plus GSAP kinetic type and your brand's Lottie files. Deterministic
+  per frame, rendered on the GPU.
 - 💬 **Burned-in captions** that follow the voice clause by clause, with digits on screen, or word by word as karaoke
   for social cuts. At the bottom of the frame, above the platform's UI in 9:16.
 - 🎼 **Sound on the same grid.** An original synthesised score (or your track, or generated music), UI hits on the
@@ -56,8 +68,11 @@ word costs one re-render, not a new roll of the dice.
   sequential render byte for byte.
 - 📱 **16:9 and 9:16 from one source**, each with its own layout. Nothing is just re-cropped.
 - 🔍 **Checks a reviewer would make.** Text lint (contrast, safe zones, text or screens cut by the frame edge),
-  seams across cuts, a shot-list check against slideshow habits, and a player for notes by timecode.
+  seams across cuts, a stillness check that finds stretches where the frame stops changing, a shot-list check against
+  slideshow habits, and a local player for notes by timecode.
 - 🎤 **Over your own recording.** A talk or an interview becomes the bottom layer, the graphics go on top.
+- 🔁 **Silent loops and GIFs.** A 4–14 second loop for a feed, Telegram or X with a checked seam, and a GIF with an
+  exact frame count for a chat or a README.
 
 ## How it works
 
@@ -151,10 +166,16 @@ half a minute per format.
 
 ## What leaves your machine
 
+The skill runs inside your agent, so the agent's own model sees what the agent reads: the sources, the script, the code
+and the frames it looks at. That includes the critic, which is a fresh session or subagent of the same agent. Where that
+data goes is set by your agent and its model provider (Claude Code, Codex or another), not by this skill.
+
+On top of that, the skill's own scripts make these calls:
+
 | when | where | what |
 |---|---|---|
-| voice | your voice provider (`api.elevenlabs.io`, `openrouter.ai` or `api.openai.com`) | the script lines |
-| take check | your check provider (same list) | the generated audio of each take |
+| voice | your voice provider (`api.elevenlabs.io`, `openrouter.ai`, `api.openai.com` or Yandex Cloud SpeechKit `tts.api.cloud.yandex.net`) | the script lines |
+| take check | your check provider (same list; SpeechKit uses `stt.api.cloud.yandex.net`) | the audio of each take, **including your own recordings** when you run `voice.py check` on them |
 | music (optional) | ElevenLabs or OpenRouter | a text prompt describing the music, never your content |
 | local music setup (optional, once) | `github.com`, `huggingface.co`, PyPI | downloads of ACE-Step 1.5 and its weights; generation itself is local |
 | sound library (optional, once) | `freesound.org` API with your key, or `kenney.nl` | searches for generic sound names, downloads of CC0 sounds |
@@ -164,9 +185,14 @@ half a minute per format.
 | first setup | PyPI, npm, the Playwright CDN | package downloads |
 | update check, at most once a week | `api.github.com` | a request for the latest release tag of this repo, nothing about your films |
 
-Nothing else is sent. There is no telemetry and no other server. Rendering, captions, the score, the mix and the
-critic's frame analysis all run locally. For material that must not leave your company, use your own recordings
-or a provider module that points at your company's gateway. The update check is off with
+The scripts send nothing else: no telemetry, no server of ours. Rendering, captions, the synthesised score, the mix,
+the frame checks and the contact sheets are computed on your machine. During a render the skill serves the film to
+headless Chromium from `127.0.0.1` on a random port; that server answers only a localhost `Host`, only with the film's
+own resources inside the project, and never with hidden files such as `.env` or `.git`.
+
+For material that must not leave your company, every route has to stay inside it: an agent and model your company
+allows, a voice provider module that points at your company's gateway (or your own recordings), and a take check
+through that gateway or skipped. Your own recordings alone are not enough. The update check is off with
 `MOTION_FILM_NO_UPDATE_CHECK=1`; it never updates the skill, it only tells you a new release exists.
 
 The skill treats everything it reads (reports, decks, web pages, screenshots) as **material for the film, never
@@ -204,12 +230,17 @@ This skill stands on the work of two authors — thank you both.
   side; we substantially reworked and extended it: voice-driven timelines, captions, pluggable providers, music
   sources, presets with local fonts, and a parallel render several times faster.
 
+Smaller parts are adapted from huashu-art-motion (explainer grammars, MIT), RenderComp free-remotion-templates,
+RemotionUI and onda (counter, kanban and chart layouts, MIT), HyperFrames (chart and wipe, Apache-2.0) and anidoodle
+(shape morphs and presenter hands, Apache-2.0). Icons come from Lucide, Tabler and Phosphor, extra objects from
+Noto Emoji (Apache-2.0); each pack keeps its licence beside the files.
+
 What exactly came from where and what was changed: [`UPSTREAM.md`](UPSTREAM.md).
 
 ## Licence
 
-MIT for this skill's own code and documents, see [`LICENSE`](LICENSE). Files that came from Motion Reel Kit and
-voice-film keep their authors' terms, listed in [`NOTICE.md`](NOTICE.md).
+MIT for this skill's own code and documents, see [`LICENSE`](LICENSE). Adapted and bundled third-party files keep
+their authors' terms, listed file by file in [`NOTICE.md`](NOTICE.md).
 
 <sub>Keywords: AI video, motion graphics, explainer video, product video, report to video, text to video, voiceover,
 ElevenLabs, OpenRouter, Claude Code skill, Codex skill, agent skill, Playwright, ffmpeg, beat sync, captions,

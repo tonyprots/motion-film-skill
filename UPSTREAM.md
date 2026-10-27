@@ -1,13 +1,13 @@
 # Upstream and licences
 
-motion-film is assembled from two sources plus our own code, built 2026-10-04 after a first real film on the kit's engine.
-Both authors are credited in `README.md` → Acknowledgements; keep that section in every copy, public or not.
+motion-film is built on two main sources plus our own code, first assembled on 2026-10-04 after a first real film on
+the kit's engine; smaller adapted parts are listed in §2b–3. The authors are credited in `README.md` → Credits; keep
+that section in every copy.
 
-## 1. Motion Reel Kit (weekly10x.com) — NO LICENCE
-Archive from the weekly10x.com newsletter, reviewed line by line on 2026-10-04 before use.
-The archive carries **no licence file**: by default all rights stay with the author. Fine for our own
-use; **public redistribution needs the author's written permission** (or a rewrite of these parts).
-`publish/build_public.sh` refuses to run without `--kit-licence-ok`.
+## 1. Motion Reel Kit (weekly10x.com) — Lukas Margerie
+Shared by its author as an archive through the weekly10x.com newsletter, without a separate licence statement, and
+reviewed line by line on 2026-10-04 before use. The files below remain the author's work and are not part of this
+repository's MIT grant; `NOTICE.md` lists them.
 
 From the kit, as is or lightly edited:
 - `engine/` — `core.js`, `type.js`, `lib/motion.js` (+ test), `index.html` (favicon, `.cap`, captions script added), starter `film.js` (captions line added)
