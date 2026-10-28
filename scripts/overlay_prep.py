@@ -5,6 +5,7 @@ Replaces step 4 of SKILL.md (extract_lines → voice.py → layout_vo.py → vo.
 
   python3 <skill>/scripts/overlay_prep.py <recording.mp4> --transcript <segments.json | raw.json | .srt | .vtt>
         [--words raw.json] [--scenes 12.5,31.4,…] [--min-scene 5] [--tail 2.5] [--height 1080] [--q 3] [--shift 0] [--keep-fps] [--force]
+        [--cut-pauses 0.6 [--keep-pause 0.3]]
 
 What it writes:
   assets/recording/<stem>.mp4         the recording (copied)
@@ -12,11 +13,15 @@ What it writes:
   audio/vo.wav                        the recording's sound, 48 kHz mono, aligned to the first video frame, film length
   audio/vo/lines.json                 one line per phrase {id, text} (captions.py reads it)
   audio/vo_placed.json                phrases in seconds {id, text, at, t0, t1} (sync.mjs → window.VO, mix.py, plan_check.py)
+  vo.json                             {"voice": {"provider": "recording"}, "phrases": [{id, text, words}]}: the display words
+                                      of each phrase, for sync.mjs (caption word marks) and CAPTIONS.karaoke; vo.py refuses it
   timeline.json                       duration = the recording, "recording" (the layer), marks in beats as layout_vo.py names them:
       sc<N>      scene N starts: one scene per transcript segment, short ones merged (--min-scene s), or at --scenes times
                  (each snapped to the first phrase that starts at or after it)
       <id>       phrase starts (s1a, s1b, s2a … one phrase per sentence)
       <id>.<k>   k-th speech chunk of the phrase (word pauses ≥ 0.12 s, commas, ≤ 7 words; from word timings)
+      <id>.w<k>  k-th display word of the phrase starts (the same words rule as layout_vo.py; a word the transcript
+                 spelled differently gets its time from its neighbours by letter count). Only with word timings.
       <id>.end   phrase ends                        done   the end of the film: the recording + --tail seconds
                  (--tail: an end card over the frozen last frame; without it the end hold is whatever the recording has)
     and, unless already set: "mix": {"voice_chain": false, "room": 0} — a real recording keeps its own room and tone;
@@ -27,6 +32,12 @@ raw.json next to it (primary hypothesis, metadata.chunks[].words) or --words. Wi
 letter count inside each segment and chunks by speech pauses in the audio (printed as ESTIMATED). Transcript times count
 from the first sample of the sound, film time from the first video frame: the offset between the two streams is added
 by itself; --shift adds more seconds on top (a transcript of a trimmed copy).
+--cut-pauses S (an option, off by default; for a talking head that hesitates): every pause longer than S seconds is
+shortened to --keep-pause (0.3 s): picture and sound are cut together on the source's frame grid into
+assets/recording/<stem>-cut.mp4, which becomes the layer; transcript times (and --scenes, given in the original's time)
+are moved by the cut. Pauses come from word timings, without them from silencedetect (-35 dB). A jump cut in the face
+shows: put graphics, a punch-in or a scene change over the cut points (timeline.json → recording.cut.at lists them in
+film seconds).
 Then: music_source.py, captions.py, sync.mjs, film.js (scenes over the recording, transparent roots), sfx, mix.py, render.
 Do NOT run layout_vo.py or vo.py in this mode: they would rebuild audio/vo.wav from TTS takes."""
 import argparse, difflib, json, math, os, re, shutil, subprocess, sys
@@ -44,6 +55,8 @@ ap.add_argument('--shift', type=float, default=0.0)
 ap.add_argument('--tail', type=float, default=0.0, help='seconds of end card after the recording: its last frame holds, the sound is silent')
 ap.add_argument('--keep-fps', action='store_true')
 ap.add_argument('--force', action='store_true', help='extract the frames again even if they are there')
+ap.add_argument('--cut-pauses', type=float, help='shorten every pause longer than this many seconds (talking head jump cuts)')
+ap.add_argument('--keep-pause', type=float, default=0.3, help='what is left of a cut pause, seconds (default 0.3)')
 A = ap.parse_args()
 
 if not Path('timeline.json').exists(): sys.exit('timeline.json missing: run from the project root (after init.sh)')
@@ -79,6 +92,109 @@ vdur = float(V.get('duration') or P['format']['duration'])
 w, h = int(V['width']), int(V['height'])
 rot = int((V.get('tags') or {}).get('rotate', 0) or next((d.get('rotation', 0) for d in V.get('side_data_list', []) if 'rotation' in d), 0) or 0)
 if abs(rot) % 180 == 90: w, h = h, w   # ffmpeg autorotates on decode: the frames come out upright
+
+tp = Path(A.transcript).expanduser()
+if not tp.exists(): sys.exit(f'{tp}: no such transcript')
+
+
+def ts(s):  # 00:01:02,345 / 01:02.345 → seconds
+    p = s.replace(',', '.').split(':'); return sum(float(x) * 60 ** i for i, x in enumerate(reversed(p)))
+
+
+def primary_chunks(raw):
+    hyps = raw.get('hypotheses') or []
+    h = next((x for x in hyps if (x.get('metadata') or {}).get('role') == 'primary'), hyps[0] if hyps else None)
+    return ((h or {}).get('metadata') or {}).get('chunks') or (h or {}).get('segments') or []
+
+
+def read_transcript():
+    """(segments, words) in the transcript's own seconds: [{start, end, text}]."""
+    segs, words = [], []
+    if tp.suffix.lower() in ('.srt', '.vtt'):
+        for m in re.finditer(r'(\d[\d:.,]*)\s*-->\s*(\d[\d:.,]*)[^\n]*\n(.*?)(?:\n\s*\n|\Z)', tp.read_text(encoding='utf-8'), re.S):
+            segs.append({'start': ts(m[1]), 'end': ts(m[2]), 'text': ' '.join(m[3].split())})
+        return segs, words
+    J = json.loads(tp.read_text(encoding='utf-8'))
+    if 'readable' in J: segs = J['readable']
+    elif 'hypotheses' in J: segs = primary_chunks(J)
+    elif isinstance(J, list): segs = J
+    else: sys.exit(f'{tp}: not a transcriber segments.json / raw.json, nor a list of {{start, end, text}}')
+    wp = Path(A.words) if A.words else (tp if 'hypotheses' in J else tp.with_name('raw.json'))
+    if wp.exists():
+        for c in primary_chunks(json.loads(wp.read_text(encoding='utf-8'))):
+            words += [x for x in c.get('words') or [] if str(x.get('text', '')).strip()]
+    return segs, words
+
+
+SEGS0, WORDS0 = read_transcript()
+remap = lambda t: t   # transcript seconds (+ --shift) → seconds of the layer; --cut-pauses replaces it
+CUT = None
+
+# ---------------------------------------------------------------- pauses (option): cut picture and sound together
+if A.cut_pauses:
+    d0 = a0 - v0   # sound time + d0 = picture time (both from their stream's first sample)
+    adur = float(AU.get('duration') or P['format']['duration'])
+    if WORDS0:
+        W = sorted((float(x['start']) + A.shift, float(x['end']) + A.shift) for x in WORDS0)
+        gaps = [(0.0, W[0][0])] + [(a[1], b[0]) for a, b in zip(W, W[1:])] + [(W[-1][1], adur)]
+        how = 'word timings'
+    else:
+        err = subprocess.run(['ffmpeg', '-hide_banner', '-nostats', '-i', str(src), '-map', '0:a:0', '-af',
+                              f'asetpts=PTS-STARTPTS,silencedetect=noise=-35dB:d={A.cut_pauses}', '-f', 'null', '-'],
+                             capture_output=True, text=True).stderr
+        st = [float(x) for x in re.findall(r'silence_start: (-?[\d.]+)', err)]
+        en = [float(x) for x in re.findall(r'silence_end: (-?[\d.]+)', err)]
+        gaps = list(zip(st, en + [adur] * (len(st) - len(en))))
+        how = 'silencedetect -35 dB'
+    # each long gap keeps keep/2 after the word before and keep/2 before the word after (the lead-in pause at the very
+    # start and the tail at the very end keep keep/2 too); boundaries snap to the picture's frame grid so every piece
+    # has the same length in picture and sound
+    half, grid = A.keep_pause / 2, (lambda t: round((t + d0) * fps) / fps - d0)
+    cuts = []
+    for a, b in gaps:
+        if b - a <= A.cut_pauses: continue
+        x, y = grid(a + half), grid(b - half)
+        if y - x >= 1 / fps: cuts.append((max(0.0, x), min(adur, y)))
+    keep, t = [], 0.0
+    for x, y in cuts:
+        if x > t: keep.append((t, x))
+        t = y
+    if t < adur - 1e-3: keep.append((t, adur))
+    keep = [(x, y) for x, y in keep if y - x >= 2 / fps]   # a sliver of a frame or two is not worth a cut
+    if len(keep) < 2: print(f'--cut-pauses {A.cut_pauses}: no pause longer than that ({how}), nothing cut')
+    else:
+        out = Path('assets/recording'); out.mkdir(parents=True, exist_ok=True)
+        stem0 = re.sub(r'[^A-Za-z0-9_-]+', '-', src.stem).strip('-') or 'rec'
+        cut = out / f'{stem0}-cut.mp4'
+        g = []
+        for i, (x, y) in enumerate(keep):
+            g.append(f'[0:v]trim=start={max(0.0, x + d0):.6f}:end={y + d0:.6f},setpts=PTS-STARTPTS[v{i}];'
+                     f'[0:a]atrim=start={x:.6f}:end={y:.6f},asetpts=PTS-STARTPTS,afade=t=in:d=0.008,'
+                     f'afade=t=out:st={max(0.0, y - x - 0.008):.6f}:d=0.008[a{i}];')
+        g.append(''.join(f'[v{i}][a{i}]' for i in range(len(keep))) + f'concat=n={len(keep)}:v=1:a=1[v][a]')
+        gf = out / f'{stem0}-cut.filter'; gf.write_text(''.join(g), encoding='utf-8')
+        print(f'cutting {len(cuts)} pauses ({how}) → {cut} …', flush=True)
+        run('ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-i', str(src), '-filter_complex_script', str(gf),
+            '-map', '[v]', '-map', '[a]', '-r', fps_s, '-c:v', 'libx264', '-crf', '14', '-preset', 'medium', '-pix_fmt', 'yuv420p',
+            '-c:a', 'pcm_s24le' if cut.suffix == '.mov' else 'aac', '-b:a', '256k', str(cut))
+        gf.unlink()
+        starts, acc = [], 0.0
+        for x, y in keep: starts.append(acc); acc += y - x
+
+        def remap(t, keep=keep, starts=starts):   # a time inside a removed pause lands on the cut point
+            for (x, y), s0 in zip(keep, starts):
+                if t < y: return s0 + max(0.0, t - x)
+            return acc
+        removed = adur - acc
+        CUT = {'from': str(src), 'pauses': len(cuts), 'removed': round(removed, 3), 'longer_than': A.cut_pauses,
+               'keep_pause': A.keep_pause, 'at': [round(s0, 3) for s0 in starts[1:]]}
+        print(f'cut {len(cuts)} pauses, {removed:.2f} s of {adur:.2f} s ({removed / adur:.0%}): the layer is now {cut.name}')
+        src = cut.resolve()
+        P = json.loads(run('ffprobe', '-v', 'error', '-show_streams', '-show_format', '-of', 'json', str(src)))
+        V = next(s for s in P['streams'] if s['codec_type'] == 'video'); AU = next(s for s in P['streams'] if s['codec_type'] == 'audio')
+        fps_s = V.get('r_frame_rate'); fps = rate(fps_s)
+        v0 = float(V.get('start_time') or 0); a0 = float(AU.get('start_time') or 0)
+        vdur = float(V.get('duration') or P['format']['duration'])
 
 # ---------------------------------------------------------------- frames
 stem = re.sub(r'[^A-Za-z0-9_-]+', '-', src.stem).strip('-') or 'rec'
@@ -123,38 +239,11 @@ print(f'audio/vo.wav: {DUR:.3f} s, sound offset {d * 1000:+.1f} ms against the f
 
 # ---------------------------------------------------------------- transcript
 # a transcript counts from the first sample of the sound (that is what an ASR decodes); the film counts from the first frame
-SHIFT = A.shift + (d if abs(d) > 0.0005 else 0.0)
-tp = Path(A.transcript).expanduser()
-if not tp.exists(): sys.exit(f'{tp}: no such transcript')
-
-
-def ts(s):  # 00:01:02,345 / 01:02.345 → seconds
-    p = s.replace(',', '.').split(':'); return sum(float(x) * 60 ** i for i, x in enumerate(reversed(p)))
-
-
-def primary_chunks(raw):
-    hyps = raw.get('hypotheses') or []
-    h = next((x for x in hyps if (x.get('metadata') or {}).get('role') == 'primary'), hyps[0] if hyps else None)
-    return ((h or {}).get('metadata') or {}).get('chunks') or (h or {}).get('segments') or []
-
-
-segs, words = [], []
-if tp.suffix.lower() in ('.srt', '.vtt'):
-    for m in re.finditer(r'(\d[\d:.,]*)\s*-->\s*(\d[\d:.,]*)[^\n]*\n(.*?)(?:\n\s*\n|\Z)', tp.read_text(encoding='utf-8'), re.S):
-        segs.append({'start': ts(m[1]), 'end': ts(m[2]), 'text': ' '.join(m[3].split())})
-else:
-    J = json.loads(tp.read_text(encoding='utf-8'))
-    if 'readable' in J: segs = J['readable']
-    elif 'hypotheses' in J: segs = primary_chunks(J)
-    elif isinstance(J, list): segs = J
-    else: sys.exit(f'{tp}: not a transcriber segments.json / raw.json, nor a list of {{start, end, text}}')
-    wp = Path(A.words) if A.words else (tp if 'hypotheses' in J else tp.with_name('raw.json'))
-    if wp.exists():
-        for c in primary_chunks(json.loads(wp.read_text(encoding='utf-8'))):
-            words += [x for x in c.get('words') or [] if str(x.get('text', '')).strip()]
-segs = sorted(({'start': float(s['start']) + SHIFT, 'end': float(s['end']) + SHIFT, 'text': ' '.join(str(s['text']).split())}
-               for s in segs if str(s.get('text', '')).strip()), key=lambda s: s['start'])
-words = sorted(({'start': float(x['start']) + SHIFT, 'end': float(x['end']) + SHIFT, 'text': str(x['text']).strip()} for x in words),
+SHIFT = d if abs(d) > 0.0005 else 0.0
+T = lambda t: remap(float(t) + A.shift) + SHIFT
+segs = sorted(({'start': T(s['start']), 'end': T(s['end']), 'text': ' '.join(str(s['text']).split())}
+               for s in SEGS0 if str(s.get('text', '')).strip()), key=lambda s: s['start'])
+words = sorted(({'start': T(x['start']), 'end': T(x['end']), 'text': str(x['text']).strip()} for x in WORDS0),
                key=lambda x: x['start'])
 segs = [s for s in segs if s['start'] < REC_DUR - 0.05]
 words = [x for x in words if x['start'] < REC_DUR - 0.02]
@@ -206,6 +295,39 @@ def phrases_of(seg):
     return out or [{'text': seg['text'], 't0': W[0]['start'], 't1': W[-1]['end'], 'words': W}]
 
 
+def tokens(text):   # display words: the same rule as voice.py, layout_vo.py, sync.mjs and lib/captions.js
+    out, lead = [], ''
+    for p in text.replace('|', ' ').split():
+        if re.search(r'\w', p): out.append(lead + p); lead = ''
+        elif out: out[-1] += ' ' + p
+        else: lead += p + ' '
+    return out
+
+
+def word_times(ph, t0, t1):
+    """Start (s) of every display word of the phrase: a word the transcript also has takes its time; the rest share the
+    span between their timed neighbours by letter count."""
+    T, W = tokens(ph['text']), ph['words']
+    at = [None] * len(T)
+    sm = difflib.SequenceMatcher(None, [norm(x) for x in T], [norm(x['text']) for x in W], autojunk=False)
+    for a, b, n in sm.get_matching_blocks():
+        for j in range(n): at[a + j] = W[b + j]['start']
+    at = [None if x is None else min(max(x, t0), t1) for x in at]
+    if at and at[0] is None: at[0] = t0
+    n = [max(1, len(re.sub(r'[\W_]', '', x))) for x in T]
+    i = 0
+    while i < len(T):
+        if at[i] is not None: i += 1; continue
+        j = i
+        while j < len(T) and at[j] is None: j += 1
+        a, b = at[i - 1], at[j] if j < len(T) else t1
+        tot = sum(n[i - 1:j]); acc = n[i - 1]
+        for k in range(i, j): at[k] = a + (b - a) * acc / tot; acc += n[k]
+        i = j
+    for k in range(1, len(at)): at[k] = max(at[k], at[k - 1])   # word marks never run backwards
+    return T, at
+
+
 def chunks_of(ph):
     """Speech chunks inside a phrase: start times. From words: a new chunk after a pause ≥ 0.12 s, after a comma-like
     mark, or after 7 words. Without words: pauses in the recording's sound."""
@@ -229,7 +351,7 @@ def chunks_of(ph):
 # ---------------------------------------------------------------- scenes and phrases
 groups = []
 if A.scenes:
-    cuts = sorted(float(x) for x in A.scenes.split(',') if x.strip())
+    cuts = sorted(remap(float(x)) for x in A.scenes.split(',') if x.strip())
     allph = [p for s in segs for p in phrases_of(s)]
     for p in allph:
         k = sum(p['t0'] >= c - 0.05 for c in cuts)
@@ -248,7 +370,7 @@ else:
 BPM = float(TL.get('bpm', 120)); BEAT = 60 / BPM
 B = lambda t: round(t / BEAT, 4)
 letters = lambda i: chr(97 + i) if i < 26 else 'z' + letters(i - 25)
-marks, lines, placed, prev_end = {}, [], [], 0.0
+marks, lines, placed, vo_ph, prev_end = {}, [], [], [], 0.0
 for n, g in enumerate(groups, 1):
     marks[f'sc{n}'] = 0.0 if n == 1 else B(max(prev_end, g[0]['t0'] - 0.25))
     for i, p in enumerate(g):
@@ -256,6 +378,10 @@ for n, g in enumerate(groups, 1):
         t0 = max(p['t0'], prev_end); t1 = max(t0 + 0.05, min(p['t1'], REC_DUR))
         marks[pid] = B(t0); marks[f'{pid}.end'] = B(t1)
         for k, c in enumerate(chunks_of(p), 1): marks[f'{pid}.{k}'] = B(min(max(c, t0), t1))
+        if p['words']:
+            T_, at = word_times(p, t0, t1)
+            for k, x in enumerate(at, 1): marks[f'{pid}.w{k}'] = B(x)
+            vo_ph.append({'id': pid, 'text': p['text'], 'words': T_})
         lines.append({'id': pid, 'text': p['text']})
         placed.append({'id': pid, 'text': p['text'], 'at': pid, 't0': round(t0, 3), 't1': round(t1, 3)})
         prev_end = t1
@@ -269,6 +395,7 @@ TL['duration'] = DUR; TL['bpm'] = BPM
 old = TL.get('recording') or {}
 TL['recording'] = {'src': str(fdir), 'file': str(dst), 'fps': round(fps, 6), 'frames': frames, 'pad': pad, 'w': w, 'h': h, 'offset': 0,
                    'transcript': str(tp), 'layout': old.get('layout', {})}
+if CUT: TL['recording']['cut'] = CUT
 TL['voiceover'] = {'source': 'recording', 'file': str(dst)}
 mix = TL.get('mix') or {}
 mix.setdefault('voice_chain', False); mix.setdefault('room', 0); TL['mix'] = mix
@@ -279,10 +406,14 @@ if not A.keep_fps:
 Path('timeline.json').write_text(json.dumps(TL, ensure_ascii=False, indent=2), encoding='utf-8')
 Path('audio/vo/lines.json').write_text(json.dumps(lines, ensure_ascii=False, indent=1), encoding='utf-8')
 Path('audio/vo_placed.json').write_text(json.dumps(placed, ensure_ascii=False, indent=1), encoding='utf-8')
-if Path('vo.json').exists(): print('NOTE: vo.json from a TTS layout is still here — do not run vo.py in overlay mode (it would overwrite audio/vo.wav)')
+# vo.json: the display words for sync.mjs (caption word marks) and CAPTIONS.karaoke. "provider": "recording" makes vo.py
+# refuse it — in this mode the voice is the recording's own sound, there are no takes to place.
+Path('vo.json').write_text(json.dumps({'voice': {'provider': 'recording', 'file': str(dst)}, 'phrases': vo_ph}, ensure_ascii=False, indent=1),
+                           encoding='utf-8')
 
 print(f'recording {w}x{h} @ {fps:.3f} fps, {REC_DUR:.3f} s · film {DUR:.3f} s at {BPM:g} BPM · {len(groups)} scenes, {len(lines)} phrases'
-      + ('' if not estimated else ' · ESTIMATED timing (no word timings: letter count + pauses in the sound)'))
+      + (f' · word marks for {len(vo_ph)} phrases' if vo_ph else '')
+      + ('' if not estimated else ' · ESTIMATED timing (no word timings: letter count + pauses in the sound; no word marks)'))
 for n, g in enumerate(groups, 1):
     print(f"  sc{n:<3} {marks[f'sc{n}'] * BEAT:7.2f}s  {len(g)} phrase(s)  «{g[0]['text'][:60]}»")
 over = [(a['id'], b['id']) for a, b in zip(placed, placed[1:]) if b['t0'] < a['t1'] - 0.005]

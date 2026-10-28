@@ -104,7 +104,8 @@ project copies with identical takes; see AUDIO.md section 1.
 A talking head, a talk, an interview: the recording is the bottom layer, the graphics go over it, its own sound is the
 voice. Transcribe it with a speech-to-text tool that gives word timings, then run `scripts/overlay_prep.py` instead of the
 step 4 commands; do not run `layout_vo.py` or `vo.py`, steps 5–10 follow as usual. The command, the 9:16 layout and
-`C.REC`: `reference/ENGINE.md` → "Overlay on a recording".
+`C.REC`: `reference/ENGINE.md` → "Overlay on a recording". The script writes word marks for karaoke itself; stumbles and
+long pauses are cut with `--cut-pauses 0.6` (an option; cover the jump cuts with graphics).
 
 ## 5. Style guide and shotlist — STOP for approval (one message with step 2 if the content was approved before)
 `docs/style_guide.md` (palette, type, grid of the frame, grammar of transitions, sound) and `docs/shotlist.md`: one
@@ -141,7 +142,7 @@ Then `render.mjs --animatic --all` (12 fps, 480p, seconds) to check timing and p
 roles in `timeline.json` `"motion"` (ENGINE.md "Motion roles"): `C.sp(t, b, 'enter')`, not a preset picked anew in every scene. Sparingly, not everywhere:
 a cutout or 2.5D depth for a photo (`scripts/vision.py`); a screen in 3D with depth of field (`uiShot`, ENGINE.md "A screen in 3D"); video bridges only when the customer asks (`scripts/broll.py`).
 
-Search for something ready first: `node scripts/scenes.mjs search "words"` (what exists: `reference/LIBRARY.md`; presenter,
+Search for something ready first: `node scripts/scenes.mjs search "words"` (what exists: `reference/LIBRARY.md`, isometric figures in its "Figures"; presenter,
 objects and causal links: `reference/EDITORIAL.md`; a prop action: `reference/PROPS.md`). Never replace real UI with these
 scenes. "An image per phrase": `"visual_format": "image-per-phrase"`, `visual-events.json` and `render.mjs --story --all`
 (PROPS.md "Check and critique").
@@ -203,6 +204,25 @@ After a remix only: `node scripts/render.mjs --mux --all`. A light copy for chat
 (30 fps, under the size limit); a GIF for a chat or a README — `share.py --gif [--range a,b] [--mb N]`. `python3 scripts/notes.py list` shows no open notes. Report: paths, duration, loudness,
 the final score table, the blind-read result, anything knowingly left imperfect, and a "Not checked" section.
 If no human listened to the sound, say so: "sound measured, not listened to". Changes go through `film.js` / `timeline.json` → `--draft` and a look → final.
+
+**Post pack** (an option when the film goes to a feed: Reels, Shorts, Telegram, VK Clips): `python3 scripts/post_pack.py --at <t>`
+makes a cover from a frame of the film with the heading or the number on screen, and a `renders/post/caption.txt`
+skeleton. The post is in the script's language: the first line is a hook, not the title, ≤ 125 characters (the feed hides
+the rest behind "more"); 2–4 short paragraphs from `## STORY`; a call to act; 3–5 topic hashtags. No fact the film does
+not state: `post_pack.py --check` matches numbers against the script, the voice lines and the captions, and fails on
+placeholders and length. The post is shown together with the film and is not published without an explicit "publish".
+
+## Fast route: a reel from one line
+An option for a request like "make a reel about X" with no brand, interface or series, when the user asks for speed. The
+full route stays the default; the fast one is chosen by the user's words ("quick", "a sketch", "one line") and named in
+the first message.
+- 9:16 only, 30–60 s, the "Image per phrase" or "Stage and object" format (STYLES), a synthesised voice.
+- One stop instead of two: the script, the theme or a styleframe board (3 variants, `render.mjs --frames`) and the post
+  in one message.
+- One critique round instead of two; the blind read stays.
+- The mechanical gates are not cut: `--lint`, `--seams`, `--verify`, `plan_check.py`, `review.py`, loudness. A FAIL is
+  fixed before the showing, as on the full route.
+- Delivery: the film, a light `share.py` copy, the post pack, and a "Not checked" section (what the fast route skipped).
 
 ## Reuse for the next issue of a recurring film
 Same folder, new project inside it (`init.sh <folder>/<issue-slug> --preset …`); copy `film/film.js` from the last

@@ -633,6 +633,20 @@ for (const fmt of FORMATS) {
       const G = [...groups.values()].map(norm).filter((s) => s.split(' ').length >= 3);
       for (let i = 0; i < G.length; i++) for (let j = i + 1; j < G.length; j++)
         if (G[i].includes(G[j]) || G[j].includes(G[i])) note('WARN', `twice|${G[i]}|${G[j]}`, t, `one phrase twice in the frame: «${G[i].slice(0, 50)}» / «${G[j].slice(0, 50)}»`);
+      // the caption repeats words already on screen (a heading, a chip, a label drawn on canvas: ISO.note): a viewer reads
+      // them twice. Words are compared by stem (first 5 letters, so «стартап» meets «стартапов»); a screen text of two or
+      // more words whose stems all sit in the caption is a PROBLEM: drop that caption (an empty entry in captions.json)
+      // or the screen text. One shared word (a name, «Иски») is fine.
+      const stems = (s) => norm(s).split(' ').filter((w) => w.length >= 3).map((w) => w.slice(0, 5));
+      const caps = [...new Map(items.filter((x) => x.cap).map((x) => [x.gid, x.group])).values()];
+      const screen = [...new Map(items.filter((x) => !x.cap).map((x) => [x.gid, x.group])).values(), ...(await F.page.evaluate(() => window.CANVAS_TEXT || []))];
+      for (const c of caps) {
+        const cs = new Set(stems(c));
+        for (const s of screen) {
+          const ss = [...new Set(stems(s))];
+          if (ss.length >= 2 && ss.every((w) => cs.has(w))) note('PROBLEM', `dup|${norm(s)}`, t, `caption repeats the screen text «${s.slice(0, 50)}» (caption «${c.slice(0, 50)}»): keep one of them — no caption for words already on screen (RULES «Внешний вид»)`);
+        }
+      }
     }
     const list = [...found.values()].sort((a, b) => (a.level > b.level ? 1 : -1) || a.t - b.t);
     mkdir(path.join(ROOT, 'review'));

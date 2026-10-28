@@ -94,6 +94,8 @@ def scan():
 
 def place():
     spec = json.loads(Path('vo.json').read_text())
+    if (spec.get('voice') or {}).get('provider') == 'recording':
+        sys.exit('vo.json is from overlay_prep.py: the voice is the recording itself, there are no takes to place (vo.py would overwrite audio/vo.wav)')
     bus = np.zeros(int(SR * DUR)); placed = []; takes = {}
     for ph in spec['phrases']:
         y = takes.setdefault(ph['take'], load(ph['take']))

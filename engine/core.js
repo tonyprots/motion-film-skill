@@ -275,7 +275,9 @@
     };
     window.READY = (async () => {
       // a missing face must be loud (the render logs [page] warnings) but not fatal: the stack falls back
-      await Promise.all(C.fonts.map((f) => document.fonts.load(f).then((r) => { if (!r.length) console.warn(`font not loaded: ${f} (falling back)`); },
+      // the sample text holds Latin, Cyrillic and digits: a face split by unicode-range (cyr/lat files) loads every part,
+      // otherwise only the Latin file is fetched and Cyrillic words stay invisible until it arrives mid-render
+      await Promise.all(C.fonts.map((f) => document.fonts.load(f, 'AaЯяЁё0$–−').then((r) => { if (!r.length) console.warn(`font not loaded: ${f} (falling back)`); },
         () => console.warn(`font failed: ${f} — check the @font-face url in film/index.html (falling back)`))));
       await document.fonts.ready;
       // preset.mjs writes local('Helvetica Neue') when a preset has no font file: the film then looks finished in the

@@ -16,9 +16,9 @@ node "$SKILL/tests/test_editorial.mjs"
 node "$SKILL/tests/test_frame_clock.mjs"
 node "$SKILL/tests/test_morph.cjs"
 node "$SKILL/tests/test_render_server.mjs"
-# the project gets every script the docs run from it (skill-only tooling: lock_deps.py, update_check.py)
+# the project gets every script the docs run from it (skill-only tooling: lock_deps.py, update_check.py, figures_build.py)
 for p in "$SKILL"/scripts/*.py "$SKILL"/scripts/*.mjs; do
-  n=$(basename "$p"); case "$n" in lock_deps.py|update_check.py) continue;; esac
+  n=$(basename "$p"); case "$n" in lock_deps.py|update_check.py|figures_build.py) continue;; esac
   [ -f "$WORK/scripts/$n" ] || { echo "FAIL: init.sh did not copy scripts/$n into the project"; exit 1; }
 done
 cd "$WORK"

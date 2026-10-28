@@ -56,7 +56,9 @@ other places refer to it.
   (2026-10-17 the top was rejected for one film; 2026-10-26 the top won a blind comparison in the "Editorial breakdown"
   recipe). Screen spelling may use digits; the words may not change. A caption does not repeat the headline — see "One line, one place".
 - **One line, one place on screen.** If the headline already says the voice line, that line gets no caption. A frame
-  inside the frame (a mini film, a preview, a phone) shows its own content, never the same headline.
+  inside the frame (a mini film, a preview, a phone) shows its own content, never the same headline. The rule covers any
+  text in the frame, canvas text included (`ISO.chip`, `ISO.callout`, text on an object): `--lint` checks the caption
+  against the DOM and `window.CANVAS_TEXT` and reports a PROBLEM on a repeat (2026-10-28).
 - **No empty containers** for more than ~0.6 s or more than a third empty: resize to the content or fill it.
 - **Clip what sits behind a rounded card** (`overflow: hidden` on the same radius): "the dark crescent" poking out of a
   corner survived three critique rounds.
@@ -70,7 +72,11 @@ other places refer to it.
   an object and the interface. A character comes on request or when the situation calls for it (one hero carries the
   story, a reaction to an event is needed, chapters need a link), not as a default part of every film. When present, it
   keeps one style with the rest of the frame, does not change from scene to scene, and its gestures and expressions answer
-  the meaning of the line rather than decorate it.
+  the meaning of the line rather than decorate it. A real person the voice talks about (a founder, a judge, a CEO) gets
+  their real licensed photo, not a token with initials or a silhouette (2026-10-28).
+- **One projection and physical overlaps.** Everything on the stage is in the stage's projection: a flat sticker, stamp
+  or plate ("BANKRUPT", "LAWSUIT") over 3D graphics is a defect. An overlap is fine when it is physically possible: the
+  nearer object covers the further one, never the reverse. A callout is tied to its object, not floating (2026-10-28).
 - **Light and depth.** One light source: all shadows point one way. The background is never perfectly flat (a soft
   gradient, `finish.grain`), but never a glow. A 3D screen tilt is 4–10°, with a shadow, on one or two scenes.
 - **Rare devices — sparingly, with their rules next to the API in ENGINE.md:** "A screen in 3D" (`uiShot`) — only where

@@ -22,11 +22,15 @@ history. This is an illustrative talking rig, not phoneme synchronization. Drive
 a baked envelope (`LIPSYNC` below does the former); do not claim random flapping is exact lip sync.
 
 `target:[x,y]` is the pointing target in the presenter's SVG coordinates (500×600 viewBox), including points outside it.
-The `point` pose aims its right index finger at that target; free hands use `open`/`relaxed`. The three silhouettes are
+In the `point` pose the nearer arm reaches for it: a target left of the figure's middle (`x` < 250) takes the left
+arm, otherwise the right. Up, the arm rises over the shoulder rather than across the face; down, it stays by the hip
+outside the body. The finger aims at the target and the other arm rests (`relaxed`). In `hush`, `think`, `chin` and
+`facepalm` the arm lies over the head: a finger on the lips, a palm over the eyes. The three silhouettes are
 baked from Anidoodle (Apache-2.0), without a 3D runtime; load `actor-hands.js` before `actor.js`. Hand shape switches at
 the pose transition midpoint: inspect the seam in motion; this is not finger morphing.
-`expression`/`previousExpression`: `neutral`, `happy`, `worried`, `surprised`, `shocked`, `grimace`, `wink`, `sad`
-(`ACTOR.expressions`). Defaults follow poses;
+`expression`/`previousExpression`: `neutral`, `happy`, `worried`, `surprised`, `shocked`, `grimace`, `wink`, `sad`,
+`skeptic` (one brow up, a smirk), `angry`, `laugh` (eyes shut in arcs) — `ACTOR.expressions`. Brows never rise above
+the fringe's lower edge or drop onto glasses; a light skin-coloured halo keeps them readable over hair. Defaults follow poses;
 expressions can change independently of arms. Face geometry interpolates over the same duration.
 
 ### Presenter pool
@@ -104,9 +108,9 @@ S.host.draw(t, {pose:'point', previous:'explain', at:C.bt('s1b.w1'), expression:
 - **Poses:** the same 14 as `ACTOR` (`PUPPET.poses`). A pose replaces the previous one on `at` with a cut, hidden by
   the body pop. There is no crossfade: two drawn poses blended show ghost arms. A pose the pack has no picture for
   uses the pack's `alias` or the nearest pose; those are listed in `host.fallback` and in a console warning.
-- **Expressions:** `neutral`, `happy`, `worried`, `surprised`, `shocked`, `grimace`, `wink`, `sad`, plus `skeptic`.
-  A missing one falls back: `shocked` → `surprised`, `grimace` and `sad` → `worried`, `wink` → `happy`, else
-  `neutral`. The face changes halfway through `duration`.
+- **Expressions:** `neutral`, `happy`, `worried`, `surprised`, `shocked`, `grimace`, `wink`, `sad`, `skeptic`, `angry`,
+  `laugh`. A missing one falls back: `shocked` → `surprised`, `angry` → `grimace`, `grimace` and `sad` → `worried`,
+  `wink` and `laugh` → `happy`, else `neutral`. The face changes halfway through `duration`.
 - **Mouth:** `viseme` is a shape from `LIPSYNC`; without it `mouth` 0–1 maps to a shape as on `ACTOR`. A closed mouth
   on a non-neutral face keeps that face's own mouth. A talking mouth over an emotion comes from the neutral face and
   reads slightly softer.
@@ -116,7 +120,10 @@ S.host.draw(t, {pose:'point', previous:'explain', at:C.bt('s1b.w1'), expression:
   opaque background colour. That finds a dark parent as well as a dark layer behind. `z-index` is not considered and
   photos, `canvas` and video are not read: pass `outline:true` or a `'#hex'` colour there. `false` turns it off. It
   can also go to `draw`, for chapters that change the background.
-- **Limits:** `look`, `target` and `sweat` are not drawn; the puppet points with the gesture in its picture. Pictures
+- **Side:** `facing:'left'` mirrors the whole figure about its feet, so one drawn gesture points either way.
+  `target:[x,y]` in pack pixels picks the side itself: left of the feet is `left`, otherwise `right`. A side change is a
+  hard cut at `at` with the same pop as a pose change; `previousFacing` gives the side before it.
+- **Limits:** `look` and `sweat` are not drawn; the finger points where the picture draws it. Pictures
   are raster, 1024 px: sharp at 1080p and in 9:16, soft in a 4K close-up.
 - **Rim and determinism.** `outline:'auto'` depends on whatever else is in the DOM and can differ when frames are sought
   in a different order (`render.mjs --verify` in 16:9 showed 6/12 mismatches, 2026-10-27). When the background changes by
@@ -138,14 +145,21 @@ critique rounds). Set the zones before building scenes and record them in the st
   out of frame, or into a pause. The change happens on a cut or with a gesture, not a dissolve.
 - Labels inside the object zone use `C.anchor` from their object; a row of labels sits on the zone's axis.
 - The presenter's hand does not reach the object's text: gap ≥ 16 px; a pointing gesture aims at the object, not into its text.
-- **Checks:** `host.root.dataset` shows the current `pose`, `face`, `mouth` and `rim` (`on`/`off`).
+- **Checks:** `host.root.dataset` shows the current `pose`, `face`, `mouth`, `facing` and `rim` (`on`/`off`).
 
 **A pack** is a folder `assets/puppets/<name>/` with `puppet.json` and PNGs; `sync.mjs` checks the file names and puts
 the manifest into `window.PUPPETS`. `scripts/puppet_pack.py` builds it from an anchor frame and its edits on a green
 background. Every frame is an edit of that one anchor: the same character, framing and head, only the arms or only
 the face changed. The script aligns each edit's head and prints its error: above ~15 the frame moved the head or
-redrew the character, so regenerate it. Frame names and `geom.json` are described at the top of the script. `--touch`
-names poses whose hand covers the mouth or eyes on purpose (`hush`, `facepalm`). Packs drawn after a real person stay
+redrew the character, so regenerate it. Frame names and `geom.json` are described at the top of the script.
+
+The face is cut along the anchor's own face outline (skin from hairline to chin), not an ellipse: a raised brow leaves
+any ellipse and the anchor's brow stays visible beside it. When hair touches an eye or stubble covers the jaw, the
+automatic outline loses that eye or the mouth; then draw the outline as an `outline` polygon in `geom.json`. A hand on
+the face (`hush`, `think`, `worry`, `facepalm`) is a polygon too, `hands: {pose: [[x,y], …]}` in the pose frame's
+pixels: a palm is skin over skin and the model redraws the whole face a little, so a difference with the anchor finds
+either nothing or the whole face. Check a pack with an "every pose × every expression" grid per presenter (brows, eyes
+showing through the palm, the finger at the lips). Packs drawn after a real person stay
 in the skill's `private/puppets/`: the folder is left out of every published copy, and `init.sh` copies its packs
 into each new project.
 

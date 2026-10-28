@@ -145,6 +145,12 @@ try {
           return{cross,dot:u[0]*v[0]+u[1]*v[1],visible:getComputedStyle(finger).visibility,gesture:hand.dataset.gesture,armSame:arm===hand.getAttribute('transform'),worried,happy};
         });
         assert.ok(Math.abs(result.cross)<1e-6);assert.ok(result.dot>0);assert.equal(result.visible,'visible');assert.equal(result.gesture,'point');assert.equal(result.armSame,true);assert.notDeepEqual(result.worried,result.happy);
+        const left=await page.evaluate(()=>{const root=document.querySelector('[data-actor="aim"]'),actor=C.SCENES.find(s=>s.name==='active').actor;
+          actor.draw(2,{pose:'point',target:[-200,100],duration:.3});const L=root.querySelector('[data-part="left-hand"]'),R=root.querySelector('[data-part="right-hand"]');
+          const out={left:L.dataset.gesture,right:R.dataset.gesture,x:L.getBoundingClientRect().x+L.getBoundingClientRect().width/2,mid:root.querySelector('svg').getBoundingClientRect().x+root.querySelector('svg').getBoundingClientRect().width/2,exprs:ACTOR.expressions};
+          actor.draw(2,{pose:'point',target:[480,-180],duration:.3});return out;});
+        assert.equal(left.left,'point','a target on the left is pointed at with the left hand');assert.equal(left.right,'relaxed');assert.ok(left.x<left.mid);
+        for(const e of ['skeptic','angry','laugh'])assert.ok(left.exprs.includes(e),e);
         await det(page,'actor-aim-'+fmt);await hidden(page);
       }finally{await page.close();}
     });
@@ -394,9 +400,10 @@ try {
     const page = await open('16x9');
     try {
       const r = await page.evaluate((pk) => { const P = PUPPETS[pk], S = C.SCENES.find((s) => s.name === 'active');
-        return { fallback: S.p.fallback, faces: Object.keys(P.faces), mouths: Object.keys(P.mouths), blink: !!P.blink, broken: [...document.images].filter((i) => !i.naturalWidth).length }; }, pack);
+        return { fallback: S.p.fallback, faces: Object.keys(P.faces), mouths: Object.keys(P.mouths), blink: !!P.blink, over: Object.keys(P.poses).filter((k) => P.poses[k].over), broken: [...document.images].filter((i) => !i.naturalWidth).length }; }, pack);
       assert.deepEqual(r.fallback, []); assert.equal(r.broken, 0); assert.ok(r.blink);
-      for (const e of ['neutral', 'happy', 'worried', 'surprised', 'shocked', 'grimace', 'wink', 'sad']) assert.ok(r.faces.includes(e), e);
+      for (const e of ['neutral', 'happy', 'worried', 'surprised', 'shocked', 'grimace', 'wink', 'sad', 'skeptic', 'angry', 'laugh']) assert.ok(r.faces.includes(e), e);
+      for (const p of ['hush', 'facepalm']) assert.ok(r.over.includes(p), `${p}: the hand on the face is a layer over it`);
       assert.deepEqual(r.mouths.sort(), ['b', 'c', 'd', 'e', 'f', 'x']);
       await det(page, 'puppet-host', [0.13, 0.55, 1.02, 1.71, 2.3, 3.05, 3.9, 4.6, 5.3]);
     } finally { await page.close(); }

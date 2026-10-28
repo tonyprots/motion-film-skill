@@ -34,6 +34,25 @@ Draw a film-specific object (a form with a missing field, an email lacking a det
 Ready presets rank first among equal search matches. Asset records include runtime IDs, source URLs, Git blob SHAs
 and SHA-256 hashes. Ported component pins are in the skill's `library/ports-manifest.json`.
 
+## Figures
+
+`library/figures` holds 13 isometric figures in one "clay" style, built by our own Blender script: there is no open set
+of isometric business objects (Kenney and KayKit are game assets, 3dicons and Fluent 3D are shot frontally, Quaternius
+has its own licence that forbids redistribution as a pack). The models and renders are ours, under the skill's licence.
+
+`office`, `courthouse`, `person`, `money_stack`, `document`, `papers`, `server_rack`, `bar_chart`, `phone`, `map_pin`,
+`gavel`, `laptop`, `portrait`.
+
+- Each figure is `<name>.png` (grey render) and `<name>.accent.png` (mask of accent details) plus an entry in
+  `figures.json` and `figures.js`: origin pixel, scale, the screen plane (`quad`) for `figureQuad`.
+- `init.sh` copies the set to `assets/figures`; the API is in ENGINE "Isometry and stage themes".
+- A new figure or a fix: add a function to `scripts/figures_build.py` and run
+  `blender -b -P scripts/figures_build.py -- --only name[,name]` (Cycles on Metal). The camera is
+  orthographic and fitted to the `ISO` projection (1.7 % error); the light matches `box`: lit front face, shaded right
+  face. Build from the script's primitives (`cube`, `cyl`, `ball`, `prism`, `quad`) with the material roles
+  `main`/`light`/`mid`/`dark`/`accent`, so theme tinting works without a re-render.
+- A person in a film about real people is not `person` but a photo in `portrait` (RULES "Characters and people").
+
 ## Scene API
 
 `BLOCKS` is loaded by new scaffolds. Every `draw` computes state from absolute time in seconds. Keys resolve marks

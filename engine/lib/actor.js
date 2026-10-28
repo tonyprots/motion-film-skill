@@ -8,23 +8,36 @@
     worry:{left:[110,399],right:[361,124],tilt:5,brow:4},
     welcome:{left:[55,185],right:[428,177],tilt:0,brow:-2},
     rest:{left:[120,440],right:[373,443],tilt:0,brow:0},
-    hush:{left:[115,430],right:[194,248],tilt:6,brow:4},
+    hush:{left:[115,430],right:[252,296],tilt:4,brow:4},
     think:{left:[115,430],right:[325,315],tilt:-8,brow:2},
     chin:{left:[150,400],right:[268,292],tilt:-7,brow:2},
     scratch:{left:[115,430],right:[352,78],tilt:-7,brow:3},
-    facepalm:{left:[115,430],right:[300,118],tilt:10,brow:4},
+    facepalm:{left:[115,430],right:[280,192],tilt:8,brow:4},
     cheer:{left:[62,70],right:[438,70],tilt:0,brow:-3},
     wave:{left:[115,430],right:[440,130],tilt:-3,brow:-1}
   };
   const clamp=x=>Math.max(0,Math.min(1,x)),mix=(a,b,p)=>a+(b-a)*p;
-  const gestures={rest:['relaxed','relaxed'],explain:['relaxed','open'],point:['relaxed','point'],listen:['relaxed','relaxed'],shrug:['open','open'],worry:['relaxed','relaxed'],welcome:['open','open'],hush:['relaxed','relaxed'],think:['relaxed','relaxed'],chin:['relaxed','relaxed'],scratch:['relaxed','relaxed'],facepalm:['relaxed','open'],cheer:['open','open'],wave:['relaxed','open']};
-  const handAngles={hush:[-25,90],think:[-25,-65],chin:[-25,-35],scratch:[-25,-150],facepalm:[-25,-170],cheer:[25,-25],wave:[-25,15]};
+  const gestures={rest:['relaxed','relaxed'],explain:['relaxed','open'],point:['relaxed','point'],listen:['relaxed','relaxed'],shrug:['open','open'],worry:['relaxed','relaxed'],welcome:['open','open'],hush:['relaxed','point'],think:['relaxed','relaxed'],chin:['relaxed','relaxed'],scratch:['relaxed','relaxed'],facepalm:['relaxed','open'],cheer:['open','open'],wave:['relaxed','open']};
+  const handAngles={hush:[-25,-8],think:[-25,-65],chin:[-25,-35],scratch:[-25,-150],facepalm:[-25,-55],cheer:[25,-25],wave:[-25,15]};
+  // poses whose right hand lies on the face: that arm is drawn over the head, not behind it; the palm is bigger there
+  const TOUCH=new Set(['hush','think','chin','facepalm']),handScale={facepalm:1.5};
+  // point: the arm reaches toward the target from the nearer shoulder; the other hand rests
+  const SHOULDER={left:[161,351],right:[343,351]},REACH=170;
+  // baked index finger direction in hand coordinates (right hand is mirrored)
+  const FINGER={left:Math.atan2(-73.93799190776967,-10.266372227065947),right:Math.atan2(-73.93799190776967,10.266372227065947)};
+  // lowest fringe point above the brow ends, per hair style, at x 188 205 224 | 277 294 310 (measured on the rig);
+  // brows never rise into it, and never drop onto the glasses
+  const FRINGE={crop:[128,107,104,95,118,130],short:[112,106,103,103,102,110],long:[135,128,122,96,102,113],bun:[107,94,86,86,93,105],curls:[122,113,109,111,116,125],bald:[0,0,0,0,0,0]};
+  const BROW_FLOOR={none:152,square:148,round:145};
   const expressions={rest:'neutral',explain:'neutral',point:'neutral',listen:'worried',shrug:'surprised',worry:'worried',welcome:'happy',hush:'surprised',think:'worried',chin:'neutral',scratch:'worried',facepalm:'grimace',cheer:'happy',wave:'happy'};
-  // open: extra mouth opening; round: narrow «O» mouth; teeth: clenched teeth; wink: left eye closed. Missing keys mean 0.
+  // open: extra mouth opening; round: narrow «O» mouth; teeth: clenched teeth; wink: left eye closed; shut: both eyes
+  // closed in happy arcs; lift: left brow up, right brow down; smirk: one mouth corner up. Missing keys mean 0.
   const emotions={neutral:{inner:0,outer:0,smile:0,eye:1,pupil:1},happy:{inner:-2,outer:-2,smile:1,eye:.72,pupil:1},worried:{inner:-9,outer:3,smile:-1,eye:.9,pupil:.9},surprised:{inner:-12,outer:-12,smile:0,eye:1.2,pupil:.75,open:20,round:.6},
     shocked:{inner:-17,outer:-17,smile:-.4,eye:1.3,pupil:.5,open:54,round:1},grimace:{inner:-7,outer:7,smile:-.2,eye:.75,pupil:.9,open:5,teeth:1},
-    wink:{inner:-3,outer:-1,smile:1,eye:.85,pupil:1,wink:1},sad:{inner:-11,outer:7,smile:-1.5,eye:.85,pupil:.85}};
-  const FACE_KEYS=['inner','outer','smile','eye','pupil','open','teeth','wink','round'];
+    wink:{inner:-3,outer:-1,smile:1,eye:.85,pupil:1,wink:1},sad:{inner:-11,outer:7,smile:-1.5,eye:.85,pupil:.85},
+    skeptic:{inner:-1,outer:0,smile:.15,eye:.88,pupil:1,lift:1,smirk:1},angry:{inner:9,outer:-5,smile:-.8,eye:.75,pupil:.85},
+    laugh:{inner:-7,outer:-5,smile:1.6,eye:1,pupil:1,open:34,shut:1}};
+  const FACE_KEYS=['inner','outer','smile','eye','pupil','open','teeth','wink','round','shut','lift','smirk'];
   const NS='http://www.w3.org/2000/svg',INK='#202421',PAPER='#fffdf5';
   // Presenter pool: one rig, different looks. classic is the original presenter and stays the default.
   const cast={
@@ -148,6 +161,7 @@
           <path data-part="eyelid-left" d="M199 178Q213 170 225 178" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>
           <path data-part="eyelid-right" d="M275 178Q288 170 301 178" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>
         </g>
+        <path data-part="brows-halo" fill="none" stroke="${c.skin}" stroke-width="10" stroke-linecap="round"/>
         <path data-part="brows" d="M188 142L224 138M277 138L310 142" fill="none" stroke="${c.hair===INK||c.hairStyle==='bald'?INK:c.hair}" stroke-width="5" stroke-linecap="round"/>
         <path d="M251 180L242 213L256 216" fill="none" stroke="#9a6856" stroke-width="3" stroke-linecap="round"/>
         <path data-part="mouth" d="M223 241Q250 263 278 240Q250 275 223 241" fill="${c.lips}" stroke="${c.lips}" stroke-width="2"/>
@@ -159,6 +173,26 @@
       <g data-part="right-hand">${hand}</g>
     </svg>`;
     const q=part=>root.querySelector(`[data-part="${part}"]`),svg=root.firstElementChild;
+    const rightArm=q('right-arm'),armSlot=rightArm.nextSibling,fringe=FRINGE[c.hairStyle],browFloor=BROW_FLOOR[c.glasses];
+    // a brow point at fringe column i: raised no higher than 4 below the fringe (softly), lowered no further than the floor
+    const browY=(y,i)=>{const lim=fringe[i]+4,v=y>=lim?y:lim-(lim-y)*.25;return Math.min(v,browFloor);};
+    // hand position, gesture and angle of one side in a pose; point aims from the shoulder nearer the target
+    const pointSide=target=>target[0]<250?'left':'right';
+    const handOf=(name,side,target)=>{
+      if(name==='point'){
+        const ps=pointSide(target);
+        if(side!==ps)return {at:side==='left'?poses.rest.left:poses.rest.right,gesture:'relaxed',angle:side==='left'?-25:20};
+        const sh=SHOULDER[side],dx=target[0]-sh[0],dy=target[1]-sh[1],d=Math.hypot(dx,dy)||1;
+        // the hand stays out on its own side: straight up or down it would cross the face or hide behind the body
+        const out=side==='left'?-1:1,reach=dy<0?REACH+80*(-dy/d):REACH,at=[sh[0]+dx/d*reach,sh[1]+dy/d*reach];
+        at[0]=out*Math.max(out*at[0],out*sh[0]+(dy>0?50:25));
+        return {at,gesture:'point',angle:(Math.atan2(target[1]-at[1],target[0]-at[0])-FINGER[side])*180/Math.PI,straight:true};
+      }
+      const i=side==='left'?0:1,gesture=gestures[name][i];
+      let angle=(handAngles[name]??[-25,20])[i];
+      if(gesture==='point'&&name==='hush')angle=(-Math.PI/2-FINGER[side])*180/Math.PI;
+      return {at:poses[name][side],gesture,angle};
+    };
     const hands={};
     if(window.ACTOR_HANDS)for(const side of ['left','right']){
       q(`${side}-hand`).innerHTML=Object.entries(ACTOR_HANDS).map(([name,shape])=>`<g data-hand="${name}" transform="scale(${side==='right'?-.85:.85} .85)">${shape.replaceAll('#ebc6ab',c.skin)}</g>`).join('');
@@ -168,29 +202,40 @@
     function draw(t,{pose='explain',previous='rest',at=0,duration=.55,mouth=0,look=0,target=[250,-120],expression=expressions[pose],previousExpression=expressions[previous],react=.6,breathe=3,sweat=0}={}) {
       if(!poses[pose]||!poses[previous]||[t,at,duration,mouth,look,react,breathe,sweat].some(x=>!Number.isFinite(x))||duration<=0)throw new Error('invalid actor pose, time or state');
       if(!emotions[expression]||!emotions[previousExpression]||!Array.isArray(target)||target.length!==2||!target.every(Number.isFinite))throw new Error('invalid actor expression or target');
-      const z=clamp((t-at)/duration),p=z*z*(3-2*z),a=poses[previous],b=poses[pose];
-      for(const [side,shoulder] of [['left',[161,351]],['right',[343,351]]]){
-        const hand=[mix(a[side][0],b[side][0],p),mix(a[side][1],b[side][1],p)];
-        const elbow=[mix(shoulder[0],hand[0],.4)+(side==='left'?-38:38),Math.max(hand[1]+43,shoulder[1]+27)];
+      const z=clamp((t-at)/duration),p=z*z*(3-2*z),a=poses[previous],b=poses[pose],active=p<.5?previous:pose;
+      for(const side of ['left','right']){
+        const shoulder=SHOULDER[side],ha=handOf(previous,side,target),hb=handOf(pose,side,target);
+        const hand=[mix(ha.at[0],hb.at[0],p),mix(ha.at[1],hb.at[1],p)];
+        // a pointing arm is nearly straight, its elbow just below the shoulder–hand line; others bend down and out
+        const bent=[mix(shoulder[0],hand[0],.4)+(side==='left'?-38:38),Math.max(hand[1]+43,shoulder[1]+27)];
+        const lx=hand[0]-shoulder[0],ly=hand[1]-shoulder[1],ll=Math.hypot(lx,ly)||1,sg=lx<0?-1:1;
+        const straight=[(shoulder[0]+hand[0])/2-ly/ll*16*sg,(shoulder[1]+hand[1])/2+lx/ll*16*sg];
+        const w=mix(ha.straight?1:0,hb.straight?1:0,p),elbow=[mix(bent[0],straight[0],w),mix(bent[1],straight[1],w)];
         const d=`M${shoulder}Q${elbow} ${hand}`;
         q(`${side}-outer`).setAttribute('d',d);q(`${side}-inner`).setAttribute('d',d);
-        const index=side==='left'?0:1,active=p<.5?previous:pose,gesture=gestures[active][index];
-        let angle=mix((handAngles[previous]??[-25,20])[index],(handAngles[pose]??[-25,20])[index],p);
+        const gesture=(p<.5?ha:hb).gesture;
+        let angle=ha.gesture==='point'&&hb.gesture==='point'?mix(ha.angle,hb.angle,p):gesture==='point'?(p<.5?ha:hb).angle:mix(ha.angle,hb.angle,p);
         if(side==='right'&&active==='wave')angle+=22*Math.sin((t-at)*11)*p;
-        if(side==='right'&&gesture==='point')angle=(Math.atan2(target[1]-hand[1],target[0]-hand[0])-Math.atan2(-73.93799190776967,10.266372227065947))*180/Math.PI;
+        const sc=mix(side==='right'?handScale[previous]??1:1,side==='right'?handScale[pose]??1:1,p);
         hands[side]?.forEach(n=>n.setAttribute('visibility',n.dataset.hand===gesture?'inherit':'hidden'));
         q(`${side}-hand`).setAttribute('data-gesture',gesture);
-        q(`${side}-hand`).setAttribute('transform',`translate(${hand}) rotate(${angle})`);
+        q(`${side}-hand`).setAttribute('transform',`translate(${hand}) rotate(${angle}) scale(${sc})`);
       }
-      q('head').setAttribute('transform',`rotate(${mix(a.tilt,b.tilt,p)} 250 310)`);
+      // the right arm goes over the head while its hand is on the face
+      if(TOUCH.has(active)!==(rightArm.nextSibling!==armSlot))svg.insertBefore(rightArm,TOUCH.has(active)?q('left-hand'):armSlot);
+      const tilt=x=>x==='point'?(pointSide(target)==='left'?5:-5):poses[x].tilt;
+      const headTilt=`rotate(${mix(tilt(previous),tilt(pose),p)} 250 310)`;
+      q('head').setAttribute('transform',headTilt);q('hair-back')?.setAttribute('transform',headTilt);
       const ea=emotions[previousExpression],eb=emotions[expression],face=Object.fromEntries(FACE_KEYS.map(k=>[k,mix(ea[k]??0,eb[k]??0,p)]));
-      q('brows').setAttribute('d',`M188 ${142+face.outer}Q205 ${136+face.inner} 224 ${138+face.inner}M277 ${138+face.inner}Q294 ${136+face.inner} 310 ${142+face.outer}`);
-      const blink=Math.exp(-Math.pow(((t%3.7)-2.8)/.065,2)),eyeH=9*face.eye*(1-.95*blink);
-      for(const [part,x,closed] of [['pupil-left',213,face.wink],['pupil-right',288,0]]){q(part).setAttribute('cx',x+Math.max(-1,Math.min(1,look))*8);q(part).setAttribute('rx',6*face.pupil);q(part).setAttribute('ry',Math.max(.4,eyeH*(1-.95*clamp(closed))));}
+      const L0=-9*face.lift,R0=3*face.lift;
+      const brows=`M188 ${browY(142+face.outer+L0,0)}Q205 ${browY(136+face.inner+L0,1)} 224 ${browY(138+face.inner+L0,2)}M277 ${browY(138+face.inner+R0,3)}Q294 ${browY(136+face.inner+R0,4)} 310 ${browY(142+face.outer+R0,5)}`;
+      q('brows').setAttribute('d',brows);q('brows-halo').setAttribute('d',brows);
+      const blink=Math.max(Math.exp(-Math.pow(((t%3.7)-2.8)/.065,2)),clamp(face.shut)),eyeH=9*face.eye*(1-.95*blink);
+      for(const [part,x,closed] of [['pupil-left',213,face.wink],['pupil-right',288,0]]){q(part).setAttribute('visibility',face.shut>.5?'hidden':'inherit');q(part).setAttribute('cx',x+Math.max(-1,Math.min(1,look))*8);q(part).setAttribute('rx',6*face.pupil);q(part).setAttribute('ry',Math.max(.4,eyeH*(1-.95*clamp(closed))));}
       q('eyelid-left').setAttribute('opacity',blink>.5||face.wink>.5?'1':'0');q('eyelid-right').setAttribute('opacity',blink>.5?'1':'0');
       const top=244+face.smile*8,corner=244-face.smile*1.5,opening=clamp(mouth)*24+face.open;
-      const L=225+13*face.round,R=277-13*face.round,lift=opening*.35*face.round,gr=face.teeth>.5;
-      q('mouth').setAttribute('d',gr?`M221 ${corner-8}H279Q286 ${corner} 279 ${corner+8}H221Q214 ${corner} 221 ${corner-8}Z`:`M${L} ${corner}Q250 ${top-lift} ${R} ${corner}Q250 ${top+3+opening} ${L} ${corner}Z`);
+      const L=225+13*face.round,R=277-13*face.round,lift=opening*.35*face.round,gr=face.teeth>.5,cl=corner+2*face.smirk,cr=corner-7*face.smirk;
+      q('mouth').setAttribute('d',gr?`M221 ${corner-8}H279Q286 ${corner} 279 ${corner+8}H221Q214 ${corner} 221 ${corner-8}Z`:`M${L} ${cl}Q250 ${top-lift-3*face.smirk} ${R} ${cr}Q250 ${top+3+opening-3*face.smirk} ${L} ${cl}Z`);
       q('mouth').setAttribute('fill',gr?PAPER:c.lips);q('mouth').setAttribute('stroke',c.lips);q('mouth').setAttribute('stroke-width',gr?'4':'2');
       q('teeth').setAttribute('d',gr?`M221 ${corner}H279M236 ${corner-8}V${corner+8}M250 ${corner-8}V${corner+8}M264 ${corner-8}V${corner+8}`:`M232 ${corner+1}Q250 ${top+6} 270 ${corner+1}`);
       q('teeth').setAttribute('stroke',gr?'#202421':'#fffdf5');q('teeth').setAttribute('stroke-width',gr?'2.5':'5');

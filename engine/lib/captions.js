@@ -12,6 +12,9 @@
 // already said drop to `dim` opacity, the current one stays full; key words take the accent. A new caption entry (or a
 // "|" page inside one) resets the whole phrase. Key words: per entry, a third element in captions.json
 //   ["s2a", "until someone hits it with a DDoS attack", {"key": ["DDoS"]}]   (several words: "DDoS attack")
+// current: true — an option, not the default: the whole page is on screen from its first word, words not yet said at
+// `ahead` opacity (0.42), the spoken word on a plate (`plate`, default var(--ink); its text `plateInk`, default var(--bg)).
+// Reads like a teleprompter; suits a talking head or a dark stage where the page must be readable at a glance.
 // exit: 'cut' drops the phrase on its last frame instead of the 4-frame blur-out, and starts its next page on the mark.
 // Page selection uses C.frameTime so shutter samples do not average two phrases; word motion still follows t.
 // or film-wide: karaoke({ keys: ['Acme'] }). Lines without word marks are timed by letter count (a console warning).
@@ -122,7 +125,8 @@
             reg(box_, { hide: true });
             pg.spans = pg.words.map((w, i) => {
               if (i) box_.appendChild(document.createTextNode(' '));
-              return reg(el('span', { style: `display:inline-block;${w.key ? keyCss + (o.keyCss || '') : ''}` }, box_, w.w), { hide: true });
+              const plate = o.current ? 'padding:0 0.14em;margin:0 0.02em;border-radius:0.14em;' : '';
+              return reg(el('span', { style: `display:inline-block;${plate}${w.key ? keyCss + (o.keyCss || '') : ''}` }, box_, w.w), { hide: true });
             });
             pg.box = box_;
             return pg;
@@ -136,6 +140,16 @@
             if (pageTime < pg.t0 - (o.exit === 'cut' ? 0 : 2 * f) || pageTime >= pg.t1) continue;
             put(pg.box, { hide: false });
             const out = o.exit === 'cut' ? 0 : clamp((t - (pg.t1 - (F + 1) * f)) / (F * f));   // leaves together just before the next one; exit:'cut' = gone on the frame, no fade
+            if (o.current) {   // whole page on screen at once, the spoken word on a light plate, unsaid words dimmed
+              const e = clamp((t - (pg.words[0].t - f)) / (F * f)), k = e > 0 ? Math.max(ease.out(e), o.enterMin ?? 0) : 0;   // enterMin: the first word's plate opaque from its first frame
+              let cur = -1; pg.words.forEach((w, i) => { if (pageTime >= w.t - f) cur = i; });
+              pg.words.forEach((w, i) => {
+                const on = i === cur;
+                put(pg.spans[i], { hide: k <= 0.001, o: k * (i <= cur ? 1 : o.ahead ?? 0.42) * (1 - out), y: rise * (1 - k),
+                  css: { background: on ? (o.plate || 'var(--ink)') : 'transparent', color: on ? (o.plateInk || 'var(--bg)') : '' } });
+              });
+              continue;
+            }
             pg.words.forEach((w, i) => {
               const e = clamp((t - (w.t - f)) / (F * f));   // enters one frame before its mark, settled F frames later
               if (e <= 0) return;

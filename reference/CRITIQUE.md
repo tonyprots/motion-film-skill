@@ -126,6 +126,11 @@ PROBLEM in `lint` and `seams`) are not repeated here. The numbers below are for 
 33. An empty container (a sheet, window, card) for more than 0.5 s; an object state that holds less than 0.8 s.
 34. A familiar interface drawn generically: a feed with no full-screen video and no action column, a chat with no bubbles.
 35. A device bezel that is a solid dark outline thicker than 6 px or uneven between sides.
+36. An element outside the stage's projection: a flat sheet, stamp or plate over isometry; a stamp-like label over graphics.
+37. A physically impossible overlap: a further object painted over a nearer one (money between a person and a building).
+38. A callout, bubble or label not tied to its object, floating in the air.
+39. An abstraction that does not read without a label (a grid instead of a map); a real person shown as a token or a
+    silhouette instead of a photo.
 
 ## Object pass (mandatory, before scoring)
 The score table looks at the whole frame; the viewer looks at the object. So walk the objects first. For each event in

@@ -24,12 +24,13 @@ cp "$SKILL"/engine/index.html "$SKILL"/engine/player.html "$SKILL"/engine/core.j
 cp "$SKILL"/engine/lib/*.js "$DEST"/film/lib/
 for f in render.mjs png.mjs sync.mjs sfx.mjs capture.mjs preset.mjs beats.py music.py music_source.py vo.py layout_vo.py captions.py \
          mix.py review.py tile.py voice.py extract_lines.py script_lint.py plan_check.py story_check.mjs scenes.mjs blindpack.py notes.py player.mjs static_files.mjs share.py sfx_fetch.py vision.py broll.py lottie.py overlay_prep.py \
-         stillness.py puppet_pack.py; do cp "$SKILL/scripts/$f" "$DEST/scripts/"; done
+         stillness.py puppet_pack.py fonts.sh post_pack.py; do cp "$SKILL/scripts/$f" "$DEST/scripts/"; done
 cp "$SKILL"/scripts/providers/*.py "$DEST"/scripts/providers/
 cp "$SKILL"/templates/brief.md "$SKILL"/templates/timeline.json "$SKILL"/templates/SCRIPT.md "$DEST"/
 cp "$SKILL"/templates/sfx_layout.py "$DEST"/scripts/
 cp "$SKILL"/templates/docs/*.md "$DEST"/docs/
 cp -R "$SKILL/library/assets/icons" "$DEST/assets/icons"
+cp -R "$SKILL/library/figures" "$DEST/assets/figures"   # ISO.figure sprites (scripts/figures_build.py)
 # extras: secondary objects (Noto Emoji, Apache-2.0): sync.mjs bundles only the ids the film names
 [ -d "$SKILL/library/assets/extras" ] && cp -R "$SKILL/library/assets/extras" "$DEST/assets/extras"
 # private puppet packs (never published, publish/guard_private.py): every local project can mount them

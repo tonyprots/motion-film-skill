@@ -5,12 +5,12 @@
 // of two drawn poses shows ghost arms, and there are no limbs to interpolate.
 (() => {
   const POSES = ['explain', 'point', 'listen', 'shrug', 'worry', 'welcome', 'rest', 'hush', 'think', 'chin', 'scratch', 'facepalm', 'cheer', 'wave'];
-  const EXPRESSIONS = ['neutral', 'happy', 'worried', 'surprised', 'shocked', 'grimace', 'wink', 'sad', 'skeptic'];
+  const EXPRESSIONS = ['neutral', 'happy', 'worried', 'surprised', 'shocked', 'grimace', 'wink', 'sad', 'skeptic', 'angry', 'laugh'];
   // same defaults as ACTOR: the pose brings its face unless the film sets one
-  const POSE_FACE = { rest: 'neutral', explain: 'neutral', point: 'neutral', listen: 'worried', shrug: 'surprised', worry: 'worried', welcome: 'happy', hush: 'surprised', think: 'worried', chin: 'neutral', scratch: 'worried', facepalm: 'grimace', cheer: 'happy', wave: 'happy' };
+  const POSE_FACE = { rest: 'neutral', explain: 'neutral', point: 'neutral', listen: 'worried', shrug: 'surprised', worry: 'worried', welcome: 'happy', hush: 'neutral', think: 'worried', chin: 'neutral', scratch: 'worried', facepalm: 'grimace', cheer: 'happy', wave: 'happy' };
   // a pack without a pose or a face falls back along these lines (then to rest / neutral)
   const NEAR_POSE = { listen: 'rest', worry: 'think', welcome: 'shrug', hush: 'point', chin: 'think', scratch: 'think', facepalm: 'think', cheer: 'wave', think: 'rest', explain: 'rest', point: 'explain', shrug: 'explain', wave: 'explain' };
-  const NEAR_FACE = { shocked: 'surprised', grimace: 'worried', sad: 'worried', wink: 'happy', skeptic: 'worried' };
+  const NEAR_FACE = { shocked: 'surprised', grimace: 'worried', sad: 'worried', wink: 'happy', skeptic: 'worried', angry: 'grimace', laugh: 'happy' };
   const SHAPES = ['x', 'b', 'c', 'd', 'e', 'f'];
   const clamp = (x) => Math.max(0, Math.min(1, x));
   const num = (x) => Number.isFinite(x);
@@ -45,7 +45,7 @@
     }
     return { map, fallback };
   }
-  const faceOf = (P, e) => P.faces[e] ? e : P.faces[NEAR_FACE[e]] ? NEAR_FACE[e] : 'neutral';
+  const faceOf = (P, e) => { for (let k = e; k; k = NEAR_FACE[k]) if (P.faces[k]) return k; return 'neutral'; };
   const luminance = (css) => {
     const m = /rgba?\(([^)]+)\)/.exec(css || ''); if (!m) return null;
     const [r, g, b, a = 1] = m[1].split(/[ ,/]+/).filter(Boolean).map(Number);
@@ -58,7 +58,9 @@
     const id = String(o.id ?? 'presenter');
     const root = C.reg(C.el('div', { class: 'abs', 'data-puppet': id, 'data-pack': o.pack, style: `width:${w}px;height:${w * PH / PW}px` }, parent), { x: o.x ?? 0, y: o.y ?? 0 });
     const rig = C.el('div', { style: `position:absolute;left:0;top:0;width:${PW}px;height:${PH}px;transform:scale(${k});transform-origin:0 0` }, root);
-    const body = C.el('div', { style: `position:absolute;inset:0;transform-origin:${foot[0]}px ${foot[1]}px` }, rig);
+    // facing 'left' mirrors the whole figure about the feet: one drawn pointing gesture serves both sides
+    const flip = C.el('div', { style: `position:absolute;inset:0;transform-origin:${foot[0]}px ${foot[1]}px` }, rig);
+    const body = C.el('div', { style: `position:absolute;inset:0;transform-origin:${foot[0]}px ${foot[1]}px` }, flip);
     const img = (l, box = body) => C.el('img', { src: P.base + l.src, alt: '', draggable: 'false',
       style: `position:absolute;left:${(l.at || [0, 0])[0]}px;top:${(l.at || [0, 0])[1]}px;opacity:0;pointer-events:none` }, box);
     const L = { pose: {}, face: {}, mouth: {}, over: {} };
@@ -95,12 +97,16 @@
     };
     const outlineDefault = o.outline ?? 'auto';
     function draw(t, { pose = 'explain', previous = 'rest', at = 0, duration = 0.55, expression = POSE_FACE[pose], previousExpression = POSE_FACE[previous],
-      mouth = 0, viseme, react = 0.6, breathe = 3, outline = outlineDefault } = {}) {
+      mouth = 0, viseme, react = 0.6, breathe = 3, outline = outlineDefault, target, facing = target ? (target[0] < foot[0] ? 'left' : 'right') : 'right', previousFacing = facing } = {}) {
       if (!map[pose] || !map[previous] || [t, at, duration, mouth, react, breathe].some((x) => !num(x)) || duration <= 0) throw new Error('invalid puppet pose, time or state');
       if (!EXPRESSIONS.includes(expression) || !EXPRESSIONS.includes(previousExpression)) throw new Error('invalid puppet expression');
       if (viseme !== undefined && viseme !== null && !SHAPES.includes(viseme)) throw new Error('invalid puppet viseme');
+      if (target !== undefined && !pt(target)) throw new Error('puppet target: [x, y] in pack pixels');
+      if (![facing, previousFacing].every((f) => f === 'left' || f === 'right')) throw new Error("puppet facing: 'left' or 'right'");
       const dt = t - at, cur = map[pose], prev = map[previous], top = dt >= 0 ? cur : prev;
       for (const [k2, n] of Object.entries(L.pose)) n.style.opacity = k2 === top ? 1 : 0;
+      const side = dt >= 0 ? facing : previousFacing;
+      flip.style.transform = side === 'left' ? 'scaleX(-1)' : 'none';
       const hd = P.poses[top].head || [0, 0];
       head.style.transform = `translate(${hd[0]}px,${hd[1]}px)`; head.style.zIndex = 3;
       const face = faceOf(P, dt < duration / 2 ? previousExpression : expression);
@@ -111,16 +117,16 @@
       for (const [k2, n] of Object.entries(L.mouth)) n.style.opacity = k2 === show ? 1 : 0;
       if (L.blink) {
         const blink = Math.exp(-Math.pow(((t % 3.7) - 2.8) / 0.065, 2));
-        L.blink.style.opacity = blink > 0.5 && !['surprised', 'shocked', 'wink'].includes(face) ? 1 : 0;
+        L.blink.style.opacity = blink > 0.5 && !['surprised', 'shocked', 'wink', 'laugh'].includes(face) ? 1 : 0;
       }
       for (const [k2, n] of Object.entries(L.over)) { n.style.opacity = k2 === top ? 1 : 0; n.style.zIndex = 4; }
       // the same body pop and breath as ACTOR, from the feet
-      const kk = Math.max(0, dt), pop = pose === previous && expression === previousExpression ? 0
+      const kk = Math.max(0, dt), pop = pose === previous && expression === previousExpression && facing === previousFacing ? 0
         : react * (kk < 0.12 ? -0.03 * Math.sin(Math.PI * kk / 0.12) : 0.045 * Math.exp(-(kk - 0.12) / 0.18) * Math.sin(Math.PI * Math.min(1, (kk - 0.12) / 0.3)));
       body.style.transform = `translateY(${breathe * Math.sin(2 * Math.PI * t / 3.4) * PW / 500}px) scale(${1 + pop},${1 - pop * 0.6})`;
       const rim = rimOf(outline), r = 3 / k;
       body.style.filter = rim ? [[r, 0], [-r, 0], [0, r], [0, -r]].map(([x, y]) => `drop-shadow(${x}px ${y}px 0 ${rim})`).join(' ') : 'none';
-      root.dataset.pose = cur; root.dataset.face = face; root.dataset.mouth = show || 'none'; root.dataset.rim = rim ? 'on' : 'off';
+      root.dataset.pose = cur; root.dataset.face = face; root.dataset.mouth = show || 'none'; root.dataset.rim = rim ? 'on' : 'off'; root.dataset.facing = side;
     }
     return { root, draw, pack: o.pack, poses: { ...map }, fallback };
   }
