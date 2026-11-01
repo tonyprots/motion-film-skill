@@ -24,7 +24,12 @@ count of accents. Accidental sticking and a lost important label remain defects.
 other places refer to it.
 
 - **Banned defaults:** a centred title on a gradient; everything fading in; corner labels; frame borders; glow on UI
-  chrome; generic particle bursts; crossfades between shots; spins, glitches, light leaks, bounce on UI.
+  chrome; generic particle bursts; crossfades between shots; spins, glitches, light leaks, bounce on UI;
+  a glowing grid floor; lens flares; camera shake for energy (`CAM.shake` only on a physical impact of an object in
+  the frame, at most once a film). The machine
+  catches fading in: `render.mjs --lint` gives WARN `fade` for an element that enters or leaves by opacity alone while its
+  box, mask and filter stand still. Enter by a rise out of a mask, a scale, a stroke or a cut; a deliberate fade gets
+  `data-fade` on the element and a line in the style guide (2026-10-31).
 - **Light theme by default.** One display face and one UI face: the brand's real files (`capture.mjs` downloads them).
   The fonts must cover the film's language: a site font may lack Cyrillic, Greek or accents, and the browser silently
   substitutes a system face. Check on `--sheet`; fallback: a Google Font with that coverage (Inter, Manrope, Noto Sans).

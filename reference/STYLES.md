@@ -48,11 +48,12 @@ breakdown reels are built this way; on 2026-10-28 four scenes of one were rebuil
 with the original.
 
 - Pictures: `ISO` (ENGINE "Isometry and stage themes"), one object per phrase, no icons or cards around it.
-- Palette and fonts: one of the `THEMES`. The `reference` theme (purple-orange haze, wide grotesque) is what everyone
-  does; do not pick it, it is there for comparison. Choose between `newsroom`, `studio`, `blueprint`, `riso`, `graphite`
-  by the material: money and risk — `newsroom` or `graphite`, technology and how things work — `blueprint`, a light
-  touch — `riso`, a calm breakdown for an adult audience — `studio`, a Reels feed for a young audience — `feed`. A light theme is the default wherever there is no
-  reason for a dark one.
+- Palette and fonts: the film's theme, picked by `scripts/theme_pick.py` (SKILL.md step 3) from the genre: research and
+  analysis — `notebook`, how things work — `draft` (the dark `blueprint` on request), a product — `studio`, the feed —
+  `feed`, an event — `riso`, sport and street — `yard`, a greeting — `card`, lifestyle — `stationery`, teaching —
+  `school`, news and investigations — `newsroom`, finance — `graphite` (the last two are dark, taken when the brief
+  signals it). The `reference` theme is what everyone does, kept for comparison. A theme also carries a motion grammar: rhythm, entrance verb, signature beat and a "never"
+  list (ENGINE "Themes: motion"); its row goes into the style guide instead of being invented again.
 - Captions: `CAPTIONS.karaoke({ current: true, exit: 'cut' })`, centred.
 - Numbers: a counter that runs to its value on the word (held with `C.frameTime`, or sub-frames mix two values).
 - Not for: a product with a real interface, a film with a presenter, anything longer than 90 s (the stage tires).
@@ -93,7 +94,8 @@ have Cyrillic and an OFL licence:
 
 | Pair | Character | Where |
 |---|---|---|
-| Unbounded + Inter (or Onest) | wide geometric grotesque, young and loud | the `feed` theme |
+| Manrope 800 + Inter | dense UI grotesque, loud without the cliché | the `feed` theme (since 2026-11-01) |
+| Unbounded + Inter (or Onest) | wide geometric grotesque, young and loud; worn out by 2026 | your own theme, deliberately |
 | Sofia Sans Extra Condensed + Inter | narrow poster caps, news and numbers | the `newsroom` theme (with Commissioner) |
 | Playfair Display + Montserrat | high-contrast serif, "magazine", calm delivery | your own theme |
 | Manrope or Onest alone | neutral UI grotesque | fallback for any theme |

@@ -15,10 +15,13 @@ node "$SKILL/tests/test_blocks.mjs"
 node "$SKILL/tests/test_editorial.mjs"
 node "$SKILL/tests/test_frame_clock.mjs"
 node "$SKILL/tests/test_morph.cjs"
+node "$SKILL/tests/test_themes.mjs" >/dev/null
+python3 -m unittest discover -s "$SKILL/tests" -p 'test_theme_pick.py' 2>&1 | tail -1
+node "$SKILL/tests/test_paper_hand.mjs" >/dev/null
 node "$SKILL/tests/test_render_server.mjs"
-# the project gets every script the docs run from it (skill-only tooling: lock_deps.py, update_check.py, figures_build.py)
+# the project gets every script the docs run from it (skill-only tooling: lock_deps.py, update_check.py, figures_build.py, hand_glyphs.py)
 for p in "$SKILL"/scripts/*.py "$SKILL"/scripts/*.mjs; do
-  n=$(basename "$p"); case "$n" in lock_deps.py|update_check.py|figures_build.py) continue;; esac
+  n=$(basename "$p"); case "$n" in lock_deps.py|update_check.py|figures_build.py|hand_glyphs.py) continue;; esac
   [ -f "$WORK/scripts/$n" ] || { echo "FAIL: init.sh did not copy scripts/$n into the project"; exit 1; }
 done
 cd "$WORK"
@@ -107,6 +110,16 @@ JS
 if node scripts/render.mjs --lint --fmt 16x9 2>&1 | grep -q ' lies on '; then :; else cp neg/film.cut film/film.js; echo "FAIL: --lint passed text lying on text"; exit 1; fi
 cp neg/film.cut film/film.js
 echo "negative: text on text → --lint PROBLEM overlap (expected)"
+cat >> film/film.js <<'JS'
+(() => { const a = C.reg(C.el('div', { class: 'abs', style: 'top:300px;left:300px;width:600px;height:200px;font:700 64px UI;color:#111;background:#f5f4ef' }, document.body, 'Faded card'));
+  const b = C.reg(C.el('div', { class: 'abs', style: 'top:600px;left:300px;width:600px;height:200px;font:700 64px UI;color:#111;background:#f5f4ef' }, document.body, 'Rising card'));
+  C.hooks.before.push((t) => { const u = C.clamp((t - 2) / 0.6); C.put(a, { o: u }); C.put(b, { o: u, y: 80 * (1 - u) }); }); })();
+JS
+node scripts/render.mjs --lint --fmt 16x9 > neg/fade.log 2>&1 || true
+cp neg/film.cut film/film.js
+grep -q '«Faded card» fades in' neg/fade.log || { echo "FAIL: --lint passed a card that fades in by opacity alone"; cat neg/fade.log; exit 1; }
+if grep -q '«Rising card» fades' neg/fade.log; then echo "FAIL: --lint flagged a card that rises while it fades"; exit 1; fi
+echo "negative: opacity-only fade → --lint WARN fade, a rise passes (expected)"
 cp cues.json neg/cues.ok
 node -e "const f='cues.json',c=JSON.parse(require('fs').readFileSync(f));c.cues.push({t:1,type:'whoosh',gain:0.5,what:'neg'});require('fs').writeFileSync(f,JSON.stringify(c))"
 if node scripts/sfx.mjs >/dev/null 2>&1; then cp neg/cues.ok cues.json; echo "FAIL: sfx.mjs played a whoosh"; exit 1; fi

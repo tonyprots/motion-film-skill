@@ -242,6 +242,7 @@ One film, one motion language. Roles are preset names too and work wherever a pr
 
 A brand retunes them in one place, `timeline.json`:
 `"motion": {"roles": {"enter": "snappy"}, "presets": {"default": {"response": 0.35, "damping": 0.9}}, "stagger": 0.05}`.
+A stage theme (`THEMES.use`, "Themes: motion") sets its own roles and cascade first; `timeline.json` overrides them key by key.
 **Soft start (`soft`, s).** A spring released at rest gets its full acceleration on the first frame; on a slow camera that
 reads as a jolt (measured 2026-10-11: peak acceleration 150 vs ~3 with `soft`). `soft` averages the response over a window
 of that length, in closed form: acceleration ramps up, the motion lags by about `soft/2`. Default only for the `camera` role;
@@ -482,11 +483,63 @@ at 720 px.
 Loaded in `index.html` after `core.js`. All functions of t; `--verify` passes.
 | | |
 |---|---|
-| `CAM.rig(t, el, [[mark, {x, y, z}], …], {ax, ay, lead, preset, maxZoom, keep, view})` | a virtual camera over a big element (a real screenshot): focus point in its own px and zoom. Every key starts `lead` (0.4 s) before its mark: the camera arrives before the action. Zoom ≤ 3×. By default it keeps the element whole across the window (the window is a parent with `overflow: hidden`, else the frame; `view: {l, r}` sets it): a zoom whose edge would cut the screenshot is capped and the focus shifted. `keep: [x0, x1]` keeps a panel whole (a natural boundary), `keep: false` is a pan over a board wider than the frame. Call it from `run()` or `C.hooks.before` |
+| `CAM.rig(t, el, [[mark, {x, y, z}], …], {ax, ay, lead, preset, maxZoom, keep, view, zoom})` | a virtual camera over a big element (a real screenshot): focus point in its own px and zoom. Every key starts `lead` (0.4 s) before its mark: the camera arrives before the action. Zoom ≤ 3×. The zoom springs in log space: equal time, equal ratio, so a pull-back slows into the wide shot like a real lens instead of rushing the close-up (halfway through 1× → 3× is √3, not 2). `zoom: 'linear'` is the old behaviour. By default it keeps the element whole across the window (the window is a parent with `overflow: hidden`, else the frame; `view: {l, r}` sets it): a zoom whose edge would cut the screenshot is capped and the focus shifted. `keep: [x0, x1]` keeps a panel whole (a natural boundary), `keep: false` is a pan over a board wider than the frame. Call it from `run()` or `C.hooks.before` |
 | `CAM.cursor(parent, [[mark, x, y, click?], …], {size, settle, hold})` | a directed cursor: an arc with ease-in and ease-out, arrives `settle` (0.12 s) before a click, a ring pulse on the click. Call it in `build()`. Returns `clicks` — marks for `click` SFX |
-| `CAM.shake(t, [mark, …], {amp, decay, rot})` | trauma shake on hero hits: returns `{x, y, r, s}` for a `put()` on a scene root (s overscans so no frame edge shows) |
+| `CAM.shake(t, [mark, …], {amp, decay, rot})` | trauma shake only on a physical impact of an object in the frame (a landing, a collision), at most once a film; never for energy (RULES "Banned defaults"). Returns `{x, y, r, s}` for a `put()` on a scene root (s overscans so no frame edge shows) |
 | `CAM.focus(t, els, hero, on)` | dims everything but the hero (opacity down to 0.35) while `on` > 0 — e.g. `C.win(t, a, b)` |
 If the scene has a WebGL layer, move its 3D camera (`L.camera`) rather than scaling the scene root: otherwise the layer's raster goes soft.
+
+## Paper, reveal, handwriting (`lib/paper.js`, `lib/reveal.js`, `lib/hand.js`)
+Loaded in `index.html` after `core.js`. All functions of t, `--verify` 12/12 (measured 2026-11-01).
+| | |
+|---|---|
+| `PAPER.drop(t, mark, {from, dist, dur, r, spin, lift, skid, shadow})` | a sheet lands on the desk. The shadow carries the weight, not a bounce: in flight the sheet is a touch bigger and its shadow far and soft, the fall speeds up, on landing the shadow snaps tight under the edge, the sheet hops a hair, skids a few px and stops; the rotation overshoots ~10 %. Returns props for `C.put` (`css.filter` holds two shadows) and `h`, the height 0…1 |
+| `PAPER.tape(t, mark, {dur})` | a strip of tape slapped on from above: 135 % → 100 % in 0.2 s and a squash on impact. Returns `{s, sx, sy, hide}` |
+| `PAPER.marker(target, mark, {text, color, speed, gap, height, seed})` | a real highlighter under the words of `target`: line by line, left to right, rough edges, light streaks along the stroke, a slanted chisel end, a darker blob where the pen first touched. It lies UNDER the letters (the target becomes its own stacking context), so the ink stays black with no `mix-blend-mode`. Call in `build()`; lines are measured after the fonts load, so read `end` (the second the last line is done) in `run()`. Default colour `#ffe024`, lime `#c9f52a` |
+| `REVEAL.field(w, h, {from, rough, scale, seed})` | once in `build()`: a noise field the size of the layer. `from` — an edge (`left`, `right`, `top`, `bottom`), `center` or `[x, y]` in shares |
+| `REVEAL.p(t, mark, dur)` | the front's progress 0…1: fast at first, then slower, like a spreading liquid |
+| `REVEAL.css(R, p, {band, soft})` | DOM: a mask for `C.put` that shows what is already flooded. `band` (px) > 0 gives the band just behind the front, the wet tide line: lay it on a darker copy of the layer above. The mask waits for decoding through `C.pending` |
+| `REVEAL.draw(ctx, src, R, p, {x, y, tide, band, tideAlpha})` | canvas: draws `src` through the front; `tide` is the wet line's colour |
+| `HAND.write(parent, text, mark, {x, y, size, face, width, lh, color, weight, cps, track, seed, wobble, res})` | the text is written with a pen along the glyphs' strokes at a steady speed (`cps`, 8 letters/s), lifting between strokes; dots and accents (i, j and the Cyrillic diacritics) come at the end of each word. The hand drifts a little in baseline, tilt and size (`wobble`, 0 = typeset). Returns `{el, end, size, pen(t)}`: `pen(t)` is `{x, y, down}` for a pen or a hand to follow |
+| `HAND.write(parent, text, mark, {font, weight, size, lh, width, color, cps, soft, x, y})` | font mode: with `font` (a CSS family) the text is set in a real handwriting font and revealed behind the pen through a soft front along the line. An outline font has no strokes to follow, so the pen sweeps each letter's width at the same `cps`; a space takes 0.3 of a letter plus 0.05 s, a line break 0.18 s. `size` is px (48), `lh` 1.25, `soft` the front width in ems (0.3). `end` and the timing are known at once; the layout is measured once the font has loaded (a gate before frame 0), so `size` is filled in by frame 0 |
+| `HAND.measure(text, o)` | `{w, h}` without drawing, for centring; with `o.font` it measures the set text |
+| `T.write(parent, text, mark, o)` | `HAND.write` in font mode with the theme's hand (`T.H`, `T.hw`, colour `T.hand`); your own `o` wins |
+
+- `PAPER.drop` replaces the "bounce" in the Investigation board card: a bounce off a desk is a cliché, weight reads in the shadow.
+- A reveal instead of a fade: ink, blueprint wash, watercolour, a flood. `rough` 0.3–0.5 keeps the edge alive; more
+  scatters islands far ahead of the front, which reads as splashes.
+- `HAND` faces are Hershey single-stroke fonts (`lib/hand-glyphs.js`, `NOTICE-hershey`): `script` — Latin cursive,
+  `cyr` — oblique Cyrillic (print, not cursive), `sans` — a plain sans. `face: 'auto'` takes `script` for Latin and
+  `cyr` for text with Cyrillic. There is no Russian cursive in the set: it is an honest draughtsman's slanted hand.
+- `HAND` draws on a canvas repainted whole every frame: Chromium antialiased overlapping SVG strokes differently
+  depending on the previous frame (`--verify` 7/12 → 12/12). `res: 2` keeps it sharp under a camera zoom up to 2×.
+- Font mode measures lines by the widths of their prefixes (`measureText` on the whole prefix), not by summing letters,
+  so kerning matches ordinary text in the same font. The front mask is built per line: one shared mask uncovered the
+  tops of the next line's letters while the previous one was still being written. `--verify` 12/12 (2026-11-01).
+- Fade a dot or nib that follows `pen(t)` with opacity, not scale: Chromium antialiases a small round element whose
+  `scale` changes (0.6 ↔ 1) differently depending on the previous frame — `--verify` failed 1–2 of 12 at different
+  probes from run to run; with `opacity` it passed 12/12 twice in a row (2026-11-01).
+
+## A route on a 3D map (`routeMap`, `lib/gl.js`)
+An Uber / Strava style scene: a procedural block city, the route along the streets, a pin dropping on the destination,
+a trip card. The camera starts low behind the start, rides behind the route's head (direction averaged over the last
+world unit: at corners it swings, it does not snap) and rises to a high plan as the pin lands.
+```js
+// film/gl.js (wired like the WebGL layer)
+import { layer, routeMap } from './lib/gl.js';
+const L = await layer(root, { bg: '#dedcd4', fov: 40 });
+const M = routeMap(L, { at: 's2', dur: 3.4, card: root.querySelector('.trip'), route: [[7, 14], [9, 14], [9, 11], [12, 11]] });
+C.glDone();
+```
+- Options: `route` — crossings `[i, j]` (moves along the streets; without it a route from `seed`), `n` blocks, `parks`,
+  `rise` (a mark: buildings grow in a wave from the centre), colours `color`, `ground`, `build`, `park`, camera `low`,
+  `back`, `lead`, `tilt`, `camera: false` — you drive the camera.
+- `card` — an element through `C.reg`: after the pin lands it stands beside it and follows it to the end; the plan
+  leaves room for it on the right. Its position comes from the same camera function of t, so it never lags a frame.
+- Returns `{end, head(t), cam(t), screen(v, t)}`: `end` — the second the pin lands (for the SFX), `screen` — a world
+  point in frame px for your own labels.
+- The layer's `bg` = the street colour: the fog dissolves the city's edge into it, measured from the camera distance.
+- Checked 2026-11-01: `--verify` 12/12 on `--gpu`.
 
 ## Isometry and stage themes (`lib/iso.js`, `lib/themes.js`, `scripts/fonts.sh`)
 An option for the "stage and an object per phrase" style (STYLES "Stage and object"), not a default: no film turns them
@@ -531,27 +584,83 @@ callout(g, o, px + 31, 40, 160, 'Hi!', { dx: 40, dy: -110, font: `600 34px ${T.U
 - `note(text)` — register painted text for `--lint` (`window.CANVAS_TEXT`, cleared every frame). `chip` and `callout`
   call it themselves; call it by hand after your own `fillText` on a canvas.
 
-**`THEMES`** holds seven ready themes: palette, light on the stage, fonts, object colours. `reference` is what everyone does
-(purple-orange haze, wide grotesque caps), kept for comparison; the other six replace it:
+**`THEMES`** holds thirteen ready themes: palette, light on the stage, fonts, a hand, object colours. `reference` is what
+everyone does (purple-orange haze, wide grotesque caps), kept for comparison; the others replace it. Every theme has its
+own hand (`T.H`, weight `T.hw`, colour `T.hand`) for `T.write`: a margin note, a signature, a pencil mark. All fonts are
+OFL with Cyrillic.
 
-| Theme | Background and light | Fonts (OFL, Cyrillic) | Signal |
-|---|---|---|---|
-| `newsroom` | green-black, a lamp pool on the floor with falloff | Sofia Sans Extra Condensed 900 caps, Commissioner | amber + teal |
-| `studio` | light cyclorama, a spot, darker toward the top | Literata 800, Commissioner | signal red |
-| `blueprint` | ultramarine, drafting grid, white edges | Tektur 800, numbers in Martian Mono, Commissioner | yellow |
-| `riso` | grained paper, type with misregistration | Dela Gothic One, Commissioner | fluorescent pink + blue + yellow |
-| `graphite` | warm graphite, a faint light from above | Geologica 800 sentence case, tight tracking | one chartreuse |
-| `feed` | white, a soft light pool | Unbounded 800, Inter (a Reels feed pair, STYLES "Fonts for the feed") | blue + red-orange |
+| Theme | Background and light | Fonts | Hand | Signal |
+|---|---|---|---|---|
+| `newsroom` | green-black, a lamp pool on the floor with falloff | Sofia Sans Extra Condensed 900 caps, Commissioner | Caveat 600, teal | amber + teal |
+| `studio` | light cyclorama, a spot, darker toward the top | Literata 800, Commissioner | Bad Script, red | signal red |
+| `blueprint` | ultramarine, drafting grid, white edges | Tektur 800, numbers in Martian Mono, Commissioner | LXGW WenKai 700, yellow | yellow |
+| `riso` | white grained paper, type with misregistration | Dela Gothic One, Commissioner | Neucha, blue | fluorescent pink + blue + green |
+| `graphite` | warm graphite, a faint light from above | Geologica 800 sentence case, tight tracking | Pangolin, light | one chartreuse |
+| `feed` | white, a soft light pool | Manrope 800 (Unbounded had become the feed cliché, 2026-11-01), Inter | Shantell Sans 700, red | blue + red-orange |
+| `notebook` | pale green paper | Commissioner 800 | Caveat 700, red pen | carmine; marker `T.marker` |
+| `draft` | light tracing paper, drafting grid, blue lines | Tektur 700 caps, Martian Mono, Commissioner | LXGW WenKai 700, red pencil | carmine |
+| `card` | pink paper | Literata 600 | Great Vibes, green | peony + leaf |
+| `yard` | the whole frame signal orange | Sofia Sans Extra Condensed 800 caps, Commissioner | Rubik Wet Paint, white | white + black |
+| `stationery` | pale pink paper | Playpen Sans 700, Commissioner | Playpen Sans 500 | cranberry + mint |
+| `school` | white ruled paper with a margin | Commissioner 600 | Marck Script, blue pen | the teacher's red pen |
+
+`notebook` to `school` are paper themes (`T.light`), put together on 2026-11-01 on the handwriting board as "hand + main
+face + palette" sets; their object colours are derived from the palette (`paper()` in `themes.js`). Avoid in your own
+palettes: neon orange on dark, orange with newsprint beige, lemon or lime on white-grey.
+
+**Picking the theme.** `python3 scripts/theme_pick.py` reads the brief and the script and picks the theme by its genre
+words (the brief counts twice; a 9:16-only format adds to the feed themes), light by default: the dark `newsroom`,
+`blueprint`, `graphite` count at 0.6 until the brief asks for dark ("dark", "night", "cinema", and the Russian equivalents). A theme named in the
+brief wins outright; no genre words — `notebook`. Brand colours or fonts in the brief or the preset — `"only": "hand"`:
+the brand's palette and type, the theme's hand. Writes `timeline.json` → `theme: {name, only?, why, alt}`, the brief's
+"Stage theme" row and fetches the fonts; `--set <name>`, `--dry`, `--no-fonts`. `THEMES.auto()` is `use()` for the theme
+in `timeline.json` (or `null`) and also points the starter's `#stage` and `.display` at the theme's faces;
+`use(name, { only: 'hand' })` loads the hand alone and leaves the palette. Test — `tests/test_theme_pick.py`.
 
 ```js
-const T = THEMES.use('blueprint');   // first lines of film.js: --bg/--ink/--ink-2/--accent and @font-face for the theme's fonts
+const T = THEMES.auto();   // first lines of film.js: the theme_pick.py theme (explicitly: THEMES.use('blueprint')): --bg/--ink/--ink-2/--accent, @font-face
 C.fonts = [`${T.dw} 100px ${T.D}`, `600 40px ${T.U}`, `800 100px ${T.N}`];
 CAPTIONS.karaoke({ current: true, font: T.U, plate: T.light ? T.ink : T.chip, plateInk: T.light ? T.bg : T.chipInk, … });
 ```
-Font files: `sh scripts/fonts.sh <theme>` (or Fontsource ids) → `assets/fonts/v/<id>-cyrillic|latin.woff2`; needs the network.
+Font files: `sh scripts/fonts.sh <theme>` (or Fontsource ids; `id:weight` for a static font with no variable build, e.g.
+`lxgw-wenkai-tc:700`) → `assets/fonts/v/<id>-cyrillic|latin.woff2`; needs the network. A theme fetches its hand too.
 Theme fields (`stage`, `mood`, object colours, cards) are listed in the header of `themes.js`; object colours are named after
 the test film (`money`, `goog`, `cai`) — rename them for your own objects. A "6 themes × 4 scenes" board was made on
 2026-10-28; no theme has passed a blind critique on a film yet (STYLES "Recipes").
+
+### Themes: motion
+
+A theme sets a motion grammar as well as a look (2026-10-31). `THEMES.use()` applies the theme's spring roles (`enter`,
+`text`, `accent`, `camera`; `TYPE.rise` and `C.sp(…, 'enter')` pick them up) and its cascade step; `timeline.json` →
+`motion` overrides them key by key. The theme's row below goes into the step 5 style guide whole: rhythm, entrance,
+signature beat and "never".
+
+| Theme | Rhythm | Entrance (`T.enter`) | Signature beat | Never |
+|---|---|---|---|---|
+| `newsroom` | smooth; heavy cards whose tilt swings past rest and settles; the camera is a slow dolly (`camera` 1.1 s, soft start 0.35) | `rise`, ~5 % overshoot, cascade 0.08 | the accent appears exactly on the event the voice names | the accent before the event; a push-in that bounces; cards fading in |
+| `studio` | smooth; contents trail their container by ~3 frames | `rise`, ~10 % overshoot, cascade 0.05 | one take: every state grows out of the last (`MORPH`), the accent dot survives them all and lands last | a cut or dissolve where a morph belongs; a second accent; bounce in more than one place |
+| `blueprint` | smooth; a stroke eases in and out like a hand | `draw` (a path with `pathLength="1"`, 0.6 s), cascade 0.07 | construction first (axes, centre lines), then the outline; dimension lines grow from their middle, numbers tick up last | glow on lines; a gradient on the blue; more than three dimensions per object; a hand or pencil on screen |
+| `riso` | on twos: the paper layer at 12 fps (`T.q`), the camera smooth; fresh grain on every drawing (`T.drawing`) | `stamp`: lands at 114 % tilted −3°, undershoots ~8 %, settles; in reading order, cascade 0.17 | a registration slip (`T.slip`): the second plate kicks 24 px out and springs back past register | smooth motion or blur on the paper layer; a colour outside the theme's inks; any gradient not made of halftone dots |
+| `graphite` | calm and exact; a soft camera (0.9 s) | `rise` without overshoot, cascade 0.06 | the counter shows the value under the line's tip; chartreuse switches on at the event | a counter overshooting its total; digits changing width (`tabular-nums` only); chartreuse before the event |
+| `feed` | fast, short holds between beats | `snap`: a row is pushed out of the margin, ~8 % overshoot, cascade 0.04 | a scale jump: the first word holds huge for ~0.7 s, then snaps down to a kicker in ~8 frames | a third typeface; centred symmetry; fading in |
+| `notebook` | calm; the pen note arrives after the line it comments on | `rise`, cascade 0.06 | a margin note written by the pen (`T.write`) on the voice's word | a note before its line; more than one note at a time |
+| `draft` | like `blueprint` on light: a stroke that speeds up and brakes | `draw`, cascade 0.07 | the pencil note comes last, after the construction | glow; a dark background |
+| `card` | slow and soft, no overshoot | `rise`, cascade 0.1 | the calligraphy is the event: it writes itself in the centre, the rest waits | a bounce; a fast cascade; more than one handwritten line |
+| `yard` | loud, short holds | `stamp`, cascade 0.06 | a word slapped on like a stencil, paint lettering written over it in white | a soft reveal; small text |
+| `stationery` | light, springy | `rise` with overshoot, cascade 0.07 | list items pop in one by one and get ticked by hand | strict symmetry; a heavy grotesque |
+| `school` | unhurried, line by line | `rise`, cascade 0.08 | the teacher's red mark lands last | script faster than the voice; red before the mark |
+| `reference` | — | — | — | the comparison theme, sets no motion |
+
+```js
+const T = THEMES.use('riso');
+C.put(S.card, T.enter(t, 's2.1'));               // the theme's verb; T.enter(t, at, { verb: 'snap' }) for another
+C.put(S.plate2, { x: T.slip(t, 's2.end') });     // the second plate (colour T.misreg)
+const seed = T.drawing(t);                       // grain and jitter seed: new on every drawing
+```
+`T.enter` returns props for `C.put`: `rise` — `{y}` from `d` (60 px), put it inside a mask (`TYPE.line`); `stamp` —
+`{s, r}` (`from` 1.14, `tilt` −3); `snap` — `{x}` from `−d` (80 px); `draw` — `{css: {strokeDashoffset}, u}` over `dur`
+(0.6 s). Before its mark the element is hidden (`hide`). The numbers are checked by `tests/test_themes.mjs` (the stamp
+dips to 0.918, the snap overshoots 7.8 %); no grammar has passed a blind critique on a film yet.
 
 `C.fonts` loads each face on a sample with Latin, Cyrillic and digits: a face split by `unicode-range` into cyr and lat files
 otherwise fetched only its Latin file, and Cyrillic vanished from the first frames (found 2026-10-28 on `blueprint`).

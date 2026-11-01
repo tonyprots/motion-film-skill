@@ -24,6 +24,9 @@ Draw a film-specific object (a form with a missing field, an email lacking a det
 
 - `ready`: 13 presets: six PROPS actions plus seven BLOCKS presets. These are parameters of four new helpers,
   not 13 separate engines. Validate content, layout and meaning in each film.
+- `ready` in the engine: `engine:paper` (a sheet with weight, tape, highlighter), `engine:reveal` (a reveal with an edge),
+  `engine:hand` (handwriting stroke by stroke), `gl:route-map` (a route on a 3D map). API — ENGINE.md "Paper, reveal,
+  handwriting" and "A route on a 3D map".
 - `asset`: 120 local SVGs: 40 each from Lucide outline, Tabler outline and Phosphor duotone. Licenses sit beside files.
 - `external`: 710 HyperFrames/RemotionUI registry records: blocks, components, examples and support dependencies.
   These are metadata and links, not 710 ported scenes. No automatic code loading.

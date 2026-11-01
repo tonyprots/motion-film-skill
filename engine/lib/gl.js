@@ -331,3 +331,161 @@ export async function uiShot(parent, planes, o = {}) {
   });
   return { renderer, scene, camera, planes: P };
 }
+
+/**
+ * A route on a 3D city map (Uber / Strava style): a procedural block city, the route drawn along the streets, a pin
+ * that drops on the destination, and a camera that starts low behind the start, rides behind the route's head and rises
+ * to a high plan as the pin lands. Everything is f(t). Call after layer(): routeMap(L, o). Options:
+ *   at        mark/beat the route starts drawing (0)          dur     seconds of drawing (3.2)
+ *   route     [[i, j], …] street crossings, Manhattan moves (a seeded route from the seed otherwise)
+ *   n 22 blocks a side · block 1 · street 0.36 · seed 7 · parks 0.12 (share of blocks) · rise null | mark (buildings grow in)
+ *   color '#e8452c' (route, pin) · ground '#dedcd4' (streets) · build '#fbfaf7' · park '#cddbbf' · width 0.16 (route, world)
+ *   camera true (false: you drive L.camera) · low 2 (chase height) · back 3.2 (chase distance) · lead 1.5 (look ahead)
+ *   tilt 0.42 (plan: horizontal offset per unit of height; 0 = straight down) · env 0.35 (ambient share of the layer's env)
+ *   card      a C.reg element (the trip card): it stands beside the pin from the landing on, springs in, and follows it
+ * Returns { end (s, the pin lands), head(t) → Vector3, cam(t) → { pos, look }, screen(v, t) → { x, y } frame px }.
+ * Keep the layer's bg = ground (the fog fades into it); the sun and its shadows give the depth, the env only fills.
+ */
+export function routeMap(L, o = {}) {
+  const rnd = C.mulberry32(o.seed ?? 7), N = o.n ?? 22, B = o.block ?? 1, SW = o.street ?? 0.36, P = B + SW, half = (N * P) / 2;
+  const groundCol = new THREE.Color(o.ground || '#dedcd4');
+  const X = (i) => i * P - SW / 2 - half;                       // street centre line between blocks i-1 and i
+  const T0 = C.bt(o.at ?? 0), DUR = o.dur ?? 3.2;
+  const grp = new THREE.Group(); L.scene.add(grp);
+  L.scene.fog = new THREE.Fog(groundCol, 16, 46); L.scene.environmentIntensity = o.env ?? 0.35;
+  L.renderer.shadowMap.enabled = true; L.renderer.shadowMap.type = THREE.PCFShadowMap;
+  const sun = new THREE.DirectionalLight('#ffffff', 2.4); sun.position.set(-9, 12, 5); sun.castShadow = true;
+  Object.assign(sun.shadow.camera, { left: -half, right: half, top: half, bottom: -half, near: 1, far: 50 });
+  sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.0005; sun.shadow.radius = 3;
+  L.scene.add(sun, new THREE.HemisphereLight('#ffffff', groundCol, 0.5));
+
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(N * P * 3, N * P * 3), new THREE.MeshStandardMaterial({ color: groundCol, roughness: 1 }));
+  ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; grp.add(ground);
+
+  // the route: Manhattan moves over street crossings
+  let route = o.route;
+  if (!route) {
+    const c = Math.floor(N / 2); let i = c - 4, j = c + 3; route = [[i, j]];
+    const ti = c + 4, tj = c - 3;
+    for (let k = 0; (i !== ti || j !== tj) && k < 20; k++) {
+      if (k % 2 === 0 && i !== ti) i += Math.sign(ti - i) * Math.min(Math.abs(ti - i), 1 + Math.floor(rnd() * 3));
+      else if (j !== tj) j += Math.sign(tj - j) * Math.min(Math.abs(tj - j), 1 + Math.floor(rnd() * 3));
+      else i += Math.sign(ti - i) * Math.min(Math.abs(ti - i), 1 + Math.floor(rnd() * 3));
+      route.push([i, j]);
+    }
+  }
+  const pts = route.map(([i, j]) => new THREE.Vector3(X(i), 0, X(j)));
+  const segL = pts.slice(1).map((p, k) => p.distanceTo(pts[k])), LEN = segL.reduce((a, b) => a + b, 0);
+  const at = (s) => {                                            // point at arc length s
+    s = Math.max(0, Math.min(LEN, s));
+    for (let k = 0; k < segL.length; k++) { if (s <= segL[k] || k === segL.length - 1) return pts[k].clone().lerp(pts[k + 1], segL[k] ? Math.min(1, s / segL[k]) : 0); s -= segL[k]; }
+    return pts[0].clone();
+  };
+  const sOf = (t) => LEN * C.ease.inOut(C.clamp((t - T0) / DUR));
+  const head = (t) => at(sOf(t));
+
+  // blocks: 1–4 buildings each, taller toward the middle; a few parks; nothing on the route's own blocks' edges is needed
+  const boxes = [], parkMat = new THREE.MeshStandardMaterial({ color: o.park || '#cddbbf', roughness: 1 });
+  for (let bi = 0; bi < N; bi++) for (let bj = 0; bj < N; bj++) {
+    const x0 = bi * P - half, z0 = bj * P - half;
+    if (rnd() < (o.parks ?? 0.12)) {
+      const pk = new THREE.Mesh(new THREE.BoxGeometry(B, 0.03, B), parkMat); pk.position.set(x0 + B / 2, 0.015, z0 + B / 2); pk.receiveShadow = true; grp.add(pk);
+      continue;
+    }
+    const d = Math.hypot(x0 + B / 2, z0 + B / 2) / half, split = rnd() < 0.5 ? 1 : 2, splitZ = rnd() < 0.5 ? 1 : 2;
+    for (let a = 0; a < split; a++) for (let c = 0; c < splitZ; c++) {
+      const w = B / split - 0.06, dpt = B / splitZ - 0.06, h = (0.12 + rnd() * 0.42) * (1 + 1.3 * Math.max(0, 1 - d) ** 2) * (rnd() < 0.06 ? 2.4 : 1);
+      boxes.push({ x: x0 + (a + 0.5) * (B / split), z: z0 + (c + 0.5) * (B / splitZ), w, d: dpt, h, k: rnd() });
+    }
+  }
+  const box = new THREE.BoxGeometry(1, 1, 1); box.translate(0, 0.5, 0);
+  const city = new THREE.InstancedMesh(box, new THREE.MeshStandardMaterial({ color: o.build || '#fbfaf7', roughness: 0.85 }), boxes.length);
+  city.castShadow = city.receiveShadow = true; grp.add(city);
+  const m4 = new THREE.Matrix4(), riseT = o.rise == null ? null : C.bt(o.rise);
+  const placeCity = (t) => {
+    boxes.forEach((b, k) => {
+      const g = riseT == null ? 1 : Motion.step(t - riseT - 0.6 * Math.hypot(b.x, b.z) / half - 0.15 * b.k, { response: 0.45, damping: 0.75 });
+      m4.makeScale(b.w, Math.max(0.001, b.h * g), b.d).setPosition(b.x, 0, b.z); city.setMatrixAt(k, m4);
+    });
+    city.instanceMatrix.needsUpdate = true;
+  };
+
+  // the route ribbon, rebuilt every frame from the cut polyline (round joins: a disc at each passed corner)
+  const col = new THREE.Color(o.color || '#e8452c'), RW = o.width ?? 0.16, MAXV = (pts.length + 2) * 4;
+  const rib = new THREE.BufferGeometry(); rib.setAttribute('position', new THREE.BufferAttribute(new Float32Array(MAXV * 3), 3));
+  const idx = []; for (let k = 0; k < pts.length + 1; k++) idx.push(4 * k, 4 * k + 1, 4 * k + 2, 4 * k + 1, 4 * k + 3, 4 * k + 2); rib.setIndex(idx);
+  const routeMat = new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide, fog: false });
+  const ribbon = new THREE.Mesh(rib, routeMat); ribbon.position.y = 0.025; grp.add(ribbon);
+  const joint = new THREE.CircleGeometry(RW / 2, 24); joint.rotateX(-Math.PI / 2);
+  const joints = pts.map((p) => { const m = new THREE.Mesh(joint, routeMat); m.position.set(p.x, 0.026, p.z); grp.add(m); return m; });
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(RW * 0.62, 24, 16), new THREE.MeshStandardMaterial({ color: col, roughness: 0.4 })); dot.castShadow = true; grp.add(dot);
+  const buildRibbon = (s) => {
+    const a = rib.attributes.position.array; let v = 0, acc = 0;
+    for (let k = 0; k < segL.length && acc < s; k++) {
+      const p0 = pts[k], p1 = acc + segL[k] <= s ? pts[k + 1] : p0.clone().lerp(pts[k + 1], (s - acc) / segL[k]);
+      const dx = pts[k + 1].x - p0.x, dz = pts[k + 1].z - p0.z, l = Math.hypot(dx, dz) || 1, nx = -dz / l * RW / 2, nz = dx / l * RW / 2;
+      for (const [x, z] of [[p0.x + nx, p0.z + nz], [p0.x - nx, p0.z - nz], [p1.x + nx, p1.z + nz], [p1.x - nx, p1.z - nz]]) { a[v++] = x; a[v++] = 0; a[v++] = z; }
+      acc += segL[k];
+    }
+    rib.setDrawRange(0, (v / 12) * 6); rib.attributes.position.needsUpdate = true; rib.computeBoundingSphere();
+    let acc2 = 0; joints.forEach((j, k) => { j.visible = s > 0 && acc2 <= s; acc2 += segL[k] ?? Infinity; });
+  };
+
+  // the pin: falls from above the lens onto the destination as the route arrives, a ring spreads from the impact
+  const END = T0 + DUR, LAND = END + 0.05;
+  const pin = new THREE.Group(), pinMat = new THREE.MeshStandardMaterial({ color: col, roughness: 0.35 });
+  const headBall = new THREE.Mesh(new THREE.SphereGeometry(0.32, 32, 24), pinMat); headBall.position.y = 0.95;
+  const cone = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.75, 32), pinMat); cone.rotation.x = Math.PI; cone.position.y = 0.42;
+  const eye = new THREE.Mesh(new THREE.SphereGeometry(0.12, 24, 16), new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.5 })); eye.position.set(0, 0.97, 0.24);
+  pin.add(headBall, cone, eye); pin.traverse((m) => { m.castShadow = true; }); grp.add(pin);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.85, 1, 64), new THREE.MeshBasicMaterial({ color: col, transparent: true, fog: false, depthWrite: false }));
+  ring.rotation.x = -Math.PI / 2; ring.position.copy(pts[pts.length - 1]).setY(0.03); grp.add(ring);
+  const placePin = (t) => {
+    const u = C.clamp((t - (LAND - 0.45)) / 0.45), fall = 1 - u * u;              // accelerating fall, lands on LAND
+    const sq = t > LAND ? 0.22 * Math.exp(-(t - LAND) / 0.09) * Math.cos((t - LAND) * 30) : 0;   // squash, rings out
+    pin.visible = t > LAND - 0.45;
+    pin.position.copy(pts[pts.length - 1]).setY(7 * fall);
+    pin.scale.set(1 + sq, 1 - sq, 1 + sq);
+    const r = C.clamp((t - LAND) / 0.9); ring.visible = r > 0 && r < 1; ring.scale.setScalar(0.2 + 1.6 * C.ease.out(r)); ring.material.opacity = 0.55 * (1 - r);
+  };
+
+  // camera: low behind the head (direction averaged over the last world unit, so corners swing, not snap) → high plan
+  const lo = o.low ?? 2, back = o.back ?? 3.2, lead = o.lead ?? 1.5, tilt = o.tilt ?? 0.42;
+  const bbox = new THREE.Box3().setFromPoints(pts), mid = bbox.getCenter(new THREE.Vector3()), size3 = bbox.getSize(new THREE.Vector3());
+  const R = Math.max(size3.x, size3.z * C.W / C.H) / 2;   // half the route's extent, in frame heights' terms
+  const cam = (t) => {
+    const s = sOf(t), h = at(s), prev = at(s - 1.1), dir = h.clone().sub(prev);
+    if (dir.lengthSq() < 1e-6) dir.copy(pts[1]).sub(pts[0]);
+    dir.y = 0; dir.normalize();
+    const chasePos = h.clone().addScaledVector(dir, -back).setY(lo), chaseLook = h.clone().addScaledVector(dir, lead).setY(0);
+    // plan: far enough that the route fills ~80 % of the frame, tilted toward the viewer by `tilt`
+    const D = ((o.card ? 1.3 : 1) * R / (C.W / C.H) + 0.9) / Math.tan((L.camera.fov / 2) * Math.PI / 180) / 0.8, a = Math.atan(tilt);
+    const aim = mid.clone().add(new THREE.Vector3(o.card ? 0.3 * R : 0, 0, 0));   // a card needs room right of the route
+    const planPos = aim.clone().add(new THREE.Vector3(0, D * Math.cos(a), D * Math.sin(a))), planLook = aim;
+    const w = C.ease.inOut(C.clamp((t - (END - 0.5)) / 2.2));
+    return { pos: chasePos.lerp(planPos, w), look: chaseLook.lerp(planLook, w) };
+  };
+  const scratch = L.camera.clone();
+  const screen = (v, t) => {
+    const c = cam(t); scratch.position.copy(c.pos); scratch.lookAt(c.look); scratch.updateMatrixWorld(); scratch.updateProjectionMatrix();
+    const p = v.clone().project(scratch); return { x: (p.x + 1) / 2 * C.W, y: (1 - p.y) / 2 * C.H };
+  };
+
+  const card = o.card || null;
+  L.frame((t) => {
+    placeCity(t);
+    const s = sOf(t); buildRibbon(s); dot.position.copy(at(s)).setY(0.1); dot.visible = t >= T0;
+    placePin(t);
+    if (o.camera !== false) { const c = cam(t); L.camera.position.copy(c.pos); L.camera.lookAt(c.look); }
+    const dist = L.camera.position.distanceTo(o.camera !== false ? cam(t).look : mid);   // the fog starts past what we look at
+    L.scene.fog.near = dist + 6; L.scene.fog.far = dist + 30;
+    if (card) {
+      const k = Motion.step(t - LAND - 0.15, { response: 0.4, damping: 0.7 }), p = screen(pts[pts.length - 1].clone().setY(0.95), t);
+      // beside the pin (right, or left when the right is short of room), never over the route's end; 48 px inside the frame
+      const cw = card.offsetWidth, ch = card.offsetHeight, right = p.x + 56 + cw <= C.W - 48;
+      const x = right ? p.x + 56 : Math.max(48, p.x - 56 - cw), y = Math.max(48, Math.min(C.H - 48 - ch, p.y - ch / 2));
+      C.put(card, { x, y: y + 26 * (1 - k), s: 0.92 + 0.08 * k, o: C.clamp(k * 3), hide: t < LAND + 0.15 });
+    }
+  });
+  return { end: LAND, head, cam, screen };
+}

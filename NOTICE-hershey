@@ -1,0 +1,9 @@
+engine/lib/hand-glyphs.js — glyph strokes of the Hershey vector fonts.
+
+The Hershey Fonts were originally created by Dr. A. V. Hershey while working at the U. S. National Bureau of Standards
+(NBS report "Calligraphy for Computers", 1967). As a work of the U.S. Government the glyph data is in the public domain;
+the customary request of its distributors is that this origin be acknowledged, which this file does.
+
+The coordinates were read out of the copy of the tables built into R (grDevices vfont, by way of GNU plotutils) with
+scripts/hand_glyphs.R and scripts/hand_glyphs.py; no R or plotutils code is included. Faces used: Script (Latin
+cursive), Complex Cyrillic (oblique), Simplex Roman (sans).

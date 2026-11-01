@@ -27,6 +27,9 @@ const aliases = { 'число':'number','числа':'number','счётчик':'
   'агент':'agent','агенты':'agent','бот':'bot','токены':'tokens','токен':'tokens','квота':'quota','баланс':'balance','тариф':'plans','тарифы':'plans',
   'лесенка':'ladder','ступени':'steps','слайды':'slides','презентация':'presentation','дека':'deck','воронка':'funnel','отбор':'filter',
   'команда':'team','инженер':'engineer','внедрение':'deployment','модель':'model','модели':'model','чип':'chip',
+  'рукопись':'handwriting','почерк':'handwriting','подпись':'signature','маркер':'highlighter','выделение':'highlighter','бумага':'paper','лист':'sheet','скотч':'tape','стол':'desk',
+  'проявление':'reveal','тушь':'ink','акварель':'watercolour','синька':'blueprint','чертёж':'blueprint','чертеж':'blueprint','заливка':'flood',
+  'маршрут':'route','такси':'taxi','доставка':'delivery','город':'city','пин':'pin','поездка':'trip','навигация':'navigation',
   'морфинг':'morph','превращение':'morph','перенос':'handoff','стык':'continuity',
   'шейдер':'shader','математика':'math','сравнение':'comparison','до':'before','после':'after','документ':'file','люди':'users' };
 function words(s) { return s.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean).map((w)=>aliases[w]||w); }

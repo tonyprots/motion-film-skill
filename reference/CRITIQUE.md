@@ -86,7 +86,8 @@ PROBLEM in `lint` and `seams`) are not repeated here. The numbers below are for 
    the bottom third empty); an empty container for more than ~0.6 s.
 10. A dark sliver at the corner of a rounded card (a layer not clipped to the radius). Crop the corners of every card.
 11. Type crosses busy UI while the camera moves.
-12. Banned look: a centred title on a gradient, corner labels, frame borders, glow, particle bursts.
+12. Banned look: a centred title on a gradient, corner labels, frame borders, glow, particle bursts,
+    a glowing grid floor, lens flares, camera shake with no impact in the frame.
 13. One layout in every scene (headline, window, caption — only the window's content changes): a slide deck, at most 6
     on Variety / pacing.
 14. The camera travels to a screenshot's text because it can't be read without the push, or text the voice asks you to

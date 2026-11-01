@@ -18,7 +18,8 @@
 //                                                                 words cut by the frame edge or a mask (caption cut, side cut = PROBLEM),
 //                                                                 screens cut at the side by their window, an «Illustration» plate,
 //                                                                 text on text or on an icon/stamp/button (overlap = PROBLEM),
-//                                                                 a free-standing label off its object's and the frame's axis (align)
+//                                                                 a free-standing label off its object's and the frame's axis (align),
+//                                                                 and over the whole film: an element that fades in/out by opacity alone (fade)
 //                                                                 → review/lint_<fmt>.json + text_<fmt>.json; exit 1 on a PROBLEM
 //   node scripts/render.mjs --seams [--all]                       every hard cut: shared text/images keep place and size (12 px, 5 %),
 //                                                                 no still-to-still cut, no empty first frame → review/seams_<fmt>.json
@@ -482,6 +483,49 @@ const PAGE_ALIGN = () => {
   }
   return out;
 };
+// --lint fade: an animated element (C.reg / C.put) that appears or vanishes by opacity alone — it goes 0 → 1 (or 1 → 0)
+// through several samples while its box, clip and filter stand still. That is the fade the cards ban: an entrance rises,
+// unmasks, scales or cuts. Samples the whole film at FADE_HZ with seek() only, no screenshots. Captions (.cap), the cursor
+// and anything under [data-fade] (a deliberate fade, explained in the style guide) are skipped, and so is anything smaller
+// than 0.5 % of the frame.
+const FADE_HZ = 15;
+const PAGE_FADE = async (ts) => {
+  const els = (window.__fadeEls ||= [...document.querySelectorAll('body *')].filter((e) => e._reg && !e.closest('.cap, [data-fade]')));
+  const out = [];
+  for (const t of ts) {
+    const p = window.seek(t); if (p) await p;
+    out.push(els.map((e) => {
+      if (!e.isConnected || !e.checkVisibility({ visibilityProperty: true })) return null;
+      const s = getComputedStyle(e), r = e.getBoundingClientRect();
+      return [+parseFloat(s.opacity).toFixed(3), Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2), Math.round(r.width), Math.round(r.height), s.clipPath + '|' + s.filter];
+    }));
+  }
+  return { out, names: els.map((e) => (e.dataset.scene ? `scene ${e.dataset.scene}` : (e.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 50) || `<${e.tagName.toLowerCase()}${e.className && typeof e.className === 'string' ? '.' + e.className.trim().split(/\s+/).join('.') : ''}>`)) };
+};
+async function fades(F) {
+  const ts = []; for (let t = 0; t < F.DUR - 0.5 / F.FPS; t += 1 / FADE_HZ) ts.push(+t.toFixed(4));
+  const S = []; let names = [];
+  for (let i = 0; i < ts.length; i += 120) { const r = await F.page.evaluate(PAGE_FADE, ts.slice(i, i + 120)); S.push(...r.out); names = r.names; }
+  const area = F.W * F.H, found = [];
+  for (let k = 0; k < names.length; k++) {
+    const o = S.map((row) => (row[k] ? row[k][0] : 0)), g = S.map((row) => row[k]);
+    for (let i = 0; i + 1 < o.length; i++) for (const dir of [1, -1]) {
+      // a run from fully hidden to fully shown (dir 1), or back (dir -1), with ≥ 2 samples in between: a gradual fade
+      const lo = (x) => x <= 0.05, hi = (x) => x >= 0.9;
+      if (!(dir > 0 ? lo(o[i]) && !lo(o[i + 1]) : hi(o[i]) && !hi(o[i + 1]))) continue;
+      let j = i + 1;
+      while (j < o.length && !(dir > 0 ? hi(o[j]) : lo(o[j])) && (o[j] - o[j - 1]) * dir >= -0.02) j++;
+      if (j >= o.length || !(dir > 0 ? hi(o[j]) : lo(o[j])) || j - i - 1 < 2) continue;
+      const shown = g.slice(i, j + 1).filter((x) => x && x[0] > 0.05), ref = dir > 0 ? g[j] : g[i];
+      if (!ref || ref[3] * ref[4] < 0.005 * area) continue;
+      const still = shown.every((x) => Math.abs(x[1] - ref[1]) < 4 && Math.abs(x[2] - ref[2]) < 4
+        && Math.abs(x[3] - ref[3]) <= 0.03 * ref[3] + 1 && Math.abs(x[4] - ref[4]) <= 0.03 * ref[4] + 1 && x[5] === ref[5]);
+      if (still) found.push({ name: names[k], t: ts[i], dur: ts[j] - ts[i], dir });
+    }
+  }
+  return { found, samples: ts.length, els: names.length };
+}
+
 // --lint: real screens (img ≥ 200 px wide) cut at the LEFT or RIGHT by a clipping ancestor or the frame. A push must hold the
 // screen whole across, or cut on a natural edge (mark that with data-crop="edge"; CAM.rig keep:false marks a pan "pan").
 const PAGE_SIDECUT = () => [...document.images].filter((i) => i.checkVisibility({ opacityProperty: true, visibilityProperty: true }))
@@ -648,6 +692,10 @@ for (const fmt of FORMATS) {
         }
       }
     }
+    const fd = await fades(F);
+    for (const f of fd.found) note('WARN', `fade|${f.name}|${f.dir}`, f.t, `«${f.name}» fades ${f.dir > 0 ? 'in' : 'out'} over ${f.dur.toFixed(2)} s by opacity alone (box, mask and filter stand still): `
+      + `${f.dir > 0 ? 'enter' : 'leave'} by a rise, a mask, a scale, a stroke or a cut (RULES «Запрещённые штампы»); a deliberate fade — data-fade on the element and a line in the style guide`);
+    console.log(`lint ${fmt}: fade scan ${fd.samples} samples × ${fd.els} animated elements · ${fd.found.length} fade${fd.found.length === 1 ? '' : 's'}`);
     const list = [...found.values()].sort((a, b) => (a.level > b.level ? 1 : -1) || a.t - b.t);
     mkdir(path.join(ROOT, 'review'));
     fs.writeFileSync(path.join(ROOT, `review/lint_${fmt}.json`), JSON.stringify({ fmt, beats: times.length, text_items: seen, issues: list }, null, 1));

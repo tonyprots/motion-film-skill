@@ -14,6 +14,7 @@ Fill every field before writing the script. `?` means "ask the user". A default 
 | A recording as the base (talking head, a talk) | ? | none: the voice is synthesised; with a recording — overlay mode (SKILL.md step 4b) |
 | Format (visual language) | agent picks | by the substance of the material, `reference/FORMATS.md`; a series keeps its format |
 | Style (STYLES.md) | ? | RULES defaults: one accent, captions at the bottom, no character, `synth`; a series keeps its style |
+| Stage theme (THEMES) | picked by `scripts/theme_pick.py` | from genre and tone: palette, fonts, a hand and a motion grammar; a brand takes the hand only |
 | Brand colours | ? | preset, else measured from the site (capture.mjs) → one accent |
 | Fonts | ? | preset, else the site's own faces |
 | Real media to show | ? | screenshots / UI from the sources (never redraw UI that exists) |

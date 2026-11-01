@@ -14566,6 +14566,93 @@
       "source": "https://github.com/googlefonts/noto-emoji/blob/e20cbc2bbec1926686be9f9bee7d1d2cfa1fea0e/2D/svg/emoji_u1faaa.svg",
       "git_blob_sha": "5f105d691da01f67486b80417e878929e850c2eb",
       "license": "Apache-2.0"
+    },
+    {
+      "id": "engine:paper",
+      "name": "paper",
+      "category": "native",
+      "status": "ready",
+      "runtime": "PAPER",
+      "kind": "paper",
+      "description": "sheet lands with weight in the shadow, tape slap, real highlighter under the words",
+      "tags": [
+        "paper",
+        "desk",
+        "highlighter",
+        "marker",
+        "tape",
+        "sheet",
+        "investigation",
+        "board",
+        "document"
+      ],
+      "source": "original motion-film",
+      "license": "MIT"
+    },
+    {
+      "id": "engine:reveal",
+      "name": "reveal",
+      "category": "native",
+      "status": "ready",
+      "runtime": "REVEAL",
+      "kind": "reveal",
+      "description": "reveal with a ragged noisy edge and a wet tide line: ink, blueprint wash, watercolour, flood",
+      "tags": [
+        "reveal",
+        "ink",
+        "wash",
+        "watercolour",
+        "blueprint",
+        "flood",
+        "mask",
+        "transition"
+      ],
+      "source": "original motion-film",
+      "license": "MIT"
+    },
+    {
+      "id": "engine:hand",
+      "name": "handwriting",
+      "category": "native",
+      "status": "ready",
+      "runtime": "HAND",
+      "kind": "handwriting",
+      "description": "text written stroke by stroke with a pen, dots at word end; Latin cursive, oblique Cyrillic",
+      "tags": [
+        "handwriting",
+        "handwritten",
+        "pen",
+        "write",
+        "signature",
+        "whiteboard",
+        "text",
+        "cursive"
+      ],
+      "source": "original motion-film; Hershey glyphs (public domain)",
+      "license": "MIT; glyphs public domain"
+    },
+    {
+      "id": "gl:route-map",
+      "name": "route-map",
+      "category": "native",
+      "status": "ready",
+      "runtime": "GL",
+      "kind": "route-map",
+      "description": "3D city map: route along streets, pin drop, camera from low chase to high plan, trip card",
+      "tags": [
+        "map",
+        "route",
+        "city",
+        "3d",
+        "pin",
+        "trip",
+        "delivery",
+        "taxi",
+        "navigation",
+        "webgl"
+      ],
+      "source": "original motion-film",
+      "license": "MIT"
     }
   ]
 }

@@ -84,16 +84,18 @@ Fields as in FORMATS.md, plus **camera** and **timings**; "risk" is expanded int
 - **Voice:** carries the argument; on "look at this line" the camera is already there.
 - **Overrides:** "cut on action" → cut on a voice pause.
 - **Build:** the desk is one big element, the camera is `CAM.rig` over it (zoom ≤ 3×). Material from `assets/shots/`
-  as is; photos may go grey (`filter: 'grayscale(1)'`). Highlighter — a plate at 0.35–0.45 opacity revealed with
-  `C.inset` left to right (`mix-blend-mode` is banned). Circling and string — SVG `path` with `pathLength="1"`,
+  as is; photos may go grey (`filter: 'grayscale(1)'`). Highlighter — `PAPER.marker` under the words of the line
+  (rough edge, chisel end, a blob at the start, line by line; no `mix-blend-mode`). Sheets land with `PAPER.drop`, tape
+  with `PAPER.tape` (ENGINE "Paper, reveal, handwriting"). Circling and string — SVG `path` with `pathLength="1"`,
   `stroke-dasharray="1"` and `stroke-dashoffset` from t. Label — a black plate, white text, `TYPE.type`.
   ```js
   CAM.rig(t, S.desk, [['s3', { x: 900, y: 600, z: 1 }], ['s3.2', { x: 1400, y: 520, z: 1.8 }]], { preset: 'desk', keep: false });   // a desk wider than the frame: a pan, not a cut screen
-  C.put(S.mark, { clip: C.inset(0, 100 * (1 - C.seg(q(t), 's3.1', 's3.2')), 0, 0) });
+  C.put(S.clip, PAPER.drop(t, 's3', { from: 'right', r: -2 }));                    // weight in the shadow, no bounce
+  // build(): S.mk = PAPER.marker(S.quote, 's3.1', { text: 'the line the voice reads' });
   ```
   `desk` is a slow camera spring: `"presets": {"desk": {"response": 0.9, "damping": 1, "soft": 0.2}}`.
-- **Mistakes:** (1) everything smooth, or the camera steps too; (2) templates: torn paper, cards dropping with a bounce,
-  a jittering paper texture; (3) "slide in → label → circle" more than three times in a row. Text to be read is on the
+- **Mistakes:** (1) everything smooth, or the camera steps too; (2) templates: torn paper, cards dropping with a bounce
+  (the shadow carries the weight: `PAPER.drop`), a jittering paper texture, a highlighter that is a flat translucent plate; (3) "slide in → label → circle" more than three times in a row. Text to be read is on the
   top layer.
 
 ### 11. Whiteboard
@@ -115,8 +117,9 @@ Fields as in FORMATS.md, plus **camera** and **timings**; "risk" is expanded int
 - **Overrides:** "cut on action", J/L cuts; "the scene headline is on screen whole within ~1 s" (RULES, "Rhythm")
   — an area's heading is written at 7.5 characters/s.
 - **Build:** the board is one SVG several frames wide, the camera is `CAM.rig`, the ending is a key with `z` < 1. A
-  stroke is a `path` with `pathLength="1"`, duration = length / ~1300 px/s, `C.ease.inOut` inside. Handwritten text —
-  a `C.inset` reveal. Line ~0.65 % of frame height, one accent on ~20 % of strokes. Type on the board ≥ 28 / z_final px
+  stroke is a `path` with `pathLength="1"`, duration = length / ~1300 px/s, `C.ease.inOut` inside. Handwritten text — `HAND.write`: a pen
+  along the strokes, dots at the end of each word (ENGINE "Paper, reveal, handwriting"). Line ~0.65 % of frame height,
+  one accent on ~20 % of strokes. Type on the board ≥ 28 / z_final px
   (a `--lint` WARN on the pull-out is intended). Don't draw a hand.
   ```js
   // build: S.board = root.appendChild(C.frag(`<div class="abs">${BOARD_SVG}</div>`)) — CAM.rig needs an HTML element;

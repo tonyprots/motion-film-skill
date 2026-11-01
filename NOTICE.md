@@ -25,6 +25,10 @@ If you are the author and would like anything here changed or credited different
 [github.com/alchaincyf/huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion), MIT, see
 `LICENSE-huashu-art-motion`: `reference/EXPLAINERS.md` is a translated and rewritten derivative of its explainer grammars.
 
+## Hershey fonts — A. V. Hershey, U.S. National Bureau of Standards (public domain)
+`engine/lib/hand-glyphs.js` holds glyph strokes of the Hershey vector fonts (1967), read out of the tables built into R
+by `scripts/hand_glyphs.R` and `scripts/hand_glyphs.py`; no R or plotutils code is included. See `NOTICE-hershey`.
+
 ## Fonts and libraries
 The only bundled font is Geist (SIL Open Font License 1.1) in `examples/readme-demo/preset/fonts/`, with its licence
 next to it. The demo media in `docs/media/` were made with this skill and are covered by our MIT licence. Playwright (Apache-2.0) and the Python packages in `requirements.lock` are installed from their

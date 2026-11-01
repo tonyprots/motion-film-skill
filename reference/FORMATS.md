@@ -62,6 +62,10 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
 - **Voice:** leads, the screen proves; the title is the scene's thesis.
 - **Overrides:** nothing — this is the format the general rules were written for.
 - **Build:** `CAM` (camera, cursor, focus), real screenshots in `assets/shots/`, live components (`C.ui`, ENGINE.md "Live components") where the cursor changes the screen, `Motion.indicator`, `swapAlpha`; for one or two shots where a big screen is itself the scene's point, `uiShot` (ENGINE.md "A screen in 3D").
+- **Push-in and click:** a ~2× push on one `camera`-role spring, no overshoot and no string of small push-ins; the camera
+  still arrives before the click (RULES "A directed cursor"). Motion blur spreads out from the target and the text is sharp
+  at rest — push into a live component or a full-resolution screenshot, never a stretched raster. The click: the button
+  darkens under the cursor, presses to 95 % and springs back, a ring spreads from the click point; the step label pops last.
 - **Risk:** a slideshow of screenshots: one layout in every scene (headline + window + caption) and a camera that travels to
   the text on every window. Every scene must do something, not just show.
 
@@ -134,6 +138,10 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
 - **Overrides:** nothing; adds the rule "one diagram, one metric".
 - **Build:** a counter with monospaced digits and a slowdown toward a round number is written in the scene; charts are SVG +
   springs.
+- **The number is the line.** When a number grows with a chart, the counter shows the value under the line's tip: it
+  creeps on a flat stretch, takes off at the event and slows into the total. Tabular figures (`tabular-nums`), no drum, no
+  overshoot past the total. The accent switches on exactly at the event: the tip dot swells, the line after it is thicker
+  and in the accent, a leader grows to the event; before the event there is no accent in the frame.
 - **Risk:** a dashboard in motion. Every scene answers one question.
 
 ### 6. How it's built (exploded view)
@@ -147,6 +155,10 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
 - **Voice:** names a part and its role in one phrase; the order of parts is the order a signal or data travels.
 - **Overrides:** "3D tilt on one or two scenes" — here depth is the language.
 - **Build:** a three.js layer (`gl.js`) for volume; for diagrams, SVG layers with a z offset through `CAM`.
+- **Teardown rhythm:** layers lift off top-down one at a time on an even ~0.33 s step (a click fits each), on a spring
+  with ~10 % overshoot and motion blur; the next one leaves as the last one settles. A leader grows from a dot on the part's
+  edge and the label rises out of a mask; leaders never cross and labels never sit on the object. Over the whole shot the
+  camera orbits ~10° at most. Never: all layers at once, an uneven step, flat cut-outs instead of volume.
 - **Risk:** a technical diagram with no idea. The end answers the question "and therefore…".
 
 ### 7. Dive (zoom chain)
@@ -177,6 +189,11 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
 - **Overrides:** one display face and one interface face (RULES.md "Look") apply inside an era, not across the whole film.
 - **Build:** an era is a set of tokens (typeface, palette, motion roles) in `timeline.json "motion"` per chapter; the styling is
   written in the scene.
+- **Years on one thread (variant):** the walk through the years is a timeline painted on a floor in perspective. The fill
+  and the playhead lead: they speed up through the middle and brake into "now"; a year darkens once the playhead has passed
+  it. Each milestone hinges up as a card on a stem (~10 % overshoot) as the playhead crosses its year, with a gap for a
+  click; the "now" card lands last and heavier. The camera reaches its final framing in one long move after the playhead
+  stops, and is still at the end.
 - **Risk:** parody. Eras are recognised by typography and motion, not by costumes and clichés.
 
 ### 9. An image per phrase

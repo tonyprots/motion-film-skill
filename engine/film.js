@@ -5,7 +5,9 @@
 (() => {
   const { W, H, pick, put, reg, el, scene, canvas, sp, spHit, trk, seg, clamp, lerp, ease, bt, beatOf, mulberry32 } = C;
   const { line, rise, type } = TYPE;
-  C.fonts = ['600 100px Display', '500 40px UI'];
+  const T = THEMES.auto();                            // the theme theme_pick.py chose (timeline.json "theme"), or null
+  C.fonts = T && !T.only ? [`${T.dw} 100px ${T.D}`, `500 40px ${T.U}`] : ['600 100px Display', '500 40px UI'];
+  if (T) C.fonts.push(`${T.hw} 60px ${T.H}`);
   const PAD = pick(140, 90, 80);                     // left margin: type never centred on an empty background
   const BRAND = C.TL.brand || {};                    // from a preset (init.sh --preset); the real film writes its own copy
 
@@ -18,6 +20,8 @@
       S.card = el('div', { class: 'card' }, root);
       Object.assign(S.card.style, { left: PAD + 'px', top: '0px', width: W - 2 * PAD + 'px', height: pick(620, 620, 900) + 'px' });
       reg(S.card, { o: 0 });
+      // the theme's hand: one short note, written by the pen on a beat (lib/hand.js; none without a theme)
+      if (T) T.write(root, BRAND.note || 'this is the point', 'hook_w3', { x: pick(1240, 1240, 520), y: pick(150, 150, 300), size: pick(64, 64, 56) });
       S.rows = [0, 1, 2].map((i) => {
         const r = el('div', { class: 'abs', style: `left:48px;top:${60 + i * 150}px;width:${W - 2 * PAD - 96}px;height:110px;border-radius:18px;background:color-mix(in srgb, var(--ink) 7%, var(--card))` }, S.card);
         return reg(r, { o: 0 });

@@ -4,7 +4,8 @@
 //                                 [[mark, {x, y, z}], …] — focus point in the element's own px and zoom. Each key starts
 //                                 `lead` s (0.4) BEFORE its mark: the camera arrives before the action, never chases it.
 //                                 Springs keep velocity between keys (C.trkObj). o: {ax, ay} = where the focus sits on
-//                                 the frame (default centre), preset 'camera' (role → heavy, soft start), lead 0.4, maxZoom 3.
+//                                 the frame (default centre), preset 'camera' (role → heavy, soft start), lead 0.4, maxZoom 3,
+//                                 zoom 'log' (default: the scale springs in log space, a ratio per second) | 'linear'.
 //                                 It never cuts a screen at the sides: the window (a parent with overflow hidden, else the
 //                                 frame; o.view = {l, r} in the parent's px) holds keep = [x0, x1] whole (default: the
 //                                 element's full width). A zoom too deep for that is capped and the focus slides inward.
@@ -25,8 +26,12 @@
   const rig = (t, e, keys, o = {}) => {
     const lead = o.lead ?? 0.4, maxZ = o.maxZoom ?? 3;
     if (e._camL == null) { e._camL = e.offsetLeft; e._camT = e.offsetTop; }
-    // keys are on marks; evaluating the track at t + lead moves every key `lead` seconds earlier
-    const v = trkObj(t + lead, keys.map(([m, v, p]) => [m, { x: v.x, y: v.y, z: Math.min(maxZ, v.z ?? 1) }, p]), o.preset || 'camera');
+    // keys are on marks; evaluating the track at t + lead moves every key `lead` seconds earlier.
+    // Zoom springs in log space: equal time = equal ratio, so 1→3 and 3→1 cover each doubling at the same pace and a
+    // pull-back slows into the wide shot like a real lens (linear z rushes the close end). o.zoom: 'linear' = the old way.
+    const lin = o.zoom === 'linear', zf = (z) => (lin ? z : Math.log(z));
+    const v = trkObj(t + lead, keys.map(([m, v, p]) => [m, { x: v.x, y: v.y, z: zf(Math.min(maxZ, v.z ?? 1)) }, p]), o.preset || 'camera');
+    if (!lin) v.z = Math.exp(v.z);
     const ax = o.ax ?? C.W / 2, ay = o.ay ?? C.H / 2;
     if (o.keep === false) e.dataset.crop = 'pan';
     else {

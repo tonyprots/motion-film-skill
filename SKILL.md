@@ -77,6 +77,11 @@ sh <skill>/scripts/init.sh <project-dir> --preset <name>      # presets: blank (
 Copies engine + pipeline, applies the preset (colours, fonts, voice, music), links the shared toolchain
 (`~/.cache/motion-film`: Python venv + Playwright; created once). Copy `SCRIPT.md` and `brief.md` in. Put the real
 media in `assets/shots/` (screenshots from the sources, never redrawn UI); the brand's ready-made Lottie files in `assets/lottie/` (ENGINE.md "Ready-made Lottie"). Brand from a site: `node scripts/capture.mjs <url>`.
+**The film's theme is picked for you:** `python3 scripts/theme_pick.py` (after the brief; again after the script if the
+brief was thin) chooses a `THEMES` theme from genre, tone and format, writes it to `timeline.json` and the brief's "Stage
+theme" row and fetches the fonts. Light by default, dark only when the brief asks; a brand with its own colours and
+fonts takes the theme's hand only. `THEMES.auto()` in `film.js` applies the pick. Another theme — `--set <name>` with
+the reason in the brief. The table of themes — ENGINE.md "Isometry and stage themes".
 **Live components before any scene is built.** Every screen whose state changes in the film (typing into a field, a toggle,
 a new list row, a counter) is captured up front, in one run, not along the way: `node scripts/capture.mjs <url> --components "Text inside the block,css:.selector"`.
 It carries the block's real markup with its computed styles, images and fonts into `assets/ui/<id>.json`, renders it on its own
@@ -113,7 +118,8 @@ row per scene with its marks, what lands on which chunk, the real media, the clo
 9:16 notes, scene density 1–5, plus the object in frame, its action and one camera move (vocabulary — RULES.md "The
 camera is punctuation"); `python3 scripts/plan_check.py` checks the shotlist before the build. The shotlist marks the hero moment (one, at 60–85 % of the length) and the quiet windows (every
 ~20 s); the style guide holds the motion grammar: spring preset per role, cascade step, where overshoot is allowed, `finish`
-(LUT, grain). Rules: `reference/RULES.md` → "AAA direction"; what the format overrides and what its signature looks like in the film —
+(LUT, grain); palette, type and hand come from the film's theme (`timeline.json` → `theme`), the motion grammar from its row in ENGINE.md
+"Themes: motion" (rhythm, entrance, signature beat, "never"); the hand is one short note in the frame (`T.write`). Rules: `reference/RULES.md` → "AAA direction"; what the format overrides and what its signature looks like in the film —
 from its card in `reference/FORMATS.md`, in one line in the style guide; what the style overrides comes from the
 brief's "Style" line (`reference/STYLES.md`). Send a short summary; wait for the OK.
 
@@ -160,6 +166,7 @@ Once per project: `node scripts/render.mjs --verify --all` (all probes identical
 On-screen text and cuts are checked by machine before the critic sees them: `render.mjs --lint --all` and
 `render.mjs --seams --all`. Lint also catches overlaps (text on text, on an icon, under a stamp — PROBLEM
 `overlap`) and labels off their object's or the frame's axis (WARN `align`); place labels with `C.anchor` from their object.
+Lint also walks the whole film and gives WARN `fade` for an entrance or exit by opacity alone (RULES "Banned defaults").
 With a presenter, lay the frame out by the zones in EDITORIAL.md "Frame layout with a presenter". Fix every PROBLEM; fix a WARN or log why not. Stillness on the draft:
 `.venv/bin/python scripts/stillness.py renders/draft_9x16.mp4 --mask <caption band>`; give every STILL an event or log
 that the hold is deliberate.
