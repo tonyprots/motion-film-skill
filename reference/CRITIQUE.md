@@ -132,6 +132,8 @@ PROBLEM in `lint` and `seams`) are not repeated here. The numbers below are for 
 38. A callout, bubble or label not tied to its object, floating in the air.
 39. An abstraction that does not read without a label (a grid instead of a map); a real person shown as a token or a
     silhouette instead of a photo.
+40. An even cascade (the same step, everything on a `power3.out`-like curve) or an exit slower than the entrance that
+    settles: the motion reads as an agent template. Check who leads each wave and whether the rest react unevenly.
 
 ## Object pass (mandatory, before scoring)
 The score table looks at the whole frame; the viewer looks at the object. So walk the objects first. For each event in

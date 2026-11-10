@@ -24,14 +24,21 @@
    *           so the outgoing line is gone before the incoming one lands (no double exposure at swaps).
    *   opts:   { stagger: 0.08 beats, preset: 'text' (role → heavy), exit: 0.28 beats }
    * Words start 145% of the size below the mask, so no glyph tops peek through the padding on the first frame.
+   * Word 0 leads, the rest react at uneven offsets (C.react; "cascade": "even" keeps i·stagger). The exit accelerates
+   * out on kit.leave over `exit` beats, centred on outAt as before, so it is gone by outAt + exit/2.
    */
   function rise(t, L, inAt, outAt = null, o = {}) {
     const stagger = o.stagger ?? 0.08, preset = o.preset || 'text', exit = o.exit ?? 0.28;
+    const even = C.TL && C.TL.motion && C.TL.motion.cascade === 'even';
+    const off = (i, s) => (even ? i * s : C.react(i, s));
     const below = L.size * 1.45, above = -L.size * 1.45;
     L.words.forEach((w, i) => {
-      const bin = Array.isArray(inAt) ? inAt[i] : C.beatOf(inAt) + i * stagger;
+      const bin = Array.isArray(inAt) ? inAt[i] : C.beatOf(inAt) + off(i, stagger);
       let y = below * (1 - C.spHit(t, bin, preset));
-      if (outAt != null) y += above * C.sp(t, C.beatOf(outAt) + i * stagger * 0.5 - exit * 0.5, 'snappy');
+      if (outAt != null) {
+        const b0 = C.beatOf(outAt) + off(i, stagger * 0.5) - exit * 0.5;
+        y += above * C.ease.leave(C.seg(t, b0, b0 + exit));
+      }
       C.put(w, { y, hide: y >= below * 0.999 || y <= above * 0.999 });
     });
   }

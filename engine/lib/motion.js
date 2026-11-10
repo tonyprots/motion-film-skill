@@ -164,5 +164,5 @@
     return u;
   }
 
-  return { PRESETS, ROLES, configure, step, settle, spring, track, indicator, swapAlpha, loopT };
+  return { PRESETS, ROLES, configure, resolve, step, settle, spring, track, indicator, swapAlpha, loopT };
 });

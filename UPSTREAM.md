@@ -28,6 +28,12 @@ Dropped: Fish Audio voiceover (replaced by providers), `install.sh` (global inst
 - `reference/EXPLAINERS.md`: the explainer grammars (`references/09-视频动画语法.md`, `动画语法/*.md`) and the per-genre base
   camera (`references/镜头语言.md`), translated and rewritten for our engine. Their code (canvas2D, `clips/*.js`) is not used.
 
+## 2d. motion-kit — MIT (hughminhphan/motion-kit, commit 6173e5c) — `LICENSE-motion-kit`
+2026-11-06. Numbers taken, code written here: the `kit.*` curve values and the 0/4/9/15/22/30-frame reaction offsets
+(here in cascade steps, `C.react`), the duration formula `(9 + 1.15·√px)·weight` (here it scales a spring's response,
+`C.byDist`), exits at ≈ 0.65 of the entrance, accelerating (`C.ease.leave`, `TYPE.rise`). Material 3 and IBM Carbon
+curves come from their public specifications.
+
 ## 2c. Scene and SVG library — 2026-10-26
 
 `engine/lib/blocks.js` adapts selected formulas/layouts from RenderComp/free-remotion-templates (KPI odometer, MIT,

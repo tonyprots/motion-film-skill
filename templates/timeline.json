@@ -6,8 +6,6 @@
   "bpm": 120,
   "formats": ["16x9", "9x16"],
   "music": {
-    "source": "synth",
-    "chords": ["Am", "F", "C", "G"],
     "sections": [
       { "at": "hook",  "kind": "intro" },
       { "at": "mid",   "kind": "full" },

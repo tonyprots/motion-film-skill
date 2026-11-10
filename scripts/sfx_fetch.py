@@ -107,8 +107,13 @@ def kenney():
     tmp, added, seen = tempfile.mkdtemp(), {}, 0
     for pack, (url, landing, rules) in KENNEY.items():
         z = os.path.join(tmp, f'{pack}.zip')
-        with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'motion-film sfx_fetch'}), timeout=120) as r, open(z, 'wb') as f:
-            shutil.copyfileobj(r, f)
+        own = os.path.join(LIB, 'kenney', f'kenney_{landing.rsplit("/", 1)[1]}.zip')
+        if os.path.exists(own): shutil.copy(own, z)   # a zip downloaded by hand wins over the pinned link
+        elif not url:   # the SkillStore copy pins no zip links
+            sys.exit(f'Kenney pack {pack}: download the zip from {landing} into {own}, then run again')
+        else:
+            with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'motion-film sfx_fetch'}), timeout=120) as r, open(z, 'wb') as f:
+                shutil.copyfileobj(r, f)
         with zipfile.ZipFile(z) as zf:
             for name in sorted(zf.namelist()):
                 stem, ext = os.path.splitext(os.path.basename(name))   # basename only: nothing in the zip picks a path

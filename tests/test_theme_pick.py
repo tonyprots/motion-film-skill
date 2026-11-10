@@ -41,8 +41,8 @@ TEMPLATE = '''# Бриф
 
 ## Заметки
 '''
-EN_TEMPLATE = next(p for p in (SKILL / 'publish/en/templates/brief.md', SKILL / 'templates/brief.md')
-                   if p.exists() and '| Subject' in p.read_text(encoding='utf-8')).read_text(encoding='utf-8')
+EN_TEMPLATE = next((p.read_text(encoding='utf-8') for p in (SKILL / 'publish/en/templates/brief.md', SKILL / 'templates/brief.md')
+                    if p.exists() and '| Subject' in p.read_text(encoding='utf-8')), None)   # the SkillStore copy is Russian only
 
 
 def brief(**rows):
@@ -115,6 +115,7 @@ class PickTest(unittest.TestCase):
             subprocess.run([sys.executable, str(SKILL / 'scripts/theme_pick.py'), '--no-fonts'], cwd=d, check=True, capture_output=True)
             self.assertEqual(json.loads((p / 'timeline.json').read_text(encoding='utf-8'))['theme']['name'], 'school')
 
+    @unittest.skipUnless(EN_TEMPLATE, 'no English brief template in this copy')
     def test_english_brief(self):
         en = EN_TEMPLATE
         self.assertEqual(theme_pick.pick(en)[0], 'notebook')

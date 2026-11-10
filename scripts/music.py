@@ -4,6 +4,7 @@
 # Reads timeline.json:
 #   bpm, duration, marks
 #   music.chords     one chord per bar, cycled: "Am" "F" "C" "G" "Dm" "Bb" "F#m" "Ebmaj7" "Gsus2" "Cadd9" ...
+#                    unset → the seed picks one of PROGRESSIONS and transposes it to one of 12 keys
 #   music.sections   [{ "at": beat|mark, "kind": ... }] — kinds:
 #       intro   four-on-the-floor, rim backbeat, off-beat hats, root bass, mallet motif
 #       full    + clap backbeat, 16th hats, off-beat bass plucks, brighter motif
@@ -14,9 +15,10 @@
 #       outro   no drums: the final chord on its first beat rings out to the end (no crash, no kick: a loud hit at
 #               the end is not a default)
 #   music.accents    [beat|mark, ...] crash + big kick, only on explicit request (never by default)
-#   music.seed       integer (default 4242)
+#   music.seed       integer; picks the progression and key (when chords are unset), the mallet motif and the noise.
+#                    Unset → derived from the project folder name, so every film gets its own score and a rerun the same one.
 # Minimal and clean by design: kick, rim/clap, metallic hats, plucked sine bass, FM mallet. No pads, no vocals.
-import json, os, re
+import json, os, re, zlib
 import numpy as np, soundfile as sf
 from scipy import signal
 
@@ -35,7 +37,9 @@ def mulberry32(seed, n):
     return ((t ^ (t >> np.uint64(14))) & np.uint64(0xFFFFFFFF)).astype(np.float64) / 4294967296.0
 
 
-_seed = [int(MU.get('seed', 4242))]
+SEED = int(MU['seed']) if MU.get('seed') is not None else zlib.crc32((os.path.basename(os.getcwd()) + '|' + str(TL.get('title', ''))).encode()) % 100000
+RNG = np.random.default_rng(SEED)
+_seed = [SEED]
 def noise(n):
     _seed[0] += 7919; return mulberry32(_seed[0], n) * 2 - 1
 def tt(d): return np.arange(int(d * SR)) / SR
@@ -121,8 +125,31 @@ def chord(sym):
     if 'add9' in ext: iv[3] = 14
     base = 64 + ((pc - 64) % 12)             # voicing root in 64..75
     return 40 + ((pc - 4) % 12), [base + i for i in iv]    # (bass root 40..51, 4 chord tones)
-CHORDS = [chord(c) for c in MU.get('chords', ['Am', 'F', 'C', 'G'])]
-MOTIF_STEPS = [0, 3, 6, 8, 10, 13]; MOTIF_IDX = [0, 2, 1, 3, 2, 1]
+NAMES = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
+def transpose(sym, n):
+    m = re.match(r'^([A-G][#b]?)(.*)$', sym)
+    pc = PC[m[1][0]] + {'#': 1, 'b': -1}.get(m[1][1:], 0)
+    return NAMES[(pc + n) % 12] + m[2]
+# written in A minor / C major, one chord per bar; calm enough to sit under a voice
+PROGRESSIONS = [
+    ['Am', 'F', 'C', 'G'], ['Am', 'Em', 'F', 'G'], ['F', 'G', 'Am', 'Am'], ['C', 'G', 'Am', 'F'],
+    ['Am', 'Dm', 'G', 'C'], ['Fmaj7', 'G', 'Em', 'Am'], ['Am7', 'Dm7', 'G', 'Cmaj7'], ['Cadd9', 'Am7', 'Fmaj7', 'G'],
+    ['Am', 'C', 'G', 'D'], ['Dm', 'Am', 'Bb', 'F'], ['Fmaj7', 'Em7', 'Dm7', 'Cmaj7'], ['Am', 'G', 'F', 'Esus4'],
+]
+# (16th step in the bar, chord-tone index) — one phrase per bar
+MOTIFS = [
+    ([0, 3, 6, 8, 10, 13], [0, 2, 1, 3, 2, 1]), ([0, 4, 6, 8, 12, 14], [0, 1, 2, 3, 2, 1]),
+    ([0, 3, 6, 10, 12], [3, 2, 0, 1, 0]), ([0, 2, 4, 8, 11, 14], [0, 2, 3, 0, 2, 1]),
+    ([0, 6, 8, 10, 14], [1, 3, 2, 0, 2]), ([0, 3, 8, 11], [0, 3, 2, 1]),
+    ([0, 2, 3, 6, 8, 12], [2, 1, 0, 1, 3, 2]), ([0, 4, 7, 10, 12], [0, 2, 3, 2, 1]),
+]
+if MU.get('chords'): CHORD_SYMS = list(MU['chords'])
+else:
+    shift = int(RNG.integers(12))
+    CHORD_SYMS = [transpose(c, shift) for c in PROGRESSIONS[int(RNG.integers(len(PROGRESSIONS)))]]
+MOTIF_NO = int(RNG.integers(len(MOTIFS)))
+CHORDS = [chord(c) for c in CHORD_SYMS]
+MOTIF_STEPS, MOTIF_IDX = MOTIFS[MOTIF_NO]
 
 SECS = sorted([(beat_of(s['at']), s['kind']) for s in MU.get('sections', [{'at': 0, 'kind': 'full'}])])
 def section(b):
@@ -203,4 +230,4 @@ stem = kickb * 0.95 + drums * 0.8; stem /= peak / 10 ** (-1 / 20)
 os.makedirs('audio', exist_ok=True)
 sf.write('audio/music.wav', mix.astype(np.float32), SR, subtype='FLOAT')
 sf.write('audio/drums.wav', stem.astype(np.float32), SR, subtype='FLOAT')
-print(f'audio/music.wav + audio/drums.wav  {DUR}s  {BPM:g} bpm  {NB} beats  sections: ' + ', '.join(f'b{s:g} {k}' for s, k in SECS))
+print(f'audio/music.wav + audio/drums.wav  {DUR}s  {BPM:g} bpm  {NB} beats  seed {SEED}  chords {" ".join(CHORD_SYMS)}  motif {MOTIF_NO}  sections: ' + ', '.join(f'b{s:g} {k}' for s, k in SECS))

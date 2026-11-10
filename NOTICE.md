@@ -25,6 +25,11 @@ If you are the author and would like anything here changed or credited different
 [github.com/alchaincyf/huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion), MIT, see
 `LICENSE-huashu-art-motion`: `reference/EXPLAINERS.md` is a translated and rewritten derivative of its explainer grammars.
 
+## motion-kit — Hugh Phan (MIT)
+Curve values (`kit.*`), reaction offsets and the distance-to-duration formula in `engine/core.js` and `engine/type.js`
+come from [hughminhphan/motion-kit](https://github.com/hughminhphan/motion-kit), Copyright (c) 2026 Hugh Phan, MIT
+(`LICENSE-motion-kit`).
+
 ## Hershey fonts — A. V. Hershey, U.S. National Bureau of Standards (public domain)
 `engine/lib/hand-glyphs.js` holds glyph strokes of the Hershey vector fonts (1967), read out of the tables built into R
 by `scripts/hand_glyphs.R` and `scripts/hand_glyphs.py`; no R or plotutils code is included. See `NOTICE-hershey`.

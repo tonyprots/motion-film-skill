@@ -50,7 +50,7 @@ script if the engine misreads digits. Native pace: never `atempo` a whole take; 
 
 | source | what happens | grid |
 |---|---|---|
-| `synth` (default) | `music.py` writes an original score from `bpm`, `chords`, `sections`, `accents` | nominal, exact — no `beats.py` |
+| `synth` (default) | `music.py` writes an original score from `bpm`, `chords`, `sections`, `accents`; `seed` (default: from the project folder name) picks the motif and, without `chords`, the progression and key, so every film gets its own tune | nominal, exact — no `beats.py` |
 | `file` | your track (`path`, `start`, `bpm`): cut, looped with crossfades if short, faded out | `beats.py audio/music.wav` |
 | `elevenlabs` / `openrouter` | generated instrumental from `prompt` (credits!) — reused on re-runs unless `--force` | `beats.py audio/music.wav` |
 | `ace` | instrumental generated on this machine by ACE-Step 1.5 from `prompt`, `bpm`, `key`, `seed`; free, nothing leaves the machine. Same request → same track; a changed request regenerates | `beats.py audio/music.wav` |

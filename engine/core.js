@@ -63,9 +63,59 @@
     expoOut: (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x)),
     expoIn: (x) => (x <= 0 ? 0 : Math.pow(2, 10 * x - 10)),
   };
+  // Cubic-bezier as an easing x → y (CSS cubic-bezier, AE speed graph, Blender handles: the same four numbers).
+  // Newton on x(u), bisection fallback. Curves by name: CURVES below (reference/RULES.md, curves by name).
+  function bez(x1, y1, x2, y2) {
+    const B = (a, b, u) => 3 * a * u * (1 - u) * (1 - u) + 3 * b * u * u * (1 - u) + u * u * u;
+    const dB = (a, b, u) => 3 * a * (1 - u) * (1 - u) + 6 * (b - a) * u * (1 - u) + 3 * (1 - b) * u * u;
+    return (x) => {
+      if (x <= 0) return 0;
+      if (x >= 1) return 1;
+      let u = x;
+      for (let k = 0; k < 8; k++) {
+        const d = dB(x1, x2, u);
+        if (Math.abs(d) < 1e-6) break;
+        const nu = u - (B(x1, x2, u) - x) / d;
+        if (nu < 0 || nu > 1) break;
+        u = nu;
+      }
+      if (Math.abs(B(x1, x2, u) - x) > 1e-5) {
+        let lo = 0, hi = 1;
+        for (let k = 0; k < 40; k++) { u = (lo + hi) / 2; if (B(x1, x2, u) < x) lo = u; else hi = u; }
+      }
+      return B(y1, y2, u);
+    };
+  }
+  // kit.* — motion-kit (hughminhphan/motion-kit, MIT, LICENSE-motion-kit); m3.* — Material 3; carbon.* — IBM Carbon.
+  const CURVES = {
+    'kit.land': [0.1, 0.75, 0.15, 1], 'kit.heavy': [0.75, 0, 0.18, 1], 'kit.whip': [0.85, 0, 0.15, 1],
+    'kit.reveal': [0.22, 1, 0.36, 1], 'kit.leave': [0.55, 0, 0.9, 0.35], 'kit.wind': [0.45, 0, 0.55, 1],
+    'kit.drift': [0.4, 0, 0.6, 1],
+    'm3.standard': [0.2, 0, 0, 1], 'm3.emphasizedDecelerate': [0.05, 0.7, 0.1, 1], 'm3.emphasizedAccelerate': [0.3, 0, 0.8, 0.15],
+    'carbon.productive.entrance': [0, 0, 0.38, 0.9], 'carbon.productive.exit': [0.2, 0, 1, 0.9],
+    'carbon.expressive.entrance': [0, 0, 0.3, 1], 'carbon.expressive.exit': [0.4, 0.14, 1, 1],
+  };
+  const curveCache = {};
+  const curve = (name) => curveCache[name] ||= (CURVES[name] ? bez(...CURVES[name]) : err(`unknown curve "${name}" (${Object.keys(CURVES)})`));
+  ease.leave = curve('kit.leave');   // exits: accelerate out, never settle
+
   // springs released on beats (lib/motion.js). presets: snappy | default | heavy   (playful: mascots only)
   // or roles: enter | exit | ui | text | accent | hero | camera — retuned per film in timeline.json "motion"
-  const stagger = (i, s = (TL.motion && TL.motion.stagger) ?? 0.05) => i * s;   // seconds; cascade 30–80 ms, ≤ 8 a wave
+  // Cascade = a lead and its reactions, not an even line: offsets in steps 0, 0.8, 1.8, 3, 4.4, 6, then +1.6 a step
+  // (motion-kit's 0/4/9/15/22/30 frames scaled to the step). An even line reads as a loop, not a chain of causes.
+  // timeline.json "motion": {"cascade": "even"} restores i·s where mechanical rhythm is the point (riso, on twos).
+  const REACT = [0, 0.8, 1.8, 3, 4.4, 6];
+  const react = (i, s = 1) => s * (i < REACT.length ? REACT[i] : REACT[REACT.length - 1] + 1.6 * (i - REACT.length + 1));
+  const stagger = (i, s = (TL.motion && TL.motion.stagger) ?? 0.05) =>
+    (TL.motion && TL.motion.cascade === 'even' ? i * s : react(i, s));   // seconds; ≤ 8 a wave, wave ≤ 0.6 s
+  // Duration from distance and weight, not habit (motion-kit dur: (9 + 1.15·√px)·weight frames at 60 fps): a chip and a
+  // full-screen panel must not take the same time. Returns the preset with its response scaled against a 300 px move,
+  // so springs keep their character. weight 0.7 light, 1 normal, 1.35 heavy. C.sp(t, b, C.byDist(900, 'enter')).
+  const DIST_REF = 9 + 1.15 * Math.sqrt(300);
+  function byDist(px, preset = 'default', weight = 1) {
+    const p = window.Motion.resolve(preset), k = ((9 + 1.15 * Math.sqrt(Math.abs(px))) / DIST_REF) * weight;
+    return { ...p, response: p.response * k, ...(p.soft ? { soft: p.soft * k } : {}) };
+  }
   const sp = (t, beat, preset = 'default') => step(t - bt(beat), preset);
   const spHit = (t, beat, preset = 'snappy', lead = leadFor(preset)) => step(t - (bt(beat) - lead), preset);   // reads ON the beat
   // keys: [[beat, value, preset?], ...]; first key = initial value. Retargets keep velocity (superposition).
@@ -249,7 +299,7 @@
 
   window.C = {
     TL, BEATS, FMT, VARIANT, W, H, FPS, DUR, LEAD, leadFor, stage, pick,
-    bt, beatAt, beatOf, clamp, lerp, seg, ease, sp, spHit, stagger, trk, trkObj, win, mulberry32, noise1,
+    bt, beatAt, beatOf, clamp, lerp, seg, ease, bez, curve, CURVES, sp, spHit, stagger, react, byDist, trk, trkObj, win, mulberry32, noise1,
     el, anchor, frag, ui, reg, put, commit, inset, rectOf, scene, canvas, hooks, SCENES,
     pending: [],
     gates: [],              // promises frame 0 waits for (pushed in build(): a Lottie file loading, a decoded asset)

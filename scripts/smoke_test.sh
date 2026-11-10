@@ -15,6 +15,7 @@ node "$SKILL/tests/test_blocks.mjs"
 node "$SKILL/tests/test_editorial.mjs"
 node "$SKILL/tests/test_frame_clock.mjs"
 node "$SKILL/tests/test_morph.cjs"
+node "$SKILL/tests/test_motion_kit.mjs"
 node "$SKILL/tests/test_themes.mjs" >/dev/null
 python3 -m unittest discover -s "$SKILL/tests" -p 'test_theme_pick.py' 2>&1 | tail -1
 node "$SKILL/tests/test_paper_hand.mjs" >/dev/null

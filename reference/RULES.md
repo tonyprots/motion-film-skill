@@ -117,6 +117,17 @@ other places refer to it.
 - **Enters:** rise through a mask; grow out of something (0.8–0.9 → 1, opacity within ≤ 4 frames); type on; build
   (skeleton → content); card rise. **Exits:** lift through the mask; get covered; get pushed past camera; collapse into
   what replaces it; a hard cut. A pure opacity fade is never an enter or an exit; only small eyebrow and sub lines may fade.
+- **Exits are quicker than entrances and accelerate** (from motion-kit, 2026-11-06): ~0.65 of the entrance on
+  `C.ease.leave` (`kit.leave`) — the thing leaves with intent and never settles. `TYPE.rise` exits this way by default.
+- **Duration from distance and weight, not habit:** `C.byDist(px, role, weight)` scales the spring's response against a
+  300 px move (weight 0.7 light, 1, 1.35 heavy). A chip and a full-frame panel do not travel alike.
+- **Decide what the move is before its curve.** Most supporting lines simply arrive on the beat or the word (a hard cut,
+  `C.put` with no animation); a mask rise is for titles; type-on only for what is literally being typed (a prompt, a
+  terminal); a tracking settle for a premium title; scramble for data, hashes, IDs; an underline wipe for emphasis on a
+  word already on screen. Blur-ins, fade-on-everything and shimmer sweeps across text are AI tells.
+- **Curves by name** where a spring is wrong (exits, wipes, travel along a path): `C.curve('kit.land' | 'kit.heavy' |
+  'kit.whip' | 'kit.reveal' | 'kit.leave' | 'kit.wind' | 'kit.drift' | 'm3.*' | 'carbon.*')`, your own `C.bez(x1, y1, x2, y2)`.
+  The same four numbers are CSS `cubic-bezier`, an AE speed graph, Blender handles. Never a preset because it is the default.
 - **A hit's motion starts before the beat so it lands on it:** use `C.spHit()`, never `C.sp()`, for anything with a sound.
   The audio stays on the grid, on the frame the object lands, with no lead of its own (measured: an audio lead of 0 gives 31/48 hits in sync). `review.py`'s
   metric measures the start of motion — confirm sync on frame strips.
@@ -144,7 +155,9 @@ other places refer to it.
 - **Cut on action, with a carrier.** A scene changes during an action, not after it. Most transitions have a carrier: a
   shape, position or colour that travels into the next scene.
 - **J/L cuts.** The next scene's sound starts 80–200 ms before the picture; the previous scene's tail runs 100–300 ms past it.
-- **Cascade rhythm.** Steps of 30–80 ms in reading order (`C.stagger`), at most 6–8 per wave, the wave ≤ 0.6 s. Four or
+- **Cascade rhythm.** One element leads, the rest react at uneven offsets: `C.stagger(i)` gives 0, 0.8, 1.8, 3, 4.4, 6
+  steps (`C.react`), steps of 30–80 ms in reading order, at most 6–8 per wave, the wave ≤ 0.6 s. An even line reads as a
+  loop, not a chain of causes; `"cascade": "even"` only where mechanics is the point (`riso`, prints on twos). Four or
   more elements on the same frame is a fault by default, unless the synchrony is deliberate ("Composition rules" above). A container arrives 40–120 ms before its content.
 - **Anticipation on big moves:** before the main zoom or a scene change — 2–3 frames of counter-motion or a sound "breath in".
 - **The camera arrives before the action:** the push starts 0.3–0.5 s before the click or the word. Zoom 1.4–2.5×, never past 3×.

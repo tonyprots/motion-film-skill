@@ -50,7 +50,7 @@
     blueprint: { step: 0, enter: 'draw', stagger: 0.07,
       roles: { enter: { response: 0.5, damping: 0.9 }, text: { response: 0.45, damping: 0.75 } } },
     // «Ризограф»: a stack of prints on twos; each element stamps or slides in reading order, 4–6 frames apart
-    riso: { step: 12, enter: 'stamp', stagger: 0.17,
+    riso: { step: 12, enter: 'stamp', stagger: 0.17, cascade: 'even',
       roles: { enter: { response: 0.3, damping: 0.58 }, text: { response: 0.32, damping: 0.58 } } },
     // «Графит и сигнал»: calm and exact; the one chartreuse accent arrives with the event it stands for
     graphite: { step: 0, enter: 'rise', stagger: 0.06,
@@ -111,6 +111,7 @@
     Motion.configure({ roles: m.roles });
     Motion.configure({ roles: own.roles || {}, presets: own.presets || {} });
     if (own.stagger == null) own.stagger = m.stagger;
+    if (own.cascade == null && m.cascade) own.cascade = m.cascade;   // riso: prints on twos stay mechanical
   }
   const FONTS = {
     sofia: ['Sofia', 'sofia-sans-extra-condensed'], literata: ['Literata', 'literata'], tektur: ['Tektur', 'tektur'],

@@ -61,8 +61,8 @@
     "formats": [],        // any of "16x9", "1x1", "4x5", "9x16". The first one is the primary format.
     "music": {
       "source": "",       // "synth" (original score in code), "file" (+ "path"), "ace" (local), "elevenlabs" / "openrouter" (+ "prompt"), "none"
-      "chords": [],       // one chord per bar, cycled, e.g. ["Am", "F", "C", "G"]
-      "seed": null        // any integer; change it for a different arrangement of the same parts
+      "chords": [],       // one chord per bar, cycled, e.g. ["Am", "F", "C", "G"]; empty — the seed picks progression and key
+      "seed": null        // any integer: chords (when unset), key and motif; empty — derived from the project folder name
     }
   },
 

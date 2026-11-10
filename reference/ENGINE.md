@@ -247,7 +247,10 @@ A stage theme (`THEMES.use`, "Themes: motion") sets its own roles and cascade fi
 reads as a jolt (measured 2026-10-11: peak acceleration 150 vs ~3 with `soft`). `soft` averages the response over a window
 of that length, in closed form: acceleration ramps up, the motion lags by about `soft/2`. Default only for the `camera` role;
 for your own preset — `"presets": {"dolly": {"response": 1.1, "damping": 1, "soft": 0.12}}`. Hits on a beat do not need it.
-`C.stagger(i)` is the i-th cascade delay in seconds (0.05 by default: cascade 30–80 ms, ≤ 8 a wave).
+`C.stagger(i)` is the i-th cascade delay in seconds: one leads, the rest react unevenly (`C.react(i, step)`: 0, 0.8,
+1.8, 3, 4.4, 6 steps, then +1.6); the step is 0.05 by default, ≤ 8 a wave. `"motion": {"cascade": "even"}` gives a plain `i·step`.
+`C.byDist(px, role, weight)` is a preset with its response from distance and weight. `C.curve(name)` / `C.bez(x1, y1, x2, y2)`
+is an x → y curve (names in `C.CURVES`), `C.ease.leave` the accelerating exit.
 
 ## WebGL layer: three.js + post-processing (motion-film)
 For what the DOM cannot do: a 3D hero, physical materials and light, glass, depth of field, bloom, a device with a real
