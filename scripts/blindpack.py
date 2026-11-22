@@ -9,6 +9,11 @@ Writes review/blind_r<round>/ and NOTHING else goes to the reader:
 The reader is a fresh agent that opens only this folder: no SCRIPT.md, no brief, no code, no previous rounds. A reader who
 saw round N is no longer blind for round N+1. Then compare the reader's thesis and chain with ## STORY (reference/BLIND.md)."""
 import json, os, shutil, subprocess, sys
+if '--visual-only' in sys.argv:
+    from visualpack import main
+    main()
+    sys.exit(0)
+
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 

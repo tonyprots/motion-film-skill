@@ -1,12 +1,19 @@
 # House rules
 
-Apply these in every project, including one with no CLAUDE.md. A project's CLAUDE.md wins where it is stricter. The film's
-format (`FORMATS.md`, `EXPLAINERS.md`) overrides only what is written in the "Overrides" field of its card; the render
-contract, legibility, contrast and sound are never overridden by a format. The thresholds below are starting points;
-critique rounds calibrate them. Where a machine checks a rule, the rule is named in one line with the name of the check:
+Apply these alongside the project's active instructions. Distinguish obligations from implementation choices.
+Facts, real UI, rights, permissions, preservation, and honest conclusions are obligations. Requested formats,
+legibility, contrast, sound, and technical specifications are delivery requirements. Composition, light, springs,
+fades, event frequency, push size, pauses, and the numbers in "AAA direction" are initial artistic settings, not a
+universal quality scale. A reasoned style-guide decision may replace them without another approval, preserving the
+narrative contract and techniques explicitly approved by the user. A format name alone does not approve all its numbers.
+Respect existing exceptions in `FORMATS.md` and `EXPLAINERS.md`; assess artistic WARNs against the intent instead of
+fixing them mechanically. This does not waive technical FAILs. Thresholds below are starting points, calibrated by
+critique. Where a machine checks a rule, it is named in one line with the name of the check:
 the exact thresholds live in its code and its message.
 
 ## Render contract
+The contract below applies to the code workflow. Freeze external clips and images as inputs: repeatable assembly
+does not mean that a new generation with the same seed will produce an identical asset.
 - The film is a pure function of time. `window.seek(t)` paints frame t, in any order, cold or after any other frame.
 - Render mode has no CSS transitions or animations, no `setTimeout`, no `requestAnimationFrame`, no `Date`, and no state carried between frames (no module variable mutated in `run()`).
 - Randomness is seeded only (`C.mulberry32(seed)`, `C.noise1(seed)`). Never `Math.random`.
@@ -92,11 +99,10 @@ other places refer to it.
 - **The voice is the timeline.** Everything on screen animates from voice marks (`<id>`, `<id>.<k>`, `<id>.w<k>`, `<id>.end`).
   With `vo_layout.timing: music`, hard cuts land on bars and phrases on half-beats; with `speech`, cuts follow speech
   without rounding. The grid is a coordinate system for time, not a compulsory metronome for speech.
-- Something new appears every 2–4 s; nothing holds longer than one bar without a new element. The end card holds ≤ 2 s and is never static.
-  A camera creep or a breathing character is not an event: viewers read the frame as stuck when under ~5 % of the
-  picture outside the captions changes in a second (`scripts/stillness.py`; 2026-10-26, agrees with blind critics). An
-  event is an element moving, something new revealed, the camera leading the eye (the camera may also stand still — see
-  "The camera is punctuation"). A slow micro push on every shot is the mark of a slide show.
+- Let action, speech and reading time set the pace. In a fast edit, 2–4 seconds between accents can guide a first draft.
+  A viewer can follow a newly revealed detail or a connection on a diagram even when it occupies little of the frame.
+  Check long holds against the subject and the purpose of the pause (CRITIQUE.md, “STILL intervals”). An end card usually fits
+  in two seconds if the viewer has time to read it. A slow push on every shot soon becomes repetitive.
 - The hook reads in the first 2 s, and frame 0 is never empty. In a launch film the product or hero is on screen by second 3.
 - **Text hold:** whole on screen for ≥ characters / 15 + 0.4 s and never under 0.8 s (2026-10-22, one rule instead of the
   two earlier ones). If you need room, take a bar of air, not a shorter show. Two simultaneous headlines need a clear
@@ -180,7 +186,9 @@ other places refer to it.
   calm on exposition and faster on a turn. Checked by `plan_check.py` (the shotlist) and `review.py` (the finished film).
 - **A directed cursor:** an arc with ease-in and ease-out, a micro-pause before the click, a response (pulse + sound).
 - **Scene typography:** at most three text sizes, adjacent levels ≥ 1.5× apart. A headline is a point of up to 9 words.
-- **Stills first, motion second:** styleframes are approved before animation, the hook in three variants (SKILL.md step 7).
+- **Image and sequence:** an early trial tests the riskier uncertainty first. Finished styleframes precede finished
+  animation, not the rough edit. Do not repeat variant production when comparable images have already established a
+  direction (SKILL.md steps 2 and 7).
 
 ## Sound (details — AUDIO.md)
 - Score and SFX are synthesized in code unless a track is supplied; every hit sits on the grid and is declared in

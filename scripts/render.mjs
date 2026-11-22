@@ -42,6 +42,7 @@ import { fileURLToPath } from 'node:url';
 import { decodePNG } from './png.mjs';
 import { filmFile, hostOk, mimeOf } from './static_files.mjs';
 import { reviewStory } from './story_check.mjs';
+import { runChecked, watchEncoder, writeFrame, workerExitError, stagingPath, probeVideo, publishVideos } from './render_safety.mjs';
 import { createRequire } from 'node:module';
 
 const ROOT = process.cwd();
@@ -72,20 +73,23 @@ const DRAFT = has('draft') || ANIMATIC;
 const AUDIO = path.resolve(ROOT, opt('audio', 'audio/mix.wav'));
 const hasAudio = fs.existsSync(AUDIO);
 const mkdir = (d) => fs.mkdirSync(d, { recursive: true });
-const run = (cmd, a) => { const r = spawnSync(cmd, a, { stdio: ['ignore', 'inherit', 'pipe'] }); if (r.status) throw new Error(`${cmd} failed: ${r.stderr}`); return r; };
+const run = runChecked;
 
 // ------------------------------------------------------------------ --mux: new mix into existing renders, video untouched
 if (has('mux')) {
   if (!hasAudio) { console.error('no audio at', AUDIO); process.exit(1); }
   for (const fmt of FORMATS) {
-    const src = path.join(ROOT, `renders/${DRAFT ? "draft_" : ""}${fmt}.mp4`), tmp = src + '.tmp.mp4';
+    const src = path.join(ROOT, `renders/${DRAFT ? "draft_" : ""}${fmt}.mp4`), tmp = stagingPath(src);
+    const outputs = [{ staged: tmp, output: src, expected: probeVideo(src) }];
     run('ffmpeg', ['-y', '-loglevel', 'error', '-i', src, '-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-af', 'apad', '-c:a', 'aac', '-b:a', '320k', '-shortest', '-movflags', '+faststart', tmp]);
-    fs.renameSync(tmp, src); console.log('muxed', src);
     const m = src.replace(/\.mp4$/, '_master.mp4');
     if (fs.existsSync(m)) {
-      run('ffmpeg', ['-y', '-loglevel', 'error', '-i', m, '-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-tag:v', 'hvc1', '-af', 'apad', '-c:a', 'aac', '-b:a', '320k', '-shortest', '-movflags', '+faststart', m + '.tmp.mp4']);
-      fs.renameSync(m + '.tmp.mp4', m); console.log('muxed', m);
+      const staged = stagingPath(m);
+      outputs.push({ staged, output: m, expected: probeVideo(m) });
+      run('ffmpeg', ['-y', '-loglevel', 'error', '-i', m, '-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-tag:v', 'hvc1', '-af', 'apad', '-c:a', 'aac', '-b:a', '320k', '-shortest', '-movflags', '+faststart', staged]);
     }
+    publishVideos(outputs);
+    for (const { output } of outputs) console.log('muxed', output);
   }
   process.exit(0);
 }
@@ -110,6 +114,15 @@ const browser = await chromium.launch({ args: ['--force-color-profile=srgb', '--
 async function openFilm(fmt, variant = null) {
   const [W, H] = SIZES[fmt];
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
+  // B-roll inputs must come from the underlying film, never an older generated bridge.
+  if (process.env.MF_BROLL_CAPTURE === '1') await page.addInitScript(() => {
+    let timeline;
+    Object.defineProperty(window, 'TL', {
+      configurable: true,
+      get: () => timeline,
+      set: (value) => { timeline = { ...value, broll: [] }; },
+    });
+  });
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') console.log('[page]', m.text()); });
   page.on('pageerror', (e) => { console.error('[pageerror]', e.message); process.exitCode = 1; });
   await page.goto(`http://127.0.0.1:${server.address().port}/film/index.html?fmt=${fmt}${variant ? '&variant=' + encodeURIComponent(variant) : ''}`);
@@ -129,11 +142,10 @@ async function openFilm(fmt, variant = null) {
 
 function ffmpeg(a) {
   const p = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...a], { stdio: ['pipe', 'inherit', 'inherit'] });
-  const done = new Promise((ok, bad) => p.on('close', (c) => (c ? bad(new Error(`ffmpeg exit ${c}`)) : ok())));
-  return { p, done };
+  return watchEncoder(p);
 }
 // wait for each frame to be flushed: on macOS a large buffer still queued when stdin.end() runs can reach ffmpeg cut short
-const write = (s, buf) => new Promise((ok, bad) => s.write(buf, (e) => (e ? bad(e) : ok())));
+const write = writeFrame;
 
 // ------------------------------------------------------------------ video: frames → ffmpeg
 const VIDEO = !['sheet', 'verify', 'at', 'lint', 'seams', 'story'].some(has);
@@ -258,6 +270,7 @@ async function renderVideo(F, fmt, t0) {
   const P = videoParams(F);
   const out = path.join(ROOT, 'renders', has('range') ? `clip_${fmt}_${P.a}-${P.b}.mp4` : `${ANIMATIC ? 'animatic_' : DRAFT ? 'draft_' : ''}${fmt}.mp4`);
   mkdir(path.dirname(out));
+  const staged = stagingPath(out);
   const withAudio = hasAudio && !has('range');
   const hist = {};
   const chunk = Math.max(1, Math.round(+opt('chunk', 4) * P.fps));
@@ -265,25 +278,43 @@ async function renderVideo(F, fmt, t0) {
   for (let i = 0; i < P.N; i += chunk) chunks.push([i, Math.min(P.N, i + chunk)]);
   const K = Math.min(WORKERS, chunks.length);
   if (K <= 1) {
-    const { p, done } = encoder(F, P.fps, out, withAudio ? AUDIO : null);
-    await renderFrames(F, P, 0, P.N, p.stdin, hist, (i) => { if (i % 60 === 0) process.stdout.write(`\r${fmt} frame ${i}/${P.N}  ${((Date.now() - t0) / 1000).toFixed(0)}s   `); });
-    p.stdin.end(); await done;
+    const { p, done } = encoder(F, P.fps, staged, withAudio ? AUDIO : null);
+    try {
+      await renderFrames(F, P, 0, P.N, p.stdin, hist, (i) => { if (i % 60 === 0) process.stdout.write(`\r${fmt} frame ${i}/${P.N}  ${((Date.now() - t0) / 1000).toFixed(0)}s   `); });
+      p.stdin.end(); await done;
+    } catch (error) { p.kill(); await done.catch(() => {}); throw error; }
   } else {
     await F.page.close(); F.page = { close: async () => {} };          // the parent only coordinates
     const partsDir = path.join(ROOT, 'renders/.parts', `${path.basename(out, '.mp4')}-${process.pid}`); mkdir(partsDir);
     const parts = chunks.map((_, k) => path.join(partsDir, `p${String(k).padStart(4, '0')}.mp4`));
     let next = 0, framesDone = 0, failed = null, lastLog = 0;
+    const completed = new Set(), children = [];
     const self = fileURLToPath(import.meta.url);
     await new Promise((resolve, reject) => {
       let alive = K;
+      const fail = (error) => {
+        if (failed) return;
+        failed = error;
+        for (const child of children) child.kill();
+        reject(error);
+      };
       for (let w = 0; w < K; w++) {
         const child = fork(self, argv, { env: { ...process.env, MF_WORKER: '1', MF_FMT: fmt }, stdio: ['ignore', 'inherit', 'inherit', 'ipc'] });
+        children.push(child);
+        const state = { pending: null, quitting: false };
         const give = () => {
-          if (failed || next >= chunks.length) return child.send({ quit: true });
-          const k = next++; child.send({ k, i0: chunks[k][0], i1: chunks[k][1], out: parts[k] });
+          if (failed) return;
+          if (next >= chunks.length) { state.quitting = true; return child.send({ quit: true }, (error) => { if (error) fail(error); }); }
+          const k = next++; state.pending = k;
+          child.send({ k, i0: chunks[k][0], i1: chunks[k][1], out: parts[k] }, (error) => { if (error) fail(error); });
         };
         child.on('message', (m) => {
+          if (failed) return;
           if (m.ready || m.done !== undefined) {
+            if (m.done !== undefined) {
+              if (m.done !== state.pending || completed.has(m.done)) return fail(new Error('unexpected completed render chunk'));
+              completed.add(m.done); state.pending = null;
+            } else if (state.pending !== null || state.quitting) return fail(new Error('unexpected worker ready'));
             if (m.hist) for (const [s, c] of Object.entries(m.hist)) hist[s] = (hist[s] || 0) + c;
             give();
           }
@@ -292,25 +323,35 @@ async function renderVideo(F, fmt, t0) {
             if (Date.now() - lastLog > 2000) { lastLog = Date.now(); process.stdout.write(`\r${fmt} frame ${framesDone}/${P.N}  ${K} workers  ${((Date.now() - t0) / 1000).toFixed(0)}s   `); }
           }
         });
-        child.on('exit', (code) => {
-          if (code && !failed) failed = new Error(`render worker exited with ${code}`);
-          if (--alive === 0) (failed ? reject(failed) : resolve());
+        child.on('error', fail);
+        child.on('exit', (code, signal) => {
+          const error = workerExitError(code, signal, state);
+          if (error) fail(error);
+          if (--alive === 0 && !failed) {
+            if (completed.size !== chunks.length) fail(new Error('render workers left unfinished chunks'));
+            else resolve();
+          }
         });
       }
     });
     const list = path.join(partsDir, 'list.txt');
     fs.writeFileSync(list, parts.map((p) => `file '${p.replace(/'/g, "'\\''")}'`).join('\n'));
     const join = (lst, dst) => run('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, ...(withAudio ? ['-i', AUDIO, '-map', '0:v', '-map', '1:a', '-af', 'apad', '-c:a', 'aac', '-b:a', '320k', '-shortest'] : []),
-      '-c:v', 'copy', ...(dst === out ? [] : ['-tag:v', 'hvc1']), '-movflags', '+faststart', dst]);
-    join(list, out);
+      '-c:v', 'copy', ...(dst === staged ? [] : ['-tag:v', 'hvc1']), '-movflags', '+faststart', dst]);
+    join(list, staged);
     if (FIN.master && HI) {
       const listM = path.join(partsDir, 'list_master.txt');
       fs.writeFileSync(listM, parts.map((p) => `file '${masterOf(p).replace(/'/g, "'\\''")}'`).join('\n'));
-      join(listM, masterOf(out));
+      join(listM, masterOf(staged));
     }
     fs.rmSync(partsDir, { recursive: true, force: true });
     try { fs.rmdirSync(path.join(ROOT, 'renders/.parts')); } catch {}
   }
+  if (process.exitCode) throw new Error('render reported page errors; final output was not replaced');
+  const expected = { frames: P.N, fps: P.fps, ...(!ANIMATIC ? { width: F.W, height: F.H } : {}) };
+  const outputs = [{ staged, output: out, expected }];
+  if (FIN.master && HI) outputs.push({ staged: masterOf(staged), output: masterOf(out), expected });
+  publishVideos(outputs);
   console.log(`\nwrote ${path.relative(ROOT, out)}  ${P.N} frames @ ${P.fps} fps${P.blur ? '  sub-frames ' + JSON.stringify(hist) : ''}${withAudio ? '  + ' + path.relative(ROOT, AUDIO) : '  (silent)'}  ${K > 1 ? K + ' workers  ' : ''}${((Date.now() - t0) / 1000).toFixed(0)}s`);
 }
 
@@ -323,8 +364,11 @@ if (process.env.MF_WORKER) {
     try {
       const hist = {}; let since = 0;
       const { p, done } = encoder(F, P.fps, m.out, null);
-      await renderFrames(F, P, m.i0, m.i1, p.stdin, hist, () => { if (++since === 30) { process.send({ frames: since }); since = 0; } });
-      p.stdin.end(); await done;
+      try {
+        await renderFrames(F, P, m.i0, m.i1, p.stdin, hist, () => { if (++since === 30) { process.send({ frames: since }); since = 0; } });
+        p.stdin.end(); await done;
+      } catch (error) { p.kill(); await done.catch(() => {}); throw error; }
+      if (process.exitCode) throw new Error('worker reported page errors');
       if (since) process.send({ frames: since });
       process.send({ done: m.k, hist });
     } catch (e) { console.error('[worker]', e.message); process.exit(1); }
@@ -761,7 +805,12 @@ for (const fmt of FORMATS) {
       const f = path.join(dir, `t${t.toFixed(3)}.png`); fs.writeFileSync(f, await F.png(t)); console.log('wrote', path.relative(ROOT, f));
     }
   } else {
-    await renderVideo(F, fmt, t0);
+    try { await renderVideo(F, fmt, t0); }
+    catch (error) {
+      await browser.close().catch(() => {});
+      server.close();
+      throw error;
+    }
   }
   await F.page.close();
 }

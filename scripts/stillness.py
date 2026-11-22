@@ -1,16 +1,12 @@
-"""Find stretches where the picture stops changing: stillness.py <video.mp4> [--mask 0,0.2] [--min 1.0] [--json out]
+"""Flag low whole-frame change for review. A small object can still change state inside a STILL range.
 
-A viewer reads a frame as "stuck" when nothing new happens for about a second, even if a caption ticks, the camera
-creeps or a character breathes. So the check compares each frame with the frame `--lag` seconds earlier on a small grey
-copy and takes the share of pixels that changed by more than `--delta` (0–255). Bands given with --mask (fractions of
-the height, e.g. the caption band 0,0.2) are ignored. If even the busiest frame of a `--min`-second window stays under
-`--thr`, that window is still; overlapping still windows merge into one STILL range.
-
-Calibrated on one 70-second 9:16 pair (2026-10-26): every stretch three blind critics called static in our film peaked
-at 2–5 % changed pixels per second; the reference film never dropped under 9 % except its closing hold. It is a
-pointer for the critic and the author, not a gate: a deliberate hold (end card, a beat of silence) is legitimate.
+Compare sampled grayscale frames separated by --lag, excluding --mask bands. If the changed fraction
+stays under --thr throughout a --min window, merge it with adjacent flagged windows. Optional --pairs
+writes full-colour before/after samples from the encoded video; --region selects the subject for review.
 """
 import argparse, json, subprocess, sys
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import numpy as np
 
@@ -23,14 +19,31 @@ p.add_argument('--delta', type=int, default=18, help='per-pixel change that coun
 p.add_argument('--thr', type=float, default=0.045, help='share of changed pixels below which the frame is still')
 p.add_argument('--fps', type=int, default=10)
 p.add_argument('--json')
+p.add_argument('--pairs', type=Path, metavar='DIR', help='save before/after images in a new or empty directory')
+p.add_argument('--region', metavar='X0,Y0,X1,Y1', help='crop the evidence to these frame fractions; detection stays unchanged')
 a = p.parse_args()
+crop = ''
+if a.region:
+    if not a.pairs:
+        p.error('--region needs --pairs DIR')
+    try:
+        x0, y0, x1, y1 = map(float, a.region.split(','))
+    except ValueError:
+        p.error('--region expects x0,y0,x1,y1')
+    if not (0 <= x0 < x1 <= 1 and 0 <= y0 < y1 <= 1):
+        p.error('--region must be a positive rectangle within 0..1')
+    crop = f"crop=w='max(1,iw*{x1-x0})':h='max(1,ih*{y1-y0})':x=iw*{x0}:y=ih*{y0}:exact=1,"
+if a.pairs and a.pairs.exists() and (not a.pairs.is_dir() or any(a.pairs.iterdir())):
+    p.error('--pairs needs a new or empty directory')
+if a.fps <= 0:
+    p.error('--fps must be positive')
 
 W, H = 72, 128
 probe = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height',
                         '-of', 'csv=p=0', a.video], capture_output=True, text=True, check=True).stdout.strip().split(',')
 vw, vh = int(probe[0]), int(probe[1])
 if vw > vh: W, H = 128, 72
-raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', a.video, '-vf', f'fps={a.fps},scale={W}:{H},format=gray',
+raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', a.video, '-map', '0:v:0', '-vf', f'fps={a.fps},scale={W}:{H},format=gray',
                       '-f', 'rawvideo', '-'], capture_output=True, check=True).stdout
 frames = np.frombuffer(raw, np.uint8).reshape(-1, H, W).astype(np.int16)
 keep = np.ones(H, bool)
@@ -49,9 +62,47 @@ for i in range(lag, len(frames) - win + 1):
         if spans and t0 <= spans[-1][1]: spans[-1] = (spans[-1][0], t1)
         else: spans.append((t0, t1))
 
+def write_pairs():
+    from PIL import Image, ImageDraw
+
+    # Use the detector's fps filter and exactly its sample indices, including an EOF hold.
+    indices = [(min(len(frames) - 1, round(t0 * a.fps)), min(len(frames) - 1, round(t1 * a.fps) - 1))
+               for t0, t1 in spans]
+    needed = sorted({i for pair in indices for i in pair})
+    a.pairs.mkdir(parents=True, exist_ok=True)
+    select = '+'.join(f'eq(n,{i})' for i in needed)
+    filters = f"fps={a.fps},select='{select}',{crop}scale=w='min(iw,640)':h='min(ih,640)':force_original_aspect_ratio=decrease"
+    with TemporaryDirectory() as tmp:
+        subprocess.run(['ffmpeg', '-v', 'error', '-i', a.video, '-map', '0:v:0', '-vf', filters,
+                        '-fps_mode', 'vfr', str(Path(tmp) / '%06d.png')], check=True)
+        files = dict(zip(needed, sorted(Path(tmp).glob('*.png')), strict=True))
+        for number, (first, last) in enumerate(indices, 1):
+            with Image.open(files[first]) as before, Image.open(files[last]) as after:
+                width, height = before.size
+                board = Image.new('RGB', (2 * width + 2, height + 24), '#202020')
+                board.paste(before, (0, 24))
+                board.paste(after, (width + 2, 24))
+                label = ImageDraw.Draw(board)
+                for x, idx in ((0, first), (width + 2, last)):
+                    label.text((x + 2, 5), f'{idx / a.fps:.3f} s', fill='white')
+                path = a.pairs / f'still-{number:03d}.png'
+                with path.open('xb') as output:
+                    board.save(output, format='PNG')
+                print(f'PAIR {spans[number-1][0]:.2f}-{spans[number-1][1]:.2f} s  {path}')
+
+
 for t0, t1 in spans:
-    print(f'STILL  {t0:6.2f}–{t1:6.2f} s  ({t1 - t0:.1f} s, under {a.thr:.1%} of the frame changes per {a.min:g} s)')
+    print(f'STILL  {t0:6.2f}–{t1:6.2f} s  ({t1 - t0:.1f} s, under {a.thr:.1%} of unmasked pixels change across {lag / a.fps:g} s)')
 print(f'stillness: {len(frames) / a.fps:.1f} s checked at {a.fps} fps, mask {a.mask or "none"} · {len(spans)} STILL')
+if spans and a.pairs:
+    try:
+        write_pairs()
+    except (OSError, ValueError, subprocess.CalledProcessError) as error:
+        p.exit(2, f'could not finish STILL pairs: {error}\n')
 if a.json:
-    json.dump({'spans': spans, 'params': vars(a)}, open(a.json, 'w'), indent=1)
+    params = {k: v for k, v in vars(a).items() if k not in ('pairs', 'region')}
+    if a.pairs:
+        params.update(pairs=str(a.pairs), region=a.region)
+    with open(a.json, 'w') as out:
+        json.dump({'spans': spans, 'params': params}, out, indent=1)
 sys.exit(1 if spans else 0)

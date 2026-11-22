@@ -201,6 +201,13 @@ node scripts/player.mjs --selftest [--shot review/player.png]  headless check of
 python3 scripts/notes.py add <t> "…" [--el "<element>"] | resolve N --reply "…" [--rule "…"]
 ```
 
+## Preserving render outputs
+
+Rendering and `--mux` first write a unique `.render-*.mp4`. Before replacing a final, they check decoded frame count,
+FPS and duration; ordinary renders also check dimensions. Process errors or incomplete files do not replace the final.
+The previous version stays in `renders/archive/`. When upgrading an existing project, copy
+`scripts/render.mjs` together with `scripts/render_safety.mjs`; `init.sh` ships both.
+
 ## Render speed (motion-film)
 Video modes (`--draft`, finals, `--range`) run in parallel: the range is cut into `--chunk` seconds (default 4) and
 `--workers` processes (default: CPU cores − 4, max 4), each with its own Chromium, encode chunks that are joined
@@ -364,11 +371,15 @@ C.glDone();
 Only when the customer asks. 4–8 s of atmosphere between scenes: fog, light, material, space. No screens, text, faces or
 logos — the model makes them up. One or two per film; name the price before `--yes`. In `timeline.json`:
 `"broll": [{"id": "b1", "at": "s3", "seconds": 4, "prompt": "…", "model": "google/veo-3.1-fast", "resolution": "1080p"}]` —
-the bridge plays from mark `at` (a mark name only) for `seconds` over the scenes; its first frame is the film's frame at `at`,
-its last the film's frame at `at` + `seconds`, so scene B starts right there. `broll.py` with no flags prints the plan and the
-price, `--yes` generates what is missing through OpenRouter (`assets/broll/<id>_<fmt>/`), then `node scripts/sync.mjs`. The engine
-plays the frames itself: `seek(t)` waits for the frame to load (`C.pending`). Price at 1080p without audio: Veo 3.1 Fast
-~$0.10/s, Lite ~$0.05/s (720p $0.03/s). `render.mjs --at` takes a mark with an offset: `s3+4`.
+the bridge plays from mark `at` (a mark name only) for `seconds` over the scenes. The model receives the film's frames
+at `at` and `at` + `seconds`; exact boundary matching must be reviewed, not assumed.
+`broll.py` with no flags captures reference frames and plans without a paid request; `--yes` executes the plan.
+The provider catalog determines supported parameters and estimated prices; unknown prices are not zero.
+`--only b1 --fmt 9x16` selects an insert; `--max-cost 2` caps estimated new requests at two dollars.
+Cache identity includes the request and both frames' bytes; a legacy cache without a manifest requires a new
+generation, shown in the plan. Repeating a run resumes a saved job. See `GENERATED.md` for recovery, versions and review.
+After generation run `node scripts/sync.mjs`. `seek(t)` waits for frame decoding (`C.pending`);
+motion blur does not blend neighbouring footage frames. `render.mjs --at` takes a mark with an offset: `s3+4`.
 
 ## Overlay on a recording (`scripts/overlay_prep.py`, `lib/footage.js`)
 A finished recording (a talking head, a talk, an interview) is the bottom layer of the whole film, the engine's graphics are
@@ -667,3 +678,18 @@ dips to 0.918, the snap overshoots 7.8 %); no grammar has passed a blind critiqu
 
 `C.fonts` loads each face on a sample with Latin, Cyrillic and digits: a face split by `unicode-range` into cyr and lat files
 otherwise fetched only its Latin file, and Cyrillic vanished from the first frames (found 2026-10-28 on `blueprint`).
+
+
+## Word marks and object presence
+
+```js
+const beat = C.word('s2a', 'resume', {occurrence: 0, offset: 0});
+C.enterExit(t, object, {from: beat, to: 'leave', enterDuration: .6, exitDuration: .45,
+  enter: {x: 0, y: C.H + 40}, exit: {x: C.W + 40, y: 0}});
+C.rotate(hand, progress * 720, {origin: '50% 100%'});
+```
+`C.word` returns beats, not seconds. It matches a whole word or phrase in `window.LINES`; occurrence is zero-based. Matching ignores case, punctuation and the Russian yo/e variation. Missing text, word or mark throws. `sync.mjs` emits LINES from voice lines; rerun after changes.
+
+`enterExit`: t is seconds, from/to are beats or mark names, durations are seconds. `to` starts the exit; omit it to retain the object. Offsets are relative to the C.reg base x/y; base scale stays intact. Hidden before entrance, visible throughout its exit path. Choose the path for the actual object size. Do not animate the same node x/y with a second helper: use a child for local movement.
+
+`rotate` sets an angle in degrees, pivoting around the centre by default. Rotate a clock hand, retaining its casing. All helpers work with backwards seek. Finished examples: PILOT.md.

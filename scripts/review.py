@@ -3,7 +3,7 @@
 # Writes review/r<round>/:
 #   contact.jpg        primary format, 2 fps, 6 across, timestamps
 #   strip_fast.jpg     12 consecutive frames around the fastest action;  strip_fast2.jpg  the 2nd, a different moment
-#   strip_cut<k>.jpg   6 frames through every hard cut (review/cuts.json from render.mjs), up to 8 cuts
+#   strip_cut<k>_<fmt>.jpg   6 frames through every hard cut, every format (review/cuts.json from render.mjs)
 #   phone_<fmt>.jpg    1 fps at 360 px wide, every rendered format (what a phone feed shows)
 #   safe_9x16.jpg      9:16 at 1 fps with the Reels/TikTok UI zones shaded (top 14 %, bottom 20 %, right 12 %)
 #   loop_seam.jpg      last 6 + first 6 frames of the video played twice
@@ -250,7 +250,8 @@ R = next((a for a in sys.argv[1:] if not a.startswith('--')), '1')
 DRAFT = '--draft' in sys.argv
 OUT = f'review/r{R}'; os.makedirs(OUT, exist_ok=True)
 TL = json.load(open('timeline.json'))
-V = {f: f"renders/{'draft_' if DRAFT else ''}{f}.mp4" for f in TL['formats'] if os.path.exists(f"renders/{'draft_' if DRAFT else ''}{f}.mp4")}
+EXPECTED = {f: f"renders/{'draft_' if DRAFT else ''}{f}.mp4" for f in TL['formats']}
+V = {f: p for f, p in EXPECTED.items() if os.path.isfile(p)}
 if not V: raise SystemExit('no renders found: node scripts/render.mjs --draft --all  (or a final render)')
 P = TL['formats'][0] if TL['formats'][0] in V else next(iter(V))
 
@@ -260,6 +261,9 @@ tw, th = (480, int(480 * H0 / W0) // 2 * 2) if W0 >= H0 else (270, int(270 * H0 
 M = {'round': R, 'source': V[P], 'fps': round(FPS, 3), 'duration': round(DUR, 3)}
 GATES = []   # (level, check, message): FAIL blocks the round, WARN goes to the critic, NOT CHECKED is never "clean"
 def gate(level, check, msg): GATES.append({'level': level, 'check': check, 'msg': msg})
+M['formats'] = {'declared': list(EXPECTED), 'checked': list(V), 'missing': [f for f in EXPECTED if f not in V]}
+for f in M['formats']['missing']:
+    gate('FAIL', 'formats', f'{f}: declared format has no render: {EXPECTED[f]}')
 if TL.get('visual_format') == 'image-per-phrase':
     import hashlib
     for fmt in TL['formats']:
@@ -276,7 +280,8 @@ if TL.get('visual_format') == 'image-per-phrase':
             gate('FAIL', 'story', f'{fmt}: rendered phrase coverage did not pass: {story.get("coverage", 0):.0%}')
         else:
             gate('NOT CHECKED', 'meaning', f'{fmt}: rendered changes cover {story["coverage"]:.0%}; critic must verify meaning from pairs/clips')
-CUTS = json.load(open('review/cuts.json')).get(P, []) if os.path.exists('review/cuts.json') else None
+CUTS_ALL = json.load(open('review/cuts.json')) if os.path.exists('review/cuts.json') else {}
+CUTS = CUTS_ALL.get(P) if os.path.exists('review/cuts.json') else None
 
 
 # 0. encode spec, every format: size, fps, frame count, pixel format, colour tags, fast start, audio, clean decode
@@ -385,12 +390,42 @@ M['flashes'] = {**worst, 'limit_per_s': 3}
 if worst['per_s'] > 3: gate('FAIL', 'flash', f"{worst['per_s']:.1f} flashes/s at {worst['at_s']}s ({worst['where']}): photosensitivity limit is 3")
 elif worst['per_s'] >= 2: gate('WARN', 'flash', f"{worst['per_s']:.1f} flashes/s at {worst['at_s']}s ({worst['where']})")
 
-# hard cuts: 6 frames through each (3 before, 3 after), what the eye checks for a jump at the seam
-if CUTS:
-    for k, c in enumerate([c for c in CUTS if 0 < c < DUR][:8]):
-        i0 = max(0, min(NF - 6, int(round(c * FPS)) - 3)); idx = list(range(i0, i0 + 6))
-        st = frames_at(V[P], idx, 480, int(480 * H0 / W0) // 2 * 2)
-        tile([Image.fromarray(x) for x in st], 6, [f'f{i} {i / FPS:.3f}s' + (' |CUT' if i == int(round(c * FPS)) else '') for i in idx], f'{OUT}/strip_cut{k + 1}.jpg')
+# Hard cuts: every cut in every declared format. Decode shared frame indices once per format
+# (frames_at batches select expressions), rather than decoding the whole film again for each cut.
+M['cut_coverage'] = {}
+for fmt in EXPECTED:
+    coverage = {'planned': len(CUTS_ALL.get(fmt, [])), 'rendered': 0, 'skipped': [], 'strips': []}
+    M['cut_coverage'][fmt] = coverage
+    if fmt not in V: continue
+    if fmt not in CUTS_ALL:
+        gate('NOT CHECKED', 'cuts', f'{fmt}: no cut list in review/cuts.json')
+        continue
+    w, h, fps, duration = probe(V[fmt]); count = M['spec'][fmt]['frames']
+    cuts = [(k, c) for k, c in enumerate(CUTS_ALL[fmt]) if 0 < c < duration]
+    coverage['skipped'] = [c for c in CUTS_ALL[fmt] if not 0 < c < duration]
+    if coverage['skipped']:
+        gate('WARN', 'cuts', f'{fmt}: {len(coverage["skipped"])} cuts outside the open video interval (0, {duration}s): {coverage["skipped"]}')
+    if not cuts: continue
+    if count < 6:
+        gate('FAIL', 'cuts', f'{fmt}: fewer than 6 frames, cannot build cut strips')
+        continue
+    windows = []
+    for k, c in cuts:
+        i0 = max(0, min(count - 6, int(round(c * fps)) - 3))
+        windows.append((k, c, list(range(i0, i0 + 6))))
+    indices = sorted({i for _, _, idx in windows for i in idx})
+    sw = 480 if w >= h else 270; sh = int(sw * h / w) // 2 * 2
+    decoded = frames_at(V[fmt], indices, sw, sh)
+    if len(decoded) != len(indices):
+        gate('FAIL', 'cuts', f'{fmt}: decoded {len(decoded)}/{len(indices)} requested cut frames')
+        continue
+    by_index = dict(zip(indices, decoded))
+    for k, c, idx in windows:
+        filename = f'strip_cut{k + 1}_{fmt}.jpg'
+        tile([Image.fromarray(by_index[i]) for i in idx], 6,
+             [f'f{i} {i / fps:.3f}s' + (' |CUT' if i == int(round(c * fps)) else '') for i in idx], f'{OUT}/{filename}')
+        coverage['strips'].append({'at_s': c, 'file': filename, 'frames': idx})
+    coverage['rendered'] = len(coverage['strips'])
 
 # 3. phone test: 1 fps at 360 px wide, every format; 9x16 safe zones
 for f, p in V.items():
@@ -556,6 +591,11 @@ else:
     I_ = float(M['loudness']['I'].split()[0]); TP_ = float(M['loudness']['Peak'].split()[0])
     if abs(I_ + 14) > 0.5 or TP_ > -1: gate('FAIL', 'loudness', f'{I_} LUFS / {TP_} dBTP: target -14 ±0.5 LUFS, ≤ -1 dBTP (after AAC; remix with mix.py)')
 
+M['verdicts'] = {
+    'technical': 'FAIL' if any(g['level'] == 'FAIL' for g in GATES) else 'INCOMPLETE' if any(g['level'] == 'NOT CHECKED' for g in GATES) else 'PASS_WITH_WARNINGS' if any(g['level'] == 'WARN' for g in GATES) else 'PASS',
+    'visual': 'NOT_REVIEWED',
+    'delivery': 'NOT_DECIDED',
+}
 M['gates'] = GATES
 json.dump(M, open(f'{OUT}/metrics.json', 'w'), indent=1, ensure_ascii=False)
 print(json.dumps({k: v for k, v in M.items() if k not in ('sync', 'gates', 'spec', 'slideshow')}, indent=1, ensure_ascii=False))

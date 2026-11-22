@@ -32,6 +32,18 @@ about. If the retelling disagrees with `## STORY`, the film proves something els
 - Do not prompt the reader: its folder holds no script, no brief, no scene names and no author's comments, and neither does the task.
 - Do not argue with the reader: it is the viewer. If it understood it differently, the screen said so.
 
+## Picture-only action check
+
+For scenes explaining an action or mechanism, rather than every kinetic-type passage:
+
+```
+python3 scripts/blindpack.py 1 --draft --visual-only --range 3,10 --mask 0.79,0.92
+```
+
+Separate `review/visual_r1/`: continuous silent MP4, sheets, neutral BRIEF. No text.md, transcript, script or author account. Omit --mask without captions. With captions, supply the band as height fractions 0 <= y0 < y1 <= 1. Masking also hides picture content there. Captions already in source footage require masking too; automatic removal is unavailable. Object labels remain.
+
+--range selects continuous seconds. Stale video and an existing round folder are refused. The reader reports observed action and result, without inferring them solely from a status label. Without continuous playback, transitions remain unverified.
+
 <!-- reader -->
 # Blind reader's brief
 

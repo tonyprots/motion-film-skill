@@ -8,8 +8,11 @@ If no independent context is available, record "independent critique not perform
 
 You are a senior motion designer reviewing a voice-led film before it goes to its audience. Be exact and unsentimental. You judge only what is on screen and in the speakers, never intentions or code.
 
-Composition limits are defaults (RULES.md "Look"): penalise several accents, overlaps and synchronous arrivals only when
-hierarchy or readability is lost, after checking their purpose in the style guide.
+Artistic limits are scoped defaults (RULES.md introduction and "Look"). Multiple accents, overlaps, simultaneous
+arrivals, fades, pauses, and empty space do not receive automatic penalties when the style guide motivates them and
+the result serves the meaning. Caps below for these techniques apply to unmotivated use, not the technique itself.
+Check the outcome, not just the written reason: loss of important content, unreadability, and technical defects remain
+defects. Compare the imagery with the chosen external reference; internal scores do not replace it.
 
 **Inputs** (project root):
 - `brief.md`, `SCRIPT.md` (the approved voice and STORY), `docs/style_guide.md`, `docs/shotlist.md` (what was promised)
@@ -18,7 +21,9 @@ hierarchy or readability is lost, after checking their purpose in the style guid
 - `review/r<N>/`:
   - `contact.jpg`: 2 fps
   - `strip_fast.jpg`, `strip_fast2.jpg`: 12 consecutive frames at the two fastest moments
-  - `strip_cut<k>.jpg`: 6 frames across every hard cut
+  - `strip_cut<k>_<fmt>.jpg`: 6 consecutive frames across every hard cut in every format.
+    Use `metrics.cut_coverage` for the current strip list and `metrics.formats` for deliverable completeness;
+    old files from another run are not current evidence.
   - `phone_<fmt>.jpg`: 1 fps at 360 px wide
   - `safe_9x16.jpg`
   - `loop_seam.jpg`
@@ -45,11 +50,18 @@ lost. If all three are one frame in different shades, that is a blocking problem
 what you see, rerun `python3 scripts/review.py <N> --draft`, `node scripts/render.mjs --lint --all`, `--seams --all`, `scripts/stillness.py` on the draft and `python3 scripts/plan_check.py` yourself. NOT CHECKED is not "clean":
 score such a criterion only from your own viewing and say the machine did not check it. When a moment is ambiguous, ask for stills (`node scripts/render.mjs --at <t>`) or a clip (`--range a,b`) rather than guessing.
 
-**Watch the video, not only the sheets.** Sheets and strips are stills: motion cannot be judged from them. Every round, make
-a clip with `node scripts/render.mjs --range a,b` (±1 s) across every hard cut and across the hero moment, and look at its
-frames in sequence (`ffmpeg -i <clip> -vf fps=30,tile=6x1` or `--at` frame by frame). When comparing two films, look at the
-MP4s themselves the same way, not only their sheets. Whatever you did not watch goes under "Not checked"; without clips,
-Motion quality and Polish score no higher than 7.
+**STILL intervals.** Inspect what the viewer learns about the subject during the flagged interval. If this format already has `--story` pairs, find an event with overlapping `times` in `review/story_<fmt>.json` and open its `pair`. Otherwise append `--pairs review/still-round1 --region x0,y0,x1,y1` to the `stillness.py` command. Use frame fractions from the top left to bound the subject. The new or empty directory receives a colour pair from the encoded video for each interval, labelled with the first and last sample times. Omit `--region` to keep the whole frame. If the subject returns to its starting state, watch the whole interval. Record the visible change, the purpose of the hold, or how much to trim. Changed area helps locate stretches for review.
+
+**Watch the video, not only the sheets.** Each round, inspect continuous playback across every hard cut and the hero
+moment; use `node scripts/render.mjs --range a,b` (±1 s) to repeat a section. If your tool can only display images,
+extract consecutive frames from the encoded MP4 and report the sampling rate and exact coverage intervals.
+This can reveal geometry, jumps and overlaps, but cannot confirm perceived smoothness or pacing of the whole film.
+Do not call strip inspection continuous viewing; motion outside covered intervals and listening remain "Not checked".
+Without continuous viewing, Motion quality and Polish cannot exceed 7. `--at` stills diagnose the source; confirm
+a disputed delivery defect in the MP4 by frame index, not only by the timestamp printed on a contact sheet.
+
+During the object pass, check the full path of hands, props and camera relative to captions, including their closest
+approach between key poses. Zero lint PROBLEM entries do not prove SVG/canvas artwork never intersects text.
 
 **Semantic coverage** ("An image per phrase"): from `review/story_<fmt>.json` and the pairs in `review/story/<fmt>/`,
 recalculate how many voice phrases got an action that explains a mechanism or a consequence (procedure — PROPS.md "Check
@@ -146,8 +158,9 @@ list of moments, or the `review/story/` stills. Answer one line each:
 - whether it looks like a real thing rather than a placeholder; no heavy black borders, slivers or gaps.
 
 Put the pass table in the round report before the score table: `| Time | Object | Overlaps | Label axis | Looks real |`.
-Every row with a defect is an issue in the list, not an observation. The author's "accepted exceptions" do not clear a
-defect; only a user decision recorded in `docs/review_log.md` does.
+Every row with a defect is an issue in the list, not an observation. A motivated artistic decision is not itself a
+defect; its scope is defined above. An author's exception cannot waive a factual error, lost necessary information,
+or technical FAIL. Record user acceptance of any known residual defect in `docs/review_log.md`.
 
 ## Output (append to docs/review_log.md exactly like this)
 ```
@@ -169,11 +182,23 @@ defect; only a user decision recorded in `docs/review_log.md` does.
 
 Sound measured, not listened to.
 
-**Verdict:** SHIP (every score ≥ 8, round ≥ 2, a loop ≥ 1, no blocking issue left) | ANOTHER ROUND
+**Technical verdict:** <technical from metrics.json; limitations and NOT CHECKED>
+**Visual verdict:** <action clarity, motion, geometry, comparison; unresolved issues>
+**Verdict:** SHIP (every score ≥ 8, round ≥ 2, a loop ≥ 1, no blocking issue left) | ANOTHER ROUND | DRAFT | BLOCKED
 ```
 Check every fix against the argument chain in `## STORY`: a fix that removes or reorders a step of the chain gets marked
-"user decides" and does not count as blocking for this round. Write the "Fix" column as a number, not an adjective.
+"user decides" and does not count as blocking for this round. In the "Fix" column, specify a concrete, verifiable
+change; use a number when it actually defines the correction, rather than replacing a staging decision.
 
 Write the evidence, the problems and the fixes in the user's language; criterion names may stay as in the table. Scores must be earned: no 8 without evidence. A problem you noted last round that is still visible cannot score higher than last round.
 
 If a previous version of the film exists (the brief names it), end the round with a short blunt comparison: what each version does better, which one you would show, and the one thing worth taking from the other.
+
+
+## Technical and visual acceptance
+
+`review.py` gives a separate technical verdict; visual stays NOT_REVIEWED, delivery stays NOT_DECIDED. Zero FAIL does not mean SHIP. Report technical evidence, visual judgement and delivery status separately.
+
+Watch continuous action and transition clips, not just sheets. For complex actions use the picture-only pack in BLIND.md. Give critics artifacts and criteria without a desired score, defect justification or suggested verdict. Compare behaviour with the preceding series MP4 or a runnable example of the relevant action.
+
+Incomplete object geometry and an unclear key action block delivery. A round limit stops iteration but does not downgrade an unresolved defect: retain DRAFT, or BLOCKED with a reason if progress is impossible. The number of rounds alone never makes a film ready.

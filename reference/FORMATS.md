@@ -57,12 +57,19 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
 - **Use when:** a feature launch, a tutorial, a decision for leadership where the proof is "here it works".
 - **Don't use:** there is no interface or it isn't ready; the idea is about a position, not a product.
 - **Signature:** one action of the hero runs from start to result on a live screen, with no redrawing.
-- **Editing:** cut on action, push to the target of the action (a button, a field) before the click, return to a wide shot in
-  the pause. A push toward text that can't be read otherwise is not editing: it means the scene needs a sign card (RULES.md).
+- **Choosing a take.** Find the state in the recording that shows the promised result, then scrub back to the start of the operation.
+  For example, to show an addition to a table, find the cell with its new value after the menu closes. If the footage shows
+  only an open menu, find another interval or narrow the claim to the available choices. Introduce a completion caption when the
+  change becomes visible. When control changes hands, check the source to establish what the person and the agent each did.
+- **Editing a recording.** Frame the detail the viewer needs. Show the target in advance when the choice of field matters.
+  If typing or the pointer obscures the result, show the action in context and move in on the completed block once the pointer
+  clears it. At phone size, the changed values or the extent of the new block should be discernible. When the claim depends on
+  what a line says, keep the whole line legible and on screen long enough to read.
 - **Voice:** leads, the screen proves; the title is the scene's thesis.
-- **Overrides:** nothing — this is the format the general rules were written for.
+- **Camera rule scope.** For a staged click, the camera reaches the target before the press. In recorded footage,
+  time the move for visibility of the action and its result.
 - **Build:** `CAM` (camera, cursor, focus), real screenshots in `assets/shots/`, live components (`C.ui`, ENGINE.md "Live components") where the cursor changes the screen, `Motion.indicator`, `swapAlpha`; for one or two shots where a big screen is itself the scene's point, `uiShot` (ENGINE.md "A screen in 3D").
-- **Push-in and click:** a ~2× push on one `camera`-role spring, no overshoot and no string of small push-ins; the camera
+- **Push-in and click for a cursor staged in code:** a ~2× push on one `camera`-role spring, no overshoot and no string of small push-ins; the camera
   still arrives before the click (RULES "A directed cursor"). Motion blur spreads out from the target and the text is sharp
   at rest — push into a live component or a full-resolution screenshot, never a stretched raster. The click: the button
   darkens under the cursor, presses to 95 % and springs back, a ring spreads from the click point; the step label pops last.

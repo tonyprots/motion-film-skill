@@ -1,6 +1,8 @@
 # Scene and graphics library
 
-Read when choosing an object, visual metaphor or reusable element. Search before building from scratch:
+Read after choosing the shot's visual idea: which object is visible, what it does and what the result should look like.
+The catalog is one implementation option alongside a prepared illustration, photo or recording, layers, 3D and generated
+media. An available component does not determine the shot's imagery. If a library option fits, search the catalog:
 
 ```sh
 node scripts/scenes.mjs counts
@@ -19,8 +21,9 @@ run `node scripts/sync.mjs` after editing assets.
 For a gesturing presenter, object illustrations and causal transfer, read `EDITORIAL.md`: `ACTOR`, `PUPPET`, `LIPSYNC`, `ILLUSTRATIONS`,
 `CAUSAL`. These entries use status `component`, separate from finished scene presets; no character/style is mandatory.
 For an outline carried into another with a checked seam, read `MORPH.md` (`MORPH.handoff`).
-Draw a film-specific object (a form with a missing field, an email lacking a detail) in the film project using the
-`EDITORIAL.md` contract; a generic checklist does not explain a particular omission.
+A film-specific object (a form with a missing field, an email lacking a detail) needs media that shows that particular
+omission. A drawing made in the project to the `EDITORIAL.md` contract is one option; a generic checklist cannot replace it.
+Asset suitability for motion: [ASSETS.md](ASSETS.md); test an uncertain route with a pilot: [PILOT.md](PILOT.md).
 
 - `ready`: 13 presets: six PROPS actions plus seven BLOCKS presets. These are parameters of four new helpers,
   not 13 separate engines. Validate content, layout and meaning in each film.
@@ -115,9 +118,10 @@ Explore these mechanisms for a wider scene vocabulary; they are design recipes, 
 | Actor with an action | a character gives, builds or points | local GLB/clips; absolute time; test skeleton/root motion separately | Kenney / Quaternius, selected CC0 packs |
 | Vector action | a prepared character/object animation | dotLottie `autoplay:false`; preload WASM/asset before `setFrame`; separate asset license | [dotLottie](https://github.com/LottieFiles/dotlottie-web) |
 
-**Objects from open sets.** No ready set of neutral objects with states and a compatible licence exists, so hero objects
-are drawn to the `EDITORIAL.md` contract (30 objects, skins `line`, `flat`, `mono`, `sketch`), secondary objects come
-from the `extras` set, and icons stay for chips and small signs. Verdicts as of 2026-10-26:
+**Objects from open sets.** The 2026-10-26 selection did not choose a suitable set of neutral objects with states
+and a compatible licence. `EDITORIAL.md` drawings (30 objects, skins `line`, `flat`, `mono`, `sketch`), the `extras`
+set and icons remain options for their respective roles, not a required way to make a shot.
+The findings below describe that selection; they do not prohibit other sources for a new visual idea:
 - Noto Emoji 2D/svg (Apache-2.0, LICENSE inside the svg folder) — taken as extras: 563 objects in
   `library/assets/extras/noto/`, commit pin and hashes in `manifest.json`. In the film's skins it reads almost like our
   own drawings. The 3D Noto exists only as a font and PNG; not taken;
@@ -127,11 +131,11 @@ from the `extras` set, and icons stay for chips and small signs. Verdicts as of 
 - Health Icons (CC0) — line medical signs, the same role as icons;
 - Open Doodles, Open Peeps, Humaaans (CC0) — almost all people, few objects;
 - Lucide, Tabler, Phosphor, Iconoir, Heroicons (MIT/ISC) — signs, not the hero object of a frame;
-- Fluent Emoji (MIT) — wide vocabulary, but the sticker look fights any film style and it has no states; not bundled;
+- Fluent Emoji (MIT) — wide vocabulary, but the sticker look did not fit the styles considered and it has no states; not bundled;
 - Twemoji (CC BY 4.0, attribution) and OpenMoji (CC BY-SA 4.0, share-alike) — not for an MIT library;
 - unDraw, DrawKit, Storyset, ManyPixels, SVG Repo — licences forbid redistributing the set.
 
-For 3D, start with Three.js and one Poly Haven object/local HDRI; for vector characters, Open Peeps, Open Doodles or
+For a chosen browser-based 3D route, Three.js and one Poly Haven object/local HDRI are a possible start; for vector characters, Open Peeps, Open Doodles or
 Humaaans (selected CC0 sources). Fluent Emoji supplies 3D-looking raster, not rotatable models. Twemoji code is MIT,
 graphics are CC BY 4.0. Do not bundle raw Mixamo, unDraw, DrawKit or LottieFiles as a general asset pack.
 
@@ -145,3 +149,8 @@ backward seek, hidden scenes, alternate data, both formats and local resources; 
 Decoration need not prove a phrase event; semantic coverage requires observable state.
 
 Composition limits are defaults (RULES "Look"). Select elements for what they explain.
+
+
+## Finished scenes
+
+`library/examples/{task,handoff,edit}.js` are runnable examples with entrance, retained state and result; shared helpers are in `common.js`. Project creation and verification: [PILOT.md](PILOT.md).

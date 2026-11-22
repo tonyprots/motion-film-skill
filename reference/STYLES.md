@@ -11,6 +11,9 @@ critique are the same for all.
 
 ## Switches
 
+The picture options are not exhaustive: a prepared illustration, footage, a whole photograph or a separate 3D shot
+can also fit. The components below implement the chosen shot; source selection: `LIBRARY.md`, suitability: `ASSETS.md`.
+
 | Switch | Options | Default | Where it is set |
 |---|---|---|---|
 | Type | preset fonts; the site's fonts (`capture.mjs`); a free font that covers the language; an accent italic for key words only; stage themes (`THEMES`, ENGINE "Isometry and stage themes"): OFL fonts with Cyrillic, outside the overused set | preset, else the site | `preset.jsonc` → `fonts`, `film/index.html` |
@@ -28,7 +31,8 @@ critique are the same for all.
 The style follows the platform, the material and the series, not the taste of the last film.
 
 - **Watched without sound** (a feed, Telegram, a meeting): captions are mandatory and large; music can be skipped.
-- **There is a real product**: its interface or a brand card, not illustrations that look like the product.
+- **There is a real product**: use its actual media—interface, photographs, footage or a verified model;
+  a brand card can identify it. Invented resemblance does not establish the product's real form or function.
 - **A story about consequences, risks, people**: object illustrations and, where it fits, a character who reacts to events.
 - **Many chapters with no shared object**: give them a thread: a character, a running total or a shared object.
 - **A series**: the series style goes into the preset (`style`), and every episode inherits it.
@@ -102,6 +106,25 @@ have Cyrillic and an OFL licence:
 
 Anton, Bebas Neue, Poppins, League Spartan and DM Sans are popular but lack Cyrillic in their Google Fonts builds: do not
 use them for a Russian film.
+
+## Postcard studies
+
+**Paper collage.** Pick one detail that survives a cut and a period of occlusion. A flower appears on the card, a miniature impression echoes it on the stamp, and the flower identifies the card when it comes out. Stage the paper in depth. The envelope's front wall covers the card down to the bottom of the pocket. A narrow contact shadow lifts the envelope off the table.
+
+**Risograph.** Assign inks to objects according to their roles in the action. A warm envelope covers a pale card, and a cool hand pulls it out. Check the flower and the paper edge at maximum overlap. Keep the halftone visible across broad planes. A slight offset between inks works where the edge of the object stays legible.
+
+Both editions share the same 6.6-second action, without text or audio. With the local runtime installed, run from the skill directory:
+
+```bash
+node scripts/pilot.mjs postcard-collage /tmp/postcard-collage
+node scripts/pilot.mjs postcard-riso /tmp/postcard-riso
+(cd /tmp/postcard-collage && node scripts/render.mjs --draft --all)
+(cd /tmp/postcard-riso && node scripts/render.mjs --draft --all)
+```
+
+Use fresh destination paths for subsequent runs. Each project produces `renders/draft_16x9.mp4` and `renders/draft_9x16.mp4`. Show them without the brief. Ask what the second person received and which detail identified it across the cut. Inspect the card in the pocket and in the hand. Where is the top edge, what hides the bottom edge, and how many cards are visible?
+
+[Preview both editions](../examples/postcard/pair.gif)
 
 ## Recipes
 

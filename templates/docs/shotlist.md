@@ -8,6 +8,9 @@ Direction: one hero moment at 60–85 % of the length (row marked **HERO**, musi
 0.6–1.2 s every ~20 s (marked **AIR**) · density 1–5 alternates, no more than three scenes in a row of the same length · every transition has a carrier.
 Every row names a concrete **object** in frame (not "headline" or "background") and its **action** (not "appears").
 On a screenshot the screen acts (cursor, new row, toggle), not the camera; a product without its screen is a sign card.
+When screen footage demonstrates a feature, use the Action cell for the source file and timecodes, the actor and the observable
+change. For example, “demo.mp4, 12–16 s, user adds a tag, the tag remains in the row after the menu closes.”
+In the 9:16 notes, name the detail the viewer needs to distinguish. See the “Product demo on a hero” card in FORMATS.md for take selection.
 **Camera** is one move from RULES.md "The camera is punctuation": hold · push · pull · pan · snap · punch · whip · cut.
 Accents at most a third, after a push comes a pull, a pan or a cut. The first and last rows are not a text card. Every
 number in "On-screen text" is in the voice or a source. Check: `python3 scripts/plan_check.py`.

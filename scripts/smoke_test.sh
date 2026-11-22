@@ -6,10 +6,22 @@
 # Proves the locked toolchain installs, Chromium renders, ffmpeg encodes, and the parallel render joins chunks.
 #   sh scripts/smoke_test.sh [work-dir]      (CI runs it on Linux and macOS; MOTION_FILM_HOME picks the toolchain dir)
 set -e
+export MOTION_FILM_OFFLINE=1
 SKILL="$(cd "$(dirname "$0")/.." && pwd)"
 WORK="${1:-$(mktemp -d)}/smoke-film"
 sh "$SKILL/scripts/init.sh" "$WORK" --preset blank
 "$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_layout_vo.py'
+"$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_broll.py'
+"$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_review.py'
+"$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_assets.py'
+"$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_compare.py'
+"$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_tracking.py'
+"$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_stillness.py'
+"$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_visualpack.py'
+node "$SKILL/tests/test_staging.mjs"
+node "$SKILL/tests/test_tracking.mjs"
+node "$SKILL/tests/test_footage_clock.mjs"
+node "$SKILL/tests/test_render_failure.mjs"
 node "$SKILL/tests/test_story.mjs"
 node "$SKILL/tests/test_blocks.mjs"
 node "$SKILL/tests/test_editorial.mjs"
@@ -17,7 +29,7 @@ node "$SKILL/tests/test_frame_clock.mjs"
 node "$SKILL/tests/test_morph.cjs"
 node "$SKILL/tests/test_motion_kit.mjs"
 node "$SKILL/tests/test_themes.mjs" >/dev/null
-python3 -m unittest discover -s "$SKILL/tests" -p 'test_theme_pick.py' 2>&1 | tail -1
+"$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_theme_pick.py'
 node "$SKILL/tests/test_paper_hand.mjs" >/dev/null
 node "$SKILL/tests/test_render_server.mjs"
 # the project gets every script the docs run from it (skill-only tooling: lock_deps.py, update_check.py, figures_build.py, hand_glyphs.py)
@@ -26,7 +38,8 @@ for p in "$SKILL"/scripts/*.py "$SKILL"/scripts/*.mjs; do
   [ -f "$WORK/scripts/$n" ] || { echo "FAIL: init.sh did not copy scripts/$n into the project"; exit 1; }
 done
 cd "$WORK"
-.venv/bin/python scripts/music_source.py
+.venv/bin/python scripts/assets.py check
+.venv/bin/python scripts/music_source.py --source synth
 node scripts/sync.mjs >/dev/null
 node scripts/sfx.mjs >/dev/null
 .venv/bin/python scripts/mix.py
