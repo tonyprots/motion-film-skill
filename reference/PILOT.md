@@ -38,6 +38,23 @@ A version without hands can test a different staging choice, not the quality of 
 
 At a handoff, occlusion or change of shot size, follow the object across the cut. How many copies are visible, who holds it, and which detail identifies it? Ask a blind viewer what changed hands and how they could tell. If the new staging obscures an opening, grip or handoff, restore the legible passage from the earlier cut and compare again. Add decoration and tracking labels once the action reads on its own.
 
+## Cutting on a turn
+
+Establish the first object from a recognisable angle. Pick a detail that the eye can find on the second object, such as a coloured rim, an outline or the edge of a label. Turn the first object, bring that detail close to its position in the next shot and cut during the fast part of the turn. Carry the motion through the cut, then hold long enough to read the new silhouette. If the shot calls for motion blur, confine it to the fast frames.
+
+In `product-cut`, an orange rim links the watch dial to a camera lens. The player expands, the watch cuts to the camera at 2.4 s, and the opening returns in a smaller window at 5.2 s. The full study lasts 6.4 s. Both objects are original Three.js geometry. Rendering requires WebGL 2 in Chromium.
+
+From the skill directory with the local runtime installed:
+
+```sh
+node scripts/pilot.mjs product-cut /tmp/product-cut
+cd /tmp/product-cut
+node scripts/render.mjs --draft --all
+node scripts/render.mjs --verify --all
+```
+
+Use a fresh destination for each scaffold. Inspect the whole shot, consecutive frames across the cut and both crops. On the last frame before the cut and the first one after it, locate the accent and check the direction of rotation. Give the next object enough screen time for a viewer to identify it. For a presenter-led replay see [the demo recipe](FORMATS.md#when-a-presenter-shows-the-result).
+
 ## Comparing two variants
 
 First identify the purpose of the comparison:

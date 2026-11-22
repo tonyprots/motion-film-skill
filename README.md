@@ -94,6 +94,10 @@ word costs one re-render, not a new roll of the dice.
 
 The approval steps are real stops: the agent waits for you before any credits are spent.
 
+## New in v1.12.0
+
+Try the [product-cut pilot](reference/PILOT.md#cutting-on-a-turn) to stage two different objects around one moving accent. [Watch the example](examples/product-cut/preview.mp4). The [presenter demo recipe](reference/FORMATS.md#when-a-presenter-shows-the-result) covers opening with the finished result, expanding a moving thumbnail into a player and bringing the same excerpt back above the presenter.
+
 ## New in v1.11.0
 
 Try a [motion pilot](reference/PILOT.md) to check whether a viewer can follow an action before producing the whole film. The [drawing recipes](reference/STYLES.md#postcard-studies) apply collage and risograph to the same postcard. [Preview both treatments](examples/postcard/pair.gif). Use the same framing and timing to compare how the object reads when partially hidden. The visual A/B tool prepares anonymized, silent clips for independent review.
@@ -107,7 +111,7 @@ Requirements: **macOS or Linux**, **Node 22+**, **Python 3.11–3.13**, **ffmpeg
 ### Claude Code
 
 ```bash
-git clone --branch v1.11.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
+git clone --branch v1.12.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
 ```
 
 Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our leadership channel."*
@@ -115,7 +119,7 @@ Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our l
 ### Codex
 
 ```bash
-git clone --branch v1.11.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
+git clone --branch v1.12.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
 ```
 
 ### Any other agent

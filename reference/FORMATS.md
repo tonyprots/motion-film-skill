@@ -76,6 +76,14 @@ critic checks it first), **Editing**, **Voice**, **Overrides** (which items of R
 - **Risk:** a slideshow of screenshots: one layout in every scene (headline + window + caption) and a camera that travels to
   the text on every window. Every scene must do something, not just show.
 
+#### When a presenter shows the result
+
+Open with a short excerpt from the finished work. Keep the source clip and its in-point. After showing the operation, replay the recognisable moment above the presenter. The opening tells viewers what they will get. The reprise connects that result to the action they just saw. Check the smaller crop for a legible detail and leave space for the face and captions.
+
+When opening a preview, move **the same moving picture** from the bounds of the thumbnail to the bounds of the player. Keep the clip clock running throughout the expansion. Compare adjacent frames to check that the gesture, line of text or rotation continues in the same direction. Restarting at the chosen in-point can serve a later, deliberate replay.
+
+A rounded frame can use a simple crop. To let hair or a pointing hand cross its edge, prepare a foreground layer with a moving subject matte. Leave space around the subject when filming and use a key or a prepared mask. Check hair and fingers at phone size. For a real product demo, use a recording of the interface and the actual operation result. See the [runnable turn-cut study](PILOT.md#cutting-on-a-turn).
+
 ### 2. Through-line anchor
 
 - **Essence.** One graphic entity runs through the whole film, reacts to what is happening and in the finale becomes a mark or a

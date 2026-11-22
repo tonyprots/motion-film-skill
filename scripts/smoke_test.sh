@@ -19,6 +19,7 @@ sh "$SKILL/scripts/init.sh" "$WORK" --preset blank
 "$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_stillness.py'
 "$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_visualpack.py'
 node "$SKILL/tests/test_staging.mjs"
+node "$SKILL/tests/test_product_cut.mjs"
 node "$SKILL/tests/test_tracking.mjs"
 node "$SKILL/tests/test_footage_clock.mjs"
 node "$SKILL/tests/test_render_failure.mjs"
