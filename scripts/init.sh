@@ -22,7 +22,7 @@ fi
 mkdir -p "$DEST"/film/lib "$DEST"/scripts/providers "$DEST"/docs "$DEST"/audio/vo "$DEST"/assets/fonts "$DEST"/assets/shots "$DEST"/renders "$DEST"/review
 cp "$SKILL"/engine/index.html "$SKILL"/engine/player.html "$SKILL"/engine/core.js "$SKILL"/engine/type.js "$SKILL"/engine/film.js "$DEST"/film/
 cp "$SKILL"/engine/lib/*.js "$DEST"/film/lib/
-for f in pilot.mjs render.mjs render_safety.mjs png.mjs sync.mjs sfx.mjs capture.mjs preset.mjs beats.py music.py music_source.py vo.py layout_vo.py captions.py \
+for f in pilot.mjs render.mjs render_safety.mjs png.mjs sync.mjs sfx.mjs sfx_world.mjs capture.mjs preset.mjs beats.py music.py music_source.py vo.py layout_vo.py captions.py \
          mix.py review.py tile.py voice.py extract_lines.py script_lint.py plan_check.py story_check.mjs scenes.mjs visualpack.py blindpack.py notes.py player.mjs static_files.mjs share.py sfx_fetch.py vision.py broll.py lottie.py overlay_prep.py \
          stillness.py puppet_pack.py fonts.sh theme_pick.py post_pack.py assets.py compare.py track.py; do cp "$SKILL/scripts/$f" "$DEST/scripts/"; done
 cp "$SKILL"/scripts/providers/*.py "$DEST"/scripts/providers/

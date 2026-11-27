@@ -23,6 +23,15 @@
 //                                                                 → review/lint_<fmt>.json + text_<fmt>.json; exit 1 on a PROBLEM
 //   node scripts/render.mjs --seams [--all]                       every hard cut: shared text/images keep place and size (12 px, 5 %),
 //                                                                 no still-to-still cut, no empty first frame → review/seams_<fmt>.json
+//   node scripts/render.mjs --perf [--all] [--samples 5]          forecast before the final, in a minute: per scene, N frames
+//                                                                 inside its window [from − pre, to + post) timed the final's way (seek +
+//                                                                 shot, GPU if "webgl") and probed for blur sub-frames → table, heaviest
+//                                                                 scene, forecast on --workers → review/perf_<fmt>.json; renders/ untouched
+//                                                                 (--draft / --fps / --blur 0 / --range forecast that render instead)
+//   node scripts/render.mjs --plates [--fmt 16x9 | --all]         timeline "plates": [{"name": "s3-end", "at": sec | mark | mark±sec}]
+//                                                                 → assets/plates/<name>_<fmt>.png, full size, no blur (a still a WebGL
+//                                                                 transition tears or folds). Re-rendered before every mode that renders
+//                                                                 frames (all but --mux), ahead of the workers; --no-plates skips that
 //   options: --fps N  --blur 0|1 (default 1 for finals)  --crf N  --audio path (default audio/mix.wav if present)
 //   finish:  --deband [thr]  --lut grade.cube  --grain N (8-bit steps, ~1.5–2.5)  --master (+ HEVC 10-bit <fmt>_master.mp4)  --no-finish
 //            defaults from timeline.json "finish": {deband, lut, grain, master}
@@ -57,10 +66,12 @@ const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i < 0 ? d : (ar
 const has = (k) => argv.includes(`--${k}`);
 // --help prints the usage above; an unknown flag stops here — without this, a typo or --help fell through to a full final render
 const KNOWN = ['all', 'animatic', 'at', 'audio', 'blur', 'chunk', 'crf', 'deband', 'draft', 'fmt', 'fps', 'frames', 'gpu', 'grain', 'lint', 'lut',
-  'master', 'mux', 'no-finish', 'phase', 'range', 'seams', 'sheet', 'story', 'verify', 'workers'];
+  'master', 'mux', 'no-finish', 'no-plates', 'perf', 'phase', 'plates', 'range', 'samples', 'seams', 'sheet', 'story', 'verify', 'workers'];
 const unknown = argv.filter((a) => a.startsWith('--') && !KNOWN.includes(a.slice(2)));
 if (unknown.length) {
-  const usage = fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n').filter((l) => l.startsWith('//')).slice(0, 24).map((l) => l.slice(3)).join('\n');
+  // usage = the header up to its second bare "//" line (the paragraph on parallel render is not usage)
+  const head = fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n');
+  const usage = head.slice(0, head.findIndex((l, i) => i > 1 && l === '//')).map((l) => l.slice(3)).join('\n');
   const help = unknown.some((a) => a === '--help' || a === '--h');
   (help ? console.log : console.error)(`${help ? '' : `unknown flag ${unknown.join(' ')}\n\n`}${usage}`);
   process.exit(help ? 0 : 1);
@@ -109,9 +120,12 @@ await new Promise((r) => server.listen(0, '127.0.0.1', r));
 // deterministic per t (lab 2026-10-06). The backend is fixed for the whole render: Metal and SwiftShader pixels differ.
 const GPU = has('gpu') || TL.webgl === true;
 const GPU_ARGS = process.platform === 'darwin' ? ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist'] : ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=vulkan'];
+const launchedAt = Date.now();
 const browser = await chromium.launch({ args: ['--force-color-profile=srgb', '--disable-lcd-text', '--font-render-hinting=none', '--disable-gpu-vsync', ...(GPU ? GPU_ARGS : [])] });
+const LAUNCH_S = (Date.now() - launchedAt) / 1000;   // a render worker pays this again (--perf forecast)
 
 async function openFilm(fmt, variant = null) {
+  const opened = Date.now();
   const [W, H] = SIZES[fmt];
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
   // B-roll inputs must come from the underlying film, never an older generated bridge.
@@ -137,7 +151,19 @@ async function openFilm(fmt, variant = null) {
     const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', optimizeForSpeed: true });
     return Buffer.from(data, 'base64');
   };
-  return { page, png, W, H, ...info };
+  return { page, png, W, H, ...info, openS: (Date.now() - opened) / 1000 };
+}
+
+// a time as --at and timeline "plates" take it: seconds, a mark, or mark±seconds (s2b+1.5). A mark whose own name ends in
+// -<number> (scene-2) is taken whole, not as scene − 2.
+async function timeOf(F, at) {
+  const s = String(at).trim();
+  if (typeof at === 'number' || !isNaN(+s)) return +s;
+  return F.page.evaluate((s) => {
+    if (C.TL.marks && s in C.TL.marks) return C.bt(s);
+    const m = s.match(/^(.*?)([+-]\d*\.?\d+)$/);
+    return m ? C.bt(m[1]) + +m[2] : C.bt(s);   // C.bt throws on an unknown mark
+  }, s);
 }
 
 function ffmpeg(a) {
@@ -148,7 +174,7 @@ function ffmpeg(a) {
 const write = writeFrame;
 
 // ------------------------------------------------------------------ video: frames → ffmpeg
-const VIDEO = !['sheet', 'verify', 'at', 'lint', 'seams', 'story'].some(has);
+const VIDEO = !['sheet', 'verify', 'at', 'lint', 'seams', 'story', 'perf', 'plates'].some(has);
 const CRF = +opt('crf', DRAFT ? 22 : 16);   // --crf 0 = lossless (x264 needs its own profile for that: used to prove parallel == serial)
 // Finish (timeline.json "finish", CLI flags override): frames reach ffmpeg as 16-bit RGB (the motion-blur average keeps its
 // fractions), are optionally debanded and graded with a .cube LUT in 16 bits, and are dithered (error diffusion) only at the
@@ -200,11 +226,10 @@ function addGrain(px, W, H, frame, amp) {   // px: Uint16Array RGB, amp in 8-bit
   }
 }
 
-// Adaptive 180° motion blur: each frame is probed at two shutter points; the mean pixel difference sets how many
-// sub-frames to average (2 when static → 24 on the fastest moves). Sub-frames sit symmetrically around the frame
-// time and never straddle a hard cut (window.CUTS), so a cut is never double-exposed.
-async function renderFrames(F, { fps, blur, a }, i0, i1, sink, hist, tick) {
-  const SHUTTER = 0.5, MIN_SUB = 2, MAX_SUB = 24;
+// The shutter, the probe and the shot are shared by renderFrames and --perf, so the forecast measures the final's own path.
+const SHUTTER = 0.5, MIN_SUB = 2, MAX_SUB = 24;
+// sample time of shutter point u ∈ [0, 1] of the output frame at tc; never across a hard cut (window.CUTS)
+function shutter(F, fps) {
   const clampCut = (tc, ts) => {
     for (const c of F.CUTS) {
       if (tc < c && ts >= c) return c - 1e-4;
@@ -212,7 +237,26 @@ async function renderFrames(F, { fps, blur, a }, i0, i1, sink, hist, tick) {
     }
     return ts;
   };
-  const at = (tc, u) => clampCut(tc, Math.max(0, Math.min(F.DUR - 1e-6, tc + (u - 0.5) * SHUTTER / fps)));
+  return (tc, u) => clampCut(tc, Math.max(0, Math.min(F.DUR - 1e-6, tc + (u - 0.5) * SHUTTER / fps)));
+}
+// the probe: mean pixel difference between the shutter points 0.25 and 0.75 → how many sub-frames to average
+function subFrames(x, y) {
+  let d = 0; for (let q = 0; q < x.length; q += 97) d += Math.abs(x[q] - y[q]); d /= x.length / 97;
+  return d < 0.35 ? MIN_SUB : Math.min(MAX_SUB, Math.max(4, Math.round(4 + d * 1.6)));
+}
+// one decoded screenshot (seek + capture + PNG decode); a short image from Chromium is reshot up to 3 times
+async function grab(F, t, hold, n, i) {
+  let im = decodePNG(await F.png(t, hold));
+  for (let r = 0; im.length !== n && r < 3; r++) { console.error(`\n[frame ${i}] screenshot ${im.length} bytes, expected ${n}: reshooting`); im = decodePNG(await F.png(t, hold)); }
+  if (im.length !== n) throw new Error(`frame ${i}: screenshot size mismatch`);
+  return im;
+}
+
+// Adaptive 180° motion blur: each frame is probed at two shutter points; the mean pixel difference sets how many
+// sub-frames to average (2 when static → 24 on the fastest moves). Sub-frames sit symmetrically around the frame
+// time and never straddle a hard cut (window.CUTS), so a cut is never double-exposed.
+async function renderFrames(F, { fps, blur, a }, i0, i1, sink, hist, tick) {
+  const at = shutter(F, fps);
   const n = F.W * F.H * 3, acc = new Uint16Array(n), buf = Buffer.alloc(n);   // 24 × 255 fits in 16 bits
   const out16 = HI ? new Uint16Array(n) : null;
   const emit = async (frame) => {
@@ -222,16 +266,13 @@ async function renderFrames(F, { fps, blur, a }, i0, i1, sink, hist, tick) {
   for (let i = i0; i < i1; i++) {
     const tc = a + i / fps, frame = Math.round(tc * fps);
     if (!blur) {
-      let im = decodePNG(await F.png(tc));
-      for (let r = 0; im.length !== n && r < 3; r++) { console.error(`\n[frame ${i}] screenshot ${im.length} bytes, expected ${n}: reshooting`); im = decodePNG(await F.png(tc)); }
-      if (im.length !== n) throw new Error(`frame ${i}: screenshot size mismatch`);
+      const im = await grab(F, tc, tc, n, i);
       if (!HI) { await write(sink, Buffer.from(im.buffer)); }
       else { for (let q = 0; q < n; q++) out16[q] = im[q] * 257; await emit(frame); }
     } else {
-      const shot = async (u) => { let im = decodePNG(await F.png(at(tc, u), tc)); for (let r = 0; im.length !== n && r < 3; r++) { console.error(`\n[frame ${i}] screenshot ${im.length} bytes, expected ${n}: reshooting`); im = decodePNG(await F.png(at(tc, u), tc)); } if (im.length !== n) throw new Error(`frame ${i}: screenshot size mismatch`); return im; };
+      const shot = (u) => grab(F, at(tc, u), tc, n, i);
       const x = await shot(0.25), y = await shot(0.75);
-      let d = 0; for (let q = 0; q < x.length; q += 97) d += Math.abs(x[q] - y[q]); d /= x.length / 97;
-      const SUB = d < 0.35 ? MIN_SUB : Math.min(MAX_SUB, Math.max(4, Math.round(4 + d * 1.6)));
+      const SUB = subFrames(x, y);
       hist[SUB] = (hist[SUB] || 0) + 1;
       if (SUB === 2) {
         if (HI) { for (let q = 0; q < n; q++) out16[q] = ((x[q] + y[q]) * 257 + 1) >> 1; }
@@ -603,14 +644,138 @@ async function carriers(F) {   // visible words and images, keyed by content
 }
 const meanDiff = (x, y) => { let d = 0; for (let q = 0; q < x.length; q += 37) d += Math.abs(x[q] - y[q]); return d / (x.length / 37); };
 
+// --perf: a forecast of the render before running it (a WebGL scene with 24 sub-frames otherwise shows its cost ten
+// minutes into a final). Rows are the scenes over their visible windows, the frames each one is live on by paint()'s own
+// rule ([from − pre, to + post) in beats), plus «(no scene)» for frames none covers. In each row --samples output frames,
+// spread evenly, are shot the way renderFrames shoots them: a warm-up shot of the frame before (a render walks frames in
+// order, so its caches are warm), then the two shutter probes, each timed (seek + screenshot + PNG decode: grab()).
+// subFrames() of the probes is the sub-frame estimate; a frame costs 2 shots when still, 2 + SUB when blurred, 1 with blur
+// off. A frame two windows share is split between their rows, so the column sums to the total. The forecast replays the
+// chunk queue on --workers. Not counted: the encoder, the 16-bit average and the cores the workers share, so the parallel
+// figure is a lower bound. Demo, M1, 3.5 s DOM film at 60 fps with blur (2026-11-28): one process 68 s forecast, 67 s real;
+// 4 workers ≥ 33 s forecast, 44 s real.
+const median = (v) => { const s = [...v].sort((a, b) => a - b), k = s.length >> 1; return s.length % 2 ? s[k] : (s[k - 1] + s[k]) / 2; };
+const clock = (s) => { const r = Math.round(s); return s < 90 ? `${s.toFixed(s < 10 ? 1 : 0)} s` : `${Math.floor(r / 60)} min ${String(r % 60).padStart(2, '0')} s`; };
+async function perf(F, fmt) {
+  const P = videoParams(F), N = Math.max(1, Math.round(+opt('samples', 5)) || 5);
+  if (!P.N) { console.log(`perf ${fmt}: no frames to render`); return { one: 0, par: 0 }; }
+  const at = shutter(F, P.fps), n = F.W * F.H * 3, round = (x, k = 1) => +x.toFixed(k);
+  const kind = has('range') ? `clip ${P.a}–${P.b} s` : ANIMATIC ? 'animatic' : DRAFT ? 'draft' : 'final';
+  const times = Array.from({ length: P.N }, (_, i) => P.a + i / P.fps);
+  const L = await F.page.evaluate(([a, fps, count]) => {
+    const live = C.SCENES.map(() => []);
+    for (let i = 0; i < count; i++) {
+      const b = C.beatAt(Math.max(0, Math.min(C.DUR - 1e-6, a + i / fps)));
+      C.SCENES.forEach((S, k) => { if ((C.beatOf(S.from) <= 0 || b >= C.beatOf(S.from) - S.pre) && b < C.beatOf(S.to) + S.post) live[k].push(i); });
+    }
+    return C.SCENES.map((S, k) => ({ name: S.name || `scene ${k + 1}`, from: C.beatOf(S.from) <= 0 ? 0 : C.bt(C.beatOf(S.from) - S.pre),
+      to: Math.min(C.DUR, C.bt(C.beatOf(S.to) + S.post)), idx: live[k] }));
+  }, [P.a, P.fps, P.N]);
+  const rows = L.filter((r) => r.idx.length).map((r) => ({ ...r, from: Math.max(r.from, P.a), to: Math.min(r.to, P.b) })), live = new Uint16Array(P.N);
+  for (const r of rows) for (const i of r.idx) live[i]++;
+  const gap = times.flatMap((_, i) => (live[i] ? [] : [i]));
+  if (gap.length) { rows.push({ name: '(no scene)', from: times[gap[0]], to: times[gap.at(-1)] + 1 / P.fps, idx: gap }); for (const i of gap) live[i] = 1; }
+  for (const r of rows) {
+    const k = Math.min(N, r.idx.length), picks = [...new Set(Array.from({ length: k }, (_, j) => r.idx[Math.floor((j + 0.5) * r.idx.length / k)]))];
+    Object.assign(r, { ms: [], sub: [], shots: [] });
+    for (const i of picks) {
+      const tc = times[i], prev = r.idx.includes(i - 1) ? times[i - 1] : tc;
+      await F.png(P.blur ? at(prev, 0.75) : prev, prev);   // warm-up, not timed
+      if (!P.blur) { const s0 = performance.now(); await grab(F, tc, tc, n, i); r.ms.push(performance.now() - s0); r.shots.push(1); continue; }
+      const s0 = performance.now(), x = await grab(F, at(tc, 0.25), tc, n, i);
+      const s1 = performance.now(), y = await grab(F, at(tc, 0.75), tc, n, i);
+      r.ms.push(s1 - s0, performance.now() - s1);
+      const SUB = subFrames(x, y); r.sub.push(SUB); r.shots.push(SUB === MIN_SUB ? 2 : 2 + SUB);
+    }
+    r.msMed = median(r.ms);
+    r.perFrame = r.msMed * r.shots.reduce((s, x) => s + x, 0) / r.shots.length / 1000;
+  }
+  const cost = new Float64Array(P.N);
+  for (const r of rows) { r.final = 0; for (const i of r.idx) { const c = r.perFrame / live[i]; cost[i] += c; r.final += c; } }
+  const serial = cost.reduce((s, x) => s + x, 0);
+  const chunkS = +opt('chunk', 4), chunk = Math.max(1, Math.round(chunkS * P.fps)), chunks = [];   // renderVideo's own split
+  for (let i = 0; i < P.N; i += chunk) chunks.push(cost.subarray(i, Math.min(P.N, i + chunk)).reduce((s, x) => s + x, 0));
+  const K = Math.min(WORKERS, chunks.length), busy = new Array(Math.max(1, K)).fill(0);
+  for (const c of chunks) { const w = busy.indexOf(Math.min(...busy)); busy[w] += c; }   // each chunk to the worker free first
+  const one = F.openS + serial, par = K > 1 ? F.openS + LAUNCH_S + F.openS + Math.max(...busy) : one;   // parent page, then worker Chromium + page
+  const heavy = rows.reduce((h, r) => (r.final > h.final ? r : h), rows[0]);
+  const subLabel = (r) => (!P.blur ? 'off' : r.sub.every((s) => s === MIN_SUB) ? String(MIN_SUB)
+    : `${(r.sub.reduce((s, x) => s + x, 0) / r.sub.length).toFixed(1)} (${Math.min(...r.sub)}–${Math.max(...r.sub)})`);
+  const w = Math.max(5, ...rows.map((r) => r.name.length));
+  console.log(`perf ${fmt}: ${kind} ${F.W}×${F.H} @ ${P.fps} fps, blur ${P.blur ? 'on' : 'off'}, GPU ${GPU ? 'on' : 'off'} · ${N} frames per scene · page load ${F.openS.toFixed(1)} s`);
+  console.log(`  ${'scene'.padEnd(w)}  ${'window, s'.padEnd(13)}  ms/shot  ${'sub-frames'.padEnd(12)}  ${(kind.split(' ')[0] + ', s').padStart(9)}`);
+  for (const r of rows) console.log(`  ${r.name.padEnd(w)}  ${`${r.from.toFixed(2)}–${r.to.toFixed(2)}`.padEnd(13)}  ${r.msMed.toFixed(0).padStart(7)}  ${subLabel(r).padEnd(12)}  ${r.final.toFixed(1).padStart(9)}${r === heavy && rows.length > 1 ? '  ← heaviest' : ''}`);
+  console.log(`forecast ${fmt}: ${clock(one)} in one process · ${K > 1 ? `≥ ${clock(par)} on ${K} workers (${chunks.length} chunks of ${chunkS} s)` : 'one chunk, no workers'}`
+    + ` · heaviest: ${heavy.name}, ${Math.round(100 * heavy.final / (serial || 1))} % · encoder and shared cores not counted`);
+  mkdir(path.join(ROOT, 'review'));
+  fs.writeFileSync(path.join(ROOT, `review/perf_${fmt}.json`), JSON.stringify({
+    fmt, mode: kind, size: [F.W, F.H], fps: P.fps, blur: P.blur, gpu: GPU, samples: N, frames: P.N,
+    page_load_s: round(F.openS, 2), browser_launch_s: round(LAUNCH_S, 2),
+    scenes: rows.map((r) => ({ name: r.name, window: [round(r.from, 3), round(r.to, 3)], frames: r.idx.length, ms_per_shot: round(r.msMed),
+      ms: r.ms.map((x) => round(x)), sub_frames: r.sub, shots_per_frame: round(r.shots.reduce((s, x) => s + x, 0) / r.shots.length, 2),
+      seconds: round(r.final, 2), share: round(r.final / (serial || 1), 3), heaviest: r === heavy })),
+    forecast: { one_process_s: round(one), workers: K, chunks: chunks.length, chunk_s: chunkS, parallel_min_s: K > 1 ? round(par) : null,
+      not_counted: 'encoder (x264/x265), 16-bit averaging and finish, cores shared between workers' },
+  }, null, 1));
+  return { one, par };
+}
+
+// ------------------------------------------------------------------ plates: stills a WebGL transition shows as a sheet
+// timeline "plates": [{"name": "s3-end", "at": "s3_end-0.02"}] → assets/plates/<name>_<fmt>.png: one full-size frame each,
+// no motion blur, shot like any frame (same GPU backend as the render). The film shows it through
+// L.texture('assets/plates/<name>_<fmt>.png') (C.plate(name)). They are re-rendered here, before the format loop and so
+// before any render worker starts: a plate is never older than the film it sits in. A file is written whole (temp file,
+// then rename), so a page never loads half a PNG. A plate must not show another plate: it would be one run behind.
+const PLATES = Array.isArray(TL.plates) ? TL.plates : TL.plates ? null : [];
+function checkPlates() {
+  const bad = (m) => { console.error(`timeline.json "plates": ${m}`); process.exit(1); };
+  if (!PLATES) bad('must be a list of {"name": "s3-end", "at": seconds | mark | mark±seconds}');
+  const seen = new Set();
+  for (const p of PLATES) {
+    if (!p || typeof p !== 'object') bad(`${JSON.stringify(p)} is not {"name", "at"}`);
+    if (typeof p.name !== 'string' || !/^[A-Za-z0-9][\w.-]*$/.test(p.name)) bad(`name ${JSON.stringify(p.name)}: letters, digits, - _ . (it is a file name)`);
+    if (seen.has(p.name)) bad(`"${p.name}" is listed twice`);
+    seen.add(p.name);
+    if (typeof p.at !== 'number' && (typeof p.at !== 'string' || !p.at.trim())) bad(`"${p.name}" has no "at" (seconds, a mark, or mark±seconds)`);
+  }
+}
+async function renderPlates(formats) {
+  checkPlates();
+  const started = Date.now(), dir = path.join(ROOT, 'assets/plates'); mkdir(dir);
+  for (const fmt of formats) {
+    const F = await openFilm(fmt);
+    for (const p of PLATES) {
+      let t;
+      try { t = await timeOf(F, p.at); } catch (e) { console.error(`plate "${p.name}": ${e.message.split('\n')[0]}`); process.exit(1); }
+      if (!(t >= 0 && t < F.DUR)) console.warn(`plate "${p.name}": ${t.toFixed(3)} s is outside the film (0–${F.DUR} s), the nearest frame is used`);
+      const out = path.join(dir, `${p.name}_${fmt}.png`), tmp = path.join(dir, `.${p.name}_${fmt}-${process.pid}.png`);
+      fs.writeFileSync(tmp, await F.png(t)); fs.renameSync(tmp, out);
+    }
+    await F.page.close();
+  }
+  console.log(`plates: ${PLATES.length} × ${formats.join(', ')} → assets/plates/ in ${((Date.now() - started) / 1000).toFixed(1)} s`);
+}
+if (has('plates')) {
+  if (!PLATES || !PLATES.length) { console.error('timeline.json "plates" is empty: [{"name": "s3-end", "at": "s3_end-0.02"}] — a still a transition shows'); process.exit(1); }
+  await renderPlates(FORMATS);
+  await browser.close(); server.close();
+  process.exit(process.exitCode || 0);
+}
+// every other mode renders film frames: plates first. Not in a b-roll capture (broll.py): its page drops the b-roll, so
+// its plates would be wrong for the film.
+if ((!PLATES || PLATES.length) && !has('no-plates') && process.env.MF_BROLL_CAPTURE !== '1') await renderPlates(FORMATS);
+
 const cutsFile = path.join(ROOT, 'review/cuts.json');
+const PERF = [];
 for (const fmt of FORMATS) {
   const F = await openFilm(fmt);
   const t0 = Date.now();
   mkdir(path.dirname(cutsFile));   // hard cuts per format, for review.py (pops near a planned cut are not pops)
   fs.writeFileSync(cutsFile, JSON.stringify({ ...(fs.existsSync(cutsFile) ? JSON.parse(fs.readFileSync(cutsFile, 'utf8')) : {}), [fmt]: F.CUTS }));
 
-  if (has('frames')) {
+  if (has('perf')) {
+    PERF.push(await perf(F, fmt));
+  } else if (has('frames')) {
     // styleframes: the closing frame of each key scene, judged as a still before any motion is built (SKILL.md step 7)
     const SF = TL.styleframes || [];
     if (!SF.length) { console.error('timeline.json "styleframes" is empty: list 4–6 marks (or {"at": mark|seconds, "name": "…"}) — hook, UI, data, hero, end'); process.exit(1); }
@@ -800,8 +965,7 @@ for (const fmt of FORMATS) {
   } else if (has('at')) {
     const dir = path.join(ROOT, 'review/stills', fmt); mkdir(dir);
     for (const a of String(opt('at', '0')).split(',')) {
-      const [, mk, off] = a.match(/^(.*?)([+-]\d*\.?\d+)?$/);                // seconds, a mark, or mark±seconds
-      const t = isNaN(+a) ? await F.page.evaluate((m) => C.bt(m), mk) + +(off || 0) : +a;
+      const t = await timeOf(F, a);                                         // seconds, a mark, or mark±seconds
       const f = path.join(dir, `t${t.toFixed(3)}.png`); fs.writeFileSync(f, await F.png(t)); console.log('wrote', path.relative(ROOT, f));
     }
   } else {
@@ -815,6 +979,10 @@ for (const fmt of FORMATS) {
   await F.page.close();
 }
 await browser.close(); server.close();
+if (PERF.length > 1) {   // a final renders its formats one after another
+  const sum = (k) => PERF.reduce((s, x) => s + x[k], 0);
+  console.log(`forecast ${FORMATS.join(' + ')}: ${clock(sum('one'))} in one process${sum('par') < sum('one') ? ` · ≥ ${clock(sum('par'))} with --workers ${WORKERS}` : ''}`);
+}
 if (has('frames')) {
   // board: one row per styleframe, every format side by side at the same height, labelled
   const SF = TL.styleframes, RH = 540, rows = [];

@@ -27,6 +27,9 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { EffectComposer, RenderPass, EffectPass, Effect, BlendFunction, KawaseBlurPass, KernelSize, BloomEffect, VignetteEffect, ToneMappingEffect, ToneMappingMode, DepthOfFieldEffect } from 'postprocessing';
 
 export { THREE };
+export { world, sea, pass, GLSL } from './world.js';     // sky, sun, haze, clouds, sea, procedural passes (lib/world.js)
+export { materialCut, card, MATERIAL_TIMING } from './material.js';   // a frame that tears, folds or slams; printed cards (lib/material.js)
+export { tree, starfield } from './setpieces.js';   // a growing tree, a universe to fly through (lib/setpieces.js)
 
 /**
  * A full-frame WebGL layer inside `parent` (a scene root or any element). Options:
@@ -43,7 +46,7 @@ export { THREE };
  *     target = a THREE.Vector3 to keep sharp as the camera moves; neither → autofocus on the origin. Per frame:
  *     L.dof.target.set(…) or L.dof.cocMaterial.focusDistance = d (a focus pull).
  *   msaa 4 · z (CSS z-index inside parent; 0 = under the scene's DOM children, raise it to draw over them)
- * Returns { scene, camera, renderer, composer, dof, frame(fn), physical(props), gltf(url), texture(url), render(t, b) }.
+ * Returns { scene, camera, renderer, composer, dof, frame(fn), late(fn), physical(props), gltf(url), texture(url), render(t, b) }.
  */
 export async function layer(parent, o = {}) {
   const W = C.W, H = C.H;
@@ -80,17 +83,29 @@ export async function layer(parent, o = {}) {
   const pass = new EffectPass(camera, ...fx);
   composer.addPass(pass);
 
-  const fns = [];
+  const fns = [], lates = [];
   const L = {
     scene, camera, renderer, composer, dof,
     /** per-frame update: fn(t, beat) sets every animated value from t. Return false to skip rendering (layer hidden). */
     frame: (fn) => fns.push(fn),
+    /** runs after every frame fn, right before rendering: kits (world, sea) read the camera and parameters set this frame */
+    late: (fn) => lates.push(fn),
     physical: (p) => new THREE.MeshPhysicalMaterial({ roughness: 0.25, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.1, ...p }),
     gltf: async (url) => (await new GLTFLoader().loadAsync('../' + url)).scene,
     /** a real screenshot as a texture (device screens, floating UI cards) */
-    texture: async (url) => { const tx = await new THREE.TextureLoader().loadAsync('../' + url); tx.colorSpace = THREE.SRGBColorSpace; tx.anisotropy = 8; return tx; },
+    // a plate (C.plate) does not exist on the very first --plates pass, which renders the film to make it: a loud magenta
+    // stand-in then, so the pass can run; any other missing file still fails the film
+    texture: async (url) => {
+      const tx = await new THREE.TextureLoader().loadAsync('../' + url).catch((e) => {
+        if (!/assets\/plates\//.test(url)) throw e;
+        console.error(`texture: plate ${url} is missing — add it to timeline.json "plates" and render with --plates`);
+        const m = new THREE.DataTexture(new Uint8Array([255, 0, 255, 255]), 1, 1); m.needsUpdate = true; return m;
+      });
+      tx.colorSpace = THREE.SRGBColorSpace; tx.anisotropy = 8; return tx;
+    },
     render(t, b) {
       if (fns.map((fn) => fn(t, b)).includes(false)) return;
+      for (const fn of lates) fn(t, b);
       if (pass.fullscreenMaterial && 'time' in pass.fullscreenMaterial) pass.fullscreenMaterial.time = t;   // f(t), never accumulated
       composer.render(0);
     },

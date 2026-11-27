@@ -487,9 +487,10 @@ else:
             c = int(round(t * FPS)); lo = max(0, c - int(w * FPS)); hi = max(lo + 1, min(len(sig), c + int(w * FPS)))
             seg = sig[lo:hi]; return (lo + int(np.argmax(seg >= 0.5 * seg.max())) + 1) / FPS - t
         rows = []
+        cue_at = lambda c: c.get('hit', c['t'])   # a material sound (sfx type material) is checked at its sharpest moment, not its start
         for c in cues:
-            au = near_peak(aflux, c['t']); va = near_onset(energy, c['t'])
-            rows.append({'t': c['t'], 'type': c['type'], 'what': c['what'], 'audio_vs_cue_ms': round(au * 1000), 'visual_minus_audio_ms': round((va - au) * 1000)})
+            au = near_peak(aflux, cue_at(c)); va = near_onset(energy, cue_at(c))
+            rows.append({'t': cue_at(c), 'type': c['type'], 'what': c['what'], 'audio_vs_cue_ms': round(au * 1000), 'visual_minus_audio_ms': round((va - au) * 1000)})
         hits = [r for r in rows if r['type'] != 'tick']
         absd = [abs(r['visual_minus_audio_ms']) for r in hits]
         masked = [r for r in hits if abs(r['audio_vs_cue_ms']) > 1000 / FPS + 1]
@@ -535,7 +536,7 @@ else:
                 return False, f'{where}: motion does not stop near the cue'
             return True, f'unknown visual "{kind}" (cut | move | land | appear)'
         typed = [c for c in cues if c.get('visual')]
-        pic = [{'t': c['t'], 'visual': c['visual'], 'what': c['what'], **(lambda ok, why: {'ok': bool(ok), 'why': why})(*picture(c['visual'], int(round(c['t'] * FPS))))} for c in typed]
+        pic = [{'t': cue_at(c), 'visual': c['visual'], 'what': c['what'], **(lambda ok, why: {'ok': bool(ok), 'why': why})(*picture(c['visual'], int(round(cue_at(c) * FPS))))} for c in typed]
         M['sync']['picture'] = pic
         if not typed: gate('NOT CHECKED', 'picture', 'no sfx event says what the picture does ("visual": cut | move | land | appear in timeline.json sfx)')
         # land is a pointer only: a spring with overshoot over a drifting card has no clean stop (demo: 13 of 14 landings read
@@ -568,7 +569,7 @@ if wave_ok:
         for ph in json.load(open('audio/vo_placed.json')): d.rectangle([X(ph['t0']), sp.height + 4, X(ph['t1']), sp.height + 18], fill=(70, 120, 230))
     if os.path.exists('cues.json'):
         for c in json.load(open('cues.json'))['cues']:
-            if c['type'] not in ('tick',): d.line([X(c['t']), 0, X(c['t']), S_.height - 22], fill=(230, 60, 60), width=1)
+            if c['type'] not in ('tick',): d.line([X(c.get('hit', c['t'])), 0, X(c.get('hit', c['t'])), S_.height - 22], fill=(230, 60, 60), width=1)
     for s_ in range(0, int(DUR) + 1, 5): d.text((X(s_) + 2, S_.height - 18), f'{s_}s', fill=(220, 220, 220), font=FONT)
     S_.save(f'{OUT}/audio.jpg', quality=88)
     for t_ in ('_spec.png', '_wave.png'): os.remove(f'{OUT}/{t_}')

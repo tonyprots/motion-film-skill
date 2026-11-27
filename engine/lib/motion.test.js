@@ -52,6 +52,63 @@ ok(M.loopT(4, 4) === 0 && M.loopT(4 - 1 / 120, 4, 60) === 0 && M.loopT(-1, 4) ==
   ok(M.step(0.3, 'camera') < M.step(0.3, 'heavy'), 'camera role starts soft');
 }
 
+// sim: a stateful fixed-step system that is still a function of t
+{
+  // a ball bouncing on the floor with a seeded kick per bounce: integration, state, events and randomness all at once
+  const ball = () => M.sim({
+    init: () => ({ y: 2, v: 0, seed: 11, hits: 0, trail: new Float32Array(3) }),
+    tick: (s, dt, t, emit) => {
+      s.v -= 9.81 * dt; s.y += s.v * dt;
+      if (s.y < 0) { s.y = -s.y; s.v = -s.v * (0.7 + 0.1 * M.rand(s)); s.hits++; emit('hit', { n: s.hits, speed: s.v }); }
+      s.trail[s.hits % 3] = s.y;
+    },
+  });
+  const ts = Array.from({ length: 241 }, (_, i) => i / 60);                 // 4 s at 60 fps
+  const fwd = ball(), back = ball(), shuffled = ball();
+  const A = ts.map((t) => fwd.at(t).y);
+  const B = ts.slice().reverse().map((t) => back.at(t).y).reverse();
+  const r = M.rand({ seed: 5 });
+  const order = ts.map((t, i) => [i, Math.sin(i * 12.9898) * 43758.5453 % 1]).sort((a, b) => a[1] - b[1]).map((x) => x[0]);
+  const S = new Array(ts.length); for (const i of order) S[i] = shuffled.at(ts[i]).y;
+  ok(A.every((y, i) => y === B[i]), 'sim: forward and backward frame orders give identical states');
+  ok(A.every((y, i) => y === S[i]), 'sim: shuffled frame order gives identical states');
+  ok(r >= 0 && r < 1, 'rand is in [0, 1)');
+  const w1 = ball(), w2 = ball();                                           // two "workers": one starts mid-film
+  ok(w1.at(3.2).y === (w2.at(0.5), w2.at(3.2).y), 'sim: a worker starting mid-film matches one that rendered from 0');
+  const ev = ball().events(4);
+  ok(ev.length >= 2 && ev.every((e, i) => e.name === 'hit' && e.n === i + 1 && (i === 0 || e.t > ev[i - 1].t)), `sim: events logged once each, in order (${ev.length} hits)`);
+  const again = fwd.events(4);
+  ok(JSON.stringify(again) === JSON.stringify(ev), 'sim: events match across instances and repeated runs');
+  const t0 = ev[0].t;
+  ok(fwd.raw(t0 - 1e-3).hits === 0 && fwd.raw(t0 + 1e-3).hits === 1, `sim: the first hit at ${t0.toFixed(3)} s shows in the state`);
+  const mid = fwd.at(0.5 + 1 / 480), lo = fwd.raw(0.5), hi = fwd.raw(0.5 + 1 / 240);
+  ok(mid.y > Math.min(lo.y, hi.y) - 1e-12 && mid.y < Math.max(lo.y, hi.y) + 1e-12, 'sim: at() between two steps blends them');
+  ok(mid.trail instanceof Float32Array, 'sim: typed arrays survive cloning and blending');
+  const leak = fwd.at(1); leak.y = 999;
+  ok(fwd.at(1).y !== 999, 'sim: at() hands out a copy, not the internal state');
+  let threw = false; try { M.sim({ init: () => ({ m: new Map() }), tick() {} }); } catch { threw = true; }
+  ok(threw, 'sim: a Map in the state is refused');
+  ok(M.sim({ init: () => ({ x: 1 }), tick: (s) => { s.x += 1; }, from: 2 }).at(1).x === 1, 'sim: before from → the initial state');
+}
+
+// path: smooth camera through timed keys
+{
+  const keys = [[0, 0], [1, 10], [2, 10], [3, 4]];
+  const p = (t) => M.path(t, keys), dv = (t) => (p(t + 1e-5) - p(t - 1e-5)) / 2e-5;
+  ok(keys.every(([t, v]) => Math.abs(p(t) - v) < 1e-12), 'path passes through every key');
+  ok(Math.abs(dv(1e-4)) < 0.05 && Math.abs(dv(3 - 1e-4)) < 0.05, 'path starts and lands at rest');
+  let max = -Infinity; for (let t = 0; t <= 3; t += 1e-3) max = Math.max(max, p(t));
+  ok(max <= 10 + 1e-9, `path never overshoots a key (peak ${max.toFixed(4)})`);
+  let jump = 0; for (let t = 0.01; t < 2.99; t += 1e-3) jump = Math.max(jump, Math.abs(dv(t + 1e-3) - dv(t)));
+  ok(jump < 0.2, 'path velocity is continuous');
+  const o = M.path(0.5, [[0, { x: 0, z: 9 }], [1, { x: 4 }]]);
+  ok(o.z === 9 && o.x > 0 && o.x < 4, 'path: an object field missing from a key holds its value');
+  const fr = M.path(1e-3, [[0, 0], [1, 1]], { ends: 'free' });
+  ok(Math.abs(fr - 1e-3) < 1e-9, 'path ends:free keeps the end slope');
+  let bad = false; try { M.path(0, [[1, 0], [1, 2]]); } catch { bad = true; }
+  ok(bad, 'path refuses keys out of time order');
+}
+
 process.exitCode = failed ? 1 : 0;
 
 // motion tokens: roles resolve to presets, configure() retunes them

@@ -125,6 +125,26 @@
     for (const k of Object.keys(keys[0][1])) out[k] = trk(t, keys.map(([b, v, p]) => [b, v[k] ?? keys[0][1][k], p]), preset);
     return out;
   }
+  // Physics as a function of t (lib/motion.js sim): dominoes, a falling stack, a swarm. from = a beat or mark (default 0).
+  //   const fall = C.sim({ from: 'drop', init: () => ({ y: 3, v: 0 }), tick: (s, dt) => { s.v -= 9.8 * dt; s.y += s.v * dt; } });
+  //   fall.at(t).y        — any frame, any order, any worker: replayed from a checkpoint, never carried between frames
+  // events(t1 = DUR) → [{ t, name, ... }] from tick's emit(): print them (C.simEvents()) and put the sound cues there.
+  const SIMS = [];
+  function sim(o) {
+    const from = o.from == null ? 0 : bt(o.from);
+    const S = window.Motion.sim({ ...o, from });
+    const api = { at: S.at, raw: S.raw, events: (t1 = DUR) => S.events(t1), get steps() { return S.steps; }, name: o.name || `sim${SIMS.length + 1}` };
+    SIMS.push(api);
+    return api;
+  }
+  const simEvents = () => SIMS.flatMap((S) => S.events().map((e) => ({ sim: S.name, ...e })));
+  // A smooth path through beat-timed keys, C¹, through every key, at rest at both ends (lib/motion.js path):
+  //   const cam = C.path(t, [['fly', { x: 0, y: 2, z: 12 }], ['tower', { x: 3, y: 9, z: 6 }], ['top', { x: 0, y: 40, z: 3 }]]);
+  // A camera flight is a path, not a chain of springs: springs settle on each key, a path flows through it.
+  const path = (t, keys, o) => window.Motion.path(t, keys.map(([b, v]) => [bt(b), v]), o);
+  // A frame of the film itself as an image (render.mjs renders timeline.json "plates" before every frame render):
+  // the source of a material transition — the outgoing shot tears, folds or falls as a sheet (lib/gl.js materialCut).
+  const plate = (name) => `assets/plates/${name}_${FMT}.png`;
   // 1 inside [b0, b1) with spring edges
   const win = (t, b0, b1, pin = 'snappy', pout = 'snappy') => sp(t, b0, pin) - (b1 == null ? 0 : sp(t, b1, pout));
 
@@ -300,6 +320,7 @@
   window.C = {
     TL, BEATS, FMT, VARIANT, W, H, FPS, DUR, LEAD, leadFor, stage, pick,
     bt, beatAt, beatOf, clamp, lerp, seg, ease, bez, curve, CURVES, sp, spHit, stagger, react, byDist, trk, trkObj, win, mulberry32, noise1,
+    sim, simEvents, path, plate,
     el, anchor, frag, ui, reg, put, commit, inset, rectOf, scene, canvas, hooks, SCENES,
     pending: [],
     gates: [],              // promises frame 0 waits for (pushed in build(): a Lottie file loading, a decoded asset)

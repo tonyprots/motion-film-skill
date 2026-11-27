@@ -88,7 +88,11 @@ originality of results and to disclose AI involvement.
 For a measured track: if `beats.py` reports a max residual > 15 ms or a BPM off by 2×, fix the `bpm` hint and rerun; if
 it still fails, delete `beats.json` and use the nominal grid at the track's BPM (that is what the first film did).
 
-## 3. SFX
+## 3. SFX and world sounds
+**Measure.** The film has its own music (§2): a `synth` score, `ace` or the user's track, no stock beds. About 15
+sounds per 1–1.5 minutes of film: not every appearance gets a sound of its own. No `whoosh`, no `riser`, no crash, in
+the SFX or in the score (`accents` only on an explicit request, §2).
+
 Write events in `scripts/sfx_layout.py` (template from init) against the voice marks, run it, then
 `node scripts/sync.mjs && node scripts/sfx.mjs` → `audio/sfx.wav`. `sfx.mjs` reads `cues.json`, not `timeline.json`:
 after any sound edit in the timeline run `sync.mjs` first, or the old sounds stay.
@@ -121,6 +125,62 @@ No key: `.venv/bin/python scripts/sfx_fetch.py --kenney` adds Kenney's CC0 packs
 through the same per-type filters: on 2026-10-14, 51 of 83 sounds passed (`click` 43, `pop` 4, `tick` 3, `thump` 1). They
 are appended, so the defaults of a built library do not change; without a Freesound library Kenney becomes the main one.
 Kenney's shutters do not measure like ours: that type stays Freesound or synth.
+
+**World sounds are a trial, off by default.** In the `sfx_layout.py` template the material sound and the world bed are
+commented out: the owner decides after listening whether they stay. Until a person has listened, the report says so:
+"sound measured, not listened to". Both are synthesized in `sfx.mjs`, there are no samples for them; a material sound is
+filtered noise with envelopes and decaying resonances, no sweeps. The timing is shared by `sync.mjs` and `sfx.mjs` and
+lives in `scripts/sfx_world.mjs`.
+
+**Material sound** (`"type": "material"`): one sound for one physical transition on screen, a sheet that tears, folds
+or slams down as a slab (`materialCut` from `lib/gl.js`, `engine/lib/material.js`). Only when the material is on screen;
+a push, a wipe or a cut does not get one. Fields: `kind` is `tear` | `fold` | `slab`; `dur` is the transition's length
+in seconds, the same as the transition in `film.js` (defaults in `sfx_world.mjs`: `tear` 2.4, `fold` 2.2, `slab` 1.6).
+The sound starts exactly on its mark and is never pulled to a measured hit of the grid: the transition starts there (in
+`sfx_layout.py`, `hit=False`, no `LEAD`). Everything inside the sound sits on fractions of `dur`, so a longer or shorter
+transition keeps its sound on the picture:
+
+| kind | what sounds (fractions of `dur`) | `hit` |
+|---|---|---|
+| `tear` | 0–0.06 tension, almost silent · 0.06–0.55 the rip runs top to bottom, louder and brighter toward the end · 0.55 the last fibres snap · 0.55–1 the halves fall away, a light rustle; small scraps within 0.1–0.7 | 0.55 |
+| `fold` | creases at 0.15, 0.32, 0.48 (a dry crunch, paper friction between them) · 0.48–1 the folded sheet flips and flies off: one light rustle near 0.6, no landing | 0.15 |
+| `slab` | 0–0.285 the slab falls with NO sound · 0.285 the impact: a low dull thud, a broadband slap, a short room · 0.285–0.6 small grit settles | 0.285 |
+
+`sync.mjs` writes `dur` and `hit` into `cues.json`; `hit` is the sound's sharpest moment, in seconds. Sync in
+`review.py`, audibility and hits on speech in `mix.py` are checked at `hit`, not at the start of the transition. For
+`mix.py` a material sound is a hit: put its sharp moment in a pause, not on a stressed word. An unknown `kind` or a
+`dur` ≤ 0 stops `sync.mjs`; a transition that runs past the end of the film is a WARN.
+
+**World bed** (`timeline.json` → `"beds"`): a continuous texture, `wind` (gusts), `water` (swells of 5.5–8.5 s, the
+hiss of the wash after the crest), `hum` (a room: a low body and a faint air-handling hiss), `air` (open sky: a soft wide
+hiss that brightens with the level). Only in scenes with a physical world (sky, sea, city, a room), never in interface
+scenes.
+```json
+"beds": [{ "kind": "wind", "keys": [["sc4", 0], ["s4a", 1], ["s4b.end", 1], ["sc5", 0]], "gain": 0, "pan": 0, "what": "sky over the city" }]
+```
+Keys are `[mark or beat, level 0..1]` in film order; between keys the level runs in a straight line, before the first
+and after the last it holds. Loudness follows the level squared and the filter opens with it; level changes are smoothed
+(0.3 s), and level 0 is digital silence. Under the voice the bed dips by itself: from 0.6 s before the first word to
+0.15 s after the last the level is × 0.56, about −10 dB and darker. Voice spans less than 1.2 s apart merge into one:
+the bed does not breathe between phrases. `gain` is dB on the bed, `pan` is −1..1. A level outside 0..1, an unknown
+`kind` or keys out of order stop `sync.mjs`.
+
+`sfx.mjs` writes the bed to `audio/sfx_bed.wav`, and `mix.py` mixes it as a stem of its own: the level is
+`timeline.mix.bed` (dB, default 0), no room and no ducking (the bed has already dipped by itself). The bed never counts
+as a hit, and in both `mix.py` checks (speech over background, audibility of sounds) it counts as background. Take
+`beds` out of the timeline and `sfx.mjs` deletes the stem, so a stale one never reaches the mix. The bed is cut below
+45 Hz: a phone does not play it, and the limiter would react to it.
+
+**The level is set by measurement, not by ear.** Level 1 of every kind is about −47 LUFS in the stem (2026-11-28: `wind`
+−47.1, `water` −47.2, `hum` −47.3, `air` −47.0): a texture, not a sound. On the demo (33 s, voice at −20 LUFS) a level-1
+bed over the whole film lowered speech over background by at most 0.04 dB in any phrase (worst: `air`, 0.037 dB);
+loudness −14.0 LUFS and true peak −1.4 dBTP did not move, and the same 20 of 25 sounds stand out over the background.
+Louder or quieter is the owner's call after listening: `timeline.mix.bed` or the bed's `gain`.
+
+`tests/test_sfx_bed.mjs` (part of `smoke_test.sh`) checks without ears: the same input gives the same bytes; no NaN,
+peaks in range; level 0 is silence; the main moment of every material sound sits on its fraction of `dur` (slab impact
+±15 ms, tear snap ±20 ms, fold creases ±15 ms), also when `dur` changes; the slab falls without a sound; a bed taken out
+leaves no stem; bad input stops `sync.mjs`.
 
 ## 4. Mix and master
 `.venv/bin/python scripts/mix.py` → `audio/mix.wav`: −14 LUFS integrated, true peak ≤ −1 dBTP, 48 kHz 24-bit; music ducks

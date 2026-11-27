@@ -147,6 +147,14 @@ PROBLEM in `lint` and `seams`) are not repeated here. The numbers below are for 
 40. An even cascade (the same step, everything on a `power3.out`-like curve) or an exit slower than the entrance that
     settles: the motion reads as an agent template. Check who leads each wave and whether the rest react unevenly.
 
+**Set pieces** (SETPIECES.md)
+41. A set piece with no thesis: the world, flight or material transition does not fit the sentence "<device> shows that <thesis>";
+    or the film has no set piece where the thesis is scale, a path or a break, and the shotlist does not say why.
+42. The seam of a material transition shows: the sheet in the first frame of the transition does not match the last frame of the
+    scene (darker, shifted), the plate is stale or magenta (no file). Check the frames `at − 1/fps` and `at` side by side.
+43. The world ate the accent: the brand colour in the world has drifted to pink or cream, text over the sky lacks 4.5:1 contrast,
+    a world shot holds longer than ~8 s with no new information.
+
 ## Object pass (mandatory, before scoring)
 The score table looks at the whole frame; the viewer looks at the object. So walk the objects first. For each event in
 `visual-events.json` (or each scene in other formats) open the frame 0.5 s after the change: `render.mjs --at` over the

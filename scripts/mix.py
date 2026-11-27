@@ -1,7 +1,9 @@
 # Mix music + sfx + voiceover → audio/mix.wav at -14 LUFS integrated, ≤ -1 dBTP, 48 kHz 24-bit. Run from the project root.
 #   python3 scripts/mix.py
-# Inputs (any may be missing except music): audio/music.wav, audio/sfx.wav, audio/vo.wav
-# Levels in dB from timeline.json "mix": { "music": 0, "sfx": -3, "vo": 0, "duck": true }
+# Inputs (any may be missing except music): audio/music.wav, audio/sfx.wav, audio/sfx_bed.wav, audio/vo.wav
+# Levels in dB from timeline.json "mix": { "music": 0, "sfx": -3, "bed": 0, "vo": 0, "duck": true }
+# sfx_bed.wav is the world bed (sfx.mjs, timeline "beds"): its own stem, no room, not ducked; it is never a hit and counts
+# as background in both checks below.
 # Polish (timeline.json "mix", all on by default, false to switch off), plain ffmpeg filters, no extra dependencies:
 #   "voice_chain": TTS → studio voice: high-pass 80 Hz, de-esser, -2 dB at 300 Hz (boxiness), +1.5 dB at 3 kHz (clarity),
 #                  +1.5 dB air above 10 kHz, compressor 3:1 (attack 10 ms, release 120 ms)
@@ -18,8 +20,8 @@ import json, os, subprocess, sys
 
 TL = json.load(open('timeline.json'))
 DUR = float(TL['duration'])
-LV = {'music': 0.0, 'sfx': -3.0, 'vo': 0.0, 'duck': True, 'voice_chain': True, 'room': 0.08, 'room_tone': -60, 'pocket': True, 'glue': True, **(TL.get('mix') or {})}
-have = {k: os.path.exists(f'audio/{k}.wav') for k in ('music', 'sfx', 'vo')}
+LV = {'music': 0.0, 'sfx': -3.0, 'bed': 0.0, 'vo': 0.0, 'duck': True, 'voice_chain': True, 'room': 0.08, 'room_tone': -60, 'pocket': True, 'glue': True, **(TL.get('mix') or {})}
+have = {k: os.path.exists(f'audio/{k}.wav') for k in ('music', 'sfx', 'sfx_bed', 'vo')}
 if not have['music']: raise SystemExit('audio/music.wav missing (python3 scripts/music.py, or copy the supplied track there)')
 
 
@@ -59,13 +61,14 @@ VOICE = (',highpass=f=80:poles=2,deesser=i=0.35:m=0.5:f=0.55,equalizer=f=300:t=q
 inp('music', LV['music'])
 chains[-1] = chains[-1].replace('[music]', f",afade=t=out:st={DUR - 0.3}:d=0.3{',equalizer=f=2500:t=q:w=0.7:g=-3' if LV['pocket'] and have['vo'] else ''}[music]")
 if have['sfx']: inp('sfx', LV['sfx'], room=True)
+if have['sfx_bed']: inp('sfx_bed', LV['bed'])
 if have['vo']:
     inp('vo', LV['vo'], mono_to_stereo=True, pre=VOICE, room=True)
     if LV['duck']:
         chains.append('[vo]asplit[vo_out][vo_key]')
         chains.append('[music][vo_key]sidechaincompress=threshold=0.04:ratio=4:attack=15:release=280:makeup=1[music_out]')
 ducked = have['vo'] and LV['duck']
-labels = (['[music_out]'] if ducked else ['[music]']) + (['[sfx]'] if have['sfx'] else []) + ((['[vo_out]'] if ducked else ['[vo]']) if have['vo'] else [])
+labels = (['[music_out]'] if ducked else ['[music]']) + (['[sfx]'] if have['sfx'] else []) + (['[sfx_bed]'] if have['sfx_bed'] else []) + ((['[vo_out]'] if ducked else ['[vo]']) if have['vo'] else [])
 TONE = f";anoisesrc=c=pink:a=1:seed=7:d={DUR}:r=48000,lowpass=f=4000,volume={LV['room_tone']}dB,aformat=channel_layouts=stereo[tone]" if LV['room_tone'] is not None and LV['room_tone'] is not False else ''
 if TONE: labels.append('[tone]')
 GLUE = ',acompressor=threshold=0.125:ratio=1.8:attack=30:release=200:makeup=1' if LV['glue'] else ''
@@ -90,7 +93,8 @@ for _ in range(3):
     I, TP = measure('audio/mix.wav')
     if abs(I + 14) <= 0.15: break
     gain += -14 - I
-print(f"audio/mix.wav  inputs: {', '.join(k for k, v in have.items() if v)}  levels music {LV['music']} / sfx {LV['sfx']} / vo {LV['vo']} dB"
+bed_lv = f" / bed {LV['bed']}" if have['sfx_bed'] else ''
+print(f"audio/mix.wav  inputs: {', '.join(k for k, v in have.items() if v)}  levels music {LV['music']} / sfx {LV['sfx']}{bed_lv} / vo {LV['vo']} dB"
       f"{'  (music ducked under VO)' if have['vo'] and LV['duck'] else ''}")
 print(f'integrated {I:.1f} LUFS (target -14)   true peak {TP:.1f} dBTP (limit -1)   gain {gain:+.1f} dB into the limiter')
 if abs(I + 14) > 0.5 or TP > -1: print('WARNING: off target — the limiter is working too hard; lower the loudest stem (usually sfx) and rerun')
@@ -122,9 +126,10 @@ if have['vo'] and os.path.exists('audio/vo_placed.json'):
         bad = sum(r[0] < 6 for r in rows)
     if os.path.exists('cues.json'):
         vo_full = pcm('audio/_vo.wav', 'anull'); placed = json.load(open('audio/vo_placed.json', encoding='utf-8'))
-        hits = [c for c in json.load(open('cues.json'))['cues'] if c['type'] in ('pop', 'click', 'thump', 'shutter')]
-        on_speech = [c for c in hits if any(ph['t0'] - 0.05 <= c['t'] <= ph['t1'] for ph in placed)
-                     and (frames_pow(vo_full, c['t'] - 0.05, c['t'] + 0.15).mean() if len(frames_pow(vo_full, c['t'] - 0.05, c['t'] + 0.15)) else 0) * g > 10 ** -3.5]
+        hits = [c for c in json.load(open('cues.json'))['cues'] if c['type'] in ('pop', 'click', 'thump', 'shutter', 'material')]
+        at = lambda c: c.get('hit', c['t'])   # a material sound is heard at its sharpest moment, not where the transition starts
+        on_speech = [c for c in hits if any(ph['t0'] - 0.05 <= at(c) <= ph['t1'] for ph in placed)
+                     and (frames_pow(vo_full, at(c) - 0.05, at(c) + 0.15).mean() if len(frames_pow(vo_full, at(c) - 0.05, at(c) + 0.15)) else 0) * g > 10 ** -3.5]
         print(f"hits on speech: {len(on_speech)}/{len(hits)}" + (' — ' + ', '.join(f"{c['t']}s {c['type']}" for c in on_speech[:8]) if on_speech else '')
               + ('  · more than half: move hits into the pauses, the ear catches neither' if hits and len(on_speech) > len(hits) / 2 else ''))
 elif have['vo']: print('speech over background: NOT CHECKED (no audio/vo_placed.json: run vo.py)')
@@ -133,27 +138,27 @@ elif have['vo']: print('speech over background: NOT CHECKED (no audio/vo_placed.
 # reach the sum, by ≥ 1.5 dB within 30 ms before to 250 ms after its cue (after Bodila51/opus-sound-layer qa.py "audible").
 if have['sfx'] and os.path.exists('cues.json'):
     from scipy import signal
-    bed = [l for l in labels if l not in ('[sfx]', '[tone]')]
-    ff([*inputs, '-filter_complex', ';'.join(chains) + f";{''.join(bed)}amix=inputs={len(bed)}:normalize=0:duration=first[bed]",
-        '-map', '[sfx]', '-c:a', 'pcm_f32le', 'audio/_sfx.wav', '-map', '[bed]', '-c:a', 'pcm_f32le', 'audio/_bed.wav'])
-    fxa, bda = pcm('audio/_sfx.wav', 'anull'), pcm('audio/_bed.wav', 'anull')
+    under = [l for l in labels if l not in ('[sfx]', '[tone]')]   # music, voice and the world bed
+    ff([*inputs, '-filter_complex', ';'.join(chains) + f";{''.join(under)}amix=inputs={len(under)}:normalize=0:duration=first[under]",
+        '-map', '[sfx]', '-c:a', 'pcm_f32le', 'audio/_sfx.wav', '-map', '[under]', '-c:a', 'pcm_f32le', 'audio/_under.wav'])
+    fxa, bda = pcm('audio/_sfx.wav', 'anull'), pcm('audio/_under.wav', 'anull')
     SR16 = 16000   # pcm() decodes at 16 kHz: bands up to 8 kHz
     BANDS = [(125, 250), (250, 500), (500, 1000), (1000, 2000), (2000, 4000), (4000, 7900)]
     sos = [signal.butter(4, b, 'bandpass', fs=SR16, output='sos') for b in BANDS]
     rms = lambda x, s: float(np.sqrt(np.mean(signal.sosfilt(s, x) ** 2))) if len(x) > 64 else 0.0
     quiet = []
     for c in json.load(open('cues.json'))['cues']:
-        w0, w1 = int((c['t'] - 0.03) * SR16), int((c['t'] + 0.25) * SR16)
+        w0, w1 = int((c.get('hit', c['t']) - 0.03) * SR16), int((c.get('hit', c['t']) + 0.25) * SR16)
         fx, bg = fxa[max(0, w0):w1], bda[max(0, w0):w1]; n = min(len(fx), len(bg)); fx, bg = fx[:n], bg[:n]
         e = [rms(fx, s) for s in sos]; tot = sum(v * v for v in e) + 1e-20
         lifts = [(20 * np.log10(rms(bg + fx, s) / max(rms(bg, s), 1e-3) + 1e-12), b) for s, b, v in zip(sos, BANDS, e) if v * v / tot >= 0.1]
         best = max(lifts) if lifts else (-99.0, None)
         if best[0] < 1.5: quiet.append((c['t'], c['type'], c.get('what', ''), best))
     n_c = len(json.load(open('cues.json'))['cues'])
-    print(f"sounds that stand out in their own band (≥ 1.5 dB over music + voice): {n_c - len(quiet)}/{n_c}")
+    print(f"sounds that stand out in their own band (≥ 1.5 dB over music + voice{' + bed' if have['sfx_bed'] else ''}): {n_c - len(quiet)}/{n_c}")
     for t, ty, wh, (d, b) in quiet[:8]:
         print(f"  WARNING {t:.2f}s {ty} «{wh}»: {'no energy (silent sample?)' if b is None else f'+{d:.1f} dB at best, {b[0]}-{b[1]} Hz'}"
               " — raise its gain, pick a brighter sample, or move it off the busy spot")
-for f in ('audio/_bg.wav', 'audio/_vo.wav', 'audio/_room_ir.wav', 'audio/_sfx.wav', 'audio/_bed.wav'):
+for f in ('audio/_bg.wav', 'audio/_vo.wav', 'audio/_room_ir.wav', 'audio/_sfx.wav', 'audio/_under.wav'):
     if os.path.exists(f): os.remove(f)
 sys.exit(1 if bad else 0)

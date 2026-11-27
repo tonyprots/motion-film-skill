@@ -8,7 +8,12 @@
 // timeline.bpm, so the film can be blocked out early. A cue lands on the nearest measured hit within ±40 ms of its
 // beat time, otherwise on the beat itself. sfx events: { at: beat|mark, type, gain?, pitch?, pan?, what }
 // Repeats: { at, to, every: beats, ... } expands to one cue per step (typing ticks, rolls).
+// Material sound { at, type: "material", kind: tear|fold|slab, dur?: s }: starts exactly on its mark (never snapped to a
+// drum hit: the transition starts there), the cue gets "dur" and "hit" (its sharpest moment, s) from sfx_world.mjs.
+// World beds, timeline "beds": [{ kind: wind|water|hum|air, keys: [[beat|mark, level 0..1], ...], gain?: dB, pan? }]
+// → cues.json "beds" with the keys in seconds and the voice spans it dips under. A bed is not a cue: it never counts as a hit.
 import fs from 'node:fs';
+import { MATERIAL, BEDS } from './sfx_world.mjs';
 
 const TL = JSON.parse(fs.readFileSync('timeline.json', 'utf8'));
 const measured = fs.existsSync('beats.json');
@@ -32,27 +37,50 @@ const mulberry32 = (a) => () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math
 const rnd = mulberry32(2026);
 
 const events = [];
-for (const ev of TL.sfx || []) {
+for (const ev0 of TL.sfx || []) {
+  const ev = { ...ev0, at: ev0.at ?? ev0.t };
   if (ev.every) {
     for (let x = beatOf(ev.at); x < beatOf(ev.to) - 1e-9; x += ev.every) events.push({ ...ev, at: +x.toFixed(4), mark: null });
   } else events.push({ ...ev, mark: typeof ev.at === 'string' ? ev.at : null });
 }
 const cues = events.map((ev) => {
-  const beat = beatOf(ev.at), target = beatTime(beat);
+  const beat = beatOf(ev.at), target = beatTime(beat), mat = ev.type === 'material' && MATERIAL[ev.kind];
+  if (ev.type === 'material' && !mat) throw new Error(`material sound at ${ev.at}: "kind" must be ${Object.keys(MATERIAL).join(' | ')}, got "${ev.kind}"`);
   let best = null;
-  for (const h of G.hits || []) { const d = Math.abs(h.t - target); if (d <= 0.04 && (!best || d < Math.abs(best.t - target))) best = h; }
-  const t = best ? best.t : target;
+  if (!mat) for (const h of G.hits || []) { const d = Math.abs(h.t - target); if (d <= 0.04 && (!best || d < Math.abs(best.t - target))) best = h; }
+  const t = best ? best.t : target, dur = mat && +(ev.dur ?? mat.dur);
+  if (mat && !(dur > 0)) throw new Error(`material sound at ${ev.at}: "dur" must be seconds > 0, got ${ev.dur}`);
+  if (mat && t + dur > TL.duration) console.warn(`WARN material ${ev.kind} at ${t.toFixed(2)}s runs ${(t + dur - TL.duration).toFixed(2)}s past the end of the film`);
   return {
     t: +t.toFixed(5), type: ev.type, gain: ev.gain ?? 0.8,
     pitch: ev.pitch ?? +(0.94 + rnd() * 0.12).toFixed(3), pan: ev.pan ?? +((rnd() - 0.5) * 0.5).toFixed(3),
     beat, mark: ev.mark, snapped_to_hit: !!best, snap_ms: +((t - target) * 1000).toFixed(2), what: ev.what || '',
+    ...(mat && { kind: ev.kind, dur, hit: +(t + mat.hit * dur).toFixed(5) }),   // sfx.mjs plays it, review.py / mix.py check "hit"
     ...(ev.src && { src: ev.src }), ...(ev.sample && { sample: ev.sample }),   // sfx.mjs reads both per cue
     ...(ev.visual && { visual: ev.visual }),   // review.py: what the picture does on this cue (cut | move | land | appear)
   };
 }).filter((c) => c.t < TL.duration).sort((a, b) => a.t - b.t);
-fs.writeFileSync('cues.json', JSON.stringify({ sr: 48000, duration: TL.duration, measured, cues }, null, 1));
-
 const VO = fs.existsSync('audio/vo_placed.json') ? JSON.parse(fs.readFileSync('audio/vo_placed.json', 'utf8')) : [];
+// under the voice a bed dips by itself (sfx.mjs): one span per run of phrases (gaps under 1.2 s are bridged, so it does
+// not breathe between them), from 0.6 s before the first word to 0.15 s after the last
+const duck = [];
+for (const p of [...VO].sort((a, b) => a.t0 - b.t0)) {
+  const last = duck[duck.length - 1];
+  if (last && p.t0 - 0.6 - last[1] < 1.2) last[1] = Math.max(last[1], p.t1 + 0.15); else duck.push([p.t0 - 0.6, p.t1 + 0.15]);
+}
+const beds = (TL.beds || []).map((b, j) => {
+  const name = `bed ${j + 1} (${b.kind})`;
+  if (!BEDS.includes(b.kind)) throw new Error(`${name}: "kind" must be ${BEDS.join(' | ')}`);
+  if (!Array.isArray(b.keys) || !b.keys.length) throw new Error(`${name}: "keys" must be [[mark or beat, level 0..1], ...]`);
+  const keys = b.keys.map(([at, level]) => {
+    if (!(level >= 0 && level <= 1)) throw new Error(`${name}: level ${level} at ${at} is outside 0..1`);
+    return [+beatTime(beatOf(at)).toFixed(5), level];
+  });
+  keys.forEach(([s], k) => { if (k && s < keys[k - 1][0]) throw new Error(`${name}: key ${JSON.stringify(b.keys[k])} goes back in time — list the keys in film order`); });
+  return { kind: b.kind, gain: b.gain ?? 0, pan: b.pan ?? 0, keys, duck: duck.map(([a, c]) => [+a.toFixed(3), +c.toFixed(3)]), what: b.what || '' };
+});
+fs.writeFileSync('cues.json', JSON.stringify({ sr: 48000, duration: TL.duration, measured, cues, ...(beds.length && { beds }) }, null, 1));
+
 const CAPS = fs.existsSync('captions.json') ? JSON.parse(fs.readFileSync('captions.json', 'utf8')) : [];   // motion-film: burned-in captions
 // words of a caption → word marks. Display words: the same rule as voice.py / layout_vo.py / lib/captions.js.
 const tokens = (s) => {
@@ -160,3 +188,4 @@ fs.writeFileSync('film/data.js', `// GENERATED by scripts/sync.mjs — do not ed
 console.log(`grid: ${measured ? `measured ${G.bpm} bpm, ${B.length} beats` : `NOMINAL ${TL.bpm} bpm (no beats.json yet)`}`);
 console.log(`cues.json: ${cues.length} cues, ${cues.filter((c) => c.snapped_to_hit).length} on measured hits · film/data.js written${VO.length ? ` (${VO.length} VO phrases)` : ''}${Object.keys(UI).length ? ` (${Object.keys(UI).length} live components)` : ''}`);
 for (const c of cues) console.log(`  ${c.t.toFixed(3)}s  b${String(c.beat).padEnd(6)} ${c.type.padEnd(7)} ${c.snapped_to_hit ? 'hit ' + (c.snap_ms >= 0 ? '+' : '') + c.snap_ms + 'ms' : 'grid'}  ${c.what}`);
+for (const b of beds) console.log(`  bed ${b.kind}: ${b.keys.length} keys ${b.keys[0][0].toFixed(2)}–${b.keys[b.keys.length - 1][0].toFixed(2)}s, peak level ${Math.max(...b.keys.map((k) => k[1]))}  ${b.what}`);

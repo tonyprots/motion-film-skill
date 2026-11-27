@@ -15,7 +15,7 @@ the exact thresholds live in its code and its message.
 The contract below applies to the code workflow. Freeze external clips and images as inputs: repeatable assembly
 does not mean that a new generation with the same seed will produce an identical asset.
 - The film is a pure function of time. `window.seek(t)` paints frame t, in any order, cold or after any other frame.
-- Render mode has no CSS transitions or animations, no `setTimeout`, no `requestAnimationFrame`, no `Date`, and no state carried between frames (no module variable mutated in `run()`).
+- Render mode has no CSS transitions or animations, no `setTimeout`, no `requestAnimationFrame`, no `Date`, and no state carried between frames (no module variable mutated in `run()`). The one exception is `C.sim` (ENGINE.md): a fixed step with checkpoints gives the same state in any frame order.
 - Randomness is seeded only (`C.mulberry32(seed)`, `C.noise1(seed)`). Never `Math.random`.
 - Output is H.264 yuv420p, CRF 16, bt709 tags, 60 fps finals, AAC 320k, `+faststart`.
 - Verify determinism once per project: `node scripts/render.mjs --verify --all`.
@@ -89,11 +89,13 @@ other places refer to it.
 - **One projection and physical overlaps.** Everything on the stage is in the stage's projection: a flat sticker, stamp
   or plate ("BANKRUPT", "LAWSUIT") over 3D graphics is a defect. An overlap is fine when it is physically possible: the
   nearer object covers the further one, never the reverse. A callout is tied to its object, not floating (2026-10-28).
-- **Light and depth.** One light source: all shadows point one way. The background is never perfectly flat (a soft
+- **Light and depth.** One light source: all shadows point one way. In a world scene (`world`) that source is its sun. The background is never perfectly flat (a soft
   gradient, `finish.grain`), but never a glow. A 3D screen tilt is 4–10°, with a shadow, on one or two scenes.
 - **Rare devices — sparingly, with their rules next to the API in ENGINE.md:** "A screen in 3D" (`uiShot`) — only where
   the screen IS the scene's point; "Cutouts and depth" (`vision.py`) — photos only; video bridges (`broll.py`) — only when
-  the customer asks. Never animate what looks wrong as a still.
+  the customer asks. Set pieces (a world, a camera flight, the frame as material) follow SETPIECES.md: one or two per film,
+  in the hook, the hero moment or the finale, each with a one-sentence thesis and approved in the style guide at step 5.
+  Never animate what looks wrong as a still.
 
 ## Rhythm
 - **The voice is the timeline.** Everything on screen animates from voice marks (`<id>`, `<id>.<k>`, `<id>.w<k>`, `<id>.end`).
@@ -160,6 +162,9 @@ other places refer to it.
   elements or hits, the camera drifts. This does not break "something new every 2–4 s".
 - **Cut on action, with a carrier.** A scene changes during an action, not after it. Most transitions have a carrier: a
   shape, position or colour that travels into the next scene.
+- **Material transition** (2026-11-28). The frame tears, folds or slams down as a slab (`materialCut`): one or two per film,
+  only at a chapter change or in the hero moment. The material comes from the story: in a film about documents, paper tears. It
+  is not a default cut but an event named in the style guide; the material sound sits on the transition's fractions (AUDIO.md §3).
 - **J/L cuts.** The next scene's sound starts 80–200 ms before the picture; the previous scene's tail runs 100–300 ms past it.
 - **Cascade rhythm.** One element leads, the rest react at uneven offsets: `C.stagger(i)` gives 0, 0.8, 1.8, 3, 4.4, 6
   steps (`C.react`), steps of 30–80 ms in reading order, at most 6–8 per wave, the wave ≤ 0.6 s. An even line reads as a

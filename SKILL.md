@@ -19,7 +19,7 @@ Sources and credits: `UPSTREAM.md` and `README.md`.
 `<skill>` = this folder. Project commands run from the project root.
 
 **Read by stage:** start with `reference/RULES.md`. At step 2 read `reference/STORY.md`, the selected card in
-`reference/FORMATS.md` and the style switches in `reference/STYLES.md`. At step 4 read AUDIO.md section 1 and the selected provider in `reference/PROVIDERS.md`;
+`reference/FORMATS.md`, the style switches in `reference/STYLES.md` and the set pieces in `reference/SETPIECES.md` (a device generator: worlds, camera flights, the frame as material). At step 4 read AUDIO.md section 1 and the selected provider in `reference/PROVIDERS.md`;
 other audio sections belong to steps 6 and 8. While building, read the relevant API in `reference/ENGINE.md`;
 prop recipes and visual coverage are in `reference/PROPS.md`. For scenes and graphics, read `reference/LIBRARY.md` and search with `scripts/scenes.mjs` before building. Read `reference/CRITIQUE.md` before critique and
 `reference/BLIND.md` before the blind read. Read `reference/EXPLAINERS.md` only for an explainer format.
@@ -65,7 +65,8 @@ beats as a list, one line of content per beat. **Format** — by the substance o
 compare with the explainer formats in `reference/EXPLAINERS.md` too. The format changes the beats, so it is approved together with them. Send it to the user: an edit at this stage costs one message.
 **Pass 2 — the script**, from the approved beats, in `SCRIPT.md` from the template (`## STORY` — the contract for the
 blind read, then scenes with `**Shot:**`, `**Title:**`, `**Voice:**`). Before voicing, select the hook and the visual logic
-of the key beats (STORY.md "Hook and visual logic"), in the same pass, with no extra stop. Preserve a supplied script:
+of the key beats (STORY.md "Hook and visual logic"), in the same pass, with no extra stop. Among the answers for the main
+metaphor, at least one is a set piece with a DOM fallback (`reference/SETPIECES.md` "How to invent"); the chosen one goes through the early trial below. Preserve a supplied script:
 propose alternatives only when a new hook is needed. Rules and arcs: `reference/STORY.md`. Terms the voice reads differently from how they are written (SQL, Claude Code, v2.0) go
 to `lexicon.json` next to the script: `{"SQL": "sequel", "v2.0": "version two"}`; screen and captions take the spelling, the voice
 takes the pronunciation.
@@ -130,8 +131,8 @@ long pauses are cut with `--cut-pauses 0.6` (an option; cover the jump cuts with
 `docs/style_guide.md` (palette, type, grid of the frame, grammar of transitions, sound) and `docs/shotlist.md`: one
 row per scene with its marks, what lands on which chunk, the real media, the closing frame (thesis + result), SFX,
 9:16 notes, scene density 1–5, plus the object in frame, its action and one camera move (vocabulary — RULES.md "The
-camera is punctuation"); `python3 scripts/plan_check.py` checks the shotlist before the build. The shotlist marks the hero moment (one, at 60–85 % of the length) and the quiet windows (every
-~20 s); the style guide holds the motion grammar: spring preset per role, cascade step, where overshoot is allowed, `finish`
+camera is punctuation"); `python3 scripts/plan_check.py` checks the shotlist before the build. The shotlist marks the hero moment (one, at 60–85 % of the length), the set pieces with a one-sentence thesis and a fallback
+(SETPIECES.md; a material transition is named here too) and the quiet windows (every ~20 s); the style guide holds the motion grammar: spring preset per role, cascade step, where overshoot is allowed, `finish`
 (LUT, grain); palette, type and hand come from the film's theme (`timeline.json` → `theme`), the motion grammar from its row in ENGINE.md
 "Themes: motion" (rhythm, entrance, signature beat, "never") as initial settings. Replace them for the chosen visual
 language with a reason in the style guide; a theme does not require handwriting, texture, or a signature hit.
@@ -166,6 +167,9 @@ test the rough sequence earlier. `render.mjs --animatic --all` (12 fps, 480p, se
 polish and does not require all styleframes to be finished first. In the code workflow, motion curves come from
 roles in `timeline.json` `"motion"` (ENGINE.md "Motion roles"): `C.sp(t, b, 'enter')`, not a preset picked anew in every scene. Sparingly, not everywhere:
 a cutout or 2.5D depth for a photo (`scripts/vision.py`); a screen in 3D with depth of field (`uiShot`, ENGINE.md "A screen in 3D"); video bridges only when the customer asks (`scripts/broll.py`).
+Set pieces from the shotlist are built with the engine kits (ENGINE.md "Worlds and set pieces": `world`, `sea`, `materialCut`, `card`,
+`tree`, `starfield`, `C.sim`, `C.path`); frames for the transition and the cards are `"plates"` in `timeline.json`. Measure the scene's cost
+with `render.mjs --perf` on a styleframe, before the draft.
 
 After choosing the shot, find a suitable implementation: `node scripts/scenes.mjs search "words"` (what exists: `reference/LIBRARY.md`, isometric figures in its "Figures"; presenter,
 objects and causal links: `reference/EDITORIAL.md`; a prop action: `reference/PROPS.md`). Never replace real UI with these

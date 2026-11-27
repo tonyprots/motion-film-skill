@@ -64,6 +64,10 @@ Change it, then run `node scripts/sync.mjs`. The film and the SFX both read it, 
 | `C.canvas(parent)` | full-frame 2D context (clear it in `run()` every frame) |
 | `C.hooks.before/after.push(fn)` | global per-frame work: camera, cursor, overlays |
 | `C.mulberry32(seed)`, `C.noise1(seed)` | seeded randomness |
+| `C.sim({ name, init, tick(s, dt, t, emit), step, every, from })` | fixed-step physics that is still a function of t: `S.at(t)` is the state (a copy, blended between steps), `S.raw(t)` the state without blending, `S.events(t1)` the `emit(name, data)` events in order. A checkpoint every `every` s (0.5), step `step` (1/240), `from` is the start mark or beat (before it, the initial state). State is plain data and typed arrays; randomness is `Motion.rand(s)` (the seed lives in the state). The only allowed path for state between frames (RULES) |
+| `C.simEvents()` | the events of every `C.sim` in the film `{ sim, name, t, … }`, for sound on impacts |
+| `C.path(t, [[beat, value], …], { ends })` | a smooth trajectory through keys (C¹, no overshoot, at rest at the start and the end; `ends: 'free'` does not stop). The value is a number or an object: a field missing from a key holds the previous value. For a camera: `{x, y, z, lx, ly, lz}` |
+| `C.plate(name)` | the path to the plate `assets/plates/<name>_<fmt>.png` (below, "Plates") |
 | `C.fonts = ['600 100px Display', …]` | awaited before frame 0. A missing face logs `[page] font failed` |
 | `C.gates.push(promise)` | in `build()`: frame 0 waits for it too (a Lottie file loading, a file decoding) |
 
@@ -190,6 +194,8 @@ node scripts/render.mjs --mux --all                           new mix into exist
 node scripts/render.mjs --verify --all                        determinism check (cold vs after seeking elsewhere)
 node scripts/render.mjs --lint --all [--phase 0.6]            text in frame per beat: size, contrast, 9:16 zones, one phrase twice
 node scripts/render.mjs --seams --all                         every hard cut: shared words/images do not jump, no empty frame after it
+node scripts/render.mjs --perf [--all] [--samples 5]          forecast before the final: per scene ms/shot, blur sub-frames, seconds, heaviest → review/perf_<fmt>.json
+node scripts/render.mjs --plates [--all]                      timeline "plates" → assets/plates/<name>_<fmt>.png (also before every frame-rendering mode; --no-plates skips)
 .venv/bin/python scripts/stillness.py <mp4> [--mask 0,0.2]   stretches ≥ 1 s where < 4.5 % of the frame changes (captions masked)
 python3 scripts/plan_check.py                                 the plan before the render: overlaps, dead air, end hold, caption speed
 python3 scripts/blindpack.py <N> --draft                      blind-read pack → review/blind_r<N>/ (reference/BLIND.md)
@@ -200,6 +206,8 @@ node scripts/player.mjs [--port N] [--fmt 9x16] [--open]       review player: ti
 node scripts/player.mjs --selftest [--shot review/player.png]  headless check of the player, exits 0/1
 python3 scripts/notes.py add <t> "…" [--el "<element>"] | resolve N --reply "…" [--rule "…"]
 ```
+
+**Plates (`plates`).** A still frame of a scene that a transition puts into the WebGL layer as a sheet: it tears, folds or slams down as a slab. `timeline.json`: `"plates": [{"name": "s3-end", "at": "s3_end-0.02"}]`; `at` takes the same as `--at`: seconds, a mark, mark±seconds. A mark whose own name ends in `-<number>` (`scene-2`) is taken whole, not as `scene` minus 2 s. `render.mjs --plates [--fmt 16x9 | --all]` writes `assets/plates/<name>_<fmt>.png`: full size, no motion blur, captured as an ordinary frame by the same backend (the GPU with `"webgl": true`). Every mode that renders frames (all but `--mux`) first re-renders the plates of its formats, before the first frame and before the workers start, so a plate never goes stale; `--no-plates` turns this off. The file is written whole (a temp file, then a rename). In a scene, `C.plate(name)` gives the plate (`L.texture(C.plate(name))`, `materialCut({ plate })`). On the first pass the plate does not exist yet: a magenta sheet stands in for it with an error in the console, and the page does not fail. A plate must not show another plate: it would lag one run behind. An unknown mark, a name with `/` or a duplicate stops the render. Capturing bridges (`broll.py`) does not re-render plates.
 
 ## Preserving render outputs
 
@@ -219,6 +227,8 @@ losslessly. Measured on an Apple M1 (8 cores), 2:36 film, 1920×1080, 60 fps wit
 Parallel and serial output differ only where Chromium's raster cache depends on which frame it painted before (edge
 antialiasing of a moving card): worst frame 71 dB PSNR against a serial render, sharpness equal. `--workers 1` gives
 the serial path. GPU flags (`--use-angle=metal`) make screenshots 5× slower: do not add them.
+
+**Forecast before the final (`--perf`).** A heavy scene (WebGL, up to 24 motion-blur sub-frames) shows up in a minute, not ten minutes into the final. `render.mjs --perf [--fmt 9x16 | --all] [--samples 5]` takes each scene over its visibility window [from − pre, to + post), shoots N frames evenly inside it the same way the final does (seek + screenshot + PNG decode, the GPU with `"webgl": true`, each one preceded by a warm-up screenshot of a neighbouring frame), and estimates the sub-frame count with the same two-point shutter probe. The table: scene, window in seconds, median ms per shot, sub-frames (mean and spread), seconds of the final; the heaviest scene is marked. A frame where the windows of two scenes overlap is split between them, so the column adds up to the total. The total is the time in one process and a lower bound for `--workers`: the queue of `--chunk` pieces is played out as in the render, but the codec, 16-bit averaging and the workers competing for cores are not counted. The report goes to `review/perf_<fmt>.json`; `renders/` is not touched. With `--draft`, `--fps`, `--blur 0` or `--range` it forecasts that render. Measured (M1, 2026-11-28, a 3.5 s demo, 60 fps with blur): one process — forecast 68 s, actual 67 s; 4 workers — forecast ≥ 33 s, actual 44 s; WebGL on the GPU, a clip at 12 fps — 26 s against 28 s. Plates cost one page load per format plus one screenshot per plate: 0.5–3 s. The cost of set pieces: SETPIECES.md.
 
 ## Picture finish (motion-film)
 Finals and `--range` send frames to ffmpeg in 16 bits (`rgb48le`): the motion-blur average keeps its fractions. In 16 bits the
@@ -281,6 +291,10 @@ screenshot on its screen. `engine/lib/gl.js` (three.js MIT, postprocessing Zlib 
   `target` a `THREE.Vector3` kept sharp while the camera moves; with neither it autofocuses on the origin. A focus pull:
   `L.dof.cocMaterial.focusDistance = d` in `L.frame`.
 - The layer sits under the scene's DOM children by default (`z: 0`); to draw over them use `z: 10`.
+- `L.frame` returning `false` skips the layer for that frame (the scene is not visible, a heavy world spends no time). `L.late(fn)`
+  runs after every `L.frame`, right before the render: kits (`world`, `sea`) read the camera and the parameters set in this frame here.
+- The layer camera sees 0.1–200 units. For a bigger scene: `L.camera.far = …; L.camera.updateProjectionMatrix()`; `world`,
+  `tree` and `starfield` extend it themselves.
 - Verified (M1, 2026-10-06): `--verify` 12/12, frame t is the same in any order. A parallel render differs from a serial one
   by ±1 level in scattered pixels (worst frame 89 dB PSNR) — less than the DOM does (71 dB).
 - Never: TAA and temporal effects, accumulation between frames, `clock.getDelta()`, unseeded `Math.random`, your own `requestAnimationFrame`.
@@ -289,6 +303,38 @@ screenshot on its screen. `engine/lib/gl.js` (three.js MIT, postprocessing Zlib 
 - Living background: `meshBackground(sceneRoot, ['#f6f5f1', '#fbe0d2', '#ffffff', '#f4c3ab'], { speed, radius, seed })` — a soft
   gradient under the scene's DOM that drifts slowly with t. The first colour is the ground, the rest are soft lights over it. Keep the
   palette tonal: one accent plus neutrals; a blue-to-purple wash reads as stock. Works without `layer()`, but needs `"webgl": true`.
+
+## Worlds and set pieces (`lib/world.js`, `lib/material.js`, `lib/setpieces.js`)
+Kits for set pieces: sky, clouds, sea, the frame as material, a tree, a universe. What to build from them and when:
+`reference/SETPIECES.md`; the API is here. Everything is imported from `./lib/gl.js` and follows the WebGL layer rules above.
+- **`world(L, opts)`** — a sky (single scattering, Rayleigh and Mie), a sun whose colour comes through the atmosphere, haze, height
+  fog, volumetric clouds (a layer between `clouds.bottom` and `clouds.top`, curving toward the horizon, wind from t), the ground far below.
+  The layer is created with `bg: null`. Presets `day`, `bright`, `golden`, `dawn`, `overcast`, `night`; any field on top.
+  `sun { elev, az }` in degrees, `haze` 1–4 (a light sky is 2–3), `fog { density, falloff, base, sun }`,
+  `clouds false | { bottom, top, cover, density, scale, shape, wind, steps, gain }`, `ground` a colour or `null`. Objects
+  are lit by the sun (`W.sunLight`) and by an environment from the same sky. Returns `W`: `W.set(partial opts)` inside `L.frame`
+  (a dawn, a change of weather), `W.sunDir`, `W.skyAt(dir)` — the sky colour on the CPU (to tint DOM text over it). A change of
+  sun rebuilds the sky and the environment: moving the sun every frame is expensive, measure with `--perf`.
+- **`sea(L, W, { level, waves, scale, deep, shallow, rough, fade })`** — an endless sea: Gerstner waves from t, ripples,
+  sky reflection, sun glint. `waves` is `'calm' | 'swell' | 'choppy'` or your own `[[dirX, dirZ, length, height], …]`.
+  `scale` below 0.5 with the camera above the water makes the ripples a regular grid.
+- **`pass(parent, glsl, { uniforms, frame, z, alpha })`** — a full-screen shader in one line: light, a gradient field,
+  paper texture. Inside `main()` you have `vUv`, `uTime`, `uRes` and the shared set (`fbm`, `vnoise`, `ign`, `toLin`, `toSrgb`,
+  `softClip`, `blackbody`). The output is written as is: blend in linear light (`toLin → mix → toSrgb`).
+- **`materialCut(parent, { kind, plate, at, dur, z, paper, shadow, seed })`** — the frame from a plate tears (`tear`),
+  folds (`fold`) or slams down as a slab (`slab`). Its own canvas over every scene (`z: 50`); works without `layer()` too.
+  The timing in fractions of `dur` is shared with the sound (`scripts/sfx_world.mjs`): the rip 0.06–0.55, the snap at 0.55; creases at
+  0.15 / 0.32 / 0.48; the slab impact at 0.285, the plate leaves from 0.6. Default lengths 2.4 / 2.2 / 1.6 s. The flat sheet matches
+  the frame pixel for pixel (verified: difference 0), so the seam does not show. Which frame goes on the plate: SETPIECES.md, recipe 2.
+- **`card(texture, { w, h, depth, paper, lit })`** — a printed frame with thickness: the film's frames as objects in the world.
+  `lit: false` (the default) shows the face in the frame's own colours; `lit: true` is a physical print.
+- **`tree(L, { seed, depth, height, spread, twist, leaves, bark, leaf, position })`** — a tree that grows with
+  `T.grow(g)`, g 0 → 1: the trunk, then the branches level by level, the leaves last. `T.tips` — branch tips for labels.
+- **`starfield(L, { count, radius, seed, galaxies, size, near, far, bg })`** — a universe for a flight: stars by
+  temperature, spiral galaxies (`U.galaxies[i].center`), nothing pops in near the camera or in the distance. A dark shot.
+- **`C.sim`** (the API table above) — for dominoes, a chain, scraps, a swarm: anything whose next state depends on the previous one.
+- Verified on the 2026-11-28 demo: a world above the clouds, a flight over the sea, three transitions, a tree, a universe — on frames;
+  `C.sim` and `C.path` — by the tests in `engine/lib/motion.test.js`.
 
 ## GSAP (kinetic type)
 GSAP 3 is in the shared toolchain, including SplitText, DrawSVG, MorphSVG ("no charge" licence, commercial use allowed).

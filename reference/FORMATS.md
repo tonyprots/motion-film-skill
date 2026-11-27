@@ -100,6 +100,9 @@ A rounded frame can use a simple crop. To let hair or a pointing hand cross its 
 - **Build:** the anchor is an `anchor(t, state)` function in `film.js`, states switch with springs on the voice marks; the
   source of the shape is a mark or detail from the preset, `capture.mjs`.
 - **Risk:** a grimacing mascot. The anchor reacts, it doesn't entertain; no more than one "joke" per film.
+- **The "gesture" variant.** The anchor can be an action instead of a character: a selection box lands on bigger and bigger
+  objects, from a paragraph to the Solar System ("Select all"). The growing object under one and the same gesture is the point
+  of the film. The far steps are built as a world (SETPIECES.md, recipe 9).
 
 ### 3. One take
 
@@ -157,6 +160,14 @@ A rounded frame can use a simple crop. To let hair or a pointing hand cross its 
   creeps on a flat stretch, takes off at the event and slows into the total. Tabular figures (`tabular-nums`), no drum, no
   overshoot past the total. The accent switches on exactly at the event: the tip dot swells, the line after it is thicker
   and in the accent, a leader grows to the event; before the event there is no accent in the frame.
+- **The number made physical** (2026-11-28): five devices for when a chart does not convey the size (SETPIECES.md, recipes 1, 6, 10, 11):
+  - a geometric series as objects: 30 dominoes, each 1.5 times the size of the one before, from 1 cm to 1.28 km, the camera
+    pulls back (`C.sim`);
+  - time compressed by pace: a calendar year where the size of a day is proportional to the speed of progress;
+  - a small error over a large distance: 1° is 17 cm at 10 m and almost two Moon diameters at the distance of the Moon;
+  - a counter from the start of viewing: "since this film started, N … have passed";
+  - an exponential on an honest linear scale as a building: the last bar is a tower above the clouds, past years at its foot.
+  Check the device's arithmetic before the script (dominoes: 1.5²⁹ ≈ 127,800, that is 1.28 km).
 - **Risk:** a dashboard in motion. Every scene answers one question.
 
 ### 6. How it's built (exploded view)

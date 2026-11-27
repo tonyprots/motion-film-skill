@@ -151,6 +151,12 @@ Decoration need not prove a phrase event; semantic coverage requires observable 
 Composition limits are defaults (RULES "Look"). Select elements for what they explain.
 
 
+## Set pieces
+
+A world with sky and sea, a camera flight, the frame as material, a tree, a universe and **the film's frames as objects** (plates
+on cards in space) are not in the `scenes.mjs` catalog but in the engine kits. Recipes, cost and what is verified:
+[SETPIECES.md](SETPIECES.md); the API is in ENGINE.md "Worlds and set pieces".
+
 ## Finished scenes
 
 `library/examples/{task,handoff,edit}.js` are runnable examples with entrance, retained state and result; shared helpers are in `common.js`. Project creation and verification: [PILOT.md](PILOT.md).

@@ -1,7 +1,8 @@
 """Sound events from picture marks → timeline.json "sfx". Copy to scripts/sfx_layout.py and write one line per sound.
 Rule that held up on a real film: a hit sits EXACTLY on the beat where the object lands (the spHit beat in film.js),
 lead 0. Measured on the first film: lead 0 → 31/48 hits in sync, −35 ms → 25/48, −75 ms → 18/48. A move or a cut gets
-no sound of its own (no whoosh, no riser). Judge sync by frames, not by review.py's onset metric.
+no sound of its own (no whoosh, no riser); a physical transition on screen (tear, fold, slab) may get one "material" sound.
+Judge sync by frames, not by review.py's onset metric.
 Run from the project root: python3 scripts/sfx_layout.py, then node scripts/sync.mjs, node scripts/sfx.mjs, python3 scripts/mix.py."""
 import json
 T = json.load(open('timeline.json')); M = T['marks']
@@ -16,4 +17,13 @@ def a(at, typ, g, what, hit=True, **kw): ev.append({'at': b(at, LEAD) if hit els
 # for i in range(3): a(b('s3b', 1.0 + i * 0.35), 'pop', 0.45, f'card {i + 1}')
 # a('s8a.3', 'thump', 0.5, 'CTA lands')
 
-T['sfx'] = ev; json.dump(T, open('timeline.json', 'w'), ensure_ascii=False, indent=2); print(len(ev), 'sound events')
+# --- the physical world: a TRIAL, off by default, the owner decides after listening (reference/AUDIO.md §3) ------
+# A bed only in scenes with a physical world (sky, sea, city, a room), never in interface scenes; level 0..1 on marks,
+# straight lines between keys; under the voice it dips by itself. A material sound only when the material is on screen;
+# it starts exactly on its mark (hit=False: no LEAD), dur = the transition shader's length in seconds.
+beds = []
+# beds.append({'kind': 'wind', 'keys': [['sc4', 0], [b('sc4', 2), 1], ['s4b.end', 1], ['sc5', 0]], 'what': 'sky over the city'})
+# a('sc6', 'material', 0.7, 'the frame tears in two', hit=False, kind='tear', dur=2.4)
+
+T['sfx'] = ev; T['beds'] = beds
+json.dump(T, open('timeline.json', 'w'), ensure_ascii=False, indent=2); print(len(ev), 'sound events', f'+ {len(beds)} bed(s)' if beds else '')

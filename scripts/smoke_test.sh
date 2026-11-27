@@ -27,12 +27,14 @@ node "$SKILL/tests/test_story.mjs"
 node "$SKILL/tests/test_blocks.mjs"
 node "$SKILL/tests/test_editorial.mjs"
 node "$SKILL/tests/test_frame_clock.mjs"
+node "$SKILL/tests/test_sfx_bed.mjs"   # world beds + material sounds: same bytes, silence at level 0, peaks on their fractions
 node "$SKILL/tests/test_morph.cjs"
 node "$SKILL/tests/test_motion_kit.mjs"
 node "$SKILL/tests/test_themes.mjs" >/dev/null
 "$WORK/.venv/bin/python" -m unittest discover -s "$SKILL/tests" -p 'test_theme_pick.py'
 node "$SKILL/tests/test_paper_hand.mjs" >/dev/null
 node "$SKILL/tests/test_render_server.mjs"
+node "$SKILL/tests/test_render_perf_plates.mjs"   # --perf forecast, --plates fresh before a parallel draft (~10 s, no GPU)
 # the project gets every script the docs run from it (skill-only tooling: lock_deps.py, update_check.py, figures_build.py, hand_glyphs.py)
 for p in "$SKILL"/scripts/*.py "$SKILL"/scripts/*.mjs; do
   n=$(basename "$p"); case "$n" in lock_deps.py|update_check.py|figures_build.py|hand_glyphs.py) continue;; esac

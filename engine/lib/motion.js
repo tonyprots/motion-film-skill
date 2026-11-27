@@ -1,5 +1,7 @@
 // Closed-form springs. Every function is a pure function of time (seconds):
 // no integration, no state, so any frame can be painted in any order.
+// sim() is the one integrator, and it keeps the same promise from outside: at(t) replays a fixed-step simulation from a
+// checkpoint, so it too is a function of t alone. path() is a smooth camera path through timed keys.
 //
 // A spring is a damped harmonic oscillator released at rest toward a new target.
 // Its unit step response s(τ) goes 0 → 1; s(τ ≤ 0) = 0.
@@ -164,5 +166,163 @@
     return u;
   }
 
-  return { PRESETS, ROLES, configure, resolve, step, settle, spring, track, indicator, swapAlpha, loopT };
+  // ---------------------------------------------------------------- physics as a function of t
+  // A spring has a closed form; a chain of dominoes, a falling stack of cards or a swarm does not. sim() runs such a
+  // system at a fixed step and hides it behind at(t): the state at t is replayed from the nearest stored checkpoint at
+  // or before t. The same t gives the same state in any frame order, after any other frame and in any worker, so shutter
+  // subframes, --verify and parallel chunks agree. This is the one sanctioned exception to "no state between frames":
+  // the state lives inside the sim and is rebuilt from t, never carried over from the previous painted frame.
+
+  function plain(v, where) {   // state must be plain data: it is cloned at every checkpoint
+    if (v === null || typeof v !== 'object') {
+      if (typeof v === 'function') throw new Error(`sim state ${where} is a function: keep only data in the state`);
+      return;
+    }
+    if (ArrayBuffer.isView(v)) return;
+    if (Array.isArray(v)) { v.forEach((x, i) => plain(x, `${where}[${i}]`)); return; }
+    const p = Object.getPrototypeOf(v);
+    if (p !== Object.prototype && p !== null) throw new Error(`sim state ${where} is a ${v.constructor && v.constructor.name}: plain objects, arrays and typed arrays only`);
+    for (const k of Object.keys(v)) plain(v[k], `${where}.${k}`);
+  }
+  function dclone(v) {
+    if (v === null || typeof v !== 'object') return v;
+    if (ArrayBuffer.isView(v)) return v.slice();
+    if (Array.isArray(v)) return v.map(dclone);
+    const o = {};
+    for (const k of Object.keys(v)) o[k] = dclone(v[k]);
+    return o;
+  }
+  // a → b by k, numbers only; the structure (and every non-number) comes from b, the later step
+  function dlerp(a, b, k) {
+    if (typeof b === 'number') return typeof a === 'number' ? a + (b - a) * k : b;
+    if (b === null || typeof b !== 'object') return b;
+    if (ArrayBuffer.isView(b)) {
+      const o = b.slice();
+      if (a && a.length === b.length) for (let i = 0; i < o.length; i++) o[i] = a[i] + (b[i] - a[i]) * k;
+      return o;
+    }
+    if (Array.isArray(b)) return b.map((x, i) => dlerp(Array.isArray(a) ? a[i] : undefined, x, k));
+    const o = {};
+    for (const key of Object.keys(b)) o[key] = dlerp(a && typeof a === 'object' ? a[key] : undefined, b[key], k);
+    return o;
+  }
+
+  /**
+   * sim({ init, tick, step, every, from, lerp }) → { at(t), raw(t), events(t1), steps }
+   *   init()                   → the state at sim time 0: plain data (numbers, arrays, typed arrays, plain objects)
+   *   tick(s, dt, t, emit)     mutates s by one fixed step dt; t = time at the start of the step (film seconds);
+   *                            emit(name, data) logs an event (an impact, a domino hitting the next) — see events()
+   *   step 1/240 s             4 steps per 60 fps frame; stiff contacts may want 1/480
+   *   every 0.5 s              checkpoint spacing: a random-order frame replays at most this much
+   *   from 0                   film second the sim starts at; before it at(t) is the initial state
+   *   lerp true                at(t) blends the two steps around t (numbers only) so shutter subframes move smoothly
+   * at(t) and raw(t) return fresh copies; raw(t) is the step at or before t without blending (counters, flags).
+   * events(t1) runs the sim up to t1 and returns [{ t, name, ...data }] sorted by time — sound cues for impacts.
+   * Rules for tick: randomness only from a seed kept IN the state (Motion.rand(s)); no Math.random, no Date, no outside
+   * mutable variables (read constants and t only). Angles stay unwrapped: blending 359° → 1° goes the long way round.
+   * Cost: the first at(t) in a fresh worker replays from 0 to t (a 30 s film at 1/240 is 7 200 ticks), then forward
+   * frames continue from the last state and a jump back starts from a checkpoint.
+   */
+  function sim(o) {
+    if (!o || typeof o.init !== 'function' || typeof o.tick !== 'function') throw new Error('sim needs init() and tick(s, dt, t)');
+    const h = o.step ?? 1 / 240, from = o.from ?? 0, smooth = o.lerp !== false;
+    const N = Math.max(1, Math.round((o.every ?? 0.5) / h));   // steps between checkpoints
+    const s0 = o.init();
+    plain(s0, 'init()');
+    const cps = [dclone(s0)];       // cps[k] = state at step k·N; private, never handed out
+    const log = [];
+    let logged = 0;                 // steps [0, logged) have had their events recorded (a step emits once, on its first run)
+    let cur = null, curI = -1;      // the last replayed state (private): a forward frame continues from it
+    const noop = () => {};
+
+    function stateAt(i) {
+      const j = Math.min(Math.floor(i / N), cps.length - 1);
+      if (!(cur && curI <= i && curI >= j * N)) { cur = dclone(cps[j]); curI = j * N; }
+      while (curI < i) {
+        const fresh = curI >= logged, at = from + curI * h, stepNo = curI;
+        const emit = fresh ? (name, data) => log.push({ t: from + (stepNo + 1) * h, name: String(name), ...(data || {}) }) : noop;
+        o.tick(cur, h, at, emit);
+        curI++;
+        if (fresh) logged = curI;
+        if (curI % N === 0 && curI / N === cps.length) cps.push(dclone(cur));
+      }
+      return cur;
+    }
+    function index(t) {
+      let x = Math.max(0, (t - from) / h);
+      const r = Math.round(x);
+      if (Math.abs(x - r) < 1e-6) x = r;   // 1/60 ÷ 1/240 must land on step 4, not 3.9999999
+      return x;
+    }
+    return {
+      at(t) {
+        const x = index(t), i = Math.floor(x), k = x - i;
+        if (!smooth || k === 0) return dclone(stateAt(i));
+        const a = dclone(stateAt(i));
+        return dlerp(a, stateAt(i + 1), k);
+      },
+      raw(t) { return dclone(stateAt(Math.floor(index(t)))); },
+      events(t1) {
+        if (!Number.isFinite(t1)) throw new Error('sim.events(t1) needs an end time');
+        stateAt(Math.ceil(index(t1)));
+        return log.filter((e) => e.t <= t1 + 1e-9).map((e) => ({ ...e }));
+      },
+      get steps() { return { step: h, every: N * h, checkpoints: cps.length }; },
+    };
+  }
+
+  /** Seeded random for sim state: advances s[key] (an integer seed kept in the state) and returns [0, 1). mulberry32. */
+  function rand(s, key = 'seed') {
+    const a = (s[key] = (s[key] + 0x6d2b79f5) | 0);
+    let r = Math.imul(a ^ (a >>> 15), 1 | a);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  }
+
+  // ---------------------------------------------------------------- camera paths
+  function path1(t, ts, ps, free) {
+    const n = ts.length;
+    if (n === 1 || t <= ts[0]) return ps[0];
+    if (t >= ts[n - 1]) return ps[n - 1];
+    let i = 0;
+    while (t >= ts[i + 1]) i++;
+    const slope = (j) => (ps[j + 1] - ps[j]) / (ts[j + 1] - ts[j]);
+    const tan = (j) => {
+      if (j === 0) return free ? slope(0) : 0;
+      if (j === n - 1) return free ? slope(n - 2) : 0;
+      const d0 = slope(j - 1), d1 = slope(j);
+      if (d0 * d1 <= 0) return 0;                         // a turn or a hold: stop on the key, never overshoot it
+      const h0 = ts[j] - ts[j - 1], h1 = ts[j + 1] - ts[j];
+      const m = (d0 * h1 + d1 * h0) / (h0 + h1);          // time-weighted mean of the two slopes
+      const lim = 3 * Math.min(Math.abs(d0), Math.abs(d1)); // Fritsch–Carlson: stays monotone between keys
+      return Math.sign(m) * Math.min(Math.abs(m), lim);
+    };
+    const dt = ts[i + 1] - ts[i], u = (t - ts[i]) / dt, u2 = u * u, u3 = u2 * u;
+    return (2 * u3 - 3 * u2 + 1) * ps[i] + (u3 - 2 * u2 + u) * dt * tan(i) + (-2 * u3 + 3 * u2) * ps[i + 1] + (u3 - u2) * dt * tan(i + 1);
+  }
+
+  /**
+   * A smooth path through timed keys [[t, value], ...] (seconds, increasing); value = a number, an array or a flat
+   * object of numbers (a field missing from a key holds its previous value). C¹ cubic Hermite: through every key exactly, the
+   * velocity at a key is the time-weighted mean of the neighbouring slopes, zero at a turn and at a hold (no overshoot
+   * past a key), zero at both ends — a camera starts and lands at rest. opts.ends 'free' keeps the end slopes instead
+   * (a flight that is already moving when the shot cuts in or out). Before the first key → the first value.
+   *   path(t, [[0, { x: 0, y: 1, z: 9 }], [2.5, { x: 3, y: 4, z: 5 }], [6, { x: 0, y: 30, z: 2 }]])
+   */
+  function path(t, keys, opts = {}) {
+    if (!keys || !keys.length) throw new Error('path needs keys [[t, value], ...]');
+    const ts = keys.map((k) => k[0]);
+    for (let i = 1; i < ts.length; i++) if (!(ts[i] > ts[i - 1])) throw new Error(`path keys must be in increasing time: key ${i} at ${ts[i]} after ${ts[i - 1]}`);
+    const free = opts.ends === 'free', v0 = keys[0][1];
+    if (typeof v0 === 'number') return path1(t, ts, keys.map((k) => k[1]), free);
+    if (Array.isArray(v0)) return v0.map((_, j) => { let last = v0[j]; return path1(t, ts, keys.map((k) => (last = k[1][j] ?? last)), free); });
+    const out = {};
+    for (const f of Object.keys(v0)) {
+      let last = v0[f];
+      out[f] = path1(t, ts, keys.map((k) => (last = k[1][f] ?? last)), free);
+    }
+    return out;
+  }
+
+  return { PRESETS, ROLES, configure, resolve, step, settle, spring, track, indicator, swapAlpha, loopT, sim, rand, path };
 });

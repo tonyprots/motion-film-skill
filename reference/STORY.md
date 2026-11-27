@@ -33,10 +33,14 @@ The one sentence, the chain and "not about" are the thesis contract: the blind r
 ## Hook and visual logic
 
 Before voicing, inside script approval:
-1. For a new hook, compare three different promises (result, contradiction, concrete loss), not three paraphrases.
+1. For a new hook, compare three different promises (result, contradiction, concrete loss, genre fake-out), not three
+   paraphrases. **Genre fake-out:** the first frame is a deliberate cliché of a genre (a dull slide with a chart, an office
+   template, "Quarterly review") that collapses on the first line or the first hit (the frame tears, a world opens behind it —
+   SETPIECES.md). The cliché reads without a label and lasts no longer than 3–5 s.
    For each, name the first line, first image, question opened and beat that pays it off. Choose by sources and payoff.
    Preserve a script supplied by the user instead of rewriting it just to generate options.
-2. Compare 2–3 prop answers for the main metaphor. For key beats use a table:
+2. Compare 2–3 prop answers for the main metaphor. At least one of them is a set piece (a world, a camera flight, the frame
+   as material) with a DOM fallback: the device generator in SETPIECES.md "How to invent". For key beats use a table:
    thesis / why this prop / before / action on a word / after / carrier into the next beat.
    Scaling a card alone does not explain a mechanism. States must show the mechanism asserted by the voice.
 3. In a list, decide what accumulates across items and why the whole is stronger than the examples. A progress counter
@@ -113,3 +117,5 @@ A new arc that worked is a candidate for this table.
 **Shot:** the same hero, the pain gone. Links and footnotes on screen.
 **Voice:** "<one short line that answers the hook>" {mood=warm pace=slow pre=1.0 air=3.5}
 ```
+The strongest echo brings back the first frame, changed by what the viewer learned along the way, and without words. Example:
+in the finale the same dull slide from the hook returns and silently tilts by 1°, the same degree of error from the middle of the film.

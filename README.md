@@ -94,6 +94,10 @@ word costs one re-render, not a new roll of the dice.
 
 The approval steps are real stops: the agent waits for you before any credits are spent.
 
+## New in v1.13.0
+
+Plan [set pieces](reference/SETPIECES.md): scenes staged as a world, not as cards. The catalog ranks devices by ambition and maps a quantity to a staging: a bar that rises above the clouds, a frame that tears in two, a slide that slams down as a slab, a flight over the sea past earlier slides. The engine adds the kits for them: sky, clouds and sea, material transitions that start from the exact last frame of the scene, a growing tree and a starfield ([Worlds and set pieces](reference/ENGINE.md#worlds-and-set-pieces-libworldjs-libmaterialjs-libsetpiecesjs)). `C.sim` runs stateful physics as a function of time, so motion blur, `--verify` and parallel workers see the same state. `render.mjs --perf` forecasts the render time before the draft. Material sounds and world beds are a trial: off by default and not yet approved by ear.
+
 ## New in v1.12.0
 
 Try the [product-cut pilot](reference/PILOT.md#cutting-on-a-turn) to stage two different objects around one moving accent. [Watch the example](examples/product-cut/preview.mp4). The [presenter demo recipe](reference/FORMATS.md#when-a-presenter-shows-the-result) covers opening with the finished result, expanding a moving thumbnail into a player and bringing the same excerpt back above the presenter.
@@ -111,7 +115,7 @@ Requirements: **macOS or Linux**, **Node 22+**, **Python 3.11–3.13**, **ffmpeg
 ### Claude Code
 
 ```bash
-git clone --branch v1.12.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
+git clone --branch v1.13.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.claude/skills/motion-film
 ```
 
 Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our leadership channel."*
@@ -119,7 +123,7 @@ Restart Claude Code, then ask: *"Make a 90-second film from report.pdf for our l
 ### Codex
 
 ```bash
-git clone --branch v1.12.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
+git clone --branch v1.13.0 --depth 1 https://github.com/tonyprots/motion-film-skill ~/.codex/skills/motion-film
 ```
 
 ### Any other agent
